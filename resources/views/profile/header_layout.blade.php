@@ -29,6 +29,7 @@
                                 
                         </li>
                         @endif
+                        @if ($sorryRoomSidebar != 1)
                         <div class="topbar-divider d-none d-sm-block"></div>
                         <!-- Nav Item - Messages -->
                         @if(isset($dataMessage))
@@ -66,6 +67,7 @@
                                 <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
                             </div>
                         </li>
+                        @endif
                         @endif
                         <div class="topbar-divider d-none d-sm-block"></div>
 

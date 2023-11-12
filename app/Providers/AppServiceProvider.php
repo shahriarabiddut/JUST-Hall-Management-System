@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
             $userid = Auth::user()->id;
             $sorryRoomSidebar = 0;
             $dataForRoomAllocation = AllocatedSeats::all()->where('user_id', '=', $userid);
-            if(count($dataForRoomAllocation)>0){
+            if (count($dataForRoomAllocation) > 0) {
                 $sorryRoomSidebar = 1;
             }
             $view->with('sorryRoomSidebar', $sorryRoomSidebar);
