@@ -1,8 +1,8 @@
 @extends('admin/layout')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script defer src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 @section('title', 'Add New Allocation')
 @section('content')
-
-
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Add New Allocation</h1>
 
@@ -73,8 +73,7 @@
 
     <!-- Add Search in select Options custom scripts -->
 
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    
     <script>
         $(function(){
          $("#select_student").select2();

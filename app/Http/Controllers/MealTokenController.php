@@ -10,7 +10,7 @@ use App\Models\TokenPrintQueue;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
+// use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use charlieuki\ReceiptPrinter\ReceiptPrinter as ReceiptPrinter;
 
 class MealTokenController extends Controller
@@ -73,7 +73,7 @@ class MealTokenController extends Controller
         $data = MealToken::find($id);
         if ($data) {
             $link = route('staff.orders.show', $data->order_id);
-            $qrcode = QrCode::size(300)->generate($link);
+            $qrcode = 0;
             return view('profile.mealtoken.show', ['data' => $data, 'qrcode' => $qrcode]);
         } else {
             return redirect('student/mealtoken')->with('danger', ' Generate Mealtoken First!');
@@ -85,7 +85,8 @@ class MealTokenController extends Controller
         $data = MealToken::all()->where('order_id', '=', $id)->first();
         if ($data) {
             $link = route('staff.orders.show', $data->order_id);
-            $qrcode = QrCode::size(300)->generate($link);
+            // $qrcode = QrCode::size(300)->generate($link);
+            $qrcode = 0;
             return view('profile.mealtoken.show', ['data' => $data, 'qrcode' => $qrcode]);
         } else {
             return redirect('student/mealtoken')->with('danger', ' Generate Mealtoken First!');
@@ -116,10 +117,64 @@ class MealTokenController extends Controller
             return redirect()->route('student.mealtoken.index')->with('danger', 'Token Expired!');
         }
     }
+
     public function TokenPrintQueue()
     {
         $data = TokenPrintQueue::all();
-        return response()->json($data);
+        $dataTokenPrintQueue = '';
+        foreach ($data as $key => $d) {
+            if ($key >= 0 && $key < count($data) - 1) {
+                $dataTokenPrintQueue = $dataTokenPrintQueue . $d->data . ',';
+            } else {
+                $dataTokenPrintQueue = $dataTokenPrintQueue . $d->data;
+            }
+        }
+        // return response($d->data);
+        return response($dataTokenPrintQueue);
+    }
+    public function TokenPrintQueue1()
+    {
+        $data = TokenPrintQueue::all();
+        $dataTokenPrintQueue = [];
+        foreach ($data as $d) {
+            $dataTokenPrintQueue[] = $d->data;
+        }
+        return response($d->data);
+        // return response($dataTokenPrintQueue);
+    }
+    public function TokenPrintQueue2()
+    {
+        // $data = TokenPrintQueue::all();
+        // $dataTokenPrintQueue = [];
+        // foreach ($data as $d) {
+        //     $dataTokenPrintQueue[] = $d->data;
+        // }
+        // return response()->json($dataTokenPrintQueue);
+        function printArrayWithoutQuotes($array)
+        {
+            echo '[';
+            $first = true;
+            foreach ($array as $key => $value) {
+                if (!$first) {
+                    echo ', ';
+                }
+                echo $key . ': ' . $value;
+                $first = false;
+            }
+            echo ']';
+        }
+
+        // Example array
+        $data = TokenPrintQueue::all();
+        $myArray = [];
+        foreach ($data as $d) {
+            $myArray[] = $d->data;
+        }
+
+        // Print array values without quotes and keys
+        $data =  implode(', ', array_values($myArray));
+        $jsonData = json_encode($data, JSON_UNESCAPED_UNICODE);
+        return response(trim($jsonData, "\""));
     }
     //Delete From Print Queue
     public function TokenPrintQueueDelete(string $id)

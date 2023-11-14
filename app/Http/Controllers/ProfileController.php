@@ -15,6 +15,7 @@ use App\Models\AllocatedSeats;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\File;
 
 class ProfileController extends Controller
 {
@@ -114,9 +115,17 @@ class ProfileController extends Controller
             'dept' => 'required',
             'session' => 'required',
         ]);
-        //If user Gieven any PHOTO
+        //If user Given any PHOTO
         if ($request->hasFile('photo')) {
             $formFields['photo'] = 'app/public/' . $request->file('photo')->store('StudentPhoto', 'public');
+            if (isset($request->prev_photo)) {
+                $actloc = 'storage/' . $request->prev_photo;
+                //Delete PHOTO from storage
+                if (File::exists($actloc)) {
+                    //Delete the previous photo 
+                    File::delete($actloc);
+                }
+            }
         } else {
             $formFields['photo'] = $request->prev_photo;
         }
