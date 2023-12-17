@@ -1,12 +1,7 @@
 @extends('admin/layout')
 @section('title', 'Room Allocation Requests')
-
 @section('content')
 
-
-    <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Room Allocation Requests</h1>
-    <p class="mb-4">Room Allocation</p>
             <!-- Session Messages Starts -->
             @if(Session::has('success'))
             <div class="p-3 mb-2 bg-success text-white">
@@ -27,8 +22,8 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Room Allocation Requests Data
-            <a href="{{ route('admin.roomallocation.create') }}" class="float-right btn btn-success btn-sm" target="_blank">Add New Room Allocation</a> </h6>
+            <h3 class="m-0 font-weight-bold text-primary">Room Allocation Requests
+            <a href="{{ route('admin.roomallocation.create') }}" class="float-right btn btn-success btn-sm" target="_blank">Add New Room Allocation</a> </h3>
         </div>
         <div class="card-body">
             <div class="table-responsive">

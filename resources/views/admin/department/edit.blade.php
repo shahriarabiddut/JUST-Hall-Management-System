@@ -5,8 +5,8 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Edit Department
-            <a href="{{ url('admin/department/') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h6>
+            <h3 class="m-0 font-weight-bold text-primary">Edit Department
+            <a href="{{ url('admin/department/') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h3>
         </div>
         <div class="card-body">
             
@@ -22,9 +22,7 @@
                     </tr><tr>
                         <th>Detail</th>
                         <td>
-                        <textarea name="detail" id="" cols="30" rows="10"class="form-control">
-                            {{ $data->detail }}
-                        </textarea>
+                        <textarea name="detail" id="" cols="30" rows="10"class="form-control">{{ $data->detail }}</textarea>
                         </td>
                     </tr><tr>
                         <td colspan="2">

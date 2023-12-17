@@ -42,6 +42,8 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
 
     // Room Routes
     Route::get('rooms/{id}/delete', [RoomController::class, 'destroy']);
+    Route::get('rooms/import-bulk', [RoomController::class, 'importRoom'])->name('rooms.bulk');
+    Route::post('rooms/import-bulk', [RoomController::class, 'handleImportRoom'])->name('rooms.bulkUpload');
     Route::resource('rooms', RoomController::class);
 
     // Student Routes

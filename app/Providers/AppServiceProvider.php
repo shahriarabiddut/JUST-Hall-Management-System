@@ -2,12 +2,13 @@
 
 namespace App\Providers;
 
+use Carbon\Carbon;
+use App\Models\Balance;
+use App\Models\HallOption;
 use App\Models\RoomRequest;
 use App\Models\AllocatedSeats;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\ServiceProvider;
-use App\Models\Balance;
-use App\Models\HallOption;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -46,6 +47,11 @@ class AppServiceProvider extends ServiceProvider
         view()->composer('*', function ($view) {
             $HallOption = HallOption::all();
             $view->with('HallOption', $HallOption);
+        });
+        view()->composer('*', function ($view) {
+            $currentDateDash = Carbon::now(); // get current date and time
+            $currentDateDash = $currentDateDash->setTimezone('GMT+6')->format('Y-m-d'); // 2023-03-17
+            $view->with('currentDateDash', $currentDateDash);
         });
     }
 }

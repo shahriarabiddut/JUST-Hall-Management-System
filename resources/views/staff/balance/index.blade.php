@@ -2,11 +2,6 @@
 @section('title', 'Balance')
 
 @section('content')
-
-
-    <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Balance History</h1>
-    <p class="mb-4">Balance of students</p>
             <!-- Session Messages Starts -->
             @if(Session::has('success'))
             <div class="p-3 mb-2 bg-success text-white">
@@ -22,8 +17,8 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Balance Data
-            <a href="{{-- route('admin.balance.create') --}}" class="float-right btn btn-success btn-sm" target="_blank">Add New</a> </h6>
+            <h3 class="m-0 font-weight-bold text-primary">Balance Data
+            <a href="{{-- route('admin.balance.create') --}}" class="float-right btn btn-success btn-sm" target="_blank">Add New</a> </h3>
         </div>
         <div class="card-body">
             <div class="table-responsive">

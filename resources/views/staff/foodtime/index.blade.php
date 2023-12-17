@@ -5,7 +5,6 @@
 
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">FoodTime</h1>
             <!-- Session Messages Starts -->
             @if(Session::has('success'))
             <div class="p-3 mb-2 bg-success text-white">
@@ -21,8 +20,8 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">FoodTime Data
-            <a href="{{ route('staff.foodtime.create') }}" class="float-right btn btn-success btn-sm" target="_blank">Add New</a> </h6>
+            <h3 class="m-0 font-weight-bold text-primary">FoodTime 
+            <a href="{{ route('staff.foodtime.create') }}" class="float-right btn btn-success btn-sm" target="_blank">Add New</a> </h3>
         </div>
         <div class="card-body">
             <div class="table-responsive">

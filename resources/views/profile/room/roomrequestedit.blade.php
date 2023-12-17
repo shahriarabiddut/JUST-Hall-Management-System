@@ -8,20 +8,20 @@
 @if ($sorryAllocatedSeat==1)
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary ">You have allready Requested
+        <h6 class="m-0 font-weight-bold text-primary ">You have allready Requested</h6>
     </div>
 </div>
 @elseif ($sorryAllocatedSeat==2)
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary ">Room Allocation Accepted
+        <h6 class="m-0 font-weight-bold text-primary ">Room Allocation Accepted</h6>
     </div>
 </div>
 @else
  <!-- DataTales Example -->
  <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Edit Room Allocation request
+        <h6 class="m-0 font-weight-bold text-primary">Edit Room Allocation request</h6>
     </div>
     <div class="card-body">
         

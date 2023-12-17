@@ -4,13 +4,16 @@
 
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800"> Order Details </h1>
+    <div class="card-header p-1 my-1 bg-info">
+        <h3 class="m-0 p-2 font-weight-bold text-white bg-info">
+            Order Data </h3>
+    </div>
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Order Details 
-            <a href="{{ url('student/order') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h6>
+            <h3 class="m-0 font-weight-bold text-primary">Order Details 
+            <a href="{{ url('student/order') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h3>
         </div>
         <div class="card-body">
             
@@ -58,12 +61,13 @@
                         </td>
                         
                     </tr>
+                    @if ($validDate=='true')
                     <tr>
                         <td colspan="2">
                             <a  href="{{ route('student.order.delete',$data->id) }}" class="float-right mx-1 btn btn-danger btn-sm "><i class="fas fa-ban"> Cancel Order </i></a>
                         </td>
                     </tr>
-                    
+                    @endif
                 </table>
             </div>
         </div>

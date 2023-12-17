@@ -1,12 +1,7 @@
 @extends('admin/layout')
 @section('title', 'Rooms')
-
 @section('content')
 
-
-    <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Rooms</h1>
-    <p class="mb-4">Room</p>
             <!-- Session Messages Starts -->
             @if(Session::has('success'))
             <div class="p-3 mb-2 bg-success text-white">
@@ -18,12 +13,23 @@
                 <p>{{ session('danger') }} </p>
             </div>
             @endif
+            @if(Session::has('danger-email'))
+            <div class="p-3 mb-2 bg-danger text-white">
+                <h3>Allready Existed Room's</h3>
+                @foreach (session('danger-titles') as $etitles)
+                    <span class="m-1">
+                        {{ $etitles }} ,
+                    </span>
+                     @endforeach
+            </div>
+            @endif
             <!-- Session Messages Ends -->
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Room Data
-            <a href="{{ route('admin.rooms.create') }}" class="float-right btn btn-success btn-sm" target="_blank">Add New</a> </h6>
+            <h3 class="m-0 font-weight-bold text-primary">Room Data
+                <a href="{{ route('admin.rooms.create') }}" class="float-right btn btn-success btn-sm mx-2" target="_blank">Add New </a>  
+                <a href="{{ route('admin.rooms.bulk') }}" class="float-right btn btn-info btn-sm" target="_blank">Add From CSV </a>  </h3>
         </div>
         <div class="card-body">
             <div class="table-responsive">

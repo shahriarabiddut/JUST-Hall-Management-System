@@ -57,8 +57,8 @@
                     <tr>
                         <th>Status</th>
                         @switch($data->status)
-                            @case(0)
-                               <td class="bg-success text-white"> Not Used </td>
+                            @case(3)
+                               <td class="bg-info text-white"> Token On Print Queue </td>
                                    @break
                             @case(1)
                             <td class="bg-danger text-white"> Used </td>
@@ -84,13 +84,11 @@
                     
                     <tr>
                         <td colspan="2" class="m-1">
-                                    <a href="{{ route('staff.orders.printToken',$data->id) }}" class="float-right btn btn-success btn-sm btn-block p-2"><i class="fas fa-ticket-alt"> Print </i></a> 
-                                                  
-                    @if($data->status==0)
-                        
-                                    <a href="{{ route('staff.orders.valid',$data->id) }}" class="float-right btn btn-info btn-sm btn-block p-2"><i class="fas fa-ticket-alt"> Mark as Used </i></a> 
+                            <a href="{{ route('staff.orders.printToken',$data->order_id) }}" class="float-right btn btn-success btn-sm btn-block p-2"><i class="fas fa-ticket-alt"> Print </i></a>           
+                            @if($data->status!=1)
+                            <a href="{{ route('staff.orders.valid',$data->id) }}" class="float-right btn btn-info btn-sm btn-block p-2"><i class="fas fa-ticket-alt"> Mark as Used </i></a> 
+                            @endif
                         </td>                            
-                    @endif
                     </tr>
                     
                 </table>

@@ -8,10 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Student extends Model
 {
     use HasFactory;
-    protected $fillable = ['rollno', 'name' ,'email','password', 'mobile','address', 'photo'];
+    protected $fillable = ['rollno', 'name', 'email', 'password', 'mobile', 'address', 'photo', 'dept', 'session'];
     public $table = 'users';
-    function rooms(){
-        return $this->belongsTo(Room::class,'room_id');
+    function rooms()
+    {
+        return $this->belongsTo(Room::class, 'room_id');
     }
-    
 }

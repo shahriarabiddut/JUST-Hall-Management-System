@@ -4,8 +4,8 @@
 @section('content')
 <!-- Page Heading -->
 
-    <div class="container py-5">
-    <h1 class="border border-secondary rounded h3 mb-2 text-gray-800 p-2 bg-white"> Editing Password </h1>
+    <div class="container py-2">
+    <h1 class="border rounded h3 my-1 text-white p-2 bg-info"> Editing Password </h1>
 
     <div class="table-responsive">
         {{-- Errors --}}

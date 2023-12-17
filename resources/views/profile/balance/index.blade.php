@@ -5,7 +5,10 @@
 
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">My Balance</h1>
+    <div class="card-header p-1 my-1 bg-info">
+        <h3 class="m-0 p-2 font-weight-bold text-white bg-info">
+            My Balance  </h3>
+    </div>
 
             <!-- Session Messages Starts -->
             @if(Session::has('success'))

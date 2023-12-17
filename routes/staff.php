@@ -67,7 +67,7 @@ Route::middleware('staff')->prefix('staff')->name('staff.')->group(function () {
     Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('orders/status/{id}', [OrderController::class, 'show'])->name('orders.show');
     Route::get('orders/valid/{id}', [OrderController::class, 'update'])->name('orders.valid');
-    Route::get('orders/printToken/{id}', [OrderController::class, 'print'])->name('orders.printToken');
+    Route::get('orders/printToken/{id}', [OrderController::class, 'printNet'])->name('orders.printToken');
     Route::post('orders/searchall/', [OrderController::class, 'searchByDate'])->name('orders.searchByDate');
     Route::post('orders/search/', [OrderController::class, 'searchByHistory'])->name('orders.searchByHistory');
 });

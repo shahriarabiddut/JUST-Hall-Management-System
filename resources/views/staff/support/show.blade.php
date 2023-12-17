@@ -1,12 +1,12 @@
-@extends('layout')
+@extends('staff/layout')
 @section('title', 'Support Ticket Details')
 @section('content')
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Support Ticket Details of {{ $data->student->name }} - {{ $data->student->rollno }} 
-            <a href="{{ url('staff/support') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h6>
+            <h3 class="m-0 font-weight-bold text-primary">Support Ticket Details of {{ $data->student->name }} - {{ $data->student->rollno }} 
+            <a href="{{ url('staff/support') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h3>
         </div>
         <div class="card-body">
             

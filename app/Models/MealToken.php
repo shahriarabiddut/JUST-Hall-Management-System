@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class MealToken extends Model
 {
     use HasFactory;
+    function order()
+    {
+        return $this->belongsTo(Order::class, 'order_id');
+    }
 }

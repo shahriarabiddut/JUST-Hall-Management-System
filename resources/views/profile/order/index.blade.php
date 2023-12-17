@@ -5,7 +5,6 @@
 
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Order Data</h1>
             <!-- Session Messages Starts -->
             @if(Session::has('success'))
             <div class="p-3 mb-2 bg-success text-white">
@@ -19,20 +18,20 @@
             @endif
             <!-- Session Messages Ends -->
     <!-- DataTales Example -->
-    <div class="card shadow mb-4">
+    <div class="card shadow mb-4 ">
         <div class="card-header py-3">
             <div class="row">
                 <div class="col-sm">
-                    <h6 class="m-0 font-weight-bold text-primary">Order History </h6>
+                    <h3 class="m-0 font-weight-bold text-primary">Order History </h3>
                 </div>
-                <div class="col-sm float-left">
-                    <select id="mySelect" class="m-1" class="float-left">
+                <div class="col-sm float-right">
+                    <select id="mySelect" class="m-1" class="float-left form-control">
                         <option value="option"> Search By Date/ Month </option>
                         <option value="option2"> Search By Month </option>
                         <option value="option1"> Search By Date </option>
                       </select>
                 </div>
-                <div class="col-6 float-left">
+                <div class="col-6 float-right">
                     <div id="myDiv" style="display: none;" >
                         <form method="POST" action="{{ route('student.order.searchByDate') }}">
                             @csrf

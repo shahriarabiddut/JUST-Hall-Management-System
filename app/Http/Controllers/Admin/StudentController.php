@@ -174,9 +174,9 @@ class StudentController extends Controller
                         'rollno' => $row['rollno'],
                         'name' => $row['name'],
                         'email' => $row['email'],
-                        'password' => bcrypt($row['email']),
                         'dept' => $row['dept'],
                         'session' => $row['session'],
+                        'password' => bcrypt($row['email']),
                     ]);
                     //Creating Balance account for student
                     $BalanceController = new BalanceController();

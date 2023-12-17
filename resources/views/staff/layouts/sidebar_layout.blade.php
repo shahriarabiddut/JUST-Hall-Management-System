@@ -48,14 +48,14 @@
      </div>
      <!-- Nav FoodTime Services - Utilities Collapse Menu -->
      <li class="nav-item">
-         <a class="nav-link @if (!request()->is('admin/foodtime*'))
+         <a class="nav-link @if (!request()->is('staff/foodtime*'))
              collapsed
          @endif" href="#" data-toggle="collapse" data-target="#collapseSix"
              aria-expanded="true" aria-controls="collapseSix">
              <i class="fas fa-table"></i>
              <span>FoodTime </span>
          </a>
-         <div id="collapseSix" class="collapse @if(request()->is('admin/foodtime*')) show @endif" aria-labelledby="headingUtilities"
+         <div id="collapseSix" class="collapse @if(request()->is('staff/foodtime*')) show @endif" aria-labelledby="headingUtilities"
              data-parent="#accordionSidebar">
              <div class="bg-white py-2 collapse-inner rounded">
                  <h6 class="collapse-header">FoodTime Management</h6>
@@ -66,14 +66,14 @@
      </li>
      <!-- Nav FoodTime Services - Utilities Collapse Menu -->
      <li class="nav-item">
-         <a class="nav-link @if (!request()->is('admin/food*'))
+         <a class="nav-link @if (!request()->is('staff/food*'))
              collapsed
          @endif" href="#" data-toggle="collapse" data-target="#collapseSeven"
              aria-expanded="true" aria-controls="collapseSeven">
              <i class="fas fa-table"></i>
              <span>Food Items </span>
          </a>
-         <div id="collapseSeven" class="collapse @if(request()->is('admin/foodtime*')) show @endif" aria-labelledby="headingUtilities"
+         <div id="collapseSeven" class="collapse @if(request()->is('staff/food/*')) show @endif" aria-labelledby="headingUtilities"
              data-parent="#accordionSidebar">
              <div class="bg-white py-2 collapse-inner rounded">
                  <h6 class="collapse-header">Food Item Management</h6>
@@ -91,12 +91,12 @@
 
    <!-- Nav Item Balance - Pages Collapse Menu -->
    <li class="nav-item">
-       <a class="nav-link @if(!request()->is('admin/balance*')) collapsed @endif" href="#" data-toggle="collapse" data-target="#collapseTwo"
+       <a class="nav-link @if(!request()->is('staff/balance*')) collapsed @endif" href="#" data-toggle="collapse" data-target="#collapseTwo"
            aria-expanded="true" aria-controls="collapseTwo">
            <i class="fas fa-wallet"></i>
            <span>Balance</span>
        </a>
-       <div id="collapseTwo" class="collapse @if(request()->is('admin/balance*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+       <div id="collapseTwo" class="collapse @if(request()->is('staff/balance*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
            <div class="bg-white py-2 collapse-inner rounded">
                <h6 class="collapse-header">Balance Management</h6>
                <a class="collapse-item" href="{{ route('staff.balance.index') }}">View All </a>
@@ -106,12 +106,12 @@
    </li>
       <!-- Nav Item Payment - Pages Collapse Menu -->
       <li class="nav-item">
-        <a class="nav-link @if(!request()->is('admin/payment*')) collapsed @endif" href="#" data-toggle="collapse" data-target="#collapseFour"
+        <a class="nav-link @if(!request()->is('staff/payment*')) collapsed @endif" href="#" data-toggle="collapse" data-target="#collapseFour"
             aria-expanded="true" aria-controls="collapseFour">
             <i class="fas fa-credit-card"></i>
             <span>Payment</span>
         </a>
-        <div id="collapseFour" class="collapse @if(request()->is('admin/payment*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="collapseFour" class="collapse @if(request()->is('staff/payment*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Payment Management</h6>
                 <a class="collapse-item" href="{{ route('staff.payment.index') }}">View All Payment</a>

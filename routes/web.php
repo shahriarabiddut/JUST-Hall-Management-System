@@ -25,7 +25,8 @@ Route::get('/', function () {
 
 Route::get('/tokenPrint', [MealTokenController::class, 'TokenPrintQueue'])->name('tokenPrint');
 //ESP 32 Token Print Queue Delete
-Route::get('/tpqd/{id}', [MealTokenController::class, 'TokenPrintQueueDelete'])->name('tokenPrint');
+// Route::get('/tpqd/{id}&{order_id}&{rollno}', [MealTokenController::class, 'TokenPrintQueueDelete'])->name('tokenprint.delete');
+Route::put('/tpqd/{id}&{order_id}&{rollno}/delete', [MealTokenController::class, 'TokenPrintQueueDelete2'])->name('tokenprint.delete2');
 //User Routes
 Route::get('student', [ProfileController::class, 'index'])->middleware(['auth'])->name('student.dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
@@ -74,7 +75,7 @@ Route::middleware('auth')->prefix('student')->name('student.')->group(function (
     Route::resource('mealtoken', MealTokenController::class);
 
     //Meal Token Print Routes
-    Route::get('mealtoken/print/{id}', [MealTokenController::class, 'print'])->name('mealtoken.print');
+    // Route::get('mealtoken/print/{id}', [MealTokenController::class, 'print'])->name('mealtoken.print');
     //Print Extra ESp32
     Route::get('mealtoken/printNet/{id}', [MealTokenController::class, 'printNet'])->name('mealtoken.printnet');
 });

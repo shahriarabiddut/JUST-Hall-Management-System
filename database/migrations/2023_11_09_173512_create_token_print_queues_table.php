@@ -14,6 +14,9 @@ return new class extends Migration
         Schema::create('token_print_queues', function (Blueprint $table) {
             $table->id();
             $table->longText('data');
+            $table->integer('token_id');
+            $table->integer('order_id');
+            $table->integer('rollno');
             $table->timestamps();
         });
     }

@@ -1,8 +1,6 @@
                <!-- Topbar -->
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-                <h4 class="sidebar-brand-text mx-1" > @isset($HallOption)
-                    {{ $HallOption[2]->value }}
-                @endisset 
+                <h4 class="sidebar-brand-text mx-1" > Dashboard
                 </h4>
 
                     <!-- Sidebar Toggle (Topbar) -->

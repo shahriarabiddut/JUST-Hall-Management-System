@@ -4,7 +4,6 @@
 @section('content')
 @if ($data)
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800"> My Room Details </h1>
     @if(Session::has('danger'))
     <div class="p-3 mb-2 bg-danger text-white">
         <p>{{ session('danger') }} </p>
@@ -13,8 +12,8 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Room Allocation Details of {{ Auth::user()->name }} 
-            
+            <h4 class="m-0 font-weight-bold text-primary">Room Allocation Details of {{ Auth::user()->name }} 
+            </h4>
         </div>
         <div class="card-body">
             

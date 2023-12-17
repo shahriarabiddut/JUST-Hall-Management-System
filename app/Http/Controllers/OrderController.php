@@ -209,7 +209,20 @@ class OrderController extends Controller
         //
         $data = Order::all()->where('id', '=', $id)->first();
         $tokendata = MealToken::all()->where('order_id', '=', $id)->first();
-        return view('profile.order.show', ['data' => $data, 'tokendata' => $tokendata]);
+        //Check Date is Valid To Delete
+        $validDate = $this->isDateValid($data->date);
+        //
+        return view('profile.order.show', ['data' => $data, 'tokendata' => $tokendata, 'validDate' => $validDate]);
+    }
+    public function isDateValid(string $date)
+    {
+        //
+        //checking if its tommorow
+        $currentDate = Carbon::now(); // get current date and time
+        $nextDate = $currentDate->addDay(); // add one day to current date
+        $nextDate = $nextDate->setTimezone('GMT+6')->format('Y-m-d'); // 2023-03-17
+        $processedData = ($date > $nextDate);
+        return $processedData;
     }
     /**
      * Show the form for editing the specified resource.

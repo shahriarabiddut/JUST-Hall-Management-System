@@ -3,10 +3,6 @@
 
 @section('content')
 
-
-    <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Staffs</h1>
-    <p class="mb-4">Staff</p>
             <!-- Session Messages Starts -->
             @if(Session::has('success'))
             <div class="p-3 mb-2 bg-success text-white">
@@ -22,8 +18,8 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Staff Data
-            <a href="{{ route('admin.staff.create') }}" class="float-right btn btn-success btn-sm" target="_blank">Add New Staff</a> </h6>
+            <h3 class="m-0 font-weight-bold text-primary">Staff 
+            <a href="{{ route('admin.staff.create') }}" class="float-right btn btn-success btn-sm" target="_blank">Add New Staff</a> </h3>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -66,7 +62,6 @@
                             <td class="text-center">
                                 <a href="{{ url('admin/staff/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
                                 <a href="{{ url('admin/staff/'.$d->id.'/edit') }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
-                                <a href="{{ url('admin/staff/payments/'.$d->id) }}" class="btn btn-dark btn-sm"><i class="fa fa-credit-card"></i></a>
                                 <a onclick="return confirm('Are You Sure?')" href="{{ url('admin/staff/'.$d->id.'/delete') }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                             </td>
 

@@ -1,16 +1,11 @@
 @extends('admin/layout')
 @section('title', 'Edit Student')
 @section('content')
-
-
-    <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Editing Student: {{ $data->full_name }}</h1>
-
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Edit Student
-            <a href="{{ route('admin.student.show',$data->id) }}" class="float-right btn btn-info btn-sm ml-1"> <i class="fa fa-eye"></i> View Student </a> <a href="{{ route('admin.student.index') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a></h6>
+            <h3 class="m-0 font-weight-bold text-primary">Editing Student: {{ $data->name }}
+            <a href="{{ route('admin.student.show',$data->id) }}" class="float-right btn btn-info btn-sm ml-1"> <i class="fa fa-eye"></i> View Student </a> <a href="{{ route('admin.student.index') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a></h3>
         </div>
         <div class="card-body">
             

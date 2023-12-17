@@ -5,7 +5,10 @@
 
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Meal Tokens</h1>
+    <div class="card-header p-1 my-1 bg-info">
+        <h3 class="m-0 p-2 font-weight-bold text-white bg-info">
+            Meal Tokens </h3>
+    </div>
             <!-- Session Messages Starts -->
             @if(Session::has('success'))
             <div class="p-3 mb-2 bg-success text-white">
@@ -30,11 +33,8 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Student</th>
                             <th>MealType</th>
                             <th>Orderno</th>
-                            <th>Creation Time</th>
-                            <th>Print Time</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -42,11 +42,8 @@
                     <tfoot>
                         <tr>
                             <th>#</th>
-                            <th>Student</th>
                             <th>MealType</th>
                             <th>Orderno</th>
-                            <th>Creation Time</th>
-                            <th>Print/Error Time</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -56,34 +53,25 @@
                         @foreach ($data as $key => $d)
                         <tr>
                             <td>{{ ++$key }}</td>
-                            <td>{{ Auth::user()->name }}</td>
                             <td>{{ $d->meal_type }}</td>
                             <td>{{ $d->order_id }}</td>
-                            <td>{{ $d->created_at }}</td>
-                            <td>
-                                @if ($d->created_at==$d->updated_at)
-                                    Not Printed Yet
-                                @else
-                                    {{ $d->updated_at }}
-                                @endif
-                                </td>
                             
                             @switch($d->status)
-                                @case(0)
-                                <td class="bg-success text-white"> Not Used </td>
-                                    @break
                                 @case(1)
                                 <td class="bg-danger text-white"> Printed </td>
                                     @break
                                 @case(2)
                                 <td class="bg-warning text-white"> Error</td>
                                     @break
+                                @case(3)
+                                <td class="bg-info text-white"> On Queue To Print </td>
+                                    @break
                                 @default
                                 <td class="bg-success text-white"> Not Used </td>
                             @endswitch
-                                <td><a  href="{{ url('student/mealtoken/'.$d->order_id.'/show') }}" class="float-right btn btn-info btn-sm m-1"><i class="fas fa-eye"> View</i></a>
-                                    @if ($d->status!=1)
-                                    <a  href="{{ url('student/mealtoken/print/'.$d->id) }}" class="float-right btn btn-success btn-sm "><i class="fas fa-ticket-alt"> Print</i></a></td>
+                                <td><a  href="{{ url('student/mealtoken/'.$d->order_id.'/show') }}" class="float-right btn btn-info btn-sm mx-1"><i class="fas fa-eye"> View</i></a>
+                                    @if ($d->status==0 && $currentDateDash==$d->date)
+                                    <a  href="{{ route('student.mealtoken.printnet',$d->order_id) }}" class="float-right btn btn-success btn-sm "><i class="fas fa-ticket-alt"> Print</i></a></td>
                                     @endif
                                     
                         </tr>

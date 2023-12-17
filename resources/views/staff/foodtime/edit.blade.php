@@ -2,15 +2,11 @@
 @section('title', 'Edit Food Time')
 @section('content')
 
-
-    <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Editing Food Time : {{ $data->title }}</h1>
-
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Edit Food Time
-            <a href="{{ url('staff/foodtime/'.$data->id) }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h6>
+            <h3 class="m-0 font-weight-bold text-primary">Editing Food Time : {{ $data->title }}
+            <a href="{{ url('staff/foodtime/'.$data->id) }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h3>
         </div>
         <div class="card-body">
             

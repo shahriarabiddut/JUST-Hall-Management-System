@@ -5,7 +5,6 @@
 
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Orders </h1>
             <!-- Session Messages Starts -->
             @if(Session::has('success'))
             <div class="p-3 mb-2 bg-success text-white">
@@ -19,7 +18,7 @@
             @endif
             <!-- Session Messages Ends -->
             
-            <div class="card shadow mb-4 pl-4 py-2 bg-secondary text-white">
+            <div class="card shadow mb-1 pl-4 py-2 bg-secondary text-white">
                 <form method="POST" action="{{ route('staff.orders.searchByHistory') }}">
                     @csrf
                     <label for="search-date">Search by Date with Details :</label>
@@ -32,7 +31,7 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Order History
+            <h3 class="m-0 font-weight-bold text-primary d-inline" >Order History</h3>
                 <div class="float-right">
                     <form method="POST" action="{{ route('staff.orders.searchByDate') }}">
                         @csrf

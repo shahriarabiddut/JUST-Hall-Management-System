@@ -15,11 +15,12 @@ return new class extends Migration
             $table->id();
             $table->integer('order_id');
             $table->string('food_name');
-            $table->string('token_number');
+            $table->date('date');
             $table->integer('rollno');
             $table->string('meal_type');
             $table->integer('quantity');
             $table->integer('status');
+            $table->string('token_number');
             $table->timestamps();
         });
     }

@@ -16,8 +16,12 @@
             <div class="table-responsive">
                 <table class="table table-bordered" width="100%">
                     <tr>
-                        <th width="60%">Meal Type</th>
-                        <td width="40%">{{ $data->meal_type }}</td>
+                        <th width="60%">Date</th>
+                        <td width="40%">{{ $data->order->date }}</td>
+                    </tr>
+                    <tr>
+                        <th>Meal Type</th>
+                        <td >{{ $data->order->order_type }}</td>
                     </tr>
                     <tr>
                         <th>Meal</th>
@@ -25,7 +29,7 @@
                     </tr>
                     <tr>
                         <th>Quantity</th>
-                        <td>{{ $data->quantity }}</td>
+                        <td>{{ $data->order->quantity }}</td>
                     </tr>
                     <tr>
                         <th>Printed Date</th>
@@ -42,14 +46,15 @@
                     <tr>
                         <th>Status</th>
                         @switch($data->status)
-                            @case(0)
-                               <td class="bg-success text-white"> Not Used </td>
-                                   @break
+                            
                             @case(1)
                             <td class="bg-danger text-white"> Used </td>
                                 @break
                             @case(2)
                             <td class="bg-warning text-white"> Error</td>
+                                @break
+                            @case(3)
+                            <td class="bg-info text-white"> On Queue To Print </td>
                                 @break
                             @default
                             <td class="bg-success text-white"> Not Used </td>
@@ -67,14 +72,12 @@
                     </tr>
                     
                     <tr>
+                        @if ($data->status==0 && $currentDateDash==$data->date)
                         <td colspan="2">
-                            @if ($data->status!=1)
-                            <a  href="{{ url('student/mealtoken/print/'.$data->id) }}" class="m-1 float-right btn btn-success btn-sm "><i class="fas fa-ticket-alt"> Print Meal Token </i></a>
-                            @endif
-                            <a  href="{{ route('student.mealtoken.printnet',$data->order_id) }}" class="m-1 float-left btn btn-danger btn-sm "><i class="fas fa-ticket-alt"> Print Meal Token Net </i></a>
-                            
-                            
+                            {{-- <a  href="{{ url('student/mealtoken/print/'.$data->id) }}" class="m-1 float-right btn btn-success btn-sm "><i class="fas fa-ticket-alt"> Print Meal Token </i></a> --}}
+                            <a  href="{{ route('student.mealtoken.printnet',$data->order_id) }}" class="m-1 float-left btn btn-info btn-sm "><i class="fas fa-ticket-alt"> Print Meal Token Net </i></a>
                         </td>
+                        @endif
                         
                     </tr>
                     

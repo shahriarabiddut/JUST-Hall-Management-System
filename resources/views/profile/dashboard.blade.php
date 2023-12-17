@@ -8,19 +8,19 @@
             </div>
 @endif
 <!-- Content Row For Order Spent of Current Month -->
-<div class="card-header py-2 my-2 bg-primary">
-    <h6 class="m-0 p-3 font-weight-bold text-white bg-info">
-        You have Spent this Month : {{ $sumofthatmonth }} Taka
+<div class="card-header p-1 bg-success my-1">
+    <h6 class="p-3 font-weight-bold text-white bg-success m-1">
+        You have Spent this Month : {{ $sumofthatmonth }} Taka </h6>
 </div>
 
 <!-- Content Row For Order Data of Next Day -->
-                <div class="card-header py-3 bg-secondary">
-                    <h6 class="m-0 font-weight-bold text-white ">
-                        My Orders For Next Day  
+                <div class="card-header p-1 my-1">
+                    <h3 class="m-0 p-3 font-weight-bold text-white bg-info">
+                        My Orders For Next Day  </h3>
                 </div>
 
 <div class="row m-1 text-center bg-dark">
-    <div class="p-1 text-white">
+    <div class="p-1 m-1 text-white">
         <i class="fa fa-clock"></i>
         <h6 id="hours" class="d-inline"></h6>
         <h6 id="mins" class="d-inline"></h6>

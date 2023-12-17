@@ -63,7 +63,7 @@
                         <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
                       </div>
                       <input required name="password" class="form-control pass-key" placeholder="Enter password" type="password" value="{{ old('password') }}">
-                      <span class="show form-control bg-primary text-white ml-1">SHOW</span>
+                      <span class="show text-center bg-primary text-white mx-1 px-2 py-1"><i class='fas fa-eye py-1'></i></span>
 
                     </div>
                     <div class="form-group">

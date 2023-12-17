@@ -2,10 +2,6 @@
 @section('title', 'Orders Search by date ')
 
 @section('content')
-
-
-    <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Orders Search by date</h1>
             <!-- Session Messages Starts -->
             @if(Session::has('success'))
             <div class="p-3 mb-2 bg-success text-white">
@@ -25,7 +21,7 @@
                 <div class="float-left">
                     <form method="POST" action="{{ route('admin.orders.searchByDate') }}">
                         @csrf
-                        <label for="search-date">Search History by Date:</label>
+                        <h3 class="m-0 font-weight-bold text-primary"> Order History :
                         <input type="date" id="search-date" name="date" value="{{ $date }}">
                         <button type="submit">Search</button>
                       </form>

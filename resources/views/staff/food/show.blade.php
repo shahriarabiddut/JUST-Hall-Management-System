@@ -4,13 +4,12 @@
 
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800"> Food Item Details </h1>
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Food Item Details of <span class="bg-warning">-- {{ $data->food_name }} -- </span> 
-            <a href="{{ url('staff/food') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h6>
+            <h3 class="m-0 font-weight-bold text-primary">Food Item Details of <span class="bg-warning"> {{ $data->food_name }} </span> 
+            <a href="{{ url('staff/food') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h3>
         </div>
         <div class="card-body">
             

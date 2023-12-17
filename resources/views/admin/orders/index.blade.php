@@ -2,10 +2,6 @@
 @section('title', 'Orders ')
 
 @section('content')
-
-
-    <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Orders </h1>
             <!-- Session Messages Starts -->
             @if(Session::has('success'))
             <div class="p-3 mb-2 bg-success text-white">
@@ -32,8 +28,8 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Order History
-                <div class="float-right">
+            <h3 class="m-0 font-weight-bold text-primary">Orders
+                <div class="float-right h6">
                     <form method="POST" action="{{ route('admin.orders.searchByDate') }}">
                         @csrf
                         <label for="search-date">Search History by Date:</label>
