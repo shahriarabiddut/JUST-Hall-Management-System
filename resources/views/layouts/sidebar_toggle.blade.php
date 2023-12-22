@@ -4,7 +4,15 @@
 <!--Logout - Dashboard -->
 <hr class="sidebar-divider d-none d-md-block">
 <li class="nav-item active">
-    <a class="nav-link" href="{{ url('admin/logout') }}">
+    @auth
+    <a class="nav-link" href="{{ route('logout') }}">
+    @endauth
+    @auth('staff')
+    <a class="nav-link" href="{{ route('staff.logout') }}">
+    @endauth
+    @auth('admin')
+    <a class="nav-link" href="{{ route('admin.logout') }}">
+    @endauth
         <i class="fas fa-fw fa-sign-out-alt"></i>
         <span>Logout</span></a>
 </li>

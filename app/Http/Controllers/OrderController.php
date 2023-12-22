@@ -56,9 +56,12 @@ class OrderController extends Controller
         $userid = Auth::user()->id;
         // Check If User Ballance is less then 50
         $this->checkBalance($userid);
-        //
+        //Check Food Time exist or not
         $food_time_id = $id;
         $food_time = FoodTime::all()->where('status', '=', '1')->where('id', '=', $food_time_id)->first();
+        if ($food_time == null) {
+            return redirect()->route('student.order.index')->with('danger', 'Not Found');
+        }
         //checking if its tommorow
         $currentDate = Carbon::now(); // get current date and time
         $current_time = $currentDate->setTimezone('GMT+6')->format('H:i:s'); // "00:10:15"
@@ -118,7 +121,7 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $userid = Auth::user()->id;
-        //
+        // Checks Balance
         $dataBalance = Balance::Find($userid);
         if ($dataBalance->balance_amount <= 50) {
             return redirect()->route('student.balance.index')->with('danger', 'Please! Add Balance First.');
@@ -208,6 +211,9 @@ class OrderController extends Controller
     {
         //
         $data = Order::all()->where('id', '=', $id)->first();
+        if ($data == null) {
+            return redirect()->route('student.order.index')->with('danger', 'Not Found');
+        }
         $tokendata = MealToken::all()->where('order_id', '=', $id)->first();
         //Check Date is Valid To Delete
         $validDate = $this->isDateValid($data->date);
@@ -319,7 +325,9 @@ class OrderController extends Controller
         $nextDate = $currentDate->addDay(); // add one day to current date
         $nextDate = $nextDate->setTimezone('GMT+6')->format('Y-m-d'); // 2023-03-17
         $data = Order::all()->where('id', '=', $id)->first();
-
+        if ($data == null) {
+            return redirect()->route('student.order.index')->with('danger', 'Not Found');
+        }
         if ($data->date <= $nextDate) {
             return redirect('student/order')->with('danger', 'You cannot edit anymore for this Order!Day Passed!');
         } else {
@@ -356,6 +364,13 @@ class OrderController extends Controller
      */
     public function createOrderAdvance(string $id)
     {
+        $userid = Auth::user()->id;
+        // Checks Balance
+        $dataBalance = Balance::Find($userid);
+        if ($dataBalance->balance_amount <= 50) {
+            return redirect()->route('student.balance.index')->with('danger', 'Please! Add Balance First.');
+        }
+        //
         $food_time_id = $id;
         $food_time = FoodTime::all()->where('status', '=', '1')->where('id', '=', $food_time_id)->first();
         if ($food_time != null) {
@@ -367,6 +382,12 @@ class OrderController extends Controller
     }
     public function storeOrderAdvance(Request $request)
     {
+        $userid = Auth::user()->id;
+        // Checks Balance
+        $dataBalance = Balance::Find($userid);
+        if ($dataBalance->balance_amount <= 50) {
+            return redirect()->route('student.balance.index')->with('danger', 'Please! Add Balance First.');
+        }
         //
         $request->validate([
             'order_type' => 'required',

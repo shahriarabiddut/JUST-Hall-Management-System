@@ -58,7 +58,7 @@
                             
                             @switch($d->status)
                                 @case(1)
-                                <td class="bg-danger text-white"> Printed </td>
+                                <td class="bg-success text-white"> Printed </td>
                                     @break
                                 @case(2)
                                 <td class="bg-warning text-white"> Error</td>
@@ -67,7 +67,7 @@
                                 <td class="bg-info text-white"> On Queue To Print </td>
                                     @break
                                 @default
-                                <td class="bg-success text-white"> Not Used </td>
+                                <td class="bg-secondary text-white"> Not Used </td>
                             @endswitch
                                 <td><a  href="{{ url('student/mealtoken/'.$d->order_id.'/show') }}" class="float-right btn btn-info btn-sm mx-1"><i class="fas fa-eye"> View</i></a>
                                     @if ($d->status==0 && $currentDateDash==$d->date)

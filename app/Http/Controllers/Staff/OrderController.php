@@ -96,6 +96,9 @@ class OrderController extends Controller
     {
         //
         $data = MealToken::all()->where('order_id', '=', $id)->first();
+        if ($data == null) {
+            return redirect()->route('staff.orders.index')->with('danger', 'Not Found');
+        }
         $data2 = Order::all()->where('id', '=', $data->order_id)->first();
         $currentDate = Carbon::now(); // get current date and time
         $current_time = $currentDate->setTimezone('GMT+6')->format('Y-m-d');
@@ -123,6 +126,9 @@ class OrderController extends Controller
     {
         //
         $data = MealToken::find($id);
+        if ($data == null) {
+            return redirect()->route('staff.orders.index')->with('danger', 'Not Found');
+        }
         if ($data->status >= 1) {
             return redirect()->back()->with('danger', 'Warning!');
         } else {
@@ -142,7 +148,7 @@ class OrderController extends Controller
             return redirect()->route('staff.orders.index')->with('danger', 'Token Expired!');
         }
         if ($data == null) {
-            return redirect()->back();
+            return redirect()->back()->with('danger', 'Not Found!');
         }
         // Done
         if ($data->status == 0) {

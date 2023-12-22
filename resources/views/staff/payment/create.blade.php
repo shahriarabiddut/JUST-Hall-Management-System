@@ -1,4 +1,6 @@
 @extends('staff/layout')
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha384-vk5WoKIaW/vJyUAd9n/wmopsmNhiy+L2Z+SBxGYnUkunIxVxAv/UtMOhba/xskxh" crossorigin="anonymous"></script>
+<script src="{{ asset('js/jquery-searchbox.js') }}"></script>
 @section('title', 'Create Payment')
 @section('content')
 
@@ -18,7 +20,7 @@
                         <tr>
                             <th width="30%" >Select Student</th>
                             <td>
-                                <select required name="student_id" class="form-control" width="70%" id="select_student">
+                                <select required name="student_id" class="form-control js-searchBox" id="select_student" width="70%" id="select_student">
                                     <option value="0">--- Select Student ---</option>
                                     @foreach ($studentdata as $st)
                                     <option value="{{$st->id}}">{{$st->name}} - {{$st->rollno}}</option>
@@ -69,12 +71,16 @@
     @section('scripts')
     <!-- Add Search in select Options custom scripts -->
 
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script defer src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-        <script>
+    <script>
         $(function(){
          $("#select_student").select2();
         }); 
+        $(function(){
+         $("#select_room").select2();
+        }); 
+        $('.js-searchBox').searchBox({ elementWidth: '100%'});
+        $('.user_id').searchBox({ elementWidth: '100%'});
+        $('.room_id').searchBox({ elementWidth: '100%'});
        </script>
     @endsection
 @endsection

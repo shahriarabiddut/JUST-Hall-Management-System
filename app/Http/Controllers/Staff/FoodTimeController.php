@@ -12,16 +12,17 @@ class FoodTimeController extends Controller
     public function index()
     {
         $data = FoodTime::all();
-        return view('staff.foodtime.index',['data'=>$data]);
+        return view('staff.foodtime.index', ['data' => $data]);
     }
- 
+
     /**
      * Show the form for creating a new resource.
      */
-    public function create(){
+    public function create()
+    {
         return view('staff.foodtime.create');
     }
- 
+
     /**
      * Store a newly created resource in storage.
      */
@@ -30,22 +31,21 @@ class FoodTimeController extends Controller
         //
         $data = new FoodTime;
         $request->validate([
-         'title' => 'required',
-         'detail' => 'required',
-         'status' => 'required',
-         'price' => 'required',
-         ]);
+            'title' => 'required',
+            'detail' => 'required',
+            'status' => 'required',
+            'price' => 'required',
+        ]);
         $data->title = $request->title;
         $data->detail = $request->detail;
         $data->price = $request->price;
         $data->status = $request->status;
         $data->createdby = $request->createdby;
         $data->save();
- 
-        return redirect('staff/foodtime')->with('success','Room Data has been added Successfully!');
-        
+
+        return redirect('staff/foodtime')->with('success', 'Foodtime has been added Successfully!');
     }
- 
+
     /**
      * Display the specified resource.
      */
@@ -53,13 +53,23 @@ class FoodTimeController extends Controller
     {
         //
         $data = FoodTime::find($id);
-        return view('staff.foodtime.show',['data'=>$data]);
+        //
+        if ($data == null) {
+            return redirect()->route('staff.foodtime.index')->with('danger', 'Not Found!');
+        }
+        //
+        return view('staff.foodtime.show', ['data' => $data]);
     }
     public function edit(string $id)
     {
-        
+
         $data = FoodTime::find($id);
-        return view('staff.foodtime.edit',['data'=>$data]);
+        //
+        if ($data == null) {
+            return redirect()->route('staff.foodtime.index')->with('danger', 'Not Found!');
+        }
+        //
+        return view('staff.foodtime.edit', ['data' => $data]);
     }
 
     /**
@@ -69,15 +79,15 @@ class FoodTimeController extends Controller
     {
         //
         $data = FoodTime::find($id);
+
         $request->validate([
-            'detail' => 'required', 
-            'price' => 'required', 
+            'detail' => 'required',
+            'price' => 'required',
         ]);
         $data->detail = $request->detail;
         $data->price = $request->price;
         $data->save();
-        return redirect('staff/foodtime')->with('success','Food Time Data has been updated Successfully!');
-
+        return redirect('staff/foodtime')->with('success', 'Food Time Data has been updated Successfully!');
     }
     /**
      * Remove the specified resource from storage.
@@ -85,31 +95,43 @@ class FoodTimeController extends Controller
     public function destroy($id)
     {
         $data = FoodTime::find($id);
+        //
+        if ($data == null) {
+            return redirect()->route('staff.foodtime.index')->with('danger', 'Not Found!');
+        }
+        //
         $data->delete();
-        return redirect('staff/foodtime')->with('danger','Data has been deleted Successfully!');
- 
+        return redirect('staff/foodtime')->with('danger', 'Data has been deleted Successfully!');
     }
     public function active($id)
     {
         $data = FoodTime::find($id);
+        //
+        if ($data == null) {
+            return redirect()->route('staff.foodtime.index')->with('danger', 'Not Found!');
+        }
+        //
         $data->status = 1;
         $data->save();
-        return redirect('staff/foodtime')->with('success','FoodTime Activate Successfully!');
- 
+        return redirect('staff/foodtime')->with('success', 'FoodTime Activate Successfully!');
     }
     public function disable($id)
     {
         $data = FoodTime::find($id);
+        //
+        if ($data == null) {
+            return redirect()->route('staff.foodtime.index')->with('danger', 'Not Found!');
+        }
+        //
         $data->status = 0;
-        
-        foreach ($data->food as $fitem){
+
+        foreach ($data->food as $fitem) {
             $dataDisable = Food::find($fitem->id);
             $dataDisable->status = 0;
-            $dataDisable->save();  
+            $dataDisable->save();
         }
-        
+
         $data->save();
-        return redirect('staff/foodtime')->with('danger','FoodTime and related FoodItems Disabled Successfully!');
- 
+        return redirect('staff/foodtime')->with('danger', 'FoodTime and related FoodItems Disabled Successfully!');
     }
 }

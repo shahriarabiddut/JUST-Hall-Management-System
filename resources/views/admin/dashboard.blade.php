@@ -4,7 +4,19 @@
 @section('content')
 <!-- Content Row -->
 <div class="row">
-
+    @if(Session::has('success'))
+    <div class="p-3 mb-2 bg-success text-white">
+        <p>{{ session('success') }} </p>
+    </div>
+    @endif
+    @if(Session::has('danger'))
+    <div class="p-3 mb-2 bg-danger text-white">
+        <p>{{ session('danger') }} </p>
+    </div>
+    @endif
+</div>
+<div class="row">
+   
     <!-- Students Card Example -->
     <div class="col-xl-3 col-md-6 mb-4">
         <div class="card border-left-success shadow h-100 py-2">

@@ -98,6 +98,9 @@ class OrderController extends Controller
     {
         //
         $data = MealToken::all()->where('order_id', '=', $id)->first();
+        if ($data == null) {
+            return redirect()->route('admin.orders.index')->with('danger', 'Not Found!');
+        }
         $data2 = Order::all()->where('id', '=', $data->order_id)->first();
         $currentDate = Carbon::now(); // get current date and time
         $current_time = $currentDate->setTimezone('GMT+6')->format('Y-m-d');
@@ -134,84 +137,5 @@ class OrderController extends Controller
         }
     }
     //Print meal token
-    public function print(string $id)
-    {
-        //MealData Date
-        $data = MealToken::find($id);
-        $date_MealToken = $data->order_id;
-        $dataOrder = Order::all()->where('id', '=', $date_MealToken)->first();
-        $date_MealToken = $dataOrder->date;
-        //
-        $currenturl = url()->full();
-        //SiteData
-        $store_name_data = HallOption::all();
-        //FoodData
-        $fooddata = Order::find($data->order_id);
-        // Set params
-        $mid = "Admin : " . Auth::guard('admin')->name;
-        $store_name = $store_name_data[8]->value;
-        $store_address = $date_MealToken;
-        $store_phone = '1234567890';
-        $store_email = $store_name_data[8]->value;
-        $store_website = env('APP_URL');
-        // $tax_percentage = 10;
-        $transaction_id = 'MTNo' . $data->id;
-        // Set items
-        $items = [
-            [
-                'name' => $data->food_name,
-                'qty' => $data->quantity,
-                'price' => $fooddata->price * 1000,
-            ],
-        ];
-        // Init printer
-        $printer = new ReceiptPrinter;
-        $printer->init(
-            config('receiptprinter.connector_type'),
-            config('receiptprinter.connector_descriptor')
-        );
-        $printerdatax = $printer->init(
-            config('receiptprinter.connector_type'),
-            config('receiptprinter.connector_descriptor')
-        );
-        if ($printerdatax == 'null') {
-            return redirect()->route('admin.orders.index')->with('danger', ' Somethings Wrong!Printer & Wifi is not on Same IP!');
-        }
-        // Set store info
-        $printer->setStore($mid, $store_name, $store_address, $store_phone, $store_email, $store_website);
 
-        // Add items
-        foreach ($items as $item) {
-            $printer->addItem(
-                $item['name'],
-                $item['qty'],
-                $item['price']
-            );
-        }
-        // Set tax
-        // $printer->setTax($tax_percentage);
-
-        // Calculate total
-        $printer->calculateSubTotal();
-        $printer->calculateGrandTotal();
-
-        // Set transaction ID
-        $printer->setTransactionID($transaction_id);
-
-        // Set qr code
-        $printer->setQRcode([
-            'tid' => $currenturl,
-        ]);
-
-        if ($printer->printReceipt() == 'null') {
-            return redirect()->route('admin.orders.index')->with('danger', ' Somethings Wrong!Printer & Wifi is not on Same IP!');
-        } else {
-            // Print Reciept 
-            $printer->printReceipt();
-            //Update Token status
-            $data->status = 1;
-            $data->save();
-            return redirect()->route('admin.orders.index')->with('success', ' Token Printed!');
-        }
-    }
 }

@@ -3,8 +3,6 @@
 @section('content')
 
 
-    <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800"> Mealtoken Details </h1>
 <!-- Session Messages Starts -->
 @if(Session::has('success'))
 <div class="p-3 mb-2 bg-success text-white">
@@ -20,8 +18,8 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Mealtoken Details 
-            <a href="{{ url('staff/orders') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h6>
+            <h3 class="m-0 font-weight-bold text-primary">Mealtoken Details 
+            <a href="{{ url('staff/orders') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h3>
         </div>
         <div class="card-body {{ $bg }} text-white p-2">
             <h1 class="text-center font-weight-bold"> {{ $messageExtra }}</h1>
@@ -61,7 +59,7 @@
                                <td class="bg-info text-white"> Token On Print Queue </td>
                                    @break
                             @case(1)
-                            <td class="bg-danger text-white"> Used </td>
+                            <td class="bg-danger text-white"> Used</td>
                                 @break
                             @case(2)
                             <td class="bg-warning text-white"> Error</td>

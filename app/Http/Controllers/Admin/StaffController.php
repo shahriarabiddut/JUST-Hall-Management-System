@@ -73,6 +73,9 @@ class StaffController extends Controller
     {
         //
         $data = Staff::find($id);
+        if ($data == null) {
+            return redirect()->route('admin.staff.index')->with('danger', 'Not Found!');
+        }
         return view('admin.staff.show', ['data' => $data]);
     }
 
@@ -84,6 +87,9 @@ class StaffController extends Controller
         //
         $departs = Department::all();
         $data = Staff::find($id);
+        if ($data == null) {
+            return redirect()->route('admin.staff.index')->with('danger', 'Not Found!');
+        }
         return view('admin.staff.edit', ['data' => $data, 'departs' => $departs]);
     }
 
@@ -125,6 +131,9 @@ class StaffController extends Controller
     public function destroy($id)
     {
         $data = Staff::find($id);
+        if ($data == null) {
+            return redirect()->route('admin.staff.index')->with('danger', 'Not Found!');
+        }
         $data->delete();
         return redirect('admin/staff')->with('danger', 'Data has been deleted Successfully!');
     }

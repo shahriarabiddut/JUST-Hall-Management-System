@@ -84,6 +84,9 @@ class StudentController extends Controller
     {
         //
         $data = Student::find($id);
+        if ($data == null) {
+            return redirect()->route('admin.student.index')->with('danger', 'Not Found!');
+        }
         return view('admin.student.show', ['data' => $data]);
     }
 
@@ -94,6 +97,9 @@ class StudentController extends Controller
     {
         //
         $data = Student::find($id);
+        if ($data == null) {
+            return redirect()->route('admin.student.index')->with('danger', 'Not Found!');
+        }
         return view('admin.student.edit', ['data' => $data]);
     }
 
@@ -140,6 +146,9 @@ class StudentController extends Controller
     public function destroy($id)
     {
         $data = Student::find($id);
+        if ($data == null) {
+            return redirect()->route('admin.student.index')->with('danger', 'Not Found!');
+        }
         $data->delete();
         //Delete Balance Account
         $BalanceAccount = Balance::all()->where('student_id', '=', $id)->first();

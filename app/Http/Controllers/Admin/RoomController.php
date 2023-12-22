@@ -49,6 +49,9 @@ class RoomController extends Controller
     {
         //
         $data = Room::find($id);
+        if ($data == null) {
+            return redirect()->route('admin.rooms.index')->with('danger', 'Not Found!');
+        }
         return view('admin.room.show', ['data' => $data]);
     }
 
@@ -60,6 +63,9 @@ class RoomController extends Controller
         //
         $roomtypes = RoomType::all();
         $data = Room::find($id);
+        if ($data == null) {
+            return redirect()->route('admin.rooms.index')->with('danger', 'Not Found!');
+        }
         return view('admin.room.edit', ['data' => $data, 'roomtypes' => $roomtypes]);
     }
 
@@ -84,6 +90,9 @@ class RoomController extends Controller
     public function destroy($id)
     {
         $data = Room::find($id);
+        if ($data == null) {
+            return redirect()->route('admin.rooms.index')->with('danger', 'Not Found!');
+        }
         $data->delete();
         return redirect('admin/rooms')->with('danger', 'Data has been deleted Successfully!');
     }

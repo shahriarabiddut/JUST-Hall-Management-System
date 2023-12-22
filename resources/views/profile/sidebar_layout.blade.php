@@ -59,12 +59,12 @@
 
     <!-- Nav Item Meal - Pages Collapse Menu -->
     <li class="nav-item">
-        <a class="nav-link @if(!request()->is('student/order*')) collapsed @endif" href="#" data-toggle="collapse" data-target="#collapseThree"
+        <a class="nav-link @if(!request()->is('student/order*') || !request()->is('student/mealtoken*')) collapsed @endif" href="#" data-toggle="collapse" data-target="#collapseThree"
             aria-expanded="true" aria-controls="collapseThree">
             <i class="fas fa-fw fa-users"></i>
             <span>Meal</span>
         </a>
-        <div id="collapseThree" class="collapse @if(request()->is('student/order*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="collapseThree" class="collapse @if(request()->is('student/order*') || request()->is('student/mealtoken*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Oeder Food</h6>
                 <a class="collapse-item" href="{{ route('student.order.foodmenu') }}">View Food Menu</a>
@@ -94,7 +94,7 @@
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Balance Management</h6>
-                <a class="collapse-item" href="{{ route('student.balance.index') }}">View Balance History</a>
+                <a class="collapse-item" href="{{ route('student.balance.index') }}">My Balance </a>
             </div>
         </div>
     </li>
@@ -105,13 +105,13 @@
         @endif" href="#" data-toggle="collapse" data-target="#collapseEight"
             aria-expanded="true" aria-controls="collapseEight">
             <i class="fas fa-credit-card"></i>
-            <span>Payment History</span>
+            <span>Payments</span>
         </a>
         <div id="collapseEight" class="collapse @if(request()->is('student/payments*')) show @endif" aria-labelledby="headingUtilities"
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Payment Management</h6>
-                <a class="collapse-item" href="{{ route('student.payments.index') }}">View Balance History</a>
+                <a class="collapse-item" href="{{ route('student.payments.index') }}">View Payment History</a>
                 <a class="collapse-item" href="{{ route('student.payments.create') }}">Add new prepayment</a>
             </div>
         </div>

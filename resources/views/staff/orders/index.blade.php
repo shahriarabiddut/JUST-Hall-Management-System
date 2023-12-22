@@ -50,7 +50,7 @@
                             <th>Student</th>
                             <th>FoodTime</th>
                             <th>FoodName</th>
-                            <th>Order Time</th>
+                            <th>Meal Date</th>
                             <th>Quantity</th>
                             <th>OrderNo</th>
                             <th>Action</th>
@@ -62,7 +62,7 @@
                             <th>Student</th>
                             <th>FoodTime</th>
                             <th>FoodName</th>
-                            <th>Order Time</th>
+                            <th>Meal Date</th>
                             <th>Quantity</th>
                             <th>OrderNo</th>
                             <th>Action</th>

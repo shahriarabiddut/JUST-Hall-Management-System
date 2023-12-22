@@ -27,6 +27,9 @@ Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function () {
     });
 });
 Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
+    // Profle
+    Route::get('/profile/changePassword', [HomeController::class, 'editPassword'])->name('profile.editPassword');
+    Route::put('/profile/changePassword', [HomeController::class, 'passwordUpdate'])->name('profile.passwordUpdate');
     // Settings Crud
     Route::get('settings/', [HomeController::class, 'edit']);
     Route::put('settings/update/{id}', [HomeController::class, 'update']);

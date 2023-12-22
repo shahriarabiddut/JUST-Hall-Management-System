@@ -81,8 +81,6 @@
                     
                     <tr>
                         <td colspan="2" class="m-1">
-                                    <a href="{{ route('admin.orders.printToken',$data->id) }}" class="float-right btn btn-success btn-sm btn-block p-2"><i class="fas fa-ticket-alt"> Print </i></a> 
-                                                  
                     @if($data->status==0)
                         
                                     <a href="{{ route('admin.orders.valid',$data->id) }}" class="float-right btn btn-info btn-sm btn-block p-2"><i class="fas fa-ticket-alt"> Mark as Used </i></a> 
