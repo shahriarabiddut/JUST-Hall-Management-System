@@ -1,5 +1,8 @@
 <?php
 
+use App\Mail\MyTestEmail;
+use App\Models\HallOption;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\BalanceController;
@@ -7,8 +10,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SupportController;
 use App\Http\Controllers\MealTokenController;
-
-/*
+/* 
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
@@ -19,14 +21,30 @@ use App\Http\Controllers\MealTokenController;
 |
 */
 
+
+Route::get('/testroute', function () {
+    $name = "Funny Coder";
+
+    // The email sending is done using the to method on the Mail facade
+    Mail::to('shahriarabiddut@gmail.com')->send(new MyTestEmail($name));
+});
+
 Route::get('/', function () {
     return view('home');
 })->name('root');
 
-Route::get('/tokenPrint', [MealTokenController::class, 'TokenPrintQueue'])->name('tokenPrint');
+//
+$printingOption = HallOption::all()->where('name', 'print')->first();
+if ($printingOption->value != 0) {
+    // Route::get('/tokenPrint', [MealTokenController::class, 'TokenPrintQueue'])->name('tokenPrint');
+    Route::get('/tokenPrint/{value1}', [MealTokenController::class, 'TokenPrintQueue2'])->name('tokenPrint');
+    Route::get('/tpqd/{id}&{order_id}&{rollno}/delete', [MealTokenController::class, 'TokenPrintQueueDelete'])->name('tokenprint.delete');
+    Route::get('/tpqd/{value}/{id}&{order_id}&{rollno}/delete', [MealTokenController::class, 'TokenPrintQueueDelete2'])->name('tokenprint.delete2');
+}
+//
 //ESP 32 Token Print Queue Delete
 // Route::get('/tpqd/{id}&{order_id}&{rollno}', [MealTokenController::class, 'TokenPrintQueueDelete'])->name('tokenprint.delete');
-Route::put('/tpqd/{id}&{order_id}&{rollno}/delete', [MealTokenController::class, 'TokenPrintQueueDelete2'])->name('tokenprint.delete2');
+
 //User Routes
 Route::get('student', [ProfileController::class, 'index'])->middleware(['auth'])->name('student.dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');

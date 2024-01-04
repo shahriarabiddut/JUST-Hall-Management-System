@@ -14,7 +14,7 @@
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="{{ asset('css/styles.css') }}" rel="stylesheet" />
     </head>
-    <body id="page-top">
+    <body id="page-top" >
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-secondary fixed-top" id="mainNav">
             <div class="container px-4">
@@ -38,7 +38,7 @@
             </div>
         </nav>
         <!-- Header-->
-        <header class="bg-primary bg-gradient text-white">
+        <header class="bg-primary bg-gradient text-white" style="min-height: 80vh;">
             <div class="container px-4 text-center">
                 <h1 class="fw-bolder">Welcome to @isset($HallOption)
                     {{ $HallOption[0]->value }}

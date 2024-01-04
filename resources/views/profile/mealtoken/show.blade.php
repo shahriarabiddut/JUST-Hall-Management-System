@@ -68,7 +68,7 @@
                     </tr>
                     <tr>
                         <th>QR Code</th>
-                        <td>{{ $qrcode }}</td>
+                        <td>{!! QrCode::size(300)->generate($data->token_number) !!}</td>
                     </tr>
                     
                     <tr>

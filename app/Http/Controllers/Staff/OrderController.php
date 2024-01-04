@@ -203,4 +203,71 @@ class OrderController extends Controller
         $processedData = ($date >= $currentDate);
         return $processedData;
     }
+    public function scan()
+    {
+        $token = null;
+        return view('staff.orders.scan.index', ['token' => $token]);
+    }
+    public function qrcodescanlink(string $tokenid)
+    {
+        $falseCheck = 0;
+        $data = MealToken::all()->where('id', $tokenid)->first();
+        //Check Date is Valid To Print
+        $result = $this->isDateValid($data->date);
+        if ($result == false) {
+            $token = $data;
+            $falseCheck = 1;
+            return view('staff.orders.scan.index', ['token' => $token, 'falseCheck' => $falseCheck]);
+        }
+        //
+        if ($data == null) {
+            return redirect()->route('staff.orders.scan')->with('danger', 'Not Found!');
+        }
+        if ($data->meal_type == 'Launch') {
+            //If remaining time is 0 , Student cannot order
+            $today = Carbon::now(); // get current date and time
+            $remainingTime = $today->setTimezone('GMT+6')->format('Y-m-d') . ' 16:00:00';
+            $todayTime = $today->setTimezone('GMT+6')->format('Y-m-d H:i:s'); // 2023-03-17
+            if ($remainingTime < $todayTime) {
+                $falseCheck = 1;
+            }
+            //
+            $token = $data;
+            return view('staff.orders.scan.index', ['token' => $token, 'falseCheck' => $falseCheck]);
+        } elseif ($data->meal_type == 'Dinner') {
+            $token = $data;
+            return view('staff.orders.scan.index', ['token' => $token, 'falseCheck' => $falseCheck]);
+        }
+    }
+    public function qrcodescan(Request $request)
+    {
+        $falseCheck = 0;
+        $data = MealToken::all()->where('id', $request->token_number)->first();
+        //Check Date is Valid To Print
+        $result = $this->isDateValid($data->date);
+        if ($result == false) {
+            $token = $data;
+            $falseCheck = 1;
+            return view('staff.orders.scan.index', ['token' => $token, 'falseCheck' => $falseCheck]);
+        }
+        //
+        if ($data == null) {
+            return redirect()->route('staff.orders.scan')->with('danger', 'Not Found!');
+        }
+        if ($data->meal_type == 'Launch') {
+            //If remaining time is 0 , Student cannot order
+            $today = Carbon::now(); // get current date and time
+            $remainingTime = $today->setTimezone('GMT+6')->format('Y-m-d') . ' 16:00:00';
+            $todayTime = $today->setTimezone('GMT+6')->format('Y-m-d H:i:s'); // 2023-03-17
+            if ($remainingTime < $todayTime) {
+                $falseCheck = 1;
+            }
+            //
+            $token = $data;
+            return view('staff.orders.scan.index', ['token' => $token, 'falseCheck' => $falseCheck]);
+        } elseif ($data->meal_type == 'Dinner') {
+            $token = $data;
+            return view('staff.orders.scan.index', ['token' => $token, 'falseCheck' => $falseCheck]);
+        }
+    }
 }

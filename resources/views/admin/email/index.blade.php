@@ -56,7 +56,14 @@
                             <td>{{ $d->email }}</td>
                             <td>{{ $d->subject }}</td>
                             <td>{{ $d->objective }}</td>
-                            <td>{{ $d->staff->name }}</td>
+                            <td>
+                                @if ($d->staff_id==0)
+                                    Admin
+                                @else
+                                {{ $d->staff->name }}
+                                @endif
+                                
+                            </td>
                             <td>{{ $d->created_at }}</td>
                             
                             <td class="text-center">

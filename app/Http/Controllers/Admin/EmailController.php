@@ -6,6 +6,9 @@ use App\Models\Email;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Mail\AdminEmail;
+use App\Mail\AllocationEmail;
+use Illuminate\Support\Facades\Mail;
 
 
 class EmailController extends Controller
@@ -17,7 +20,7 @@ class EmailController extends Controller
     {
         //
         $data = Email::all();
-        return view('admin.email.index',['data'=>$data]);
+        return view('admin.email.index', ['data' => $data]);
     }
 
     /**
@@ -43,33 +46,15 @@ class EmailController extends Controller
             'message' => 'required',
             'objective' => 'required',
         ]);
-        if($this->isOnline()){
-            $mail_data = [
-                'objective'=>$request->objective,
-                'recipient'=>$request->email,
-                'fromEmail'=>'cseengineerbiddut@gmail.com',
-                'fromName'=>$request->name,
-                'subject'=>$request->subject,
-                'body'=>$request->message
-            ];
-            \Mail::send('admin.email.email-template',$mail_data,function($message) use ($mail_data){
-                $message->to($mail_data['recipient'])
-                        ->from($mail_data['fromEmail'],$mail_data['fromName'])
-                        ->subject($mail_data['subject']);
-            });
-            return redirect('admin/email')->with('success','Email Sent Successfully!');
-        }else{
-
-            return redirect()->back()->withInput()->with('error','No Internet Connection');
-        }
-        Email::create($formFields);
-        
+        // The email sending is done using the to method on the Mail facade
+        Mail::to($request->email)->send(new AdminEmail($request->message, $request->objective, $request->subject));
     }
     //Check internet Connections
-    public function isOnline($site = 'https://youtube.com'){
-        if(@fopen($site,'r')){
+    public function isOnline($site = 'https://youtube.com')
+    {
+        if (@fopen($site, 'r')) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -81,7 +66,7 @@ class EmailController extends Controller
     {
         //
         $data = Email::find($id);
-        return view('admin.email.show',['data'=>$data]);
+        return view('admin.email.show', ['data' => $data]);
     }
 
     /**
@@ -92,47 +77,35 @@ class EmailController extends Controller
         //
         $data = Email::find($id);
         $data->delete();
-        return redirect('admin/email')->with('danger','Email Data has been deleted Successfully!');
+        return redirect('admin/email')->with('danger', 'Email Data has been deleted Successfully!');
     }
-    public function RoomAllocationEmail(string $id,string $roomtitle,string $status)
+    public function RoomAllocationEmail(string $id, string $roomtitle, string $status)
     {
-        
+
         $RecieverData = Student::find($id);
         $RecieverEmail = $RecieverData->email;
         $RecieverName = $RecieverData->name;
-        $RoomTitle = $roomtitle; 
+        $RoomTitle = $roomtitle;
         //accept or reject
-        if($status==1){
+        if ($status == 1) {
             $emailObjective = 'Your Room Allocation Request Accepted';
-            $emailSubject = 'Your Room Allocation Request Accepted ! Contact Hall Admin Soon!';
-            $emailBody = 'Your Room Allocation Request has been Accepted by Hall Admin! Your allocated Room no is '.$RoomTitle.' and Login to See Further Details.';
-
-        }elseif($status==2){
+            $emailSubject = 'Your Room Allocation Request Accepted ! Contact Hall Provost Soon!';
+            $emailBody = 'Your Room Allocation Request has been Accepted by Hall Provost! To get allocated Room no is ' . $RoomTitle . ' please contact Hall Provost . Login to See Further Details.';
+        } elseif ($status == 2) {
             $emailObjective = 'Your Room Allocation Request Rejected';
-            $emailSubject = 'Your Room Allocation Request Rejected! Contact Hall Admin Soon!';
-            $emailBody = 'Your Room Allocation Request has been Reject by Hall Admin! Please Leave the room Room no '.$RoomTitle.' and Login to See Further Details.';
-        }elseif($status==3){
+            $emailSubject = 'Your Room Allocation Request Rejected! Contact Hall Provost Soon!';
+            $emailBody = 'Your Room Allocation Request has been Rejected by Hall Provost! Please Leave the room Room no ' . $RoomTitle . ' and Login to See Further Details.';
+        } elseif ($status == 3) {
             $emailObjective = 'Your Room Allocation Request is on Waiting';
-            $emailSubject = 'Your Room Allocation Request is on Waiting! Contact Hall Admin Soon!';
-            $emailBody = 'Your Room Allocation Request is on Waiting by Hall Admin! Your requested room was Room no '.$RoomTitle.' and Login to See Further Details.';
-        }else{
-            return redirect()->back()->withInput()->with('danger','Server Error');
+            $emailSubject = 'Your Room Allocation Request is on Waiting! Contact Hall Provost Soon!';
+            $emailBody = 'Your Room Allocation Request is on Waiting by Hall Provost! Your requested room was Room no ' . $RoomTitle . ' and Login to See Further Details.';
+        } else {
+            return redirect()->back()->withInput()->with('danger', 'Server Error');
         }
         //Sending email with information
-        if($this->isOnline()){
-            $mail_data = [
-                'objective'=>$emailObjective,
-                'recipient'=>$RecieverEmail,
-                'fromEmail'=>'cseengineerbiddut@gmail.com',
-                'fromName'=>$RecieverName,
-                'subject'=> $emailSubject,
-                'body'=>$emailBody
-            ];
-            \Mail::send('admin.email.email-template-allocation',$mail_data,function($message) use ($mail_data){
-                $message->to($mail_data['recipient'])
-                        ->from($mail_data['fromEmail'],$mail_data['fromName'])
-                        ->subject($mail_data['subject']);
-            });
+        if ($this->isOnline()) {
+            // The email sending is done using the to method on the Mail facade
+            Mail::to($RecieverEmail)->send(new AllocationEmail($emailBody, $emailObjective, $emailSubject));
 
             //Saving data to email history
             $dataEmail = new Email;
@@ -143,10 +116,9 @@ class EmailController extends Controller
             $dataEmail->objective = $emailObjective;
             $dataEmail->staff_id = 0;
             $dataEmail->save();
-        }else{
+        } else {
 
-            return redirect()->back()->withInput()->with('error','No Internet Connection');
+            return redirect()->back()->withInput()->with('error', 'No Internet Connection');
         }
-        
     }
 }

@@ -9,6 +9,7 @@ use App\Models\HallOption;
 use App\Models\Student;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\AdminEmail;
 
 class SendSms extends Command
 {
@@ -70,20 +71,10 @@ class SendSms extends Command
                 $emailBody = 'You have ordered this month : ' . $sumofthatmonth . 'Your Old Balance was : ' . $balance . ' and No Money was deducted today!';
             }
             //email
-            $mail_data = [
-                'objective' => 'No',
-                'recipient' => $student_email,
-                'fromEmail' => 'cseengineerbiddut@gmail.com',
-                'fromName' => 'Just Hall',
-                'subject' => 'Balance information of Last Month',
-                'body' => $emailBody
-            ];
-            Mail::send('mail.notification', $mail_data, function ($message) use ($mail_data) {
-                $message->to($mail_data['recipient'])
-                    ->from($mail_data['fromEmail'], $mail_data['fromName'])
-                    ->subject($mail_data['subject']);
-            });
-            //email
+            // The email sending is done using the to method on the Mail facade
+            Mail::to($student_email)->send(new AdminEmail($emailBody, 'Monthly Deduction', 'Balance information of Last Month'));
+            //email 
+
         }
     }
 }

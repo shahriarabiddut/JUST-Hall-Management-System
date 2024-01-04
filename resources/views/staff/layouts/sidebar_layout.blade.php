@@ -37,6 +37,7 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Order Management</h6>
                 <a class="collapse-item" href="{{ route('staff.orders.index') }}">Orders</a>
+                <a class="collapse-item" href="{{ route('staff.orders.scan') }}">Scan</a>
             </div>
         </div>
     </li>

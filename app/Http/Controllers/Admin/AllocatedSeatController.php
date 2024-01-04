@@ -140,7 +140,7 @@ class AllocatedSeatController extends Controller
     //Room Allocation Requests
     public function roomrequests()
     {
-        $data = RoomRequest::all();
+        $data = RoomRequest::orderBy('created_at', 'desc')->get();
         return view('admin.roomallocation.requests', ['data' => $data]);
     }
     //Room Allocation Requests Details
@@ -188,7 +188,7 @@ class AllocatedSeatController extends Controller
 
             //Room Allocation Requests Accepted
             $allocated_seat_id = $data3->id;
-            $this->roomrequestaccept($id, $allocated_seat_id);
+            $this->roomrequestaccept2($id, $allocated_seat_id);
             //Sending Email to User That Room Allocation is Accepted
             $EmailController = new EmailController();
             $EmailController->RoomAllocationEmail($student_id, $room->title, 1);
@@ -198,8 +198,7 @@ class AllocatedSeatController extends Controller
             return redirect('admin/roomallocation')->with('danger', 'No Data Found');
         }
     }
-    //Room Allocation Requests
-    public function roomrequestaccept(string $id, string $allocated_seat_id)
+    public function roomrequestaccept2(string $id, string $allocated_seat_id)
     {
         $data = RoomRequest::find($id);
         if ($data == null) {
@@ -208,6 +207,24 @@ class AllocatedSeatController extends Controller
         $data->status = '1';
         $data->allocated_seat_id = $allocated_seat_id;
         $data->save();
+        return redirect('admin/roomallocation/roomrequests')->with('success', 'Accepted Successfully!');
+    }
+    //Room Allocation Requests
+    public function roomrequestaccept(string $id)
+    {
+        $data = RoomRequest::find($id);
+        if ($data == null) {
+            return redirect()->route('admin.roomallocation.index')->with('danger', 'Not Found!');
+        }
+        $data->status = '1';
+        $data->save();
+
+        $student_id = $data->user_id;
+        $roomid = $data->room_id;
+        $room = Room::find($roomid);
+        //Sending Email to User That Room Allocation is Accepted
+        $EmailController = new EmailController();
+        $EmailController->RoomAllocationEmail($student_id, $room->title, 1);
         return redirect('admin/roomallocation/roomrequests')->with('success', 'Accepted Successfully!');
     }
     public function roomrequestban(string $id)
@@ -250,7 +267,6 @@ class AllocatedSeatController extends Controller
         //Sending Email to User That Room Allocation is Accepted
         $EmailController = new EmailController();
         $EmailController->RoomAllocationEmail($student_id, $room->title, 3);
-
-        return redirect('admin/roomallocation/roomrequests')->with('warning', 'Listed for Queue Successfully!');
+        return redirect()->route('admin.roomallocation.roomrequests')->with('warning', 'Listed for Queue Successfully!');
     }
 }

@@ -8,6 +8,8 @@ use App\Models\Order;
 use App\Models\MealToken;
 use App\Models\TokenPrintQueue;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use App\Models\HallOption;
 
 class MealTokenController extends Controller
 {
@@ -131,7 +133,27 @@ class MealTokenController extends Controller
             return redirect()->route('student.mealtoken.index')->with('danger', 'Ops! Token Expired!');
         }
     }
+    //post method
+    public function TokenPrintQueue2(string $value1)
+    {
+        $printingOption = HallOption::all()->where('id', '10')->first();
 
+        if ($value1 != $printingOption->value) {
+            return redirect()->route('root')->with('danger', 'Ops! Token Expired!');
+        }
+        $data = TokenPrintQueue::all();
+        $dataTokenPrintQueue = '';
+        foreach ($data as $key => $d) {
+            if ($key >= 0 && $key < count($data) - 1) {
+                $dataTokenPrintQueue = $dataTokenPrintQueue . $d->data . ',';
+            } else {
+                $dataTokenPrintQueue = $dataTokenPrintQueue . $d->data;
+            }
+        }
+        // return response($d->data);
+        return response($dataTokenPrintQueue);
+    }
+    //
     public function TokenPrintQueue()
     {
         $data = TokenPrintQueue::all();
@@ -149,6 +171,14 @@ class MealTokenController extends Controller
     //Delete From Print Queue
     public function TokenPrintQueueDelete(string $id, string $order_id, string $rollno)
     {
+        // Token Status Update
+        $dataUpdate = MealToken::all()->where('id', '=', $id)->where('order_id', '=', $order_id)->where('rollno', '=', $rollno)->first();
+        if ($dataUpdate == null) {
+            return response()->json(0);
+        }
+        $dataUpdate->status = 1;
+        $dataUpdate->save();
+        //Delete
         $data = TokenPrintQueue::all()->where('token_id', '=', $id)->where('order_id', '=', $order_id)->where('rollno', '=', $rollno)->first();
         if ($data == null) {
             return response()->json(0);
@@ -156,8 +186,13 @@ class MealTokenController extends Controller
         $data->delete();
         return response()->json(1);
     }
-    public function TokenPrintQueueDelete2(string $id, string $order_id, string $rollno)
+    public function TokenPrintQueueDelete2(string $value, string $id, string $order_id, string $rollno)
     {
+        $printingOption = HallOption::all()->where('id', '10')->first();
+
+        if ($value != $printingOption->value) {
+            return redirect()->route('root')->with('danger', 'Ops! Token Expired!');
+        }
         // Token Status Update
         $dataUpdate = MealToken::all()->where('id', '=', $id)->where('order_id', '=', $order_id)->where('rollno', '=', $rollno)->first();
         if ($dataUpdate == null) {

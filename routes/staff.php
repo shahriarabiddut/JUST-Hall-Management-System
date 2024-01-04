@@ -70,4 +70,8 @@ Route::middleware('staff')->prefix('staff')->name('staff.')->group(function () {
     Route::get('orders/printToken/{id}', [OrderController::class, 'printNet'])->name('orders.printToken');
     Route::post('orders/searchall/', [OrderController::class, 'searchByDate'])->name('orders.searchByDate');
     Route::post('orders/search/', [OrderController::class, 'searchByHistory'])->name('orders.searchByHistory');
+    //Scan QR Code
+    Route::get('orders/scan/', [OrderController::class, 'scan'])->name('orders.scan');
+    Route::get('orders/scan/{id}', [OrderController::class, 'qrcodescanlink'])->name('orders.qrcodescanlink');
+    Route::post('orders/qrcodescan/', [OrderController::class, 'qrcodescan'])->name('orders.qrcodescan');
 });

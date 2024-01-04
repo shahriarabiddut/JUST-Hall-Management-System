@@ -78,7 +78,10 @@
                         <th>Token No</th>
                         <td>{{ $data->id }}</td>
                     </tr>
-                    
+                    <tr>
+                        <th>Token QR</th>
+                        <td>{!! QrCode::size(300)->generate($data->id) !!}</td>
+                    </tr>
                     
                     <tr>
                         <td colspan="2" class="m-1">
