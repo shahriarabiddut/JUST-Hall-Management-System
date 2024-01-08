@@ -18,6 +18,8 @@ class StudentSeeder extends Seeder
             'rollno' => '170131',
             'name' => 'Shahriar Ahmed',
             'email' => 'shahriarabiddut@gmail.com',
+            'dept' => 'cse',
+            'session' => '2017-18',
             'password' => bcrypt('Password')
         ];
         Student::insert($student);

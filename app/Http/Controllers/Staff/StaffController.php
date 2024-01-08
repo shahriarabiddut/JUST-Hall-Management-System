@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Staff;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -19,7 +19,7 @@ class StaffController extends Controller
     public function index()
     {
         $data = Staff::all();
-        return view('admin.staff.index', ['data' => $data]);
+        return view('staff.staff.index', ['data' => $data]);
     }
 
     /**
@@ -29,7 +29,7 @@ class StaffController extends Controller
     {
         //
         $departs = Department::all();
-        return view('admin.staff.create', ['departs' => $departs]);
+        return view('staff.staff.create', ['departs' => $departs]);
     }
 
     /**
@@ -40,32 +40,15 @@ class StaffController extends Controller
         //
         $data = new Staff;
         $request->validate([
-            'name' => 'required',
             'email' => 'required|email|unique:staff',
-            'password' => 'required',
-            'name' => 'required',
-            'department_id' => 'required',
-            'bio' => 'required',
-            'address' => 'required',
-            'phone' => 'required',
-            'photo' => 'required',
             'type' => 'required',
         ]);
-        $imgpath = $request->file('photo')->store('StaffPhoto', 'public');
-
-        $data->name = $request->name;
         $data->email = $request->email;
-        $data->password = bcrypt($request->password);
-        $data->department_id = $request->department_id;
-        $data->photo = $imgpath;
-        $data->bio = $request->bio;
-        $data->address = $request->address;
-        $data->phone = $request->phone;
+        $data->password = bcrypt($request->email);
         $data->type = $request->type;
-
         $data->save();
 
-        return redirect('admin/staff')->with('success', 'Staff Data has been added Successfully!');
+        return redirect('staff/staff')->with('success', 'Staff Data has been added Successfully!');
     }
 
     /**
@@ -76,9 +59,9 @@ class StaffController extends Controller
         //
         $data = Staff::find($id);
         if ($data == null) {
-            return redirect()->route('admin.staff.index')->with('danger', 'Not Found!');
+            return redirect()->route('staff.staff.index')->with('danger', 'Not Found!');
         }
-        return view('admin.staff.show', ['data' => $data]);
+        return view('staff.staff.show', ['data' => $data]);
     }
 
     /**
@@ -87,12 +70,11 @@ class StaffController extends Controller
     public function edit(string $id)
     {
         //
-        $departs = Department::all();
         $data = Staff::find($id);
         if ($data == null) {
-            return redirect()->route('admin.staff.index')->with('danger', 'Not Found!');
+            return redirect()->route('staff.staff.index')->with('danger', 'Not Found!');
         }
-        return view('admin.staff.edit', ['data' => $data, 'departs' => $departs]);
+        return view('staff.staff.edit', ['data' => $data]);
     }
 
     /**
@@ -108,7 +90,6 @@ class StaffController extends Controller
             'bio' => 'required',
             'address' => 'required',
             'phone' => 'required',
-            'type' => 'required',
         ]);
 
         $data->name = $request->name;
@@ -126,7 +107,7 @@ class StaffController extends Controller
         $data->photo = $imgpath;
         $data->save();
 
-        return redirect('admin/staff')->with('success', 'Staff Data has been updated Successfully!');
+        return redirect('staff/staff')->with('success', 'Staff Data has been updated Successfully!');
     }
 
     /**
@@ -136,10 +117,10 @@ class StaffController extends Controller
     {
         $data = Staff::find($id);
         if ($data == null) {
-            return redirect()->route('admin.staff.index')->with('danger', 'Not Found!');
+            return redirect()->route('staff.staff.index')->with('danger', 'Not Found!');
         }
         $data->delete();
-        return redirect('admin/staff')->with('danger', 'Data has been deleted Successfully!');
+        return redirect('staff/staff')->with('danger', 'Data has been deleted Successfully!');
     }
     // Add Payment
     public function add_payment($staff_id)
@@ -163,7 +144,7 @@ class StaffController extends Controller
         $data->payment_date = $request->amount_date;
 
         $data->save();
-        return redirect('admin/staff/payment/' . $staff_id . '/add')->with('success', 'Payment added Successfully!');
+        return redirect('staff/staff/payment/' . $staff_id . '/add')->with('success', 'Payment added Successfully!');
     }
     public function all_payment(Request $request, $staff_id)
     {
@@ -177,20 +158,20 @@ class StaffController extends Controller
         $monthdb = $carbonDatedb->month;
         //custom biddut
 
-        return view('admin.staffpayment.index', ['staff' => $staff, 'staff_id' => $staff_id, 'data' => $data, 'monthdb' => $monthdb]);
+        return view('staff.staffpayment.index', ['staff' => $staff, 'staff_id' => $staff_id, 'data' => $data, 'monthdb' => $monthdb]);
     }
     public function delete_payment($id, $staff_id)
     {
         $data = StaffPayment::find($id);
         $data->delete();
-        return redirect('admin/staff/payments/' . $staff_id)->with('danger', 'Payment data has been deleted Successfully!');
+        return redirect('staff/staff/payments/' . $staff_id)->with('danger', 'Payment data has been deleted Successfully!');
     }
     public function change(string $id)
     {
         //
         $departs = Department::all();
         $data = Staff::find($id);
-        return view('admin.staff.change', ['data' => $data, 'departs' => $departs]);
+        return view('staff.staff.change', ['data' => $data, 'departs' => $departs]);
     }
 
     /**
@@ -210,6 +191,6 @@ class StaffController extends Controller
         $data->password = bcrypt($request->password);
         $data->save();
 
-        return redirect('admin/staff')->with('success', 'Staff Email & Password has been updated Successfully!');
+        return redirect('staff/staff')->with('success', 'Staff Email & Password has been updated Successfully!');
     }
 }

@@ -16,6 +16,11 @@ class RoomTypeSeeder extends Seeder
         //
         $roomtypes = [
             [
+                'title' => '2 Seats',
+                'details' => 'shahriarabiddut@gmail.com',
+                'price' => '2000'
+            ],
+            [
                 'title' => '3 Seats',
                 'details' => 'shahriarabiddut@gmail.com',
                 'price' => '3000'

@@ -21,7 +21,7 @@
                     </tr><tr>
                         <th>Select Room Type</th>
                         <td>
-                            <select required name="rt_id" class="form-control">
+                            <select required name="rt_id" id="type" class="form-control">
                                 <option value="0">--- Select Room Type ---</option>
                                 @foreach ($roomtypes as $rt)
                                 <option value="{{$rt->id}}">{{$rt->title}}</option>
@@ -31,7 +31,7 @@
                     </tr>
                     <tr>
                         <th>Total Seats</th>
-                        <td><input required name="totalseats" type="number" class="form-control"></td>
+                        <td><input required name="totalseats" id="numberInput" type="number" class="form-control"></td>
                     </tr>
                     <tr>
                         <td colspan="2">
@@ -46,6 +46,19 @@
     </div>
 
     @section('scripts')
+    <script>
+        // Get the sentence text
+        let sentence = document.getElementById('type').textContent;
+    
+        // Use regular expression to extract the number
+        let extractedNumber = sentence.match(/\d+(\.\d+)?/);
+    
+        // Check if a number is found
+        if (extractedNumber) {
+          // Update the input value with the extracted number
+          document.getElementById('numberInput').value = extractedNumber[0];
+        }
+      </script>
     @endsection
 @endsection
 

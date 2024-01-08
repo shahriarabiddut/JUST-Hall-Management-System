@@ -30,6 +30,18 @@
                                 </select>
                             </td>
                         </tr>
+                        <tr>
+                            <th>Select User Type</th>
+                            <td>
+                                <select required name="type" class="form-control">
+                                    <option value="0">--- Select User Type ---</option>
+                                    
+                                    <option value="staff">Staff</option>
+                                     <option value="provost">Provost</option>
+                                     <option value="aprovost">Assistant Provost</option>
+                                </select>
+                            </td>
+                        </tr>
                     <tr>
                         <th>Email <span class="text-danger">*</span></th>
                         <td><input required name="email" type="email" class="form-control"></td>

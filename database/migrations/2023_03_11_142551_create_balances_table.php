@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('balances', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->integer('student_id')->references('id')->on('users')->onDelete('cascade');
             $table->float('balance_amount');
             $table->timestamp('last_transaction_date')->nullable();
             $table->timestamps();

@@ -17,21 +17,21 @@ class FoodTimeSeeder extends Seeder
         $food_times = [
             [
                 'title' => 'Launch',
-                'details' => 'Launch Meal',
+                'detail' => 'Launch Meal',
                 'status' => 0,
                 'price' => 0,
                 'createdby' => 'Automated',
-            ] ,
+            ],
             [
                 'title' => 'Dinner',
-                'details' => 'Dinner Meal',
+                'detail' => 'Dinner Meal',
                 'status' => 0,
                 'price' => 0,
                 'createdby' => 'Automated',
             ],
             [
                 'title' => 'Suhr',
-                'details' => 'Suhr Meal',
+                'detail' => 'Suhr Meal',
                 'status' => 0,
                 'price' => 0,
                 'createdby' => 'Automated',

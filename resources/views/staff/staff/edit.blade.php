@@ -1,4 +1,4 @@
-@extends('admin/layout')
+@extends('staff/layout')
 @section('title', 'Edit Staff')
 @section('content')
 
@@ -6,31 +6,22 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h3 class="m-0 font-weight-bold text-primary">Edit Staff : {{ $data->name }}
-            <a href="{{ url('admin/staff/'.$data->id) }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h3>
+            <a href="{{ url('staff/staff/'.$data->id) }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h3>
         </div>
         <div class="card-body">
             
             <div class="table-responsive">
-            <form method="POST" action="{{ route('admin.staff.update',$data->id) }}" enctype="multipart/form-data">
+                @if ($errors->any())
+                @foreach ($errors->all() as $error)
+                   <p class="text-danger"> {{ $error }} </p>
+                @endforeach
+                @endif
+            <form method="POST" action="{{ route('staff.staff.update',$data->id) }}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <tbody>
                     <tr>
-                            <th>Select Department</th>
-                            <td>
-                                <select required name="department_id" class="form-control">
-                                    <option value="0">--- Select Department ---</option>
-                                    @foreach ($departs as $dp)
-                                    <option @if ($data->department_id==$dp->id)
-                                        @selected(true)
-                                    @endif
-                                     value="{{$dp->id}}">{{$dp->title}}</option>
-                                    @endforeach
-                                </select>
-                            </td>
-                        </tr>
-                    <tr><tr>
                         <th>Photo</th>
                         <td>
                             <table class="table table-bordered">
@@ -62,19 +53,9 @@
                         <td>
                             <select required name="type" class="form-control">
                                 <option value="0">--- Select User Type ---</option>
-                                
-                                <option @if ($data->type=='staff')
-                                    @selected(true)
-                                @endif
-                                 value="staff">Staff</option>
-                                 <option @if ($data->type=='provost')
-                                    @selected(true)
-                                @endif
-                                 value="provost">Provost</option>
-                                 <option @if ($data->type=='provost')
-                                    @selected(true)
-                                @endif
-                                 value="aprovost">Assistant Provost</option>
+                                <option @if ($data->type=='staff') @selected(true) @endif value="staff">Staff</option>
+                                <option @if ($data->type=='provost') @selected(true) @endif value="provost">Provost</option>
+                                <option @if ($data->type=='aprovost') @selected(true) @endif value="aprovost">Assistant Provost</option>
                             </select>
                         </td>
                     </tr>

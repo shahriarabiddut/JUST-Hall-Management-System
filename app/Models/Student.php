@@ -14,4 +14,8 @@ class Student extends Model
     {
         return $this->belongsTo(Room::class, 'room_id');
     }
+    function allocatedRoom()
+    {
+        return $this->hasOne(AllocatedSeats::class, 'user_id');
+    }
 }

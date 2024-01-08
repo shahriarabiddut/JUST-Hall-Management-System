@@ -104,7 +104,7 @@
     <hr class="sidebar-divider">
     <!-- Heading -->
     <div class="sidebar-heading">
-        Hall Automation User System
+        Hall User System
     </div>
      <!-- Nav Item Department - Utilities Collapse Menu -->
      <li class="nav-item">

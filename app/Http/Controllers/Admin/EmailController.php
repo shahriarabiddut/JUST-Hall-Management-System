@@ -38,8 +38,7 @@ class EmailController extends Controller
     public function store(Request $request)
     {
         //
-        $formFields = $request->validate([
-            'staff_id' => 'required',
+        $request->validate([
             'name' => 'required',
             'email' => 'required',
             'subject' => 'required',
@@ -48,6 +47,16 @@ class EmailController extends Controller
         ]);
         // The email sending is done using the to method on the Mail facade
         Mail::to($request->email)->send(new AdminEmail($request->message, $request->objective, $request->subject));
+        //Saving data to email history
+        $dataEmail = new Email;
+        $dataEmail->name = $request->name;
+        $dataEmail->email = $request->email;
+        $dataEmail->subject = $request->subject;
+        $dataEmail->message = $request->message;
+        $dataEmail->objective = $request->objective;
+        $dataEmail->staff_id = 0;
+        $dataEmail->save();
+        return redirect('admin/email')->with('danger', 'Email Sent Successfully!');
     }
     //Check internet Connections
     public function isOnline($site = 'https://youtube.com')

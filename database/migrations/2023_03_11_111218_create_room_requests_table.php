@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('room_id');
             $table->text('message');
             $table->integer('status')->nullable();
+            $table->integer('flag')->nullable();
             $table->timestamps();
         });
     }

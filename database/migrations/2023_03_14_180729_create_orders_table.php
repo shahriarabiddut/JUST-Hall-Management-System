@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->integer('student_id');
             $table->integer('food_item_id');
-            $table->time('order_time');
-            $table->time('order_type');
+            $table->string('order_type');
             $table->integer('quantity');
             $table->integer('price');
+            $table->date('date');
             $table->timestamps();
         });
     }

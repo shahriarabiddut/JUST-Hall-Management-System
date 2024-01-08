@@ -17,8 +17,72 @@
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
-
+    @if (Auth::guard('staff')->user()->type == 'provost')
+    <!-- Divider -->
     <hr class="sidebar-divider">
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Hall Staffs
+    </div>
+
+    <!-- Nav Item Customer - Pages Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link @if(!request()->is('staff/staff*')) collapsed @endif" href="#" data-toggle="collapse" data-target="#collapseStaff"
+            aria-expanded="true" aria-controls="collapseStaff">
+            <i class="fas fa-fw fa-users"></i>
+            <span>Staff</span>
+        </a>
+        <div id="collapseStaff" class="collapse @if(request()->is('staff/staff*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Staff Management</h6>
+                <a class="collapse-item" href="{{ route('staff.staff.index') }}">View All</a>
+                <a class="collapse-item" href="{{ route('staff.staff.create') }}">Add new</a>
+            </div>
+        </div>
+    </li>
+    @endif
+    @if (Auth::guard('staff')->user()->type == 'provost' || Auth::guard('staff')->user()->type == 'aprovost')
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Hall Students System
+    </div>
+
+    <!-- Nav Item Customer - Pages Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link @if(!request()->is('staff/student*')) collapsed @endif" href="#" data-toggle="collapse" data-target="#collapseStudent"
+            aria-expanded="true" aria-controls="collapseStudent">
+            <i class="fas fa-fw fa-users"></i>
+            <span>Student</span>
+        </a>
+        <div id="collapseStudent" class="collapse @if(request()->is('staff/student*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Student Management</h6>
+                <a class="collapse-item" href="{{ route('staff.student.index') }}">View All</a>
+                <a class="collapse-item" href="{{ route('staff.student.create') }}">Add new</a>
+            </div>
+        </div>
+    </li>
+    <!-- Nav Item Customer - Pages Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link @if(!request()->is('staff/roomallocation*')) collapsed @endif" href="#" data-toggle="collapse" data-target="#collapseStudentRoom"
+            aria-expanded="true" aria-controls="collapseStudentRoom">
+            <i class="fas fa-fw fa-users"></i>
+            <span>Student Room Alocation</span>
+        </a>
+        <div id="collapseStudentRoom" class="collapse @if(request()->is('staff/roomallocation*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Student Room Alocation</h6>
+                <a class="collapse-item" href="{{ route('staff.roomallocation.index') }}">View All</a>
+                <a class="collapse-item" href="{{ route('staff.roomallocation.create') }}">Add new </a>
+                <a class="collapse-item" href="{{ route('staff.roomallocation.roomrequests') }}">Allocation Requests </a>
+            </div>
+        </div>
+    </li>
+    @endif
+    <hr class="sidebar-divider">
+    @if (Auth::guard('staff')->user()->type == 'staff')
     <!-- Heading -->
     <div class="sidebar-heading">
         Hall Orders System
@@ -85,6 +149,7 @@
      </li>
    <!-- Divider -->
    <hr class="sidebar-divider">
+   @endif
    <!-- Heading -->
    <div class="sidebar-heading">
        Hall Balance System
@@ -161,27 +226,6 @@
             </div>
         </div>
     </li>
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-    <!-- Nav Item BackupUpdate - Utilities Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link @if (!request()->is('student/support*'))
-            collapsed
-        @endif" href="#" data-toggle="collapse" data-target="#collapseOneOne"
-            aria-expanded="true" aria-controls="collapseOneOne">
-            <i class="fas fa-ticket-alt"></i>
-            <span>Backup Update</span>
-        </a>
-        <div id="collapseOneOne" class="collapse @if(request()->is('student/backup*')) show @endif" aria-labelledby="headingUtilities"
-            data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Backup Update Management</h6>
-                <a class="collapse-item" href="{{ route('staff.support.index') }}">Backup</a>
-                <a class="collapse-item" href="{{ route('staff.support.index') }}">Update</a>
-            </div>
-        </div>
-    </li>
-   
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">

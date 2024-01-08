@@ -37,6 +37,14 @@ class RoomController extends Controller
         $data->title = $request->title;
         $data->totalseats = $request->totalseats;
         $data->vacancy = $request->totalseats;
+        //
+        $positions = [];
+        for ($i = 1; $i <= $request->totalseats; $i++) {
+            $positions[] = $i;
+        }
+        $jsonData = json_encode($positions);
+        $data->positions = $jsonData;
+        //
         $data->save();
 
         return redirect('admin/rooms')->with('success', 'Room Data has been added Successfully!');

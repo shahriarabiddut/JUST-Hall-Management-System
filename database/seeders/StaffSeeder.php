@@ -14,19 +14,25 @@ class StaffSeeder extends Seeder
     public function run(): void
     {
         //
-        $staff = [[
-            'department_id' => '1',
-            'name' => 'Staff 1',
-            'email' => 'shahriarabiddut@gmail.com',
-            'password' => bcrypt('Password')
-        ],[
-            'department_id' => '2',
-            'name' => 'Staff 2',
-            'email' => 'shahriarhmed@gmail.com',
-            'password' => bcrypt('Password')
-        ]
-    
-    ];
+        $staff = [
+            [
+                'name' => 'Staff 1',
+                'email' => 'shahriarabiddut@gmail.com',
+                'type' => 'staff',
+                'password' => bcrypt('Password')
+            ], [
+                'name' => 'Provost',
+                'email' => 'provost@gmail.com',
+                'type' => 'provost',
+                'password' => bcrypt('Password')
+            ], [
+                'name' => 'Assistant Provost',
+                'email' => 'aprovost@gmail.com',
+                'type' => 'aprovost',
+                'password' => bcrypt('Password')
+            ]
+
+        ];
         Staff::insert($staff);
     }
 }

@@ -205,6 +205,7 @@ class ProfileController extends Controller
         $data->user_id = $request->user_id;
         $data->message = $request->message;
         $data->status = 3;
+        $data->flag = 0;
         $data->save();
 
         return redirect()->route('student.roomrequestshow')->with('success', 'Room Alloacation Request has been added Successfully!');

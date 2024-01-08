@@ -50,12 +50,12 @@ class HallOptionSeeder extends Seeder
                 'value' => 'Sheikh Hasina Hall'
             ],
             [
-                'name' => 'IP Address of Printer',
-                'value' => '\'192.168.1.87\''
+                'name' => 'Printing Secret',
+                'value' => 'value'
             ],
             [
-                'name' => 'backup',
-                'value' => '0'
+                'name' => 'print',
+                'value' => '1'
             ],
         ];
         HallOption::insert($options);

@@ -9,10 +9,12 @@
     @endisset 
     </h6>
     <script>
-        window.onload = function () {
+        if (/Mobi/.test(navigator.userAgent)) {
+            window.onload = function () {
             let myDiv = document.getElementById('sidebarToggleTop');
             myDiv.click();
         };
+        }
     </script>
 
     

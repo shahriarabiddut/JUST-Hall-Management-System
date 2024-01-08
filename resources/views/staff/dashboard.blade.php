@@ -2,7 +2,12 @@
 @section('title', 'Staff Dashboard')
 
 @section('content')
-
+@if(App\Models\RoomRequest::where('flag', 0)->count()!=0)
+<!-- Content Row Notificaton -->
+<div class="row mt-1 p-2 mx-2 bg-warning text-white mb-2">
+    <p> {{ App\Models\RoomRequest::where('flag', 0)->count(); }} Unread Room Allocation Request</p>
+</div>
+@endif
 <!-- Content Row -->
 <div class="row">
 
@@ -84,6 +89,7 @@
         </div>
     </div>
 </div>
+
 <!-- Content Row For Order Data of Next Day -->
 <div class="row">
 
