@@ -30,22 +30,18 @@
                         <tr>
                             <th>#</th>
                             <th>Student</th>
-                            <th>Method</th>
                             <th>Amount</th>
                             <th>Creation Date</th>
                             <th>Status</th>
-                            <th>Accepted/Rejection Date</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
                             <th>#</th>
                             <th>Student</th>
-                            <th>Method</th>
                             <th>Amount</th>
                             <th>Creation Date</th>
                             <th>Status</th>
-                            <th>Accepted/Rejection Date</th>
                         </tr>
                     </tfoot>
                     <tbody>
@@ -53,33 +49,17 @@
                         @foreach ($data as $key => $d)
                         <tr>
                             <td>{{ ++$key }}</td>
-                            <td>{{ Auth::user()->name }}</td>
-                            <td>{{ $d->payment_method }}
-                                @switch($d->payment_method)
-                                @case('cash')
-                                   
-                                       @break
-                                @default
-                                    -TRXID {{ $d->transid }}
-                            @endswitch
-                            </td>
+                            <td>{{ $d->students->name }}</td>
                             <td>{{ $d->amount }}</td>
                             <td>{{ $d->created_at }}</td>
                             
                             @switch($d->status)
-                                @case(0)
-                                   <td class="bg-warning text-white"> Checking</td>
+                                @case('Pending')
+                                   <td class="bg-warning text-white"> Pending</td>
                                        @break
-                                @case(1)
-                                <td class="bg-success text-white"> Accepted by {{ $d->staff->name }}</td>
-                                    @break
-                                @case(2)
-                                <td class="bg-danger text-white"> Rejected by {{ $d->staff->name }}</td>
-                                    @break
                                 @default
-                                   <td>   No Action Taken </td>
+                                   <td>   {{ $d->status }} </td>
                             @endswitch
-                            <td>{{ $d->updated_at }}</td>
 
                         </tr>
                         @endforeach

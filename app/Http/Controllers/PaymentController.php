@@ -15,8 +15,8 @@ class PaymentController extends Controller
     {
         //
         $student_id = Auth::user()->id;
-        $data = Payment::select('*')->where('student_id','=',$student_id)->orderBy("id", "desc")->get();
-        return view('profile.balance.payment.index',['data' => $data]);
+        $data = Payment::select('*')->where('student_id', '=', $student_id)->orderBy("id", "desc")->get();
+        return view('profile.balance.payment.index', ['data' => $data]);
     }
 
     /**
@@ -31,28 +31,28 @@ class PaymentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
-        $data = new Payment;
-        $request->validate([
-            'student_id' => 'required',
-            'payment_method' => 'required',
-            'mobileno' => 'required',
-            'amount' => 'required',
-            'createdby' => 'required',
-        ]);
-       
+    // public function store(Request $request)
+    // {
+    //     //
+    //     $data = new Payment;
+    //     $request->validate([
+    //         'student_id' => 'required',
+    //         'payment_method' => 'required',
+    //         'mobileno' => 'required',
+    //         'amount' => 'required',
+    //         'createdby' => 'required',
+    //     ]);
 
-        $data->student_id = $request->student_id;
-        $data->payment_method = $request->payment_method;
-        $data->mobileno = $request->mobileno;
-        $data->amount = $request->amount;
-        $data->transid = $request->transid;
-        $data->status = 0;
-        $data->createdby = $request->createdby;
-        $data->save();
-        return redirect('student/payments')->with('success','Payment Data has been added Successfully!');
-    }
+
+    //     $data->student_id = $request->student_id;
+    //     $data->payment_method = $request->payment_method;
+    //     $data->mobileno = $request->mobileno;
+    //     $data->amount = $request->amount;
+    //     $data->transid = $request->transid;
+    //     $data->status = 0;
+    //     $data->createdby = $request->createdby;
+    //     $data->save();
+    //     return redirect('student/payments')->with('success','Payment Data has been added Successfully!');
+    // }
 
 }

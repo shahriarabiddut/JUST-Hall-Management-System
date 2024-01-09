@@ -10,6 +10,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SupportController;
 use App\Http\Controllers\MealTokenController;
+use App\Http\Controllers\SslCommerzPaymentController;
 /* 
 |--------------------------------------------------------------------------
 | Web Routes
@@ -75,6 +76,9 @@ Route::middleware('auth')->prefix('student')->name('student.')->group(function (
     Route::resource('balance', BalanceController::class);
     //Payment Routes
     Route::resource('payments', PaymentController::class);
+    // SSLCOMMERZ Start
+    Route::post('/pay', [SslCommerzPaymentController::class, 'index'])->name('ssl.pay');
+    //SSLCOMMERZ END
 
     //Order Routes
     Route::get('order/foodmenu', [OrderController::class, 'foodmenu'])->name('order.foodmenu');
@@ -97,7 +101,14 @@ Route::middleware('auth')->prefix('student')->name('student.')->group(function (
     //Print Extra ESp32
     Route::get('mealtoken/printNet/{id}', [MealTokenController::class, 'printNet'])->name('mealtoken.printnet');
 });
+// SSLCOMMERZ Start
+Route::post('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax'])->name('ssl.payViaAjax');
 
+Route::post('/success', [SslCommerzPaymentController::class, 'success'])->name('ssl.success');
+Route::post('/fail', [SslCommerzPaymentController::class, 'fail'])->name('ssl.fail');
+Route::post('/cancel', [SslCommerzPaymentController::class, 'cancel'])->name('ssl.cancel');
+Route::post('/ipn', [SslCommerzPaymentController::class, 'ipn'])->name('ssl.ipn');
+//SSLCOMMERZ END
 require __DIR__ . '/auth.php';
 require __DIR__ . '/admin.php';
 require __DIR__ . '/staff.php';
