@@ -17,20 +17,6 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <tbody>
                     <tr>
-                            <th>Select Department</th>
-                            <td>
-                                <select required name="department_id" class="form-control">
-                                    <option value="0">--- Select Department ---</option>
-                                    @foreach ($departs as $dp)
-                                    <option @if ($data->department_id==$dp->id)
-                                        @selected(true)
-                                    @endif
-                                     value="{{$dp->id}}">{{$dp->title}}</option>
-                                    @endforeach
-                                </select>
-                            </td>
-                        </tr>
-                    <tr><tr>
                         <th>Photo</th>
                         <td>
                             <table class="table table-bordered">

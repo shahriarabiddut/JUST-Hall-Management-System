@@ -28,10 +28,10 @@
                         <tr>
                             <th>#</th>
                             <th>Room No</th>
+                            <th>Seat No</th>
                             <th>Student Name</th>
                             <th>Student Roll</th>
                             <th>Assigned Date</th>
-                            <th>Position</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -39,10 +39,10 @@
                         <tr>
                             <th>#</th>
                             <th>Room No</th>
+                            <th>Seat No</th>
                             <th>Student Name</th>
                             <th>Student Roll</th>
                             <th>Assigned Date</th>
-                            <th>Position</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
@@ -52,10 +52,10 @@
                         <tr>
                             <td>{{ ++$key }}</td>
                             <td>{{ $d->rooms->title }}</td>
+                            <td>{{ $d->position }}</td>
                             <td>{{ $d->students->name }}</td>
                             <td>{{ $d->students->rollno }}</td>
                             <td>{{ $d->created_at }} </td>
-                            <td>{{ $d->position }}</td>
 
                             <td class="text-center">
                                 <a href="{{ url('admin/roomallocation/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>

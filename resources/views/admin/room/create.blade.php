@@ -47,18 +47,28 @@
 
     @section('scripts')
     <script>
-        // Get the sentence text
-        let sentence = document.getElementById('type').textContent;
-    
-        // Use regular expression to extract the number
-        let extractedNumber = sentence.match(/\d+(\.\d+)?/);
-    
-        // Check if a number is found
-        if (extractedNumber) {
-          // Update the input value with the extracted number
-          document.getElementById('numberInput').value = extractedNumber[0];
+        // Function to extract and update number
+        function updateNumber() {
+            // Get the sentence text
+            let sentence = document.getElementById('type').value;
+        
+            // Use regular expression to extract the number
+            let extractedNumber = sentence.match(/\d+(\.\d+)?/);
+        
+            // Check if a number is found
+            if (extractedNumber) {
+                // Update the input value with the extracted number
+                document.getElementById('numberInput').value = extractedNumber[0];
+            }
         }
-      </script>
+
+        // Add event listener to detect changes in the select input
+        document.getElementById('type').addEventListener('change', updateNumber);
+
+        // Initial call to set the initial value
+        updateNumber();
+    </script>
+
     @endsection
 @endsection
 

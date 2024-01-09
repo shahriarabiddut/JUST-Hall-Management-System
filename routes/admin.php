@@ -56,16 +56,7 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
     Route::get('student/{id}/delete', [StudentController::class, 'destroy']);
     Route::resource('student', StudentController::class);
 
-    // Department Routes
-    Route::get('department/{id}/delete', [StaffDepartmentController::class, 'destroy']);
-    Route::resource('department', StaffDepartmentController::class);
 
-    // Staff Routes
-    // Staff Payment
-    Route::get('staff/payments/{id}', [StaffController::class, 'all_payment']);
-    Route::get('staff/payment/{id}/add', [StaffController::class, 'add_payment']);
-    Route::post('staff/payment/{id}', [StaffController::class, 'save_payment']);
-    Route::get('staff/payment/{id}/{stuff_id}/delete', [StaffController::class, 'delete_payment']);
     // Staff Crud
     Route::get('staff/{id}/delete', [StaffController::class, 'destroy']);
     Route::get('staff/{id}/change', [StaffController::class, 'change']);
@@ -78,6 +69,8 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
     Route::get('roomallocation/ban/{id}', [AllocatedSeatController::class, 'roomrequestban'])->name('roomallocation.ban');
     Route::get('roomallocation/list/{id}', [AllocatedSeatController::class, 'roomrequestlist'])->name('roomallocation.list');
     Route::get('roomallocation/roomrequests/{id}', [AllocatedSeatController::class, 'showRoomRequest'])->name('roomallocation.showRoomRequest');
+    //Available Positions
+    Route::get('room/postion/{selectedValue}', [AllocatedSeatController::class, 'getPositions']);
     // Order Crud
     Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('orders/status/{id}', [OrderController::class, 'show'])->name('orders.show');

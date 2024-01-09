@@ -25,7 +25,7 @@
                         <tr>
                             <th width="30%" >Select Student</th>
                             <td>
-                                <select  required name="user_id" class="js-searchBox" width="70%" id="select_student">
+                                <select required name="user_id" class="js-searchBox" width="70%" id="select_student">
                                     <option value="0">--- Select Student ---</option>
                                     @foreach ($students as $st)
                                     <option value="{{$st->id}}">{{$st->name}} - {{$st->rollno}}</option>
@@ -36,7 +36,7 @@
                     <tr>
                         <th>Select RoomNo</th>
                             <td>
-                                <select required name="room_id" class="form-control room_id" id="select_room">
+                                <select required name="room_id" class="form-control room_id" id="select_room" onchange="fetchAndPopulateData()">
                                     <option value="0">--- Select RoomNo ---</option>
                                     @foreach ($rooms as $rm)
                                     <option value="{{$rm->id}}">{{$rm->title}}</option>
@@ -45,12 +45,7 @@
                             </td>
                     </tr>
                     <th>Position <span class="text-danger">*</span></th>
-                        <td><select required name="position" class="form-control room-list">
-                            <option value="0">--- Select Position ---</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
+                        <td><select name="position" class="form-control" id="positions">
                         </select></td>
                     </tr>
 
@@ -82,7 +77,37 @@
         $('.user_id').searchBox({ elementWidth: '100%'});
         $('.room_id').searchBox({ elementWidth: '100%'});
        </script>
+<script>
+    function fetchAndPopulateData() {
+        let selectedValue = document.getElementById("select_room").value;
 
+        // Make Ajax request to fetch data
+        fetch('{{ url("admin/room") }}/postion/' + selectedValue)
+            .then(response => response.json())
+            .then(data => {
+                // Update the options of the second select field
+                let secondSelectField = document.getElementById("positions");
+                secondSelectField.innerHTML = ""; // Clear existing options
+                let arrayString = data;
+
+                // Parse the string into a JavaScript array
+                let dataArray = JSON.parse(arrayString);
+
+                // Get the select field element
+                let selectField = document.getElementById("positions");
+
+                // Populate the select field with options based on the array
+                dataArray.forEach(function(value) {
+                    let option = document.createElement("option");
+                    option.value = value;
+                    option.text = value;
+                    selectField.add(option);
+                });
+                
+            })
+            .catch(error => console.error('Error:', error));
+    }
+</script>
     @endsection
 @endsection
 

@@ -70,6 +70,10 @@
     <div class="p-1 mb-1 bg-danger text-white text-center">
         <h3> Token Expired </h3>
     </div>
+    @else
+    <div class="p-1 mb-1 bg-success text-white text-center">
+        <h3> Token Valid </h3>
+    </div>
     @endif
     <div class="card-body">
         <div class="table-responsive">
@@ -84,39 +88,23 @@
                         <td>{{ $token->food_name }}</td>
                     </tr>
                     <tr>
+                        <th>Token Date</th>
+                        <td>{{ $token->date }}</td>
+                    </tr>
+                    <tr>
                         <th>Quantity</th>
                         <td>{{ $token->quantity }}</td>
                     </tr>
                     <tr>
-                        <th>Printed Date</th>
+                        <th>Validity Update Time</th>
                         <td>
                             @if ($token->created_at==$token->updated_at)
-                                Not Printed Yet
+                                N/A
                             @else
                                 {{ $token->updated_at }}
                             @endif
                             </td>
-                        
-                        
                     </tr>
-                    <tr>
-                        <th>Status</th>
-                        @switch($token->status)
-                            @case(3)
-                               <td class="bg-info text-white"> Token On Print Queue </td>
-                                   @break
-                            @case(1)
-                            <td class="bg-danger text-white"> Used</td>
-                                @break
-                            @case(2)
-                            <td class="bg-warning text-white"> Error</td>
-                                @break
-                            @default
-                            <td class="bg-success text-white"> Not Used </td>
-                        @endswitch
-                    </tr>
-                    
-                    
                     <tr>
                         <th>Order No</th>
                         <td>{{ $token->order_id }}</td>
@@ -124,15 +112,6 @@
                     <tr>
                         <th>Token No</th>
                         <td>{{ $token->id }}</td>
-                    </tr>
-                    
-                    
-                    <tr>
-                        <td colspan="2" class="m-1">          
-                            @if($token->status!=1)
-                            <a href="{{ route('staff.orders.valid',$token->id) }}" class="float-right btn btn-info btn-sm btn-block p-2"><i class="fas fa-ticket-alt"> Mark as Used </i></a> 
-                            @endif
-                        </td>                            
                     </tr>
                     
                 </table>

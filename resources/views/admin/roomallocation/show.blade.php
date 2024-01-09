@@ -15,7 +15,10 @@
                         <tr>
                             <th> Room No </th>
                             <td>{{ $data->rooms->title }}</td>
-                             </tr>
+                            </tr><tr>
+                            <th>Seat No </th>
+                            <td>{{ $data->position }}</td>
+                        </tr>
                         <tr>
                             <th>Student Name </th>
                             <td>{{ $data->students->name }}</td>
@@ -25,9 +28,6 @@
                         </tr><tr>
                             <th>Allocation Date </th>
                             <td>{{ $data->created_at }} </td>
-                        </tr><tr>
-                            <th>Position </th>
-                            <td>{{ $data->position }}</td>
                         </tr><tr>
                             <td colspan="2">
                                 <a href="{{ url('admin/roomallocation/'.$data->id.'/edit') }}" class="float-right btn btn-info btn-sm"><i class="fa fa-edit"> Edit {{ $data->title }} </i></a> 

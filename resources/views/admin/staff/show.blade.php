@@ -23,9 +23,6 @@
                        <th>Full Name </th>
                             <td>{{ $data->name }}</td>
                         </tr><tr>
-                            <th>Department</th>
-                            <td>{{ $data->department->title }}</td>
-                        </tr><tr>
                             <th>Bio </th>
                             <td>{{ $data->bio }}</td>
                         </tr><tr>

@@ -94,14 +94,15 @@ class FoodTimeController extends Controller
      */
     public function destroy($id)
     {
-        $data = FoodTime::find($id);
-        //
-        if ($data == null) {
-            return redirect()->route('staff.foodtime.index')->with('danger', 'Not Found!');
-        }
-        //
-        $data->delete();
-        return redirect('staff/foodtime')->with('danger', 'Data has been deleted Successfully!');
+        return redirect()->route('staff.foodtime.index')->with('danger', 'Not Permitted!');
+        // $data = FoodTime::find($id);
+        // //
+        // if ($data == null) {
+        //     return redirect()->route('staff.foodtime.index')->with('danger', 'Not Found!');
+        // }
+        // //
+        // $data->delete();
+        // return redirect('staff/foodtime')->with('danger', 'Data has been deleted Successfully!');
     }
     public function active($id)
     {

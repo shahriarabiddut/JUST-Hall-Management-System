@@ -41,9 +41,4 @@ class Staff extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    function department()
-    {
-        return $this->belongsTo(Department::class, 'department_id');
-    }
 }

@@ -224,18 +224,36 @@ class OrderController extends Controller
             return redirect()->route('staff.orders.scan')->with('danger', 'Not Found!');
         }
         if ($data->meal_type == 'Launch') {
-            //If remaining time is 0 , Student cannot order
+            //If today time is greater than remaining time , Token Invalid
             $today = Carbon::now(); // get current date and time
-            $remainingTime = $today->setTimezone('GMT+6')->format('Y-m-d') . ' 16:00:00';
-            $todayTime = $today->setTimezone('GMT+6')->format('Y-m-d H:i:s'); // 2023-03-17
-            if ($remainingTime < $todayTime) {
+            $remainingTime = $data->date . ' 16:00:00'; // Token Time
+            $todayTime = $today->setTimezone('GMT+6')->format('Y-m-d H:i:s'); //Today Time
+
+            if ($todayTime > $remainingTime) {
                 $falseCheck = 1;
             }
             //
             $token = $data;
+            //If Token invalid then falsecheck = 1 or update status as used
+            if ($data->status == 1) {
+                $falseCheck = 1;
+            } else {
+                $data->status = 1;
+                $data->save();
+            }
+
+            // Updated
             return view('staff.orders.scan.index', ['token' => $token, 'falseCheck' => $falseCheck]);
         } elseif ($data->meal_type == 'Dinner') {
             $token = $data;
+            //If Token invalid then falsecheck = 1 or update status as used
+            if ($data->status == 1) {
+                $falseCheck = 1;
+            } else {
+                $data->status = 1;
+                $data->save();
+            }
+            // Updated
             return view('staff.orders.scan.index', ['token' => $token, 'falseCheck' => $falseCheck]);
         }
     }
@@ -255,19 +273,34 @@ class OrderController extends Controller
             return redirect()->route('staff.orders.scan')->with('danger', 'Not Found!');
         }
         if ($data->meal_type == 'Launch') {
-            //If remaining time is 0 , Student cannot order
+            //If today time is greater than remaining time , Token Invalid
             $today = Carbon::now(); // get current date and time
-            $remainingTime = $today->setTimezone('GMT+6')->format('Y-m-d') . ' 16:00:00';
-            $todayTime = $today->setTimezone('GMT+6')->format('Y-m-d H:i:s'); // 2023-03-17
-            if ($remainingTime < $todayTime) {
+            $remainingTime = $data->date . ' 16:00:00'; // Token Time
+            $todayTime = $today->setTimezone('GMT+6')->format('Y-m-d H:i:s'); //Today Time
+            if ($todayTime  > $remainingTime) {
                 $falseCheck = 1;
             }
-            //
-            $token = $data;
-            return view('staff.orders.scan.index', ['token' => $token, 'falseCheck' => $falseCheck]);
+            //If Token invalid then falsecheck = 1 and update status as used
+            if ($data->status == 1) {
+                $falseCheck = 1;
+            } else {
+                $data2 = MealToken::all()->where('id', $request->token_number)->first();
+                $data2->status = 1;
+                $data2->save();
+            }
+            // Updated
+            return view('staff.orders.scan.index', ['token' => $data, 'falseCheck' => $falseCheck]);
         } elseif ($data->meal_type == 'Dinner') {
-            $token = $data;
-            return view('staff.orders.scan.index', ['token' => $token, 'falseCheck' => $falseCheck]);
+            //If Token invalid then falsecheck = 1 and update status as used
+            if ($data->status == 1) {
+                $falseCheck = 1;
+            } else {
+                $data2 = MealToken::all()->where('id', $request->token_number)->first();
+                $data2->status = 1;
+                $data2->save();
+            }
+            // Updated
+            return view('staff.orders.scan.index', ['token' => $data, 'falseCheck' => $falseCheck]);
         }
     }
 }
