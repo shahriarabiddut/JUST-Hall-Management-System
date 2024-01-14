@@ -28,7 +28,6 @@
                         <tr>
                             <th>#</th>
                             <th>Student</th>
-                            <th>Method</th>
                             <th>Amount</th>
                             <th>Date</th>
                             <th>Status</th>
@@ -39,7 +38,6 @@
                         <tr>
                             <th>#</th>
                             <th>Student</th>
-                            <th>Method</th>
                             <th>Amount</th>
                             <th>Date</th>
                             <th>Status</th>
@@ -52,18 +50,17 @@
                         <tr>
                             <td>{{ ++$key }}</td>
                             <td>{{ $d->students->name }} - {{ $d->students->rollno }}</td>
-                            <td>{{ $d->payment_method }}</td>
                             <td>{{ $d->amount }}</td>
                             <td>{{ $d->created_at }}</td>
                             
                             @switch($d->status)
-                                @case(0)
-                                   <td class="bg-warning text-white"> Checking</td>
+                                @case('Processing')
+                                   <td class="bg-warning text-white"> Processing</td>
                                        @break
-                                @case(1)
+                                @case('Accepted')
                                 <td class="bg-success text-white"> Accepted by {{ $d->staff->name }}</td>
                                     @break
-                                @case(2)
+                                @case('Rejected')
                                 <td class="bg-danger text-white"> Rejected by {{ $d->staff->name }}</td>
                                     @break
                                 @default

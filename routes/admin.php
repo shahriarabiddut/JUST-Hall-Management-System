@@ -5,13 +5,14 @@ use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\SupportController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\RoomController;
+use App\Http\Controllers\Admin\FoodController;
 use App\Http\Controllers\Admin\EmailController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\Admin\StudentController;
 use App\Http\Controllers\Admin\RoomTypeController;
-use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\FoodTimeController;
 use App\Http\Controllers\Admin\AllocatedSeatController;
-use App\Http\Controllers\Admin\StaffDepartmentController;
 use App\Http\Controllers\Admin\Auth\AuthenticatedSessionController;
 
 //Admin
@@ -92,4 +93,16 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
 
     //Command Test 
     Route::get("/deductBalance", [App\Http\Controllers\ProcessController::class, 'deductBalance'])->name('student.deductBalance');
+
+    // Foodtime Crud
+    Route::get('foodtime/{id}/active', [FoodTimeController::class, 'active']);
+    Route::get('foodtime/{id}/disable', [FoodTimeController::class, 'disable']);
+    Route::get('foodtime/{id}/delete', [FoodTimeController::class, 'destroy']);
+    Route::resource('foodtime', FoodTimeController::class);
+
+    // Food Crud
+    Route::get('food/{id}/active', [FoodController::class, 'active']);
+    Route::get('food/{id}/disable', [FoodController::class, 'disable']);
+    Route::get('food/{id}/delete', [FoodController::class, 'destroy']);
+    Route::resource('food', FoodController::class);
 });

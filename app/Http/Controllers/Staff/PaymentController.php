@@ -42,25 +42,26 @@ class PaymentController extends Controller
         $request->validate([
             'student_id' => 'required',
             'staff_id' => 'required',
-            'payment_method' => 'required',
             'mobileno' => 'required',
             'amount' => 'required',
             'status' => 'required',
-            'createdby' => 'required',
         ]);
 
 
         $data->student_id = $request->student_id;
         $data->staff_id = $request->staff_id;
-        $data->payment_method = $request->payment_method;
-        $data->mobileno = $request->mobileno;
+        $data->transaction_id = 0;
+        $data->phone = $request->mobileno;
         $data->amount = $request->amount;
         $data->status = $request->status;
-        $data->createdby = $request->createdby;
+        $data->name = Auth::guard('staff')->user()->name;
+        $data->email = Auth::guard('staff')->user()->email;
+        $data->address = Auth::guard('staff')->user()->email;
+        $data->currency = 'BDT';
         $data->save();
         $status = $data->status;
         // Add in Balance if accepted
-        if ($status == 1) {
+        if ($status == 'Accepted') {
             //For adding in balance 
             $newBalance = $data->amount;
 
@@ -101,11 +102,11 @@ class PaymentController extends Controller
         if ($data == null) {
             return redirect()->route('staff.payment.index')->with('danger', 'Not Found!');
         }
-        if ($data->status == 1 || $data->status == 2) {
+        if ($data->status == 'Accepted' || $data->status == 'Rejected') {
             return redirect('staff/payment')->with('danger', 'You are Warned!');
         } else {
 
-            $data->status = 1;
+            $data->status = 'Accepted';
             $data->staff_id = Auth::guard('staff')->user()->id;
             $staff_id = $data->staff_id;
             $status = $data->status;
@@ -134,8 +135,6 @@ class PaymentController extends Controller
             //Sending Email to User
             $EmailController = new EmailController();
             $EmailController->paymentEmail($student_id, $newBalance, $staff_id, $status);
-
-
             //updating Status
             $data->save();
 
@@ -149,11 +148,11 @@ class PaymentController extends Controller
         if ($data == null) {
             return redirect()->route('staff.payment.index')->with('danger', 'Not Found!');
         }
-        if ($data->status == 1 || $data->status == 2) {
+        if ($data->status == 'Accepted' || $data->status == 'Rejected') {
             return redirect('staff/payment')->with('danger', 'You are Warned!');
         } else {
 
-            $data->status = 2;
+            $data->status = 'Rejected';
             $data->staff_id = Auth::guard('staff')->user()->id;
             //updating Status
             $data->save();

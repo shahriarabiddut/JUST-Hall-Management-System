@@ -147,7 +147,47 @@
             </div>
         </div>
     </li>
-   
+    <hr class="sidebar-divider">
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Hall Food System
+    </div>
+    <!-- Nav FoodTime Services - Utilities Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link @if (!request()->is('admin/foodtime*'))
+            collapsed
+        @endif" href="#" data-toggle="collapse" data-target="#collapseFoodTime"
+            aria-expanded="true" aria-controls="collapseFoodTime">
+            <i class="fas fa-table"></i>
+            <span>FoodTime </span>
+        </a>
+        <div id="collapseFoodTime" class="collapse @if(request()->is('admin/foodtime*')) show @endif" aria-labelledby="headingUtilities"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">FoodTime Management</h6>
+                <a class="collapse-item" href="{{ route('admin.foodtime.index') }}">View All</a>
+                <a class="collapse-item" href="{{ route('admin.foodtime.create') }}">Add new</a>
+            </div>
+        </div>
+    </li>
+    <!-- Nav FoodTime Services - Utilities Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link @if (!request()->is('admin/food*'))
+            collapsed
+        @endif" href="#" data-toggle="collapse" data-target="#collapseFood"
+            aria-expanded="true" aria-controls="collapseFood">
+            <i class="fas fa-table"></i>
+            <span>Food Items </span>
+        </a>
+        <div id="collapseFood" class="collapse @if(request()->is('admin/food/*')) show @endif" aria-labelledby="headingUtilities"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Food Item Management</h6>
+                <a class="collapse-item" href="{{ route('admin.food.index') }}">View All</a>
+                <a class="collapse-item" href="{{ route('admin.food.create') }}">Add new</a>
+            </div>
+        </div>
+    </li>
     <!-- Divider -->
     <hr class="sidebar-divider">
     <!-- Heading -->

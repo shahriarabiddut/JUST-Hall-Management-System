@@ -28,16 +28,6 @@
                                 </select>
                             </td>
                         </tr>
-                        <tr>
-                            <th>Payment Method <span class="text-danger">*</span></th>
-                                <td><select required name="payment_method" class="form-control room-list">
-                                    <option value="0">--- Select Method ---</option>
-                                    <option value="cash">Cash</option>
-                                    <option value="bkash">Bkash</option>
-                                    <option value="rocket">Rocket</option>
-                                    <option value="nogod">Nogod</option>
-                                </select></td>
-                            </tr> 
                             <tr>
                                 <th>Mobile</th>
                                 <td><input required name="mobileno" type="text" class="form-control"></td>
@@ -50,14 +40,13 @@
                         <th>Payment Status <span class="text-danger">*</span></th>
                             <td><select required name="status" class="form-control room-list">
                                 <option value="0">--- Select Status ---</option>
-                                <option value="1">Accepted</option>
-                                <option value="0">On Process</option>
+                                <option value="Accepted">Accepted</option>
+                                <option value="Processing">On Process</option>
                             </select></td>
                         </tr> 
                     <tr>
                         <td colspan="2">
                             <input name="staff_id" type="hidden" value="{{ Auth::guard('staff')->user()->id }}">
-                            <input name="createdby" type="hidden" value="Staff name :{{ Auth::guard('staff')->user()->name }}">
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </td>
                     </tr>

@@ -80,6 +80,49 @@
             </div>
         </div>
     </li>
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Hall Food System
+    </div>
+    <!-- Nav FoodTime Services - Utilities Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link @if (!request()->is('staff/foodtime*'))
+            collapsed
+        @endif" href="#" data-toggle="collapse" data-target="#collapseSix"
+            aria-expanded="true" aria-controls="collapseSix">
+            <i class="fas fa-table"></i>
+            <span>FoodTime </span>
+        </a>
+        <div id="collapseSix" class="collapse @if(request()->is('staff/foodtime*')) show @endif" aria-labelledby="headingUtilities"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">FoodTime Management</h6>
+                <a class="collapse-item" href="{{ route('staff.foodtime.index') }}">View All</a>
+                <a class="collapse-item" href="{{ route('staff.foodtime.create') }}">Add new</a>
+            </div>
+        </div>
+    </li>
+    <!-- Nav FoodTime Services - Utilities Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link @if (!request()->is('staff/food*'))
+            collapsed
+        @endif" href="#" data-toggle="collapse" data-target="#collapseSeven"
+            aria-expanded="true" aria-controls="collapseSeven">
+            <i class="fas fa-table"></i>
+            <span>Food Items </span>
+        </a>
+        <div id="collapseSeven" class="collapse @if(request()->is('staff/food/*')) show @endif" aria-labelledby="headingUtilities"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Food Item Management</h6>
+                <a class="collapse-item" href="{{ route('staff.food.index') }}">View All</a>
+                <a class="collapse-item" href="{{ route('staff.food.create') }}">Add new</a>
+            </div>
+        </div>
+    </li>
+  <!-- Divider -->
     @endif
     <hr class="sidebar-divider">
     @if (Auth::guard('staff')->user()->type == 'staff')
@@ -105,49 +148,7 @@
             </div>
         </div>
     </li>
-     <!-- Divider -->
-     <hr class="sidebar-divider">
-     <!-- Heading -->
-     <div class="sidebar-heading">
-         Hall Food System
-     </div>
-     <!-- Nav FoodTime Services - Utilities Collapse Menu -->
-     <li class="nav-item">
-         <a class="nav-link @if (!request()->is('staff/foodtime*'))
-             collapsed
-         @endif" href="#" data-toggle="collapse" data-target="#collapseSix"
-             aria-expanded="true" aria-controls="collapseSix">
-             <i class="fas fa-table"></i>
-             <span>FoodTime </span>
-         </a>
-         <div id="collapseSix" class="collapse @if(request()->is('staff/foodtime*')) show @endif" aria-labelledby="headingUtilities"
-             data-parent="#accordionSidebar">
-             <div class="bg-white py-2 collapse-inner rounded">
-                 <h6 class="collapse-header">FoodTime Management</h6>
-                 <a class="collapse-item" href="{{ route('staff.foodtime.index') }}">View All</a>
-                 <a class="collapse-item" href="{{ route('staff.foodtime.create') }}">Add new</a>
-             </div>
-         </div>
-     </li>
-     <!-- Nav FoodTime Services - Utilities Collapse Menu -->
-     <li class="nav-item">
-         <a class="nav-link @if (!request()->is('staff/food*'))
-             collapsed
-         @endif" href="#" data-toggle="collapse" data-target="#collapseSeven"
-             aria-expanded="true" aria-controls="collapseSeven">
-             <i class="fas fa-table"></i>
-             <span>Food Items </span>
-         </a>
-         <div id="collapseSeven" class="collapse @if(request()->is('staff/food/*')) show @endif" aria-labelledby="headingUtilities"
-             data-parent="#accordionSidebar">
-             <div class="bg-white py-2 collapse-inner rounded">
-                 <h6 class="collapse-header">Food Item Management</h6>
-                 <a class="collapse-item" href="{{ route('staff.food.index') }}">View All</a>
-                 <a class="collapse-item" href="{{ route('staff.food.create') }}">Add new</a>
-             </div>
-         </div>
-     </li>
-   <!-- Divider -->
+     
    <hr class="sidebar-divider">
    @endif
    <!-- Heading -->

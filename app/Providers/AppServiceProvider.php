@@ -25,6 +25,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Redirect to HTTPS
+        if ($this->app->environment('production')) {
+            \URL::forceScheme('https');
+        }
+        //
         view()->composer('profile.*', function ($view) {
             $userid = Auth::user()->id;
             $dataMessage = RoomRequest::all()->where('user_id', '=', $userid);

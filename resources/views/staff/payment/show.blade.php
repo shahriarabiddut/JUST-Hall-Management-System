@@ -23,55 +23,70 @@
                         <td>{{ $data->amount }}</td>
                     </tr><tr>
                         <th>Pament Method</th>
-                        <td>{{ $data->payment_method }}</td>
+                        <td>
+                            @switch($data->transaction_id)
+                        @case(0)
+                            Cash
+                                @break
+                        @default
+                        SSLCOMMERZ
+                    @endswitch
+                        </td>
                     </tr>
-                    @switch($data->payment_method)
-                        @case('cash')
-                            
+                    @switch($data->transaction_id)
+                        @case(0)
+                            Cash
                                 @break
                         @default
                         <th>Transaction ID</th>
-                        <td> {{ $data->transid }} </td>
+                        <td> {{ $data->transaction_id }} </td>
                     @endswitch
                     <tr>
                         <th>Mobile No</th>
-                        <td>{{ $data->mobileno }}</td>
+                        <td>{{ $data->phone }}</td>
                     </tr><tr>
                         <th>Created By</th>
-                        <td>{{ $data->createdby }}</td>
+                        <td>{{ $data->name }}</td>
                     </tr><tr>
                         <th>Created Date</th>
                         <td>{{ $data->created_at }}</td>
                     </tr><tr>
                         <th>Status</th>
-                            @switch($data->status)
-                                @case(0)
-                                   <td class="bg-warning text-white"> Checking</td>
-                                       @break
-                                @case(1)
-                                <td class="bg-success text-white"> Accepted</td>
-                                    @break
-                                @case(2)
-                                <td class="bg-danger text-white"> Rejected</td>
-                                    @break
-                                @default
-                                   <td>   No Action Taken </td>
-                            @endswitch
+                        @switch($data->status)
+                        @case('Processing')
+                           <td class="bg-warning text-white"> Processing</td>
+                               @break
+                        @case('Accepted')
+                        <td class="bg-success text-white"> Accepted</td>
+                            @break
+                        @case('Rejected')
+                        <td class="bg-danger text-white"> Rejected</td>
+                            @break
+                        @default
+                           <td>   No Action Taken </td>
+                    @endswitch
                     </tr>
-                    @if($data->staff_id)
+                    @if($data->status == 'Accepted' || $data->status =='Rejected')
                     <tr>
                         <th>Accepted By</th>
-                        <td>{{ $data->staff->name }}</td>
+                        @switch($data->status)
+                        @case('Accepted')
+                        <td class="bg-success text-white"> Accepted by {{ $data->staff->name }}</td>
+                            @break
+                        @case('Rejected')
+                        <td class="bg-danger text-white"> Rejected by {{ $data->staff->name }}</td>
+                            @break
+                    @endswitch
                     </tr>
                     @endif
                     <tr>
-                        @if($data->status ==1 || $data->status ==2)
+                        @if($data->status == 'Accepted' || $data->status =='Rejected')
                         @switch($data->status)
-                                @case(1)
+                                @case('Accepted')
                                 <th>Accepted Date</th>
                                 <td class="bg-success text-white">{{ $data->updated_at }} </td>
                                     @break
-                                @case(2)
+                                @case('Rejected')
                                 th>Rejected Date</th>
                                 <td class="bg-danger text-white"> {{ $data->updated_at }}</td>
                                     @break

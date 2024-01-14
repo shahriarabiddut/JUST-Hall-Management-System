@@ -75,6 +75,15 @@ Route::middleware('userType:aprovost')->prefix('staff')->name('staff.')->group(f
     //RoomAllocation CRUD
     Route::get('roomallocation/{id}/delete', [AllocatedSeatController::class, 'destroy']);
     Route::resource('roomallocation', AllocatedSeatController::class);
+    // Foodtime Crud
+    Route::get('foodtime/{id}/active', [FoodTimeController::class, 'active']);
+    Route::get('foodtime/{id}/disable', [FoodTimeController::class, 'disable']);
+    Route::resource('foodtime', FoodTimeController::class);
+
+    // Food Crud
+    Route::get('food/{id}/active', [FoodController::class, 'active']);
+    Route::get('food/{id}/disable', [FoodController::class, 'disable']);
+    Route::resource('food', FoodController::class);
 });
 // Provost Extra
 Route::middleware('userType:provost')->prefix('staff')->name('staff.')->group(function () {
@@ -99,8 +108,7 @@ Route::middleware('userType:provost')->prefix('staff')->name('staff.')->group(fu
     Route::get('staff/{id}/change', [StaffController::class, 'change']);
     Route::put('staff/{id}/changeUpdate', [StaffController::class, 'changeUpdate'])->name('staff.changeUpdate');
     Route::resource('staff', StaffController::class);
-});
-Route::middleware('userType:staff')->prefix('staff')->name('staff.')->group(function () {
+
     // Foodtime Crud
     Route::get('foodtime/{id}/active', [FoodTimeController::class, 'active']);
     Route::get('foodtime/{id}/disable', [FoodTimeController::class, 'disable']);
@@ -112,7 +120,8 @@ Route::middleware('userType:staff')->prefix('staff')->name('staff.')->group(func
     Route::get('food/{id}/disable', [FoodController::class, 'disable']);
     Route::get('food/{id}/delete', [FoodController::class, 'destroy']);
     Route::resource('food', FoodController::class);
-
+});
+Route::middleware('userType:staff')->prefix('staff')->name('staff.')->group(function () {
     // Order Crud
     Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('orders/status/{id}', [OrderController::class, 'show'])->name('orders.show');

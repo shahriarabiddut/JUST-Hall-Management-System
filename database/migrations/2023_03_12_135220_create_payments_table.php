@@ -23,7 +23,6 @@ return new class extends Migration
             $table->string('currency');
             $table->integer('student_id')->references('id')->on('users')->nullable();
             $table->integer('staff_id')->references('id')->on('staff')->nullable();
-            $table->string('createdby')->nullable();
             $table->timestamps();
         });
     }

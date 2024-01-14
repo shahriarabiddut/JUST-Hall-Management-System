@@ -1,4 +1,4 @@
-@extends('staff/layout')
+@extends('admin/layout')
 @section('title', 'Food Item Details')
 @section('content')
 
@@ -9,7 +9,7 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h3 class="m-0 font-weight-bold text-primary">Food Item Details of <span class="bg-warning"> {{ $data->food_name }} </span> 
-            <a href="{{ url('staff/food') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h3>
+            <a href="{{ url('admin/food') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h3>
         </div>
         <div class="card-body">
             
@@ -51,7 +51,8 @@
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <a href="{{ url('staff/food/'.$data->id.'/edit') }}" class="float-left btn btn-info btn-sm mr-1"><i class="fa fa-edit"> Edit {{ $data->title }}  </i></a> 
+                            <a onclick="return confirm('Are You Sure?')" href="{{ url('admin/food/'.$data->id.'/delete') }}" class="float-right btn btn-danger btn-sm "><i class="fa fa-trash"> Delete </i></a>
+                            <a href="{{ url('admin/food/'.$data->id.'/edit') }}" class="float-left btn btn-info btn-sm mr-1"><i class="fa fa-edit"> Edit {{ $data->title }}  </i></a> 
                             
                         </td>
                         
