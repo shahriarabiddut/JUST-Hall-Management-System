@@ -20,12 +20,13 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call(AdminSeeder::class);
-        $this->call(DepartmentSeeder::class);
-        $this->call(RoomSeeder::class);
+        // $this->call(RoomSeeder::class);
         $this->call(RoomTypeSeeder::class);
         $this->call(StaffSeeder::class);
         $this->call(StudentSeeder::class);
         $this->call(FoodTimeSeeder::class);
+        $this->call(FoodSeeder::class);
         $this->call(HallOptionSeeder::class);
+        $this->call(BalanceSeeder::class);
     }
 }

@@ -244,6 +244,27 @@ class OrderController extends Controller
 
             // Updated
             return view('staff.orders.scan.index', ['token' => $token, 'falseCheck' => $falseCheck]);
+        } elseif ($data->meal_type == 'Suhr') {
+            //If today time is greater than remaining time , Token Invalid
+            $today = Carbon::now(); // get current date and time
+            $remainingTime = $data->date . ' 4:00:00'; // Token Time
+            $todayTime = $today->setTimezone('GMT+6')->format('Y-m-d H:i:s'); //Today Time
+
+            if ($todayTime > $remainingTime) {
+                $falseCheck = 1;
+            }
+            //
+            $token = $data;
+            //If Token invalid then falsecheck = 1 or update status as used
+            if ($data->status == 1) {
+                $falseCheck = 1;
+            } else {
+                $data->status = 1;
+                $data->save();
+            }
+
+            // Updated
+            return view('staff.orders.scan.index', ['token' => $token, 'falseCheck' => $falseCheck]);
         } elseif ($data->meal_type == 'Dinner') {
             $token = $data;
             //If Token invalid then falsecheck = 1 or update status as used

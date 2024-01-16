@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('room_type_id')->references('id')->on('room_types')->onDelete('cascade');
             $table->integer('totalseats');
             $table->integer('vacancy');
-            $table->array('positions');
+            $table->longText('positions');
             $table->timestamps();
         });
     }
