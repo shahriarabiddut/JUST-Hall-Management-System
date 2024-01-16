@@ -57,6 +57,9 @@
                                 @case('Processing')
                                    <td class="bg-warning text-white"> Processing</td>
                                        @break
+                                @case('Completed')
+                                <td class="bg-warning text-white"> Completed</td>
+                                    @break
                                 @case('Accepted')
                                 <td class="bg-success text-white"> Accepted by {{ $d->staff->name }}</td>
                                     @break
@@ -64,7 +67,7 @@
                                 <td class="bg-danger text-white"> Rejected by {{ $d->staff->name }}</td>
                                     @break
                                 @default
-                                   <td>   No Action Taken </td>
+                                   <td>{{$d->status}}</td>
                             @endswitch
                             
                             <td class="text-center">

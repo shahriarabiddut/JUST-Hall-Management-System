@@ -24,7 +24,7 @@ use App\Http\Controllers\SslCommerzPaymentController;
 
 
 Route::get('/testroute', function () {
-    $name = "Funny Coder";
+    $name = "Biddut";
 
     // The email sending is done using the to method on the Mail facade
     Mail::to('shahriarabiddut@gmail.com')->send(new MyTestEmail($name));

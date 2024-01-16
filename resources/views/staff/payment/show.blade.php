@@ -56,6 +56,9 @@
                         @case('Processing')
                            <td class="bg-warning text-white"> Processing</td>
                                @break
+                        @case('Completed')
+                        <td class="bg-warning text-white"> Completed</td>
+                            @break
                         @case('Accepted')
                         <td class="bg-success text-white"> Accepted</td>
                             @break
@@ -63,7 +66,7 @@
                         <td class="bg-danger text-white"> Rejected</td>
                             @break
                         @default
-                           <td>   No Action Taken </td>
+                        <td>{{$d->status}}</td>
                     @endswitch
                     </tr>
                     @if($data->status == 'Accepted' || $data->status =='Rejected')

@@ -94,9 +94,6 @@ class SslCommerzPaymentController extends Controller
 
     public function success(Request $request)
     {
-
-        echo "Transaction is Successful";
-
         $tran_id = $request->input('tran_id');
         $amount = $request->input('amount');
         $currency = $request->input('currency');
@@ -116,20 +113,19 @@ class SslCommerzPaymentController extends Controller
                     ->where('transaction_id', $tran_id)
                     ->update(['status' => 'Processing']);
 
-                echo "<br >Transaction is successfully Completed";
-                echo "Transaction is successfully Completed";
-                dd("Transaction is Successful Completed");
+                $data = 1;
+                return view('layouts.success', ['data' => $data]);
             }
         } else if ($order_details->status == 'Processing' || $order_details->status == 'Complete') {
             /*
              That means through IPN Order status already updated. Now you can just show the customer that transaction is completed. No need to udate database.
              */
-            echo "Transaction is successfully Completed";
-            dd("Transaction is Successful");
+            $data = 1;
+            return view('layouts.success', ['data' => $data]);
         } else {
             #That means something wrong happened. You can redirect customer to your product page.
-            echo "Invalid Transaction";
-            dd("Transaction is Invalid");
+            $data = 1;
+            return view('layouts.failed', ['data' => $data]);
         }
     }
 
@@ -145,11 +141,14 @@ class SslCommerzPaymentController extends Controller
             $update_product = DB::table('payments')
                 ->where('transaction_id', $tran_id)
                 ->update(['status' => 'Failed']);
-            echo "Transaction is Falied";
+            $data = 0;
+            return view('layouts.failed', ['data' => $data]);
         } else if ($order_details->status == 'Processing' || $order_details->status == 'Complete') {
-            echo "Transaction is already Successful";
+            $data = 2;
+            return view('layouts.success', ['data' => $data]);
         } else {
-            echo "Transaction is Invalid";
+            $data = 1;
+            return view('layouts.failed', ['data' => $data]);
         }
     }
 
@@ -165,11 +164,14 @@ class SslCommerzPaymentController extends Controller
             $update_product = DB::table('payments')
                 ->where('transaction_id', $tran_id)
                 ->update(['status' => 'Canceled']);
-            echo "Transaction is Cancel";
+            $data = 2;
+            return view('layouts.failed', ['data' => $data]);
         } else if ($order_details->status == 'Processing' || $order_details->status == 'Complete') {
-            echo "Transaction is already Successful";
+            $data = 2;
+            return view('layouts.success', ['data' => $data]);
         } else {
-            echo "Transaction is Invalid";
+            $data = 1;
+            return view('layouts.failed', ['data' => $data]);
         }
     }
 
@@ -199,20 +201,24 @@ class SslCommerzPaymentController extends Controller
                         ->where('transaction_id', $tran_id)
                         ->update(['status' => 'Processing']);
 
-                    echo "Transaction is successfully Completed";
+                    $data = 1;
+                    return view('layouts.success', ['data' => $data]);
                 }
             } else if ($order_details->status == 'Processing' || $order_details->status == 'Complete') {
 
                 #That means Order status already updated. No need to udate database.
 
-                echo "Transaction is already successfully Completed";
+                $data = 2;
+                return view('layouts.success', ['data' => $data]);
             } else {
                 #That means something wrong happened. You can redirect customer to your product page.
 
-                echo "Invalid Transaction";
+                $data = 1;
+                return view('layouts.failed', ['data' => $data]);
             }
         } else {
-            echo "Invalid Data";
+            $data = 1;
+            return view('layouts.failed', ['data' => $data]);
         }
     }
 }
