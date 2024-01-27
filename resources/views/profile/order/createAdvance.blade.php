@@ -1,10 +1,7 @@
 @extends('layout')
-@section('title', 'Create Order For Meal')
+@section('title', 'Add Advance Meal Order ')
 @section('content')
 
-
-    <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Create Order Meal </h1>
         <!-- Session Messages Starts -->
 
         @if(Session::has('danger'))
@@ -16,8 +13,8 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Add Order 
-            <a href="{{ url('student/order') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h6>
+            <h3 class="m-0 font-weight-bold text-primary">Add Advance Meal Order 
+            <a href="{{ url('student/order') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h3>
         </div>
         <div class="card-body">
             

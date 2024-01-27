@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('message');
             $table->integer('status')->nullable();
             $table->integer('flag')->nullable();
+            $table->integer('allocated_seat_id')->nullable();
             $table->timestamps();
         });
     }

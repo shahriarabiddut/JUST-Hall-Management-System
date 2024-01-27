@@ -261,22 +261,38 @@ class AllocatedSeatController extends Controller
         }
         $student_id = $data->user_id;
         $room_id = $data->room_id;
+
         $data2 = Student::find($student_id);
+
+        $room = Room::find($room_id);
+        if ($room->vacancy == 0) {
+            return redirect()->route('staff.roomallocation.index')->with('danger', 'Room is Full!');
+        }
+        $roomVacant = $room->vacancy - 1;
+        $room->vacancy = $roomVacant;
+        // Room Vancacy deleted
+        // Remove a specific position from the Room Positions
+        $arrayRepresentation = json_decode($room->positions, true);
+        foreach ($arrayRepresentation as $key => $data) {
+            if ($key == 0) {
+                $aposition = $data;
+            }
+        }
+        $filteredArray = array_diff($arrayRepresentation, array($aposition));
+        $filteredArray = array_values($filteredArray);
+        $jsonData = json_encode($filteredArray);
+        $room->positions = $jsonData;
+        // Removed
+        $room->save();
+        // Room Vancacy deleted
         if ($data) {
             //Allocating seat 
             $data3 = new AllocatedSeats;
             $data3->room_id = $room_id;
             $data3->user_id = $student_id;
-            $data3->position = 0;
 
+            $data3->position = $aposition;
             $data3->save();
-            // Room Vacancy - 1
-            $roomid = $room_id;
-            $room = Room::find($roomid);
-            $roomVacant = $room->vacancy - 1;
-            $room->vacancy = $roomVacant;
-            $room->save();
-            // Room Vancacy deleted
 
             //Room Allocation Requests Accepted
             $allocated_seat_id = $data3->id;

@@ -53,7 +53,7 @@
                             <td>{{ ++$key }}</td>
                             <td>{{ $d->title }}</td>
                             <td>{{ $d->detail }}</td>
-                            <td>{{ $d->price }}</td>
+                            <td>{{ $d->price }}/= Taka</td>
                             @switch($d->status)
                             @case(0)
                                 <td class="bg-danger text-white"> Disable</td>

@@ -66,7 +66,7 @@
                         <td class="bg-danger text-white"> Rejected</td>
                             @break
                         @default
-                        <td>{{$d->status}}</td>
+                        <td>{{$data->status}}</td>
                     @endswitch
                     </tr>
                     @if($data->status == 'Accepted' || $data->status =='Rejected')

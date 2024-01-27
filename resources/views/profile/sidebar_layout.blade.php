@@ -49,7 +49,7 @@
             </div>
         </div>
     </li>
-
+ @if (!Auth::user()->allocated_seat)
     <!-- Divider -->
     <hr class="sidebar-divider">
     <!-- Heading -->
@@ -117,6 +117,7 @@
         </div>
     </li>
     <!-- Nav Item Support - Utilities Collapse Menu -->
+    @endif
     <li class="nav-item">
         <a class="nav-link @if (!request()->is('student/support*'))
             collapsed

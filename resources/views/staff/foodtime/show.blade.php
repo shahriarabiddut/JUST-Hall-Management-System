@@ -20,7 +20,7 @@
                         <td>{{ $data->detail }}</td>
                     </tr><tr>
                         <th>Price</th>
-                        <td>{{ $data->price }}</td>
+                        <td>{{ $data->price }} /= Taka</td>
                     </tr><tr>
                         <th>Status</th>
                         @switch($data->status)

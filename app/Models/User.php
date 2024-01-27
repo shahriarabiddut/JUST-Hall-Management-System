@@ -41,4 +41,8 @@ class User extends Authenticatable  implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    function allocated_seat()
+    {
+        return $this->belongsTo(AllocatedSeats::class, 'user_id');
+    }
 }
