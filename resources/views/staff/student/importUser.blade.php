@@ -24,6 +24,10 @@
                 @csrf
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <tbody>
+                        <tr>
+                            <th>Format (Excel)</th>
+                            <td>Coumn name should be in serial - rollno,name,email,dept,session </td>
+                        </tr>
                     <tr>
                         <th style="width: 50%">File</th>
                         <td><input name="file" type="file" ></td>

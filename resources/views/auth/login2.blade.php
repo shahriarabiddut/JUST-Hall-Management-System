@@ -10,7 +10,7 @@
     <link rel="icon" type="image/x-icon" href="{{ asset($HallOption[4]->value) }}" />
     <meta name="author" content="">
 
-    <title> Login | @isset($HallOption)
+    <title> Login Rollno | @isset($HallOption)
         {{ $HallOption[2]->value }}
     @endisset </title>
     <!-- Custom fonts for this template-->
@@ -33,7 +33,7 @@
             <div class="col-12 col-md-4 col-lg-4 h-50 ">
               <div class="card shadow">
                 <div class="card-body mx-2">
-                    @error('email')
+                    @error('rollno')
                   <div class="text-bold bg-danger text-center text-white p-2">{{ $message }}</div>
                   @enderror
                   @error('password')
@@ -50,13 +50,13 @@
                   <p class="text-muted font-weight-bold ">
                     <span>OR</span>
                   </p> --}}
-                  <form method="POST" action="{{ route('login') }}">
+                  <form method="POST" action="{{ route('login2') }}">
                     @csrf
                     <div class="form-group input-group">
                       <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
                       </div> 
-                      <input required name="email" class="form-control" placeholder="Enter Email address" type="email" value="{{ old('email') }}">
+                      <input required name="rollno" class="form-control" placeholder="Enter Roll No" type="text" value="{{ old('rollno') }}">
                     </div>
                     <div class="form-group input-group">
                       <div class="input-group-prepend">
@@ -73,8 +73,7 @@
                     @if (Route::has('password.request'))
                     <p class="text-center">Forgot Your Password?
                       <a href="{{ route('password.request') }}">Request New Password</a>
-                      <hr>
-                      <a href="{{ route('login2') }}" class="btn btn-block btn-info"><i class="fa fa-signup m-2"></i>Login Using Roll No</a>
+                      <a href="{{ route('login') }}" class="btn btn-block btn-info"><i class="fa fa-signup m-2"></i>Login Using Email</a>
                     </p>
                     @endif
                     <hr>

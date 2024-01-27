@@ -6,9 +6,24 @@ use App\Models\Food;
 use App\Models\FoodTime;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class FoodTimeController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            if (Auth::guard('staff')->user()->type == 'provost') {
+                return $next($request);
+                // return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+            } elseif (Auth::guard('staff')->user()->type == 'aprovost') {
+                return $next($request);
+            } else {
+                return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+                return $next($request);
+            }
+        });
+    }
     public function index()
     {
         $data = FoodTime::all();

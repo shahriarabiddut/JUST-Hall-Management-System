@@ -177,15 +177,18 @@ class StudentController extends Controller
             if ($key != $length - 1) {
                 $row = array_combine($header, $row);
                 $email = $row['email'];
+                $rollno = $row['rollno'];
+                dd($row['email']);
                 $data = Student::where('email', $email)->first();
-                if ($data == null) {
+                $data2 = Student::where('rollno', $rollno)->first();
+                if ($data == null && $data2 == null) {
                     $StudentData =  Student::create([
                         'rollno' => $row['rollno'],
                         'name' => $row['name'],
                         'email' => $row['email'],
                         'dept' => $row['dept'],
                         'session' => $row['session'],
-                        'password' => bcrypt($row['email']),
+                        'password' => bcrypt($row['rollno']),
                     ]);
                     //Creating Balance account for student
                     $BalanceController = new BalanceController();

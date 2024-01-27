@@ -4,15 +4,30 @@ namespace App\Http\Controllers\Staff;
 
 use App\Models\Room;
 use App\Models\Student;
+use App\Models\RoomRequest;
 use Illuminate\Http\Request;
 use App\Models\AllocatedSeats;
-use App\Http\Controllers\Controller;
-use App\Models\RoomRequest;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 
 class AllocatedSeatController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            if (Auth::guard('staff')->user()->type == 'provost') {
+                return $next($request);
+                // return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+            } elseif (Auth::guard('staff')->user()->type == 'aprovost') {
+                return $next($request);
+            } else {
+                return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+                return $next($request);
+            }
+        });
+    }
     /**
      * Display a listing of the resource.
      */

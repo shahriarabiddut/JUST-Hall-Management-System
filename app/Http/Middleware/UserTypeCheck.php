@@ -22,6 +22,6 @@ class UserTypeCheck
         }
 
         // Redirect or respond accordingly if the user type check fails
-        return redirect()->route('staff.dashboard')->with('error', 'Unauthorized access');
+        return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
     }
 }

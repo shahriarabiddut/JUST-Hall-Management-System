@@ -19,13 +19,24 @@ class AuthenticatedSessionController extends Controller
     {
         return view('auth.login');
     }
-
+    public function create2(): View
+    {
+        return view('auth.login2');
+    }
     /**
      * Handle an incoming authentication request.
      */
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
+
+        $request->session()->regenerate();
+
+        return redirect()->intended(RouteServiceProvider::HOME);
+    }
+    public function store2(LoginRequest $request): RedirectResponse
+    {
+        $request->authenticate2();
 
         $request->session()->regenerate();
 

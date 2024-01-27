@@ -2,19 +2,35 @@
 
 namespace App\Http\Controllers\Staff;
 
+use App\Models\Balance;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\BalanceController;
-use App\Models\Balance;
 
 class StudentController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            if (Auth::guard('staff')->user()->type == 'provost') {
+                return $next($request);
+                // return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+            } elseif (Auth::guard('staff')->user()->type == 'aprovost') {
+                return $next($request);
+            } else {
+                return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+                return $next($request);
+            }
+        });
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
+
         $data = Student::all();
         return view('staff.student.index', ['data' => $data]);
     }
@@ -177,21 +193,27 @@ class StudentController extends Controller
             if ($key != $length - 1) {
                 $row = array_combine($header, $row);
                 $email = $row['email'];
+                $rollno = $row['rollno'];
                 $data = Student::where('email', $email)->first();
-                if ($data == null) {
+                $data2 = Student::where('rollno', $rollno)->first();
+                if ($data == null && $data2 == null) {
                     $StudentData =  Student::create([
                         'rollno' => $row['rollno'],
                         'name' => $row['name'],
                         'email' => $row['email'],
                         'dept' => $row['dept'],
                         'session' => $row['session'],
-                        'password' => bcrypt($row['email']),
+                        'password' => bcrypt($row['rollno']),
                     ]);
                     //Creating Balance account for student
                     $BalanceController = new BalanceController();
                     $BalanceController->store($StudentData->id);
                 } else {
-                    $errorEmails[] = $email;
+                    if ($data != null) {
+                        $errorEmails[] = $email;
+                    } else {
+                        $errorEmails[] = 'rollno :' . $rollno;
+                    }
                 }
             }
         }

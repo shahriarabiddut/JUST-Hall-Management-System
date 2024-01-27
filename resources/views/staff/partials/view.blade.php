@@ -72,15 +72,6 @@
               </div>
               <hr>
               <div class="row">
-                <div class="col-sm-3">
-                  <p class="mb-0">Department</p>
-                </div>
-                <div class="col-sm-9">
-                  <p class="text-muted mb-0">{{ $user->department->title }}</p>
-                </div>
-              </div>
-              <hr>
-              <div class="row">
                 <div class="col-sm-3 float-left">
                   <a href="{{ route('staff.profile.edit') }}"><button type="button" class="btn btn-primary">Edit Profile</button></a>
                 </div>

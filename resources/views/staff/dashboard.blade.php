@@ -2,6 +2,11 @@
 @section('title', 'Staff Dashboard')
 
 @section('content')
+@if(Session::has('danger'))
+            <div class="p-3 mb-2 bg-danger text-white">
+                <p>{{ session('danger') }} </p>
+            </div>
+            @endif
 @if(App\Models\RoomRequest::where('flag', 0)->count()!=0)
 <!-- Content Row Notificaton -->
 <div class="row mt-1 p-2 mx-2 bg-warning text-white mb-2">
