@@ -328,6 +328,23 @@ class OrderController extends Controller
     }
     public function qrcodescanesp(string $value, string $tokenid)
     {
+        function capitalizeAndLowercase($str)
+        {
+            $result = "";
+            $len = strlen($str);
+            for ($i = 0; $i < $len; $i++) {
+                $char = $str[$i];
+                if (ctype_lower($char)) {
+                    $result .= strtoupper($char);
+                } elseif (ctype_upper($char)) {
+                    $result .= strtolower($char);
+                } else {
+                    $result .= $char;
+                }
+            }
+            return $result;
+        }
+        $result2 = capitalizeAndLowercase($tokenid);
         $printingOption = HallOption::all()->where('id', '10')->first();
 
         if ($value != $printingOption->value) {
@@ -335,8 +352,7 @@ class OrderController extends Controller
         }
         //
         $falseCheck = 0;
-        $data = MealToken::all()->where('token_number', $tokenid)->first();
-        dd($data);
+        $data = MealToken::all()->where('token_number', $result2)->first();
         if ($data == null) {
             return 0;
         }
