@@ -6,6 +6,7 @@ use App\Models\Food;
 use App\Models\Order;
 use App\Models\FoodTime;
 use App\Models\MealToken;
+use App\Models\HallOption;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Models\TokenPrintQueue;
@@ -282,6 +283,9 @@ class OrderController extends Controller
     {
         $falseCheck = 0;
         $data = MealToken::all()->where('id', $request->token_number)->first();
+        if ($data == null) {
+            return redirect()->route('staff.orders.scan')->with('danger', 'Not Found!');
+        }
         //Check Date is Valid To Print
         $result = $this->isDateValid($data->date);
         if ($result == false) {
@@ -290,9 +294,7 @@ class OrderController extends Controller
             return view('staff.orders.scan.index', ['token' => $token, 'falseCheck' => $falseCheck]);
         }
         //
-        if ($data == null) {
-            return redirect()->route('staff.orders.scan')->with('danger', 'Not Found!');
-        }
+
         if ($data->meal_type == 'Launch') {
             //If today time is greater than remaining time , Token Invalid
             $today = Carbon::now(); // get current date and time
@@ -322,6 +324,90 @@ class OrderController extends Controller
             }
             // Updated
             return view('staff.orders.scan.index', ['token' => $data, 'falseCheck' => $falseCheck]);
+        }
+    }
+    public function qrcodescanesp(string $value, string $tokenid)
+    {
+        $printingOption = HallOption::all()->where('id', '10')->first();
+
+        if ($value != $printingOption->value) {
+            return 0;
+        }
+        //
+        $falseCheck = 0;
+        $data = MealToken::all()->where('token_number', $tokenid)->first();
+        dd($data);
+        if ($data == null) {
+            return 0;
+        }
+        //Check Date is Valid To Print
+        $result = $this->isDateValid($data->date);
+        if ($result == false) {
+            return 0;
+        }
+        //
+
+        if ($data->meal_type == 'Launch') {
+            //If today time is greater than remaining time , Token Invalid
+            $today = Carbon::now(); // get current date and time
+            $remainingTime = $data->date . ' 16:00:00'; // Token Time
+            $todayTime = $today->setTimezone('GMT+6')->format('Y-m-d H:i:s'); //Today Time
+
+            if ($todayTime > $remainingTime) {
+                return 0;
+            }
+            //
+            $token = $data;
+            //If Token invalid then falsecheck = 1 or update status as used
+            if ($data->status == 1) {
+                return 0;
+            } else {
+                $data->status = 1;
+                $data->save();
+            }
+
+            // Updated
+            return 1;
+        } elseif ($data->meal_type == 'Suhr') {
+            //If today time is greater than remaining time , Token Invalid
+            $today = Carbon::now(); // get current date and time
+            $remainingTime = $data->date . ' 4:00:00'; // Token Time
+            $todayTime = $today->setTimezone('GMT+6')->format('Y-m-d H:i:s'); //Today Time
+
+            if ($todayTime > $remainingTime) {
+                return 0;
+            }
+            //
+            $token = $data;
+            //If Token invalid then falsecheck = 1 or update status as used
+            if ($data->status == 1) {
+                return 0;
+            } else {
+                $data->status = 1;
+                $data->save();
+            }
+
+            // Updated
+            return 1;
+        } elseif ($data->meal_type == 'Dinner') {
+            $token = $data;
+            //If today time is greater than remaining time , Token Invalid
+            $today = Carbon::now(); // get current date and time
+            $remainingTime = $data->date . ' 23:59:00'; // Token Time
+            $todayTime = $today->setTimezone('GMT+6')->format('Y-m-d H:i:s'); //Today Time
+
+            if ($todayTime > $remainingTime) {
+                return 0;
+            }
+            //If Token invalid then falsecheck = 1 or update status as used
+            if ($data->status == 1) {
+                return 0;
+            } else {
+                $data->status = 1;
+                $data->save();
+            }
+            // Updated
+            return 1;
         }
     }
 }
