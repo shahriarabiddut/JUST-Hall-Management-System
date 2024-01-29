@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SupportController;
 use App\Http\Controllers\Staff\FoodController;
 use App\Http\Controllers\Staff\HomeController;
+use App\Http\Controllers\Staff\RoomController;
 use App\Http\Controllers\Staff\EmailController;
 use App\Http\Controllers\Staff\OrderController;
 use App\Http\Controllers\Staff\StaffController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\Staff\BalanceController;
 use App\Http\Controllers\Staff\PaymentController;
 use App\Http\Controllers\Staff\StudentController;
 use App\Http\Controllers\Staff\FoodTimeController;
+use App\Http\Controllers\Staff\RoomTypeController;
 use App\Http\Controllers\Staff\AllocatedSeatController;
 use App\Http\Controllers\Staff\Auth\AuthenticatedSessionController;
 
@@ -83,20 +85,6 @@ Route::middleware('staff')->prefix('staff')->name('staff.')->group(function () {
     Route::get('food/{id}/active', [FoodController::class, 'active']);
     Route::get('food/{id}/disable', [FoodController::class, 'disable']);
     Route::resource('food', FoodController::class);
-});
-//Assistant Provost Extra
-Route::middleware('userType:aprovost')->prefix('staff')->name('staff.')->group(function () {
-});
-// Provost Extra
-Route::middleware('userType:provost')->prefix('staff')->name('staff.')->group(function () {
-
-    // Staff Crud
-    Route::get('staff/{id}/delete', [StaffController::class, 'destroy']);
-    Route::get('staff/{id}/change', [StaffController::class, 'change']);
-    Route::put('staff/{id}/changeUpdate', [StaffController::class, 'changeUpdate'])->name('staff.changeUpdate');
-    Route::resource('staff', StaffController::class);
-});
-Route::middleware('userType:staff')->prefix('staff')->name('staff.')->group(function () {
     // Order Crud
     Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('orders/status/{id}', [OrderController::class, 'show'])->name('orders.show');
@@ -108,4 +96,28 @@ Route::middleware('userType:staff')->prefix('staff')->name('staff.')->group(func
     Route::get('orders/scan/', [OrderController::class, 'scan'])->name('orders.scan');
     Route::get('orders/scan/{id}', [OrderController::class, 'qrcodescanlink'])->name('orders.qrcodescanlink');
     Route::post('orders/qrcodescan/', [OrderController::class, 'qrcodescan'])->name('orders.qrcodescan');
+});
+//Assistant Provost Extra
+Route::middleware('userType:aprovost')->prefix('staff')->name('staff.')->group(function () {
+});
+// Provost Extra
+Route::middleware('userType:provost')->prefix('staff')->name('staff.')->group(function () {
+    // RoomTypes Routes
+    Route::get('roomtype/{id}/delete', [RoomTypeController::class, 'destroy']);
+    Route::resource('roomtype', RoomTypeController::class);
+    // Delete RoomType Images
+    Route::get('roomtypeImage/delete/{id}', [RoomTypeController::class, 'destroy_image']);
+
+    // Room Routes
+    Route::get('rooms/{id}/delete', [RoomController::class, 'destroy']);
+    Route::get('rooms/import-bulk', [RoomController::class, 'importRoom'])->name('rooms.bulk');
+    Route::post('rooms/import-bulk', [RoomController::class, 'handleImportRoom'])->name('rooms.bulkUpload');
+    Route::resource('rooms', RoomController::class);
+    // Staff Crud
+    Route::get('staff/{id}/delete', [StaffController::class, 'destroy']);
+    Route::get('staff/{id}/change', [StaffController::class, 'change']);
+    Route::put('staff/{id}/changeUpdate', [StaffController::class, 'changeUpdate'])->name('staff.changeUpdate');
+    Route::resource('staff', StaffController::class);
+});
+Route::middleware('userType:staff')->prefix('staff')->name('staff.')->group(function () {
 });

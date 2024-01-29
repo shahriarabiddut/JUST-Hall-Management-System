@@ -41,8 +41,7 @@ if ($printingOption->value != 0) {
     Route::get('/tokenPrint/{value1}', [MealTokenController::class, 'TokenPrintQueue2'])->name('tokenPrint');
     Route::get('/tpqd/{id}&{order_id}&{rollno}/delete', [MealTokenController::class, 'TokenPrintQueueDelete'])->name('tokenprint.delete');
     Route::get('/tpqd/{value}/{id}&{order_id}&{rollno}/delete', [MealTokenController::class, 'TokenPrintQueueDelete2'])->name('tokenprint.delete2');
-    // Route::get('orders/scan/{value}/{id}', [App\Http\Controllers\Staff\OrderController::class, 'qrcodescanesp'])->name('orders.qrcodescanlink')->where('id', '(.*(?:%2F:)?.*)');
-    Route::get('orders/scan/{value}/{id}', [App\Http\Controllers\Staff\OrderController::class, 'qrcodescanesp'])->name('orders.qrcodescanlink');
+    Route::get('orders/scan/{value}/{id}', [App\Http\Controllers\Staff\OrderController::class, 'qrcodescanesp'])->name('orders.qrcodescanlink')->where('id', '(.*(?:%2F:)?.*)');
 }
 //
 //ESP 32 Token Print Queue Delete

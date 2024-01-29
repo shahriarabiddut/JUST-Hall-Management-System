@@ -95,6 +95,9 @@ class EmailController extends Controller
     {
         $RecieverData = Student::find($id);
         $RecieverEmail = $RecieverData->email;
+        if ($RecieverEmail == null) {
+            return redirect()->back()->with('danger', 'No Email Found');
+        }
         $RecieverName = $RecieverData->name;
         $RecieverAmount = $amount;
         //accept or reject
@@ -144,6 +147,9 @@ class EmailController extends Controller
 
         $RecieverData = Student::find($id);
         $RecieverEmail = $RecieverData->email;
+        if ($RecieverEmail == null) {
+            return redirect()->back()->with('danger', 'No Email Found');
+        }
         $RecieverName = $RecieverData->name;
         $RoomTitle = $roomtitle;
         //accept or reject

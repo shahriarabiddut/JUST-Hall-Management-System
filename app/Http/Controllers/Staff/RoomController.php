@@ -1,19 +1,34 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Staff;
 
-use Illuminate\Http\Request;
 use App\Models\Room;
 use App\Models\RoomType;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class RoomController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            if (Auth::guard('staff')->user()->type == 'provost') {
+                return $next($request);
+                // return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+            } elseif (Auth::guard('staff')->user()->type == 'aprovost') {
+                return $next($request);
+            } else {
+                return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+                return $next($request);
+            }
+        });
+    }
     //
     public function index()
     {
         $data = Room::all();
-        return view('admin.room.index', ['data' => $data]);
+        return view('staff.room.index', ['data' => $data]);
     }
 
     /**
@@ -23,7 +38,7 @@ class RoomController extends Controller
     {
         //
         $roomtypes = RoomType::all();
-        return view('admin.room.create', ['roomtypes' => $roomtypes]);
+        return view('staff.room.create', ['roomtypes' => $roomtypes]);
     }
 
     /**
@@ -47,7 +62,7 @@ class RoomController extends Controller
         //
         $data->save();
 
-        return redirect('admin/rooms')->with('success', 'Room Data has been added Successfully!');
+        return redirect('staff/rooms')->with('success', 'Room Data has been added Successfully!');
     }
 
     /**
@@ -58,9 +73,9 @@ class RoomController extends Controller
         //
         $data = Room::find($id);
         if ($data == null) {
-            return redirect()->route('admin.rooms.index')->with('danger', 'Not Found!');
+            return redirect()->route('staff.rooms.index')->with('danger', 'Not Found!');
         }
-        return view('admin.room.show', ['data' => $data]);
+        return view('staff.room.show', ['data' => $data]);
     }
 
     /**
@@ -72,9 +87,9 @@ class RoomController extends Controller
         $roomtypes = RoomType::all();
         $data = Room::find($id);
         if ($data == null) {
-            return redirect()->route('admin.rooms.index')->with('danger', 'Not Found!');
+            return redirect()->route('staff.rooms.index')->with('danger', 'Not Found!');
         }
-        return view('admin.room.edit', ['data' => $data, 'roomtypes' => $roomtypes]);
+        return view('staff.room.edit', ['data' => $data, 'roomtypes' => $roomtypes]);
     }
 
     /**
@@ -89,7 +104,7 @@ class RoomController extends Controller
         $data->totalseats = $request->totalseats;
         $data->save();
 
-        return redirect('admin/rooms')->with('success', 'Room Data has been updated Successfully!');
+        return redirect('staff/rooms')->with('success', 'Room Data has been updated Successfully!');
     }
 
     /**
@@ -99,15 +114,15 @@ class RoomController extends Controller
     {
         $data = Room::find($id);
         if ($data == null) {
-            return redirect()->route('admin.rooms.index')->with('danger', 'Not Found!');
+            return redirect()->route('staff.rooms.index')->with('danger', 'Not Found!');
         }
         $data->delete();
-        return redirect('admin/rooms')->with('danger', 'Data has been deleted Successfully!');
+        return redirect('staff/rooms')->with('danger', 'Data has been deleted Successfully!');
     }
     // Import Bilk users from csv
     public function importRoom()
     {
-        return view('admin.room.importRoom');
+        return view('staff.room.importRoom');
     }
 
     public function handleImportRoom(Request $request)
@@ -149,9 +164,9 @@ class RoomController extends Controller
             }
         }
         if ($errorTitles == null) {
-            return redirect()->route('admin.rooms.index')->with('success', 'Room Data has been imported Successfully!');
+            return redirect()->route('staff.rooms.index')->with('success', 'Room Data has been imported Successfully!');
         } else {
-            return redirect()->route('admin.rooms.index')->with('success', 'Room Data has been imported Successfully!')->with('danger-titles', $errorTitles);
+            return redirect()->route('staff.rooms.index')->with('success', 'Room Data has been imported Successfully!')->with('danger-titles', $errorTitles);
         }
     }
 }

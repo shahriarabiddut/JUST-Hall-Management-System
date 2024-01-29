@@ -353,6 +353,7 @@ class OrderController extends Controller
         //
         $falseCheck = 0;
         $data = MealToken::all()->where('token_number', $result2)->first();
+
         if ($data == null) {
             return 0;
         }

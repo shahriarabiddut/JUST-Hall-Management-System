@@ -22,10 +22,46 @@
     <hr class="sidebar-divider">
     <!-- Heading -->
     <div class="sidebar-heading">
+        Hall Rooms
+    </div>
+    <!-- Nav Item Room Type - Pages Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link @if(!request()->is('staff/roomtype*')) collapsed @endif" href="#" data-toggle="collapse" data-target="#collapseRoomType"
+            aria-expanded="true" aria-controls="collapseRoomType">
+            <i class="fas fa-fw fa-users"></i>
+            <span>Room Type</span>
+        </a>
+        <div id="collapseRoomType" class="collapse @if(request()->is('staff/roomtype*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Room Type Management</h6>
+                <a class="collapse-item" href="{{ route('staff.roomtype.index') }}">View All</a>
+                <a class="collapse-item" href="{{ route('staff.roomtype.create') }}">Add new</a>
+            </div>
+        </div>
+    </li>
+<!-- Nav Item Room - Pages Collapse Menu -->
+<li class="nav-item">
+    <a class="nav-link @if(!request()->is('staff/rooms*')) collapsed @endif" href="#" data-toggle="collapse" data-target="#collapseRoom"
+        aria-expanded="true" aria-controls="collapseRoom">
+        <i class="fas fa-fw fa-users"></i>
+        <span>Room</span>
+    </a>
+    <div id="collapseRoom" class="collapse @if(request()->is('staff/rooms*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Room Management</h6>
+            <a class="collapse-item" href="{{ route('staff.rooms.index') }}">View All</a>
+            <a class="collapse-item" href="{{ route('staff.rooms.create') }}">Add new</a>
+        </div>
+    </div>
+</li>
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+    <!-- Heading -->
+    <div class="sidebar-heading">
         Hall Staffs
     </div>
 
-    <!-- Nav Item Customer - Pages Collapse Menu -->
+    <!-- Nav Item Staff - Pages Collapse Menu -->
     <li class="nav-item">
         <a class="nav-link @if(!request()->is('staff/staff*')) collapsed @endif" href="#" data-toggle="collapse" data-target="#collapseStaff"
             aria-expanded="true" aria-controls="collapseStaff">
@@ -125,7 +161,7 @@
   <!-- Divider -->
     @endif
     <hr class="sidebar-divider">
-    @if (Auth::guard('staff')->user()->type == 'staff')
+    @if (Auth::guard('staff')->user()->type == 'staff' || Auth::guard('staff')->user()->type == 'provost' || Auth::guard('staff')->user()->type == 'aprovost')
     <!-- Heading -->
     <div class="sidebar-heading">
         Hall Orders System
