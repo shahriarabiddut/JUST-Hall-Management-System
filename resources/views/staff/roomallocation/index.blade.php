@@ -55,7 +55,7 @@
                             <td>{{ $d->position }}</td>
                             <td>{{ $d->students->name }}</td>
                             <td>{{ $d->students->rollno }}</td>
-                            <td>{{ $d->created_at }} </td>
+                            <td>{{ $d->created_at->format("F j, Y")  }} </td>
 
                             <td class="text-center">
                                 <a href="{{ url('staff/roomallocation/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>

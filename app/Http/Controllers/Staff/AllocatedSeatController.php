@@ -96,8 +96,12 @@ class AllocatedSeatController extends Controller
         // Removed
         $room->save();
         // 
-
-        return redirect('staff/roomallocation')->with('success', 'AllocatedSeats Data has been added Successfully!');
+        //Saving History 
+        $HistoryController = new HistoryController();
+        $staff_id = Auth::guard('staff')->user()->id;
+        $HistoryController->addHistory($staff_id, 'allocation', 'Student (' . $data->students->rollno . ' ) - ' . $data->students->name . ' , Room is Allocated Successfully!');
+        //Saved
+        return redirect('staff/roomallocation')->with('success', 'Room Allocation Data has been added Successfully!');
     }
 
     /**
@@ -125,6 +129,7 @@ class AllocatedSeatController extends Controller
         if ($data == null) {
             return redirect()->route('staff.roomallocation.index')->with('danger', 'Not Found!');
         }
+
         return view('staff.roomallocation.edit', ['data' => $data, 'students' => $students, 'rooms' => $rooms]);
     }
 
@@ -196,7 +201,11 @@ class AllocatedSeatController extends Controller
         }
         //
         $data->save();
-
+        //Saving History 
+        $HistoryController = new HistoryController();
+        $staff_id = Auth::guard('staff')->user()->id;
+        $HistoryController->addHistory($staff_id, 'allocation update', 'Student (' . $data->students->rollno . ' ) - ' . $data->students->name . ' , Room is Allocation Updated Successfully!');
+        //Saved
         return redirect('staff/roomallocation')->with('success', 'AllocatedSeats Data has been updated Successfully!');
     }
 
@@ -223,8 +232,20 @@ class AllocatedSeatController extends Controller
         $room->positions = $jsonData;
         //
         $room->save();
+        //Room Request Clean
+        $data2 = RoomRequest::all()->where('user_id', $data->user_id)->where('room_id', $data->room_id)->first();
+        if ($data2 != null) {
+            $data2->allocated_seat_id = 0;
+            $data2->status = 2;
+            $data2->save();
+        }
         //
         $data->delete();
+        //Saving History 
+        $HistoryController = new HistoryController();
+        $staff_id = Auth::guard('staff')->user()->id;
+        $HistoryController->addHistory($staff_id, 'delete', 'Student (' . $data->students->rollno . ' ) - ' . $data->students->name . ' , Room Allocation has been deleted Successfully!');
+        //Saved
         return redirect('staff/roomallocation')->with('danger', 'Data has been deleted Successfully!');
     }
     //Room Allocation Requests
@@ -301,6 +322,11 @@ class AllocatedSeatController extends Controller
             $EmailController = new EmailController();
             $EmailController->RoomAllocationEmail($student_id, $room->title, 1);
 
+            //Saving History 
+            $HistoryController = new HistoryController();
+            $staff_id = Auth::guard('staff')->user()->id;
+            $HistoryController->addHistory($staff_id, 'accept', 'Student (' . $data2->rollno . ' ) - ' . $data2->name . ' , Room Allocation Request has been accepted and Room is Allocated Successfully!');
+            //Saved
             return redirect('staff/roomallocation')->with('success', 'AllocatedSeats Data has been added Successfully!');
         } else {
             return redirect('staff/roomallocation')->with('danger', 'No Data Found');
@@ -333,6 +359,11 @@ class AllocatedSeatController extends Controller
         //Sending Email to User That Room Allocation is Accepted
         $EmailController = new EmailController();
         $EmailController->RoomAllocationEmail($student_id, $room->title, 1);
+        //Saving History 
+        $HistoryController = new HistoryController();
+        $staff_id = Auth::guard('staff')->user()->id;
+        $HistoryController->addHistory($staff_id, 'accept', 'Student (' . $data->students->rollno . ' ) - ' . $data->students->name . ' , Room Allocation Request has been accepted Successfully!');
+        //Saved
         return redirect('staff/roomallocation/roomrequests')->with('success', 'Accepted Successfully!');
     }
     public function roomrequestban(string $id)
@@ -351,7 +382,11 @@ class AllocatedSeatController extends Controller
         //Sending Email to User That Room Allocation is Accepted
         $EmailController = new EmailController();
         $EmailController->RoomAllocationEmail($student_id, $room->title, 2);
-
+        //Saving History 
+        $HistoryController = new HistoryController();
+        $staff_id = Auth::guard('staff')->user()->id;
+        $HistoryController->addHistory($staff_id, 'reject', 'Student (' . $data->students->rollno . ' ) - ' . $data->students->name . ' , Room Allocation Request has been rejected Successfully!');
+        //Saved
         if ($allocated_seat_id) {
             //Room Allocation Seat Delete
             $this->destroy($allocated_seat_id);
@@ -375,6 +410,11 @@ class AllocatedSeatController extends Controller
         //Sending Email to User That Room Allocation is Accepted
         $EmailController = new EmailController();
         $EmailController->RoomAllocationEmail($student_id, $room->title, 3);
+        //Saving History 
+        $HistoryController = new HistoryController();
+        $staff_id = Auth::guard('staff')->user()->id;
+        $HistoryController->addHistory($staff_id, 'listed', 'Student (' . $data->students->rollno . ' ) - ' . $data->students->name . ' , Room Allocation Request has been listed for queue Successfully!');
+        //Saved
         return redirect()->route('staff.roomallocation.roomrequests')->with('warning', 'Listed for Queue Successfully!');
     }
 }

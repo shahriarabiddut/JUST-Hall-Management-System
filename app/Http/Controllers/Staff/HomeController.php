@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\Staff;
 use App\Models\FoodTime;
 use Illuminate\View\View;
+use App\Models\HallOption;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -96,7 +97,7 @@ class HomeController extends Controller
         }
         //If user Gieven any PHOTO
         if ($request->hasFile('photo')) {
-            $formFields['photo'] = $request->file('photo')->store('StaffPhoto', 'public');
+            $formFields['photo'] = 'app/public/' . $request->file('photo')->store('StaffPhoto', 'public');
         } else {
             $formFields['photo'] = $request->prev_photo;
         }
@@ -105,7 +106,7 @@ class HomeController extends Controller
         $data->email = $request->email;
         $data->phone = $request->mobile;
         $data->address = $request->address;
-        $data->photo = $formFields['photo'];
+        $data->photo =  $formFields['photo'];
 
         $data->save();
 
@@ -142,5 +143,22 @@ class HomeController extends Controller
         } else {
             return Redirect::back()->with('danger', "Current Password Didn't Match");
         }
+    }
+    public function settings()
+    {
+        $datas = HallOption::all();
+        return view('staff.settings.edit', ['datas' => $datas]);
+    }
+    public function settingsUpdate(Request $request, $id)
+    {
+        //
+        $data = HallOption::find($id);
+        $request->validate([
+            'value' => 'required',
+        ]);
+        $data->value = $request->value;
+        $data->save();
+
+        return redirect()->route('staff.settings.index')->with('success', 'Settings has been updated Successfully!');
     }
 }

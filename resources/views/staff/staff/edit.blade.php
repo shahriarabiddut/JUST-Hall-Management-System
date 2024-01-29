@@ -26,7 +26,8 @@
                         <td>
                             <table class="table table-bordered">
                                 <td>
-                                    <input name="photo" type="file">
+                                    <input type="file" accept="image/*" id="fileInput" name="photo" onchange="previewImage(event)">
+                                    <img id="imagePreview" src="#" alt="Image Preview">
                                 </td>
                             <td> <img width="100" src="{{$data->photo ? asset('storage/'.$data->photo) : ''}}" >
                             </td>
@@ -72,6 +73,21 @@
     </div>
 
     @section('scripts')
+    <script>
+        function previewImage(event) {
+          const file = event.target.files[0];
+          const reader = new FileReader();
+    
+          reader.onload = function() {
+            const img = document.getElementById('imagePreview');
+            img.src = reader.result;
+          }
+    
+          if (file) {
+            reader.readAsDataURL(file);
+          }
+        }
+      </script>
     @endsection
 @endsection
 

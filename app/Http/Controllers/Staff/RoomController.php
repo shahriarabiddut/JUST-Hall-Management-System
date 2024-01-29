@@ -61,8 +61,13 @@ class RoomController extends Controller
         $data->positions = $jsonData;
         //
         $data->save();
+        //Saving History 
+        $HistoryController = new HistoryController();
+        $staff_id = Auth::guard('staff')->user()->id;
+        $HistoryController->addHistory($staff_id, 'add', 'Room ' . $data->title . ' has been added Successfully!');
+        //Saved
 
-        return redirect('staff/rooms')->with('success', 'Room Data has been added Successfully!');
+        return redirect()->route('staff.rooms.index')->with('success', 'Room has been added Successfully!');
     }
 
     /**
@@ -103,8 +108,12 @@ class RoomController extends Controller
         $data->title = $request->title;
         $data->totalseats = $request->totalseats;
         $data->save();
-
-        return redirect('staff/rooms')->with('success', 'Room Data has been updated Successfully!');
+        //Saving History 
+        $HistoryController = new HistoryController();
+        $staff_id = Auth::guard('staff')->user()->id;
+        $HistoryController->addHistory($staff_id, 'update', 'Room ' . $data->title . ' has been updated Successfully!');
+        //Saved
+        return redirect()->route('staff.rooms.index')->with('success', 'Room has been updated Successfully!');
     }
 
     /**
@@ -117,7 +126,12 @@ class RoomController extends Controller
             return redirect()->route('staff.rooms.index')->with('danger', 'Not Found!');
         }
         $data->delete();
-        return redirect('staff/rooms')->with('danger', 'Data has been deleted Successfully!');
+        //Saving History 
+        $HistoryController = new HistoryController();
+        $staff_id = Auth::guard('staff')->user()->id;
+        $HistoryController->addHistory($staff_id, 'delete', 'Room ' . $data->title . ' has been deleted Successfully!');
+        //Saved
+        return redirect()->route('staff.rooms.index')->with('danger', 'Room has been deleted Successfully!');
     }
     // Import Bilk users from csv
     public function importRoom()
@@ -163,6 +177,11 @@ class RoomController extends Controller
                 }
             }
         }
+        //Saving History 
+        $HistoryController = new HistoryController();
+        $staff_id = Auth::guard('staff')->user()->id;
+        $HistoryController->addHistory($staff_id, 'add', 'Room has been imported Successfully!');
+        //Saved
         if ($errorTitles == null) {
             return redirect()->route('staff.rooms.index')->with('success', 'Room Data has been imported Successfully!');
         } else {

@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Models\Staff;
 use App\Models\Department;
 use App\Models\StaffPayment;
+use Illuminate\Http\Request;
 
-use Carbon\Carbon;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Staff\HistoryController;
 
 class StaffController extends Controller
 {
@@ -54,7 +56,7 @@ class StaffController extends Controller
         $data->name = $request->name;
         $data->email = $request->email;
         $data->password = bcrypt($request->password);
-        $data->photo = $imgpath;
+        $data->photo = 'app/public/' . $imgpath;
         $data->bio = $request->bio;
         $data->address = $request->address;
         $data->phone = $request->phone;
@@ -113,7 +115,7 @@ class StaffController extends Controller
         $data->type = $request->type;
         //If user Gieven any PHOTO
         if ($request->hasFile('photo')) {
-            $imgpath = $request->file('photo')->store('StaffPhoto', 'public');
+            $imgpath =  'app/public/' . $request->file('photo')->store('StaffPhoto', 'public');
         } else {
             $imgpath = $request->prev_photo;
         }

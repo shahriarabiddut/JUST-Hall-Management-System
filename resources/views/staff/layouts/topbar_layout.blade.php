@@ -34,7 +34,7 @@
                 
                 </span>
                 <img class="img-profile rounded-circle"
-                    src="{{ asset('img/undraw_profile.svg') }}">
+                src="{{Auth::guard('staff')->user()->photo ? asset('storage/'.Auth::guard('staff')->user()->photo) : url('images/user.png')}}">
             </a>
             <!-- Dropdown - User Information -->
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"

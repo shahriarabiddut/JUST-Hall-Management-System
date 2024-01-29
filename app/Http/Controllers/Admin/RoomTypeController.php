@@ -48,13 +48,13 @@ class RoomTypeController extends Controller
                 $imgPath = $img->store('RoomTypeImages', 'public');
                 $imgData = new RoomTypeImage;
                 $imgData->room_type_id = $data->id;
-                $imgData->img_src = $imgPath;
+                $imgData->img_src =  'app/public/' . $imgPath;
                 $imgData->img_alt = $request->title;
                 $imgData->save();
             }
         }
-
         $data->save();
+
         return redirect('admin/roomtype')->with('success', 'Room Type has been Created Successfully!');
     }
 
@@ -102,7 +102,7 @@ class RoomTypeController extends Controller
                 $imgPath = $img->store('RoomTypeImages', 'public');
                 $imgData = new RoomTypeImage;
                 $imgData->room_type_id = $data->id;
-                $imgData->img_src = $imgPath;
+                $imgData->img_src =  'app/public/' . $imgPath;
                 $imgData->img_alt = $request->title;
                 $imgData->save();
             }

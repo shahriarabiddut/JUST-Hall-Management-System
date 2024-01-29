@@ -60,8 +60,12 @@ class FoodController extends Controller
         $data->food_name = $request->food_name;
         $data->status = $request->status;
         $data->save();
-
-        return redirect('staff/food')->with('success', 'Food Item Data has been added Successfully!');
+        //Saving History 
+        $HistoryController = new HistoryController();
+        $staff_id = Auth::guard('staff')->user()->id;
+        $HistoryController->addHistory($staff_id, 'add', 'Food ( ' . $data->food_name . ' ) - of Foodtime - ' . $data->foodtime->title . ' has been added Successfully!');
+        //Saved
+        return redirect()->route('staff.food.index')->with('success', 'Food Item Data has been added Successfully!');
     }
 
     /**
@@ -106,7 +110,12 @@ class FoodController extends Controller
         $data->food_time_id = $request->food_time_id;
         $data->food_name = $request->food_name;
         $data->save();
-        return redirect('staff/food')->with('success', 'Food Item Data has been updated Successfully!');
+        //Saving History 
+        $HistoryController = new HistoryController();
+        $staff_id = Auth::guard('staff')->user()->id;
+        $HistoryController->addHistory($staff_id, 'update', 'Food ( ' . $data->food_name . ' ) - of Foodtime - ' . $data->foodtime->title . ' has been added Successfully!');
+        //Saved
+        return redirect()->route('staff.food.index')->with('success', 'Food Item Data has been updated Successfully!');
     }
 
     /**
@@ -134,6 +143,11 @@ class FoodController extends Controller
         if ($dataActive->status == 1) {
             $data->status = 1;
             $data->save();
+            //Saving History 
+            $HistoryController = new HistoryController();
+            $staff_id = Auth::guard('staff')->user()->id;
+            $HistoryController->addHistory($staff_id, 'Activated', 'Food ( ' . $data->food_name . ' ) - of Foodtime - ' . $data->foodtime->title . ' has been Activated Successfully!');
+            //Saved
             return redirect('staff/food')->with('success', 'Food Activate Successfully!');
         } else {
             return redirect('staff/food')->with('danger', 'Related FoodTime is not Active!');
@@ -147,6 +161,11 @@ class FoodController extends Controller
         }
         $data->status = 0;
         $data->save();
+        //Saving History 
+        $HistoryController = new HistoryController();
+        $staff_id = Auth::guard('staff')->user()->id;
+        $HistoryController->addHistory($staff_id, 'Disabled', 'Food ( ' . $data->food_name . ' ) - of Foodtime - ' . $data->foodtime->title . ' has been Disabled Successfully!');
+        //Saved
         return redirect('staff/food')->with('danger', 'Food Disabled Successfully!');
     }
 }

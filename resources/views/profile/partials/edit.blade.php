@@ -22,6 +22,10 @@
                     <td><input required name="name" type="text" class="form-control" value="{{ $user->name }}"></td>
                 </tr>
                 <tr>
+                    <th>Email <span class="text-danger">*</span></th>
+                    <td><input required name="email" type="email" class="form-control" value="{{ $user->email }}"></td>
+                </tr>
+                <tr>
                     <th>Department <span class="text-danger">*</span></th>
                     <td><input required name="dept" type="text" class="form-control" value="{{ $user->dept }}" placeholder="example : CSE"></td>
                 </tr>
@@ -30,7 +34,7 @@
                     <td><input required name="session" type="text" class="form-control" value="{{ $user->session }}" placeholder="example : 2017-18"></td>
                 </tr><tr>
                     <th>Mobile No <span class="text-danger">*</span></th>
-                    <td><input required name="mobile" type="text" class="form-control" value="{{ $user->mobile }}"></td>
+                    <td><input required name="mobile" type="text" maxlength="11" class="form-control" value="{{ $user->mobile }}"></td>
                 </tr><tr>
                     <th>Photo</th>
                     <td><input name="photo" type="file">

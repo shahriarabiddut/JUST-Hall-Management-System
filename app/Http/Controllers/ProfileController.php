@@ -114,6 +114,7 @@ class ProfileController extends Controller
             'mobile' => 'required',
             'dept' => 'required',
             'session' => 'required',
+            'email' => 'required',
         ]);
         //If user Given any PHOTO
         if ($request->hasFile('photo')) {
@@ -131,11 +132,12 @@ class ProfileController extends Controller
         }
 
         $data->name = $request->name;
+        $data->email = $request->email;
         $data->dept = $request->dept;
         $data->session = $request->session;
         $data->mobile = $request->mobile;
         $data->address = $request->address;
-        $data->photo = $formFields['photo'];
+        $data->photo =  $formFields['photo'];
 
         $data->save();
 

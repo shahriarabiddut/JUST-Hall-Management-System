@@ -13,7 +13,7 @@
                 <p>{{ session('danger') }} </p>
             </div>
             @endif
-            @if(Session::has('danger-email'))
+            @if(Session::has('danger-titles'))
             <div class="p-3 mb-2 bg-danger text-white">
                 <h3>Allready Existed Room's</h3>
                 @foreach (session('danger-titles') as $etitles)

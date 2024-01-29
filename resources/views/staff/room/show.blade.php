@@ -1,4 +1,4 @@
-@extends('staff/layout')
+@extends('staff/layout') 
 @section('title', 'Room Details')
 @section('content')
     <!-- DataTales Example -->
@@ -27,6 +27,32 @@
                         <th>Total Seats</th>
                         <td>{{ $data->totalseats }}</td>
                     </tr>
+                    @if (count($data->allocatedseats) !=0)
+                    <tr>
+                        <th>Student</th>
+                        <td>
+                            <table>
+                                @foreach ( $data->allocatedseats as $allocatedseats  )
+                                <tr>
+                                        
+                                    <td width="50%">@if ($allocatedseats->position ==1) 1.{{ $allocatedseats->students->name }} - {{ $allocatedseats->students->rollno }}@else 1. N/A @endif </td>
+                                    <td>@if ($allocatedseats->position ==2) 2.{{ $allocatedseats->students->name }} - {{ $allocatedseats->students->rollno }}@else 2. N/A @endif </td>
+                                    
+                                </tr>
+                                @if ($data->totalseats ==5)
+                                <tr>
+                                    <td>@if ($allocatedseats->position ==5)5.{{ $allocatedseats->students->name }} - {{ $allocatedseats->students->rollno }}@else 5. N/A @endif </td>
+                                  </tr>
+                                  @endif
+                                <tr>
+                                    <td>@if ($allocatedseats->position ==3) 3.{{ $allocatedseats->students->name }} - {{ $allocatedseats->students->rollno }}@else 3. N/A @endif </td>
+                                    <td>@if ($allocatedseats->position ==4) 4.{{ $allocatedseats->students->name }} - {{ $allocatedseats->students->rollno }}@else 4. N/A @endif </4.>
+                                </tr>
+                                @endforeach
+                              </table>
+                        </td>
+                    </tr>
+                    @endif
                     <tr>
                         <td colspan="2">
                             <a href="{{ url('staff/rooms/'.$data->id.'/edit') }}" class="float-right btn btn-info btn-sm"><i class="fa fa-edit"> Edit {{ $data->title }}  </i></a>

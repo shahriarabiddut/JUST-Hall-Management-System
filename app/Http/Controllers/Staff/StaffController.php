@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Staff;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Models\Staff;
 use App\Models\Department;
 use App\Models\StaffPayment;
+use Illuminate\Http\Request;
 
-use Carbon\Carbon;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class StaffController extends Controller
 {
@@ -46,8 +47,12 @@ class StaffController extends Controller
         $data->password = bcrypt($request->email);
         $data->type = $request->type;
         $data->save();
-
-        return redirect('staff/staff')->with('success', 'Staff Data has been added Successfully!');
+        //Saving History 
+        $HistoryController = new HistoryController();
+        $staff_id = Auth::guard('staff')->user()->id;
+        $HistoryController->addHistory($staff_id, 'add', 'Staff (' . $data->type . ' ) - ' . $data->name . ' has been added Successfully!');
+        //Saved
+        return redirect()->route('staff.staff.index')->with('success', 'Staff has been added Successfully!');
     }
 
     /**
@@ -85,28 +90,30 @@ class StaffController extends Controller
         $data = Staff::find($id);
         $request->validate([
             'name' => 'required',
-            'department_id' => 'required',
             'bio' => 'required',
             'address' => 'required',
             'phone' => 'required',
         ]);
 
         $data->name = $request->name;
-        $data->department_id = $request->department_id;
         $data->bio = $request->bio;
         $data->address = $request->address;
         $data->phone = $request->phone;
         $data->type = $request->type;
         //If user Gieven any PHOTO
         if ($request->hasFile('photo')) {
-            $imgpath = $request->file('photo')->store('StaffPhoto', 'public');
+            $imgpath = 'app/public/' . $request->file('photo')->store('StaffPhoto', 'public');
         } else {
             $imgpath = $request->prev_photo;
         }
-        $data->photo = $imgpath;
+        $data->photo =  $imgpath;
         $data->save();
-
-        return redirect('staff/staff')->with('success', 'Staff Data has been updated Successfully!');
+        //Saving History 
+        $HistoryController = new HistoryController();
+        $staff_id = Auth::guard('staff')->user()->id;
+        $HistoryController->addHistory($staff_id, 'update', 'Staff (' . $data->type . ' ) - ' . $data->name . ' has been updated Successfully!');
+        //Saved
+        return redirect()->route('staff.staff.index')->with('success', 'Staff has been updated Successfully!');
     }
 
     /**
@@ -119,7 +126,12 @@ class StaffController extends Controller
             return redirect()->route('staff.staff.index')->with('danger', 'Not Found!');
         }
         $data->delete();
-        return redirect('staff/staff')->with('danger', 'Data has been deleted Successfully!');
+        //Saving History 
+        $HistoryController = new HistoryController();
+        $staff_id = Auth::guard('staff')->user()->id;
+        $HistoryController->addHistory($staff_id, 'delete', 'Staff (' . $data->type . ' ) - ' . $data->name . ' has been updated Successfully!');
+        //Saved
+        return redirect()->route('staff.staff.index')->with('danger', 'Data has been deleted Successfully!');
     }
 
     public function change(string $id)

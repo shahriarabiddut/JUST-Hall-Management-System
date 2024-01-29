@@ -83,14 +83,14 @@ class StudentController extends Controller
         //Creating Balance account for student
         $BalanceController = new BalanceController();
         $BalanceController->store($data->id);
-
+        //
+        //Saving History 
+        $HistoryController = new HistoryController();
+        $staff_id = Auth::guard('staff')->user()->id;
+        $HistoryController->addHistory($staff_id, 'add', 'Student (' . $data->rollno . ' ) - ' . $data->name . ' has been added Successfully!');
+        //Saved
         //Created
-        $ref = $request->ref;
-        if ($ref == 'front') {
-            return redirect('welcome')->with('success', 'Registration Successful!' . $request->name);
-        } else {
-            return redirect('staff/student')->with('success', 'Data has been added Successfully!');
-        }
+        return redirect()->route('staff.student.index')->with('success', 'Student has been added Successfully!');
     }
 
     /**
@@ -116,6 +116,7 @@ class StudentController extends Controller
         if ($data == null) {
             return redirect()->route('staff.student.index')->with('danger', 'Not Found!');
         }
+
         return view('staff.student.edit', ['data' => $data]);
     }
 
@@ -153,7 +154,12 @@ class StudentController extends Controller
             $data->photo = $request->prev_photo;
         }
         $data->update();
-        return redirect()->route('staff.student.index')->with('success', 'Data has been updated Successfully!');
+        //Saving History 
+        $HistoryController = new HistoryController();
+        $staff_id = Auth::guard('staff')->user()->id;
+        $HistoryController->addHistory($staff_id, 'update', 'Student (' . $data->rollno . ' ) - ' . $data->name . ' has been updated Successfully!');
+        //Saved
+        return redirect()->route('staff.student.index')->with('success', 'Student has been updated Successfully!');
     }
 
     /**
@@ -169,7 +175,12 @@ class StudentController extends Controller
         //Delete Balance Account
         $BalanceAccount = Balance::all()->where('student_id', '=', $id)->first();
         $BalanceAccount->delete();
-        return redirect('staff/student')->with('danger', 'Student data and Associated Balance Account has been deleted Successfully!');
+        //Saving History 
+        $HistoryController = new HistoryController();
+        $staff_id = Auth::guard('staff')->user()->id;
+        $HistoryController->addHistory($staff_id, 'delete', 'Student (' . $data->rollno . ' ) - ' . $data->name . '  and Associated Balance Account has been deleted Successfully!');
+        //Saved
+        return redirect()->route('staff.student.index')->with('danger', 'Student data and Associated Balance Account has been deleted Successfully!');
     }
 
     // Import Bilk users from csv
@@ -217,6 +228,11 @@ class StudentController extends Controller
                 }
             }
         }
+        //Saving History 
+        $HistoryController = new HistoryController();
+        $staff_id = Auth::guard('staff')->user()->id;
+        $HistoryController->addHistory($staff_id, 'add', 'Student has been imported Successfully!');
+        //Saved
         if ($errorEmails == null) {
             return redirect()->route('staff.student.index')->with('success', 'Student Data has been imported Successfully!');
         } else {

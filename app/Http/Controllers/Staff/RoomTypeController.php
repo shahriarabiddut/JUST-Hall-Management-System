@@ -58,19 +58,23 @@ class RoomTypeController extends Controller
         $data->title = $request->title;
         $data->price = $request->price;
         $data->details = $request->details;
+        $data->save();
         if ($request->imgs) {
             foreach ($request->file('imgs') as $img) {
                 $imgPath = $img->store('RoomTypeImages', 'public');
                 $imgData = new RoomTypeImage;
                 $imgData->room_type_id = $data->id;
-                $imgData->img_src = $imgPath;
+                $imgData->img_src = 'app/public/' . $imgPath;
                 $imgData->img_alt = $request->title;
                 $imgData->save();
             }
         }
-
-        $data->save();
-        return redirect('staff/roomtype')->with('success', 'Room Type has been Created Successfully!');
+        //Saving History 
+        $HistoryController = new HistoryController();
+        $staff_id = Auth::guard('staff')->user()->id;
+        $HistoryController->addHistory($staff_id, 'add', 'Room Type ' . $data->title . ' has been Added Successfully!');
+        //Saved
+        return redirect()->route('staff.roomtype.index')->with('success', 'Room Type has been Added Successfully!');
     }
 
     /**
@@ -117,12 +121,17 @@ class RoomTypeController extends Controller
                 $imgPath = $img->store('RoomTypeImages', 'public');
                 $imgData = new RoomTypeImage;
                 $imgData->room_type_id = $data->id;
-                $imgData->img_src = $imgPath;
+                $imgData->img_src = 'app/public/' . $imgPath;
                 $imgData->img_alt = $request->title;
                 $imgData->save();
             }
         }
-        return redirect('staff/roomtype')->with('success', 'Data has been updated Successfully!');
+        //Saving History 
+        $HistoryController = new HistoryController();
+        $staff_id = Auth::guard('staff')->user()->id;
+        $HistoryController->addHistory($staff_id, 'update', 'Room Type ' . $data->title . ' has been updated Successfully!');
+        //Saved
+        return redirect()->route('staff.roomtype.index')->with('success', 'Data has been updated Successfully!');
     }
 
     /**
@@ -145,11 +154,17 @@ class RoomTypeController extends Controller
             $dataDelete->delete();
         }
         $data->delete();
-        return redirect('staff/roomtype')->with('danger', 'Data has been deleted Successfully!');
+        //Saving History 
+        $HistoryController = new HistoryController();
+        $staff_id = Auth::guard('staff')->user()->id;
+        $HistoryController->addHistory($staff_id, 'delete', 'Room Type ' . $data->title . ' has been deleted Successfully!');
+        //Saved
+        return redirect()->route('staff.roomtype.index')->with('danger', 'Data has been deleted Successfully!');
     }
     public function destroy_image($id)
     {
         $data = RoomTypeImage::find($id);
+        $room_type_id = $data->room_type_id;
         //Delete Image from storage
         $path = 'storage/' . $data->img_src;
         if (File::exists($path)) {
@@ -157,6 +172,12 @@ class RoomTypeController extends Controller
         }
         //Delete Image
         $data->delete();
+        $data2 = RoomType::find($room_type_id);
+        //Saving History 
+        $HistoryController = new HistoryController();
+        $staff_id = Auth::guard('staff')->user()->id;
+        $HistoryController->addHistory($staff_id, 'delete', 'Room Type ' . $data2->title . ' , A Photo was deleted Successfully!');
+        //Saved
         return response()->json(['bool' => true]);
     }
 }

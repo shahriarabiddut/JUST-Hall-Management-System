@@ -248,14 +248,14 @@
     </li>
      <!-- Nav Item Support - Utilities Collapse Menu -->
      <li class="nav-item">
-        <a class="nav-link @if (!request()->is('student/support*'))
+        <a class="nav-link @if (!request()->is('staff/support*'))
             collapsed
         @endif" href="#" data-toggle="collapse" data-target="#collapseOne"
             aria-expanded="true" aria-controls="collapseOne">
             <i class="fas fa-ticket-alt"></i>
             <span>Support</span>
         </a>
-        <div id="collapseOne" class="collapse @if(request()->is('student/support*')) show @endif" aria-labelledby="headingUtilities"
+        <div id="collapseOne" class="collapse @if(request()->is('staff/support*')) show @endif" aria-labelledby="headingUtilities"
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Support Ticket Management</h6>
@@ -263,7 +263,30 @@
             </div>
         </div>
     </li>
-
+    @if (Auth::guard('staff')->user()->type == 'provost')
+    <hr class="sidebar-divider d-none d-md-block">
+    <div class="sidebar-heading">
+        Settings System
+    </div>
+    <!-- Nav Item Settings - Utilities Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link @if (!request()->is('student/settings*'))
+            collapsed
+        @endif" href="#" data-toggle="collapse" data-target="#collapseSettings"
+            aria-expanded="true" aria-controls="collapseSettings">
+            <i class="fas fa-ticket-alt"></i>
+            <span>Settings</span>
+        </a>
+        <div id="collapseSettings" class="collapse @if(request()->is('staff/settings*')) show @endif" aria-labelledby="headingUtilities"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Site Management</h6>
+                <a class="collapse-item" href="{{ route('staff.settings.index') }}">View Settings</a>
+                <a class="collapse-item" href="{{ route('staff.history.index') }}">View History</a>
+            </div>
+        </div>
+    </li>
+    @endif
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
 

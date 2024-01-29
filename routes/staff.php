@@ -15,6 +15,7 @@ use App\Http\Controllers\Staff\FoodTimeController;
 use App\Http\Controllers\Staff\RoomTypeController;
 use App\Http\Controllers\Staff\AllocatedSeatController;
 use App\Http\Controllers\Staff\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Staff\HistoryController;
 
 //Staff Routes
 Route::namespace('Staff')->prefix('staff')->name('staff.')->group(function () {
@@ -106,7 +107,7 @@ Route::middleware('userType:provost')->prefix('staff')->name('staff.')->group(fu
     Route::get('roomtype/{id}/delete', [RoomTypeController::class, 'destroy']);
     Route::resource('roomtype', RoomTypeController::class);
     // Delete RoomType Images
-    Route::get('roomtypeImage/delete/{id}', [RoomTypeController::class, 'destroy_image']);
+    Route::get('roomtypeImage/delete/{id}', [RoomTypeController::class, 'destroy_image'])->name('deleteImage');
 
     // Room Routes
     Route::get('rooms/{id}/delete', [RoomController::class, 'destroy']);
@@ -118,6 +119,15 @@ Route::middleware('userType:provost')->prefix('staff')->name('staff.')->group(fu
     Route::get('staff/{id}/change', [StaffController::class, 'change']);
     Route::put('staff/{id}/changeUpdate', [StaffController::class, 'changeUpdate'])->name('staff.changeUpdate');
     Route::resource('staff', StaffController::class);
+
+    // History
+    Route::get('settings/history', [HistoryController::class, 'index'])->name('history.index');
+    Route::get('settings/history/{id}', [HistoryController::class, 'show'])->name('history.show');
+    Route::get('settings/historyRead', [HistoryController::class, 'read'])->name('history.read');
+
+    // Settings Crud
+    Route::get('settings/', [HomeController::class, 'settings'])->name('settings.index');
+    Route::put('settings/update/{id}', [HomeController::class, 'settingsUpdate'])->name('settings.update');
 });
 Route::middleware('userType:staff')->prefix('staff')->name('staff.')->group(function () {
 });
