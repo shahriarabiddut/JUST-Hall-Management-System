@@ -61,6 +61,7 @@
     </div>
 </div>
 @else
+@php $date = strtotime($token->date); $tokenDate = date("F j, Y", $date);; @endphp
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
     <div class="card-header py-3">
@@ -70,9 +71,17 @@
     <div class="p-1 mb-1 bg-danger text-white text-center">
         <h3> Token Expired </h3>
     </div>
+    @elseif ($falseCheck ==2)
+    <div class="p-1 mb-1 bg-danger text-white text-center">
+        <h3> Token is not valid Today . Valid Date - {{ $tokenDate }}</h3>
+    </div>
+    @elseif ($falseCheck ==3)
+    <div class="p-1 mb-1 bg-danger text-white text-center">
+        <h3> Token is not valid Now. Wait For Dinner Time to Start .</h3>
+    </div>
     @else
     <div class="p-1 mb-1 bg-success text-white text-center">
-        <h3> Token Valid </h3>
+        <h3> Token Valid ! Please Serve </h3>
     </div>
     @endif
     <div class="card-body">
@@ -89,7 +98,7 @@
                     </tr>
                     <tr>
                         <th>Token Date</th>
-                        <td>{{ $token->date }}</td>
+                        <td>{{ $tokenDate }}</td>
                     </tr>
                     <tr>
                         <th>Quantity</th>

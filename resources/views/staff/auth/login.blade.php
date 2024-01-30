@@ -24,7 +24,8 @@
 
 <body>
 
-    <section class="pt-5 pb-5 mt-0 align-items-center d-flex bg-dark" style="min-height: 100vh; background-size: cover; background-image: url('{{ asset($HallOption[5]->value) }}')">
+    {{-- <section class="pt-5 pb-5 mt-0 align-items-center d-flex bg-dark" style="min-height: 100vh; background-size: cover; background-image: url('{{ asset($HallOption[5]->value) }}')"> --}}
+      <section class="pt-5 pb-5 mt-0 align-items-center d-flex bg-dark" style="min-height: 100vh;">
         <div class="container-fluid">
             
           <div class="row  justify-content-center align-items-center d-flex-row text-center h-100">
@@ -37,8 +38,8 @@
                   @error('password')
                   <div class="text-bold bg-danger text-center text-white p-2">{{ $message }}</div>
                   @enderror
-                  <img src="{{ asset($HallOption[3]->value) }}" class="rounded mx-auto d-block" alt="Logo" style="height: 150px;">
-                  <h4 class="card-title mt-1 text-center">Staff Login</h4>
+                  <img src="{{ asset($HallOption[3]->value) }}" class="rounded mx-auto d-block mb-1" alt="Logo" style="height: 100px;">
+                  <h4 class="card-title text-center bg-secondary p-2 text-white my-3 rounded">Staff Login</h4>
                   <form method="POST" action="{{ route('staff.login') }}">
                     @csrf
                     <div class="form-group input-group">

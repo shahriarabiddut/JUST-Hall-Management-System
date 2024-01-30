@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('status')->nullable();
             $table->string('category');
             $table->string('subject');
-            $table->string('meassage');
+            $table->string('message');
             $table->integer('repliedby')->nullable();
             $table->string('reply')->nullable();
             $table->timestamps();

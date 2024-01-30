@@ -26,7 +26,8 @@
 
 <body>
 
-    <section class="pt-5 pb-5 mt-0 align-items-center d-flex bg-dark" style="min-height: 100vh; background-size: cover; background-image: url('{{ asset($HallOption[5]->value) }}')">
+    {{-- <section class="pt-5 pb-5 mt-0 align-items-center d-flex bg-dark" style="min-height: 100vh; background-size: cover; background-image: url('{{ asset($HallOption[5]->value) }}')"> --}}
+      <section class="pt-3 pb-3 mt-0 align-items-center d-flex bg-dark" style="min-height: 100vh;">
         <div class="container-fluid">
             
           <div class="row  justify-content-center align-items-center d-flex-row text-center h-100">
@@ -39,7 +40,8 @@
                   @error('password')
                   <div class="text-bold bg-danger text-center text-white p-2">{{ $message }}</div>
                   @enderror
-                  <h4 class="card-title mt-3 text-center">Login</h4>
+                  <img src="{{ asset($HallOption[3]->value) }}" class="rounded mx-auto d-block mb-1" alt="Logo" style="height: 100px;">
+                  <h4 class="card-title text-center bg-secondary p-2 text-white my-3 rounded"> Student Login </h4>
                   {{-- <p class="text-center">Get started with your free account</p>
                   <p>
                     <a href="" class="btn btn-block btn-info">
@@ -54,13 +56,13 @@
                     @csrf
                     <div class="form-group input-group">
                       <div class="input-group-prepend">
-                        <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
+                        <span class="input-group-text"> <i class="fa fa-address-card"></i> </span>
                       </div> 
                       <input required name="rollno" class="form-control" placeholder="Enter Roll No" type="text" value="{{ old('rollno') }}">
                     </div>
                     <div class="form-group input-group">
                       <div class="input-group-prepend">
-                        <span class="input-group-text"> <i class="fa fa-lock"></i> </span>
+                        <span class="input-group-text"> <i class="fa fa-lock pr-1"></i> </span>
                       </div>
                       <input required name="password" class="form-control pass-key" placeholder="Enter password" type="password" value="{{ old('password') }}">
                       <span class="show text-center bg-primary text-white mx-1 px-2 py-1"><i class='fas fa-eye py-1'></i></span>
@@ -103,11 +105,11 @@
       showBtn.addEventListener("click", function () {
         if (pass_field.type === "password") {
           pass_field.type = "text";
-          showBtn.textContent = "HIDE";
+          showBtn.innerHTML = "<i class='fa fa-ban'></i>";
           showBtn.style.color = "#3498db";
         } else {
           pass_field.type = "password";
-          showBtn.textContent = "SHOW";
+          showBtn.innerHTML  = "<i class='fas fa-eye py-1'></i>";
           showBtn.style.color = "#222";
         }
       });

@@ -7,6 +7,7 @@ use App\Models\RoomRequest;
 use Illuminate\Http\Request;
 use App\Models\AllocatedSeats;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Staff\HistoryController;
 
 class SupportController extends Controller
 {
@@ -161,7 +162,11 @@ class SupportController extends Controller
         $data->status = $request->status;
         $data->repliedby = $request->repliedby;
         $data->save();
-
+        //Saving History 
+        $HistoryController = new HistoryController();
+        $staff_id = Auth::guard('staff')->user()->id;
+        $HistoryController->addHistory($staff_id, 'support Reply', 'Staff (' . $data->staff->name . ' ) Replied to Student (' . $data->student->rollno . ' ) - ' . $data->student->name . ' , Support Ticket!');
+        //Saved
         return redirect('staff/support')->with('success', 'Support Ticket has been Replied Successfully!');
     }
 }
