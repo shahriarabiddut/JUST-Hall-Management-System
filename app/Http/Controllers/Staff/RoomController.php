@@ -149,6 +149,7 @@ class RoomController extends Controller
         $rows = array_map("str_getcsv", explode("\n", $csvData));
         $header = array_shift($rows);
         $length = count($rows);
+        $importedStudents = 1;
         $errorTitles = [];
         foreach ($rows as $key => $row) {
             if ($key != $length - 1) {
@@ -156,22 +157,39 @@ class RoomController extends Controller
                 $title = $row['title'];
                 $room_type_id = $row['room_type_id'];
                 //
+                if ($room_type_id == 0) {
+                    $roomType = 7;
+                    $totalseats = 20;
+                } else {
+                    $roomType = $room_type_id;
+                    $totalseats = $row['totalseats'];
+                }
+                //
                 $positions = [];
-                for ($i = 1; $i <= $room_type_id; $i++) {
+                for ($i = 1; $i <= $totalseats; $i++) {
                     $positions[] = $i;
                 }
                 $jsonData = json_encode($positions);
                 $positions = $jsonData;
                 //
                 $data = Room::where('title', $title)->first();
+
+                $titleMain = str_replace(' ', '', $row['title']);
                 if ($data == null) {
+
                     $RoomData =  Room::create([
-                        'title' => $row['title'],
-                        'room_type_id' => $row['room_type_id'],
-                        'totalseats' => $row['totalseats'],
-                        'vacancy' => $row['totalseats'],
+                        'title' => $titleMain,
+                        'room_type_id' => $roomType,
+                        'totalseats' => $totalseats,
+                        'vacancy' => $totalseats,
                         'positions' => $positions
                     ]);
+                    $importedStudents++;
+                } elseif ($data->totalseats < $totalseats) {
+                    $data->positions = $positions;
+                    $data->totalseats = $totalseats;
+                    $data->vacancy = $totalseats;
+                    $data->save();
                 } else {
                     $errorTitles[] = $title;
                 }
@@ -180,12 +198,12 @@ class RoomController extends Controller
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistory($staff_id, 'add', 'Room has been imported Successfully!');
+        $HistoryController->addHistory($staff_id, 'add', 'Today ' . $importedStudents++ . ' Rooms has been imported Successfully!');
         //Saved
         if ($errorTitles == null) {
-            return redirect()->route('staff.rooms.index')->with('success', 'Room Data has been imported Successfully!');
+            return redirect()->route('staff.rooms.index')->with('success', 'Today ' . $importedStudents++ . ' Rooms has been imported Successfully!');
         } else {
-            return redirect()->route('staff.rooms.index')->with('success', 'Room Data has been imported Successfully!')->with('danger-titles', $errorTitles);
+            return redirect()->route('staff.rooms.index')->with('success', 'Today ' . $importedStudents++ . ' Rooms has been imported Successfully!')->with('danger-titles', $errorTitles);
         }
     }
 }

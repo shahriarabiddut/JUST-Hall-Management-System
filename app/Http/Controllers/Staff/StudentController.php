@@ -199,19 +199,22 @@ class StudentController extends Controller
         $rows = array_map("str_getcsv", explode("\n", $csvData));
         $header = array_shift($rows);
         $length = count($rows);
+        $importedStudents = 1;
         $errorEmails = [];
         foreach ($rows as $key => $row) {
             if ($key != $length - 1) {
                 $row = array_combine($header, $row);
+                // dd($row);
                 $email = $row['email'];
                 $rollno = $row['rollno'];
+                $rollnoMain = str_replace(' ', '', $rollno);
                 $data = Student::where('email', $email)->first();
-                $data2 = Student::where('rollno', $rollno)->first();
+                $data2 = Student::where('rollno', $rollnoMain)->first();
                 if ($data == null && $data2 == null) {
                     $StudentData =  Student::create([
-                        'rollno' => $row['rollno'],
+                        'rollno' => $rollnoMain,
                         'name' => $row['name'],
-                        'email' => $row['email'],
+                        'email' => $email,
                         'dept' => $row['dept'],
                         'session' => $row['session'],
                         'password' => bcrypt($row['rollno']),
@@ -219,6 +222,8 @@ class StudentController extends Controller
                     //Creating Balance account for student
                     $BalanceController = new BalanceController();
                     $BalanceController->store($StudentData->id);
+                    //
+                    $importedStudents++;
                 } else {
                     if ($data != null) {
                         $errorEmails[] = $email;
@@ -231,12 +236,12 @@ class StudentController extends Controller
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistory($staff_id, 'add', 'Student has been imported Successfully!');
+        $HistoryController->addHistory($staff_id, 'add', 'Total ' . $importedStudents . ' Student has been imported Successfully!');
         //Saved
         if ($errorEmails == null) {
-            return redirect()->route('staff.student.index')->with('success', 'Student Data has been imported Successfully!');
+            return redirect()->route('staff.student.index')->with('success', 'Total ' . $importedStudents . ' Student Data has been imported Successfully!');
         } else {
-            return redirect()->route('staff.student.index')->with('success', 'Student Data has been imported Successfully!')->with('danger-email', $errorEmails);
+            return redirect()->route('staff.student.index')->with('success', 'Total ' . $importedStudents . ' Student Data has been imported Successfully!')->with('danger-email', $errorEmails);
         }
     }
 }

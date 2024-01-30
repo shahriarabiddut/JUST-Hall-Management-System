@@ -27,26 +27,18 @@
                         <th>Total Seats</th>
                         <td>{{ $data->totalseats }}</td>
                     </tr>
+                    <tr>
+                        <th>Total Vacancy</th>
+                        <td>{{ $data->vacancy }}</td>
+                    </tr>
                     @if (count($data->allocatedseats) !=0)
                     <tr>
-                        <th>Student</th>
+                        <th>Allocated Students</th>
                         <td>
                             <table>
-                                @foreach ( $data->allocatedseats as $allocatedseats  )
+                                @foreach ( $data->allocatedseats as $key => $allocatedseats  )
                                 <tr>
-                                        
-                                    <td width="50%">@if ($allocatedseats->position ==1) 1.{{ $allocatedseats->students->name }} - {{ $allocatedseats->students->rollno }}@else 1. N/A @endif </td>
-                                    <td>@if ($allocatedseats->position ==2) 2.{{ $allocatedseats->students->name }} - {{ $allocatedseats->students->rollno }}@else 2. N/A @endif </td>
-                                    
-                                </tr>
-                                @if ($data->totalseats ==5)
-                                <tr>
-                                    <td>@if ($allocatedseats->position ==5)5.{{ $allocatedseats->students->name }} - {{ $allocatedseats->students->rollno }}@else 5. N/A @endif </td>
-                                  </tr>
-                                  @endif
-                                <tr>
-                                    <td>@if ($allocatedseats->position ==3) 3.{{ $allocatedseats->students->name }} - {{ $allocatedseats->students->rollno }}@else 3. N/A @endif </td>
-                                    <td>@if ($allocatedseats->position ==4) 4.{{ $allocatedseats->students->name }} - {{ $allocatedseats->students->rollno }}@else 4. N/A @endif </4.>
+                                    <td width="50%">{{ $allocatedseats->position }}.{{ $allocatedseats->students->name }} - {{ $allocatedseats->students->rollno }} </td>
                                 </tr>
                                 @endforeach
                               </table>

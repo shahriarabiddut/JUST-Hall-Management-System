@@ -26,7 +26,7 @@
                     <tbody>
                         <tr>
                             <th>Format (Excel)</th>
-                            <td>Coumn name should be in serial - rollno,name,email,dept,session </td>
+                            <td>Coumn name should be in serial - rollno,name,email,dept,session or Error May Occur!</td>
                         </tr>
                     <tr>
                         <th style="width: 50%">File</th>

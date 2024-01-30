@@ -62,7 +62,14 @@
                         <tr>
                             <td>{{ ++$key }}</td>
                             <td>{{ $d->title }}</td>
-                            <td>{{ $d->roomtype->title }}</td>
+                            <td>
+                                
+                            @if ($d->roomtype!=null)
+                            {{ $d->roomtype->title }}
+                            @else
+                            {{ $d->room_type_id }}
+                            @endif
+                            </td>
                             <td>{{ $d->totalseats }}</td>
                             <td>{{ count($d->allocatedseats) }}</td>
                             @if ($d->vacancy==0)

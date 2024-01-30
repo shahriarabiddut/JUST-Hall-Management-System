@@ -14,12 +14,22 @@
                 <p>{{ session('danger') }} </p>
             </div>
             @endif
+            @if(Session::has('danger-titles'))
+            <div class="p-3 mb-2 bg-danger text-white">
+                <h3>Allready Existed Allocation's</h3>
+                @foreach (session('danger-titles') as $etitles)
+                    <span class="m-1">
+                        {{ $etitles }} ,
+                    </span>
+                     @endforeach
+            </div>
+            @endif
             <!-- Session Messages Ends -->
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h3 class="m-0 font-weight-bold text-primary">Room Allocation
-            <a href="{{ route('staff.roomallocation.create') }}" class="float-right btn btn-success btn-sm" target="_blank">Add New Room Allocation</a> </h3>
+            <a href="{{ route('staff.roomallocation.create') }}" class="float-right btn btn-success btn-sm" target="_blank">Add New Room Allocation</a> <a href="{{ route('staff.roomallocation.bulk') }}" class="float-right btn btn-info btn-sm mx-2" target="_blank">Add From CSV </a> </h3>
         </div>
         <div class="card-body">
             <div class="table-responsive">

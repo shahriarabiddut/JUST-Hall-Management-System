@@ -44,7 +44,7 @@
                             <th>RollNo</th>
                             <th>Name</th>
                             <th>Room</th>
-                            <th>Mobile</th>
+                            <th>Department</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -55,7 +55,7 @@
                             <th>RollNo</th>
                             <th>Name</th>
                             <th>Room</th>
-                            <th>Mobile</th>
+                            <th>Department</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
@@ -80,7 +80,7 @@
                                    Not Allocated
                                @endif
                             </td>
-                            <td>{{ $d->mobile }}</td>
+                            <td>{{ $d->dept }}</td>
                             
                             
                             <td class="text-center">

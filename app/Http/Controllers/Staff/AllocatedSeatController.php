@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\AllocatedSeats;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -416,5 +417,120 @@ class AllocatedSeatController extends Controller
         $HistoryController->addHistory($staff_id, 'listed', 'Student (' . $data->students->rollno . ' ) - ' . $data->students->name . ' , Room Allocation Request has been listed for queue Successfully!');
         //Saved
         return redirect()->route('staff.roomallocation.roomrequests')->with('warning', 'Listed for Queue Successfully!');
+    }
+    // Import Bulk users and room allocation from csv
+    public function importAllocation()
+    {
+        return view('staff.roomallocation.importAllocation');
+    }
+
+    public function handleImportAllocation(Request $request)
+    {
+        $validator = $request->validate([
+            'file' => 'required',
+        ]);
+        $file = $request->file('file');
+        $csvData = file_get_contents($file);
+        $rows = array_map("str_getcsv", explode("\n", $csvData));
+        $header = array_shift($rows);
+        $length = count($rows);
+        $importedStudents = 1;
+        $errorTitles = [];
+        $xyz = 1;
+        foreach ($rows as $key => $row) {
+            if ($key != $length - 1) {
+                $row = array_combine($header, $row);
+
+                $room_title = str_replace(' ', '', $row['roomtitle']);
+                $rollno = str_replace(' ', '', $row['rollno']);
+                $position = $row['position'];
+
+                //User Data
+                $user = User::all()->where('rollno', $rollno)->first();
+
+                // Room Vacancy - 1
+                $room = Room::all()->where('title', $room_title)->first();
+                if ($room == null) {
+                    $errorTitles[] = $room_title . ' No Such Room Found';
+                    $xyz = 0;
+                } elseif ($room->vacancy == 0) {
+                    $errorTitles[] = $room_title . ' No Vacancy found on Room';
+                    $xyz = 0;
+                }
+                if ($xyz != 0) {
+                    $roomVacant = $room->vacancy - 1;
+                    $room->vacancy = $roomVacant;
+                    // Room Vancacy deleted
+                    if ($room->room_type_id == 7) {
+                        if ($position) {
+                            // Remove a specific position from the Room Positions
+                            $arrayRepresentation = json_decode($room->positions, true);
+                            $filteredArray = array_diff($arrayRepresentation, array($position));
+                            $filteredArray = array_values($filteredArray);
+                            $jsonData = json_encode($filteredArray);
+                            $room->positions = $jsonData;
+                            // Removed
+                        } else {
+                            $aposition = 0;
+                            // Remove a position from the Room Positions
+                            $arrayRepresentation = json_decode($room->positions, true);
+                            foreach ($arrayRepresentation as $key => $data) {
+                                if ($key == 0) {
+                                    $aposition = $data;
+                                }
+                            }
+                            $filteredArray = array_diff($arrayRepresentation, array($aposition));
+                            $filteredArray = array_values($filteredArray);
+                            $jsonData = json_encode($filteredArray);
+                            $room->positions = $jsonData;
+                            $position = $aposition;
+                            // Removed
+                        }
+                    } else {
+                        // Remove a specific position from the Room Positions
+                        $arrayRepresentation = json_decode($room->positions, true);
+                        $filteredArray = array_diff($arrayRepresentation, array($position));
+                        $filteredArray = array_values($filteredArray);
+                        $jsonData = json_encode($filteredArray);
+                        $room->positions = $jsonData;
+                        // Removed
+                    }
+                }
+                if ($user == null) {
+                    $errorTitles[] = $rollno . ' No User Found';
+                    $xyz = 0;
+                } else {
+                    $data = AllocatedSeats::all()->where('user_id', $user->id)->first();
+                }
+                //
+                if ($data == null && $xyz != 0) {
+                    $AllocatedSeatsData =  AllocatedSeats::create([
+                        'room_id' => $room->id,
+                        'user_id' => $user->id,
+                        'position' => $position
+                    ]);
+                    $room->save();
+                    $importedStudents++;
+                } else {
+                    if ($xyz != 0) {
+                        $errorTitles[] = $user->rollno . ' Room Allocation Found for this user!';
+                    }
+                }
+            }
+        }
+        //Saving History 
+        $HistoryController = new HistoryController();
+        $staff_id = Auth::guard('staff')->user()->id;
+        if ($importedStudents == 1) {
+            $HistoryController->addHistory($staff_id, 'import', ' Room Allocation has been failed !');
+        } else {
+            $HistoryController->addHistory($staff_id, 'import', 'Today ' . $importedStudents . ' Room Allocation has been imported Successfully!');
+        }
+        //Saved
+        if ($errorTitles == null) {
+            return redirect()->route('staff.roomallocation.index')->with('success', 'Today ' . $importedStudents . ' Room Allocation has been imported Successfully!');
+        } else {
+            return redirect()->route('staff.roomallocation.index')->with('success', 'Today ' . $importedStudents . ' Room Allocation has been imported Successfully!')->with('danger-titles', $errorTitles);
+        }
     }
 }
