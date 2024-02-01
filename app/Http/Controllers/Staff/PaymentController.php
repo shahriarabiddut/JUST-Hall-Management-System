@@ -105,40 +105,48 @@ class PaymentController extends Controller
         if ($data->status == 'Accepted' || $data->status == 'Rejected') {
             return redirect('staff/payment')->with('danger', 'You are Warned!');
         } else {
+            if ($data->type != 'roomrequest') {
 
-            $data->status = 'Accepted';
-            $data->staff_id = Auth::guard('staff')->user()->id;
-            $staff_id = $data->staff_id;
-            $status = $data->status;
+                $data->status = 'Accepted';
+                $data->staff_id = Auth::guard('staff')->user()->id;
+                $staff_id = $data->staff_id;
+                $status = $data->status;
 
-            //For adding in balance 
-            $newBalance = $data->amount;
-            $student_id = $data->student_id;
-            $findBalanceAccount = Balance::all()->where('student_id', '=', $student_id)->first();
-            //Adding Balance
-            if ($findBalanceAccount != null) {
+                //For adding in balance 
+                $newBalance = $data->amount;
+                $student_id = $data->student_id;
+                $findBalanceAccount = Balance::all()->where('student_id', '=', $student_id)->first();
+                //Adding Balance
+                if ($findBalanceAccount != null) {
 
-                $studentCurrentBalance = $findBalanceAccount->balance_amount;
-                $studentNewBalance = $studentCurrentBalance + $newBalance;
-                $findBalanceAccount->balance_amount = $studentNewBalance;
-                $findBalanceAccount->save();
+                    $studentCurrentBalance = $findBalanceAccount->balance_amount;
+                    $studentNewBalance = $studentCurrentBalance + $newBalance;
+                    $findBalanceAccount->balance_amount = $studentNewBalance;
+                    $findBalanceAccount->save();
+                } else {
+
+                    $studentCurrentBalance = 0;
+                    $studentNewBalance = $studentCurrentBalance + $newBalance;
+                    $newBalanceAccount = new Balance;
+                    $newBalanceAccount->student_id = $student_id;
+                    $newBalanceAccount->balance_amount = $studentNewBalance;
+                    $newBalanceAccount->save();
+                }
+
+                //Sending Email to User
+                $EmailController = new EmailController();
+                $EmailController->paymentEmail($student_id, $newBalance, $staff_id, $status);
+                //updating Status
+                $data->save();
+
+                return redirect('staff/payment')->with('success', 'Payment has been accepted and added balance to Student!');
             } else {
-
-                $studentCurrentBalance = 0;
-                $studentNewBalance = $studentCurrentBalance + $newBalance;
-                $newBalanceAccount = new Balance;
-                $newBalanceAccount->student_id = $student_id;
-                $newBalanceAccount->balance_amount = $studentNewBalance;
-                $newBalanceAccount->save();
+                $data->status = 'Accepted';
+                $data->staff_id = Auth::guard('staff')->user()->id;
+                //updating Status
+                $data->save();
+                return redirect('staff/payment')->with('success', 'Room Allocation Payment has been accepted!');
             }
-
-            //Sending Email to User
-            $EmailController = new EmailController();
-            $EmailController->paymentEmail($student_id, $newBalance, $staff_id, $status);
-            //updating Status
-            $data->save();
-
-            return redirect('staff/payment')->with('success', 'Payment Data has been accepted and added balance to Student!');
         }
     }
     public function rejectedby(string $id)

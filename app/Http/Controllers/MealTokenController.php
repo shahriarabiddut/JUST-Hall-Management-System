@@ -176,8 +176,8 @@ class MealTokenController extends Controller
         if ($dataUpdate == null) {
             return response()->json(0);
         }
-        $dataUpdate->status = 1;
-        $dataUpdate->save();
+        // $dataUpdate->status = 1;
+        // $dataUpdate->save();
         //Delete
         $data = TokenPrintQueue::all()->where('token_id', '=', $id)->where('order_id', '=', $order_id)->where('rollno', '=', $rollno)->first();
         if ($data == null) {

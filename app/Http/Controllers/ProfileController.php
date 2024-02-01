@@ -12,6 +12,7 @@ use Illuminate\View\View;
 use App\Models\RoomRequest;
 use Illuminate\Http\Request;
 use App\Models\AllocatedSeats;
+use App\Models\Payment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
@@ -198,12 +199,9 @@ class ProfileController extends Controller
     {
         $data = new RoomRequest;
         $request->validate([
-            'room_id' => 'required',
             'message' => 'required',
         ]);
-
-
-        $data->room_id = $request->room_id;
+        $data->room_id = 0;
         $data->user_id = $request->user_id;
         $data->message = $request->message;
         $data->status = 3;
@@ -216,13 +214,14 @@ class ProfileController extends Controller
     {
         $userid = Auth::user()->id;
         $data = RoomRequest::all()->where('user_id', '=', $userid)->first();
+        $dataPayment = Payment::all()->where('type', 'roomrequest')->where('student_id', $userid)->first();
         // page redirection
         $dataAllocatedSeats = AllocatedSeats::all()->where('user_id', '=', $userid)->first();
         if ($data != null) {
             if ($dataAllocatedSeats != null) {
                 return redirect()->route('student.myroom');
             } else {
-                return view('profile.room.roomrequestshow', ['data' => $data]);
+                return view('profile.room.roomrequestshow', ['data' => $data, 'dataPayment' => $dataPayment]);
             }
         } else {
             return redirect()->route('student.dashboard')->with('danger', 'No Room Alloacation Request Found!');
@@ -270,6 +269,42 @@ class ProfileController extends Controller
         $data->save();
 
         return redirect()->route('student.roomrequestshow')->with('success', 'Room Alloacation Request has been added Successfully!');
+    }
+    // Add Payment
+    public function roomrequestpayment()
+    {
+        $userid = Auth::user()->id;
+        $data = RoomRequest::all()->where('user_id', '=', $userid)->first();
+        $dataPayment = Payment::all()->where('type', 'roomrequest')->where('student_id', $userid)->first();
+        // IF User has Room Allocation
+        if ($dataPayment != null) {
+            return redirect()->route('student.roomrequestshow');
+        }
+        return view('profile.room.roomrequestpayment', ['dataPayment' => $dataPayment]);
+    }
+    public function roomrequestpaymentstore(Request $request)
+    {
+        $data = new Payment;
+        $request->validate([
+            'proof' => 'required',
+            'amount' => 'required',
+        ]);
+        $imgPath = $request->proof->store('PaymentSlips', 'public');
+        $data->proof = 'app/public/' . $imgPath;
+        $data->student_id = $request->user_id;
+        $data->transaction_id = 0;
+        $data->phone = $request->mobileno;
+        $data->amount = $request->amount;
+        $data->status = 'Processing';
+        $data->name = Auth::user()->name;
+        $data->email = Auth::user()->email;
+        $data->address = 'Bank Payment';
+        $data->currency = 'BDT';
+        $data->type = 'roomrequest';
+        $data->phone = $request->mobileno;
+        $data->save();
+
+        return redirect()->route('student.roomrequestshow')->with('success', 'Room Alloacation Request Payment has been added Successfully!');
     }
     /**
      * Update the user's password information.

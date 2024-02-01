@@ -26,7 +26,7 @@
                         <td>
                             @switch($data->transaction_id)
                         @case(0)
-                            Cash
+                            Cash / Bank
                                 @break
                         @default
                         SSLCOMMERZ

@@ -33,6 +33,8 @@
                         <td class="bg-warning"> On Queue </td>
                         @elseif($data->status=='2')
                         <td class="bg-danger"> Rejected </td>
+                        @elseif($data->status=='4')
+                        <td class="bg-primary"> Allocated </td>
                         @else
                         <td> Requested </td>
                         @endif
@@ -44,10 +46,13 @@
                     </tr><tr>
                         <th>Detail</th>
                         <td>{{ Auth::user()->rollno }} </td>
-                    </tr><tr>
+                    </tr>
+                    @if ($data->room_id !=0)
+                        <tr>
                         <th>Room no</th>
                         <td>{{ $data->rooms->title }} - {{ $data->rooms->RoomType->title }} type </td>
                     </tr>
+                    @endif
                     <tr>
                         <th>Application</th>
                         <td>{{ $data->message }}</td>
@@ -63,9 +68,63 @@
                     </tr>
                 </table>
             </div>
+            
         </div>
     </div>
-
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h3 class="m-0 font-weight-bold text-primary">Payment Details </h3>
+            
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" width="100%">  
+                    @if ($dataPayment == null)
+                    <tr>
+                        <td colspan="2">
+                            <a href="{{ route('student.roomrequest.roomrequestpayment') }}" class="float-right btn btn-info btn-block"><i class="fa fa-edit"> Add Payment Slip </i></a>
+                        </td>
+                    </tr>
+                    @else
+                    
+                    <tr>
+                        <th>Status</th>
+                        @switch($dataPayment->status)
+                                @case('Processing')
+                                   <td class="bg-warning text-white"> Processing</td>
+                                       @break
+                                @case('Completed')
+                                <td class="bg-warning text-white"> Completed</td>
+                                    @break
+                                @case('Accepted')
+                                <td class="bg-success text-white"> Accepted by {{ $d->staff->name }}</td>
+                                    @break
+                                @case('Rejected')
+                                <td class="bg-danger text-white"> Rejected by {{ $d->staff->name }}</td>
+                                    @break
+                                @default
+                                   <td>{{$d->status}}</td>
+                            @endswitch
+                        
+                    </tr>
+                    <tr>
+                        <th>Amount</th>
+                        <td>{{ $dataPayment->amount }}</td>
+                    </tr><tr>
+                        <th>Payment Proof</th>
+                        <td><img src="{{ asset('storage/'.$dataPayment->proof) }}" alt=""> </td>
+                    </tr>
+                    <tr>
+                        <th>Payment Date</th>
+                        <td>{{ $data->created_at->format('F j,Y') }}</td>
+                    </tr>
+                    @endif
+                </table>
+            </div>
+            
+        </div>
+    </div>
+    
     @section('scripts')
     @endsection
 @endsection

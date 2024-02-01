@@ -32,7 +32,7 @@
                     <tr>
                         <th>Advance Order Date<span class="text-danger">*</span></th>
                             <td>
-                            <input id='date' name="date" type="date" class="form-control">
+                            <input id='date' min="{{ $nextDate }}" name="date" type="date" class="form-control">
                             </td>
                         </tr>
                     <tr>
@@ -84,7 +84,7 @@
         currentDate.setDate(currentDate.getDate() + 2);
         // Format the date as ISO string
         const tomorrow = currentDate.toISOString().split('T')[0];
-        dateField1.setAttribute('min', tomorrow);
+        // dateField1.setAttribute('min', tomorrow);
         // dateField1.setAttribute('max', tomorrow);
 
         //Auto Input Date For tommorow

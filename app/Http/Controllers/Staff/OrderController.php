@@ -217,23 +217,22 @@ class OrderController extends Controller
     public function scan()
     {
         $token = null;
-        return view('staff.orders.scan.index', ['token' => $token]);
+        return view('staff.orders.scan.index2', ['token' => $token]);
     }
     public function qrcodescanlink(string $tokenid)
     {
         $falseCheck = 0;
-        $data = MealToken::all()->where('id', $tokenid)->first();
+        $data = MealToken::all()->where('token_number', $tokenid)->first();
+        $token = MealToken::all()->where('token_number', $tokenid)->first();
         //Check Date is Valid 
         $result = $this->isDateValid($data->date);
         if ($result == false) {
-            $token = $data;
             $falseCheck = 1;
             return view('staff.orders.scan.index', ['token' => $token, 'falseCheck' => $falseCheck]);
         }
         // Check Is Date Today
         $result2 = $this->isDateValid2($data->date);
         if ($result2 == false) {
-            $token = $data;
             $falseCheck = 2;
             return view('staff.orders.scan.index', ['token' => $token, 'falseCheck' => $falseCheck]);
         }
@@ -242,7 +241,6 @@ class OrderController extends Controller
             return redirect()->route('staff.orders.scan')->with('danger', 'Not Found!');
         }
         if ($data->meal_type == 'Launch') {
-            $token = $data;
             //If today time is greater than remaining time , Token Invalid
             $today = Carbon::now(); // get current date and time
             $remainingTime = $data->date . ' 16:00:00'; // Token Time
@@ -262,11 +260,9 @@ class OrderController extends Controller
                 $data->status = 1;
                 $data->save();
             }
-
             // Updated
             return view('staff.orders.scan.index', ['token' => $token, 'falseCheck' => $falseCheck]);
         } elseif ($data->meal_type == 'Suhr') {
-            $token = $data;
             //If today time is greater than remaining time , Token Invalid
             $today = Carbon::now(); // get current date and time
             $remainingTime = $data->date . ' 4:00:00'; // Token Time
@@ -290,7 +286,6 @@ class OrderController extends Controller
             // Updated
             return view('staff.orders.scan.index', ['token' => $token, 'falseCheck' => $falseCheck]);
         } elseif ($data->meal_type == 'Dinner') {
-            $token = $data;
             //If today time is greater than remaining time , Token Invalid
             $today = Carbon::now(); // get current date and time
             $remainingTime = $data->date . ' 23:59:00'; // Token Time
@@ -321,27 +316,25 @@ class OrderController extends Controller
     {
         $falseCheck = 0;
         $data = MealToken::all()->where('id', $request->token_number)->first();
+        $token = MealToken::all()->where('id', $request->token_number)->first();
         if ($data == null) {
             return redirect()->route('staff.orders.scan')->with('danger', 'Not Found!');
         }
         //Check Date is Valid To Print
         $result = $this->isDateValid($data->date);
         if ($result == false) {
-            $token = $data;
             $falseCheck = 1;
             return view('staff.orders.scan.index', ['token' => $token, 'falseCheck' => $falseCheck]);
         }
         // Check Is Date Today
         $result2 = $this->isDateValid2($data->date);
         if ($result2 == false) {
-            $token = $data;
             $falseCheck = 2;
             return view('staff.orders.scan.index', ['token' => $token, 'falseCheck' => $falseCheck]);
         }
         //
 
         if ($data->meal_type == 'Launch') {
-            $token = $data;
             //If today time is greater than remaining time , Token Invalid
             $today = Carbon::now(); // get current date and time
             $remainingTime = $data->date . ' 16:00:00'; // Token Time
@@ -363,7 +356,6 @@ class OrderController extends Controller
             // Updated
             return view('staff.orders.scan.index', ['token' => $data, 'falseCheck' => $falseCheck]);
         } elseif ($data->meal_type == 'Dinner') {
-            $token = $data;
             //If today time is greater than remaining time , Token Invalid
             $today = Carbon::now(); // get current date and time
             $remainingTime = $data->date . ' 23:59:00'; // Token Time
@@ -390,7 +382,6 @@ class OrderController extends Controller
             // Updated
             return view('staff.orders.scan.index', ['token' => $data, 'falseCheck' => $falseCheck]);
         } elseif ($data->meal_type == 'Suhr') {
-            $token = $data;
             //If today time is greater than remaining time , Token Invalid
             $today = Carbon::now(); // get current date and time
             $remainingTime = $data->date . ' 4:00:00'; // Token Time

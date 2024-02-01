@@ -74,7 +74,7 @@ Route::middleware('staff')->prefix('staff')->name('staff.')->group(function () {
     Route::get('roomallocation/list/{id}', [AllocatedSeatController::class, 'roomrequestlist'])->name('roomallocation.list');
     Route::get('roomallocation/roomrequests/{id}', [AllocatedSeatController::class, 'showRoomRequest'])->name('roomallocation.showRoomRequest');
     //AllocateSeat From Request
-    Route::get('roomallocation/allocate/{id}', [AllocatedSeatController::class, 'RoomRequestAllocate'])->name('roomallocation.RoomRequestAllocate');
+    Route::post('roomallocation/allocate/', [AllocatedSeatController::class, 'RoomRequestAllocate'])->name('roomallocation.RoomRequestAllocate');
     //RoomAllocation CRUD
     Route::get('roomallocation/{id}/delete', [AllocatedSeatController::class, 'destroy']);
     Route::resource('roomallocation', AllocatedSeatController::class);
@@ -98,7 +98,7 @@ Route::middleware('staff')->prefix('staff')->name('staff.')->group(function () {
     Route::post('orders/search/', [OrderController::class, 'searchByHistory'])->name('orders.searchByHistory');
     //Scan QR Code
     Route::get('orders/scan/', [OrderController::class, 'scan'])->name('orders.scan');
-    Route::get('orders/scan/{id}', [OrderController::class, 'qrcodescanlink'])->name('orders.qrcodescanlink');
+    Route::get('orders/scan/{id}', [OrderController::class, 'qrcodescanlink'])->name('orders.qrcodescanlink')->where('id', '(.*(?:%2F:)?.*)');
     Route::post('orders/qrcodescan/', [OrderController::class, 'qrcodescan'])->name('orders.qrcodescan');
 });
 //Assistant Provost Extra

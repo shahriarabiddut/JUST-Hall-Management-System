@@ -55,16 +55,24 @@
                         @foreach ($data as $key=> $d)
                         <tr>
                             <td>{{ ++$key }}</td>
-                            <td>{{ $d->rooms->title }}</td>
+                            <td>
+                                @if ($d->room_id ==0)
+                                    N/A
+                                @else
+                                {{ $d->rooms->title }}
+                                @endif
+                            </td>
                             <td>{{ $d->students->name }}</td>
                             <td>{{ $d->students->rollno }}</td>
                             <td>{{ $d->created_at }}</td>
                             @if ($d->status=='1')
-                            <td class="bg-success"> Accepted </td>
+                            <td class="bg-success text-white"> Accepted </td>
                             @elseif($d->status=='0')
-                            <td class="bg-warning"> On Queue </td>
+                            <td class="bg-warning text-white"> On Queue </td>
                             @elseif($d->status=='2')
-                            <td class="bg-danger"> Rejected </td>
+                            <td class="bg-danger text-white"> Rejected </td>
+                            @elseif($d->status=='4')
+                            <td class="bg-primary text-white"> Allocated </td>
                             @else
                             <td>Requested </td>
                             @endif
@@ -72,7 +80,7 @@
                             <td class="text-center">
 
                                 <a  title="View Request" href="{{ url('staff/roomallocation/roomrequests/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
-                                @if ($d->status!='2')
+                                @if ($d->status!='1' || $d->status!='4')
                                 <a title="Reject" onclick="return confirm('Are You Sure?')" href="{{ url('staff/roomallocation/ban/'.$d->id) }}" class="btn btn-danger btn-sm"><i class="fa fa-ban" aria-hidden="true"></i></a>
                                 @endif
                             </td>

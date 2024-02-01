@@ -68,6 +68,9 @@ Route::middleware('auth')->prefix('student')->name('student.')->group(function (
     Route::get('rooms/request/{id}/edit', [ProfileController::class, 'roomrequestedit'])->name('roomrequest.edit');
     Route::put('rooms/request/update', [ProfileController::class, 'roomrequestupdate'])->name('roomrequest.update');
     Route::get('rooms/requestshow/{id}/delete', [ProfileController::class, 'roomrequestdestroy'])->name('roomrequest.destroy');
+    // Payment
+    Route::get('rooms/request/payment/', [ProfileController::class, 'roomrequestpayment'])->name('roomrequest.roomrequestpayment');
+    Route::post('rooms/roomrequestpayment', [ProfileController::class, 'roomrequestpaymentstore'])->name('roomrequestpaymentstore');
 
     //Support Routes
     Route::get('support/{id}/delete', [SupportController::class, 'destroy']);
@@ -104,7 +107,6 @@ Route::middleware('auth')->prefix('student')->name('student.')->group(function (
 });
 // SSLCOMMERZ Start
 Route::post('/pay-via-ajax', [SslCommerzPaymentController::class, 'payViaAjax'])->name('ssl.payViaAjax');
-
 Route::post('/success', [SslCommerzPaymentController::class, 'success'])->name('ssl.success');
 Route::post('/fail', [SslCommerzPaymentController::class, 'fail'])->name('ssl.fail');
 Route::post('/cancel', [SslCommerzPaymentController::class, 'cancel'])->name('ssl.cancel');

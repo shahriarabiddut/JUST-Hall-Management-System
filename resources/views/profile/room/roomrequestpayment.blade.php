@@ -1,11 +1,11 @@
 @extends('layout')
-@section('title', 'Request Room Allocation')
+@section('title', ' Room Allocation Application Payment ')
 @section('content')
 
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Request Room Allocation</h1>
-@if ($sorryAllocatedSeat)
+@if ($dataPayment!=null)
+    <h1 class="h3 mb-2 text-gray-800">Room Allocation Application Payment</h1>
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary ">You have allready Requested</h6>
@@ -15,7 +15,7 @@
  <!-- DataTales Example -->
  <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Add New Allocation request</h6>
+        <h3 class="m-0 font-weight-bold text-primary">Add Payment to Room Allocation Request Application </h3>
     </div>
     <div class="card-body">
         
@@ -25,26 +25,34 @@
                <p class="text-danger"> {{ $error }} </p>
             @endforeach
             @endif
-        <form method="POST" action="{{ route('student.roomrequeststore') }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('student.roomrequestpaymentstore') }}" enctype="multipart/form-data">
             @csrf
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <tbody>
                 <tr>
-                    <th>Rules</th>
-                        <td>
-                            To Add Line break use &lt;br&gt; .
-                        </td>
+                    <th>Amount  <span class="text-danger">*</span></th>
+                    <td>
+                        <input type="number" name="amount" class="form-control">
+                    </td>
                 </tr>
                 <tr>
-                <th>Your Application <span class="text-danger">*</span></th>
+                    <th>Mobile  <span class="text-danger">*</span></th>
                     <td>
-                        <textarea name="message" id="" cols="10" rows="20" class="form-control"></textarea>
+                        <input type="text" name="mobileno" class="form-control">
+                    </td>
+                </tr>
+                <tr>
+                <th>Proof of Slip <span class="text-danger">*</span></th>
+                    <td>
+                        <input type="file" name="proof"  class="form-control">
                     </td>
                 </tr>
 
                 <tr>
                     <td colspan="2">
                         <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+                        <input type="hidden" name="type" value="roomrequest">
+                        <input type="hidden" name="type" value="roomrequest">
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </td>
                 </tr>

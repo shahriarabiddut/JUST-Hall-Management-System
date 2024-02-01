@@ -9,7 +9,6 @@
             <a href="{{ url('staff/roomallocation') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h3>
         </div>
         <div class="card-body">
-            
             <div class="table-responsive">
                 <table class="table table-bordered" width="100%">
                         <tr>
@@ -25,7 +24,7 @@
                         </tr><tr>
                             <th>Allocation Date </th>
                             <td>{{ $data->created_at }} </td>
-                        </tr>><tr>
+                        </tr><tr>
                             <td colspan="2">
                                 <a href="{{ url('staff/roomallocation/'.$data->id.'/edit') }}" class="float-right btn btn-info btn-sm"><i class="fa fa-edit"> Edit {{ $data->title }} </i></a> 
                             </td>

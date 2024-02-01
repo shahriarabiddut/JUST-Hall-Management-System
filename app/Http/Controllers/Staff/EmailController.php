@@ -187,4 +187,48 @@ class EmailController extends Controller
             return redirect()->back()->withInput()->with('error', 'No Internet Connection');
         }
     }
+    public function RoomAllocationEmail2(string $id,  string $status)
+    {
+
+        $RecieverData = Student::find($id);
+        $RecieverEmail = $RecieverData->email;
+        if ($RecieverEmail == null) {
+            return redirect()->back()->with('danger', 'No Email Found');
+        }
+        $RecieverName = $RecieverData->name;
+        //accept or reject
+        if ($status == 1) {
+            $emailObjective = 'Your Room Allocation Request Accepted';
+            $emailSubject = 'Your Room Allocation Request Accepted ! ';
+            $emailBody = 'Your Room Allocation Request has been Accepted by Hall Provost! Please contact Hall Provost . Login to See Further Details.';
+        } elseif ($status == 2) {
+            $emailObjective = 'Your Room Allocation Request Rejected';
+            $emailSubject = 'Your Room Allocation Request Rejected! ';
+            $emailBody = 'Your Room Allocation Request has been Rejected by Hall Provost! and Login to See Further Details.';
+        } elseif ($status == 3) {
+            $emailObjective = 'Your Room Allocation Request is on Waiting!';
+            $emailSubject = 'Your Room Allocation Request is on Waiting! ';
+            $emailBody = 'Your Room Allocation Request is on Waiting by Hall Provost!Please contact Hall Provost Soon and Login to See Further Details.';
+        } else {
+            return redirect()->back()->withInput()->with('danger', 'Server Error');
+        }
+        //Sending email with information
+        if ($this->isOnline()) {
+            // The email sending is done using the to method on the Mail facade
+            Mail::to($RecieverEmail)->send(new AllocationEmail($emailBody, $emailObjective, $emailSubject));
+
+            //Saving data to email history
+            $dataEmail = new Email;
+            $dataEmail->name = $RecieverName;
+            $dataEmail->email = $RecieverEmail;
+            $dataEmail->subject = $emailSubject;
+            $dataEmail->message = $emailBody;
+            $dataEmail->objective = $emailObjective;
+            $dataEmail->staff_id = 0;
+            $dataEmail->save();
+        } else {
+
+            return redirect()->back()->withInput()->with('error', 'No Internet Connection');
+        }
+    }
 }

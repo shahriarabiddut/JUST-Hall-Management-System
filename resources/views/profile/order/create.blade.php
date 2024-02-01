@@ -32,7 +32,7 @@
                     <tr>
                         <th>Order Date<span class="text-danger">*</span></th>
                             <td>
-                            <input readonly id='date' name="date" type="date" class="form-control">
+                            <input readonly id='date' name="date" value="{{ $nextDate }}" type="date" class="form-control">
                             </td>
                         </tr>
                     <tr>
@@ -76,7 +76,7 @@
     </div>
 
     @section('scripts')
-    <script type="text/javascript">
+    {{-- <script type="text/javascript"> --}}
         // Hiding Old Dates
         const dateField1 = document.getElementById('date');
         const currentDate = new Date();
