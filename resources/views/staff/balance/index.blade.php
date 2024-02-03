@@ -43,14 +43,26 @@
                         @foreach ($data as $key => $d)
                         <tr>
                             <td>{{ ++$key }}</td>
-                            <td>{{ $d->students->name }} - {{ $d->students->rollno }}</td>
+                            <td>{{ $d->students->name }} - {{ $d->students->rollno }} - 
+                                @if ($d->students->ms==0)
+                                (Masters)
+                                @else
+                                (Honours)
+                                @endif
+                            </td>
                             @if ($d->balance_amount<0)
                             <td class="bg-danger text-white">
                             @else
                             <td class="bg-success text-white">
                             @endif
                             {{ $d->balance_amount }}</td>
-                            <td>{{ $d->last_transaction_date }}</td>
+                            <td>
+                                @if ($d->updated_at!=$d->created_at)
+                                {{ $d->updated_at->format('F j, Y')  }}
+                                @else
+                                No Transaction
+                                @endif
+                            </td>
                         </tr>
                         @endforeach
                         @endif

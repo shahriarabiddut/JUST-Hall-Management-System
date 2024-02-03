@@ -1,5 +1,5 @@
 @extends('staff/layout')
-@section('title', 'Student')
+@section('title', 'Student Search')
 
 @section('content')
 
@@ -39,8 +39,8 @@
                     @csrf
                     <label for="search-date"> Students : </label>
                     <select  name="type" id="">
-                        <option value="1">MS</option>
-                        <option value="0">Honours</option>
+                        <option @if ($type==1) selected @endif value="1">MS</option>
+                        <option @if ($type==0) selected @endif value="0">Honours</option>
                     </select>
                     <button type="submit" class="btn btn-dark btn-sm mx-1" >Search</button>
                 </form>

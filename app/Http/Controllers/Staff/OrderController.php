@@ -11,6 +11,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Models\TokenPrintQueue;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class OrderController extends Controller
 {
@@ -18,18 +21,81 @@ class OrderController extends Controller
     public function index()
     {
         $data = Order::select('*')->orderBy("id", "desc")->where('food_item_id', '!=', '0')->get();
+        $dataFoodTime = FoodTime::all()->where('status', '1');
         $token = [];
         foreach ($data as $d) {
             $tokenData = MealToken::all()->where('order_id', '=', $d->id)->first();
             $token[] = $tokenData->status;
         }
-        return view('staff.orders.index', ['data' => $data, 'token' => $token]);
+        return view('staff.orders.index', ['data' => $data, 'token' => $token, 'dataFoodTime' => $dataFoodTime]);
     }
     public function searchByDate(Request $request)
     {
+        // dd($request);
         $date = $request->date;
-        $data = Order::all()->where('date', '=', $date);
-        return view('staff.orders.search', ['data' => $data, 'date' => $date]);
+        $type = $request->type;
+        $data = MealToken::all();
+        if ($request->date != null) {
+            $data = $data->where('date', '=', $date);
+        }
+        if ($request->type != '') {
+            $data = $data->where('meal_type', '=', $type);
+        }
+        $dataFoodTime = FoodTime::all()->where('status', '1');
+        return view('staff.orders.search', ['data' => $data, 'type' => $type, 'date' => $date, 'dataFoodTime' => $dataFoodTime]);
+    }
+    public function searchByDateDownload(Request $request)
+    {
+        $date = $request->date;
+        $type = $request->type;
+        $data = MealToken::all();
+        if ($request->date != null) {
+            $data = $data->where('date', '=', $date);
+        }
+        if ($request->type != '') {
+            $data = $data->where('meal_type', '=', $type);
+        }
+        $data = $data->map(function ($item) {
+            unset($item['id']);
+            unset($item['print']);
+            unset($item['token_number']);
+            unset($item['updated_at']);
+            unset($item['created_at']);
+
+            return $item;
+        })->toArray();
+
+        // Define headers for the Excel sheet
+        $headers = ['Order Id', 'Food Name', 'Date', 'Roll No', 'Meal Type', 'Quantity', 'Status']; // Add your headers here
+
+        // Create a new Spreadsheet object
+        $spreadsheet = new Spreadsheet();
+
+        // Set the active sheet
+        $spreadsheet->setActiveSheetIndex(0);
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Add headers to the sheet
+        $sheet->fromArray([$headers], null, 'A1');
+
+        // Add data to the sheet
+        $sheet->fromArray($data, null, 'A2');
+
+        // Create a new Excel Writer object
+        $writer = new Xlsx($spreadsheet);
+
+        // Save the Excel file to storage path
+        $filePath = storage_path('app/public/data.xlsx');
+        $writer->save($filePath);
+
+        //Saving History 
+        $HistoryController = new HistoryController();
+        $staff_id = Auth::guard('staff')->user()->id;
+        $HistoryController->addHistory($staff_id, 'download', 'MealType - ' . $type . ' of ' . $date . '  data has been downloaded Successfully!');
+        //Saved
+
+        // Return a download response
+        return response()->download($filePath, 'Data - ' . $date . ' - ' . $type . ' .xlsx')->deleteFileAfterSend(true);
     }
     public function searchByHistory(Request $request)
     {

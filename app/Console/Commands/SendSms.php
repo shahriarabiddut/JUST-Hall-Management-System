@@ -34,13 +34,19 @@ class SendSms extends Command
     {
         //Getting Fixed Cost From Options
         $fcc = HallOption::all()->where('name', '==', 'fixed_cost_charge')->first();
+        $fcc2 = HallOption::all()->where('name', '==', 'masters_fixed_cost')->first();
         $fixed_cost_charge = $fcc->value;
+        $masters_fixed_cost_charge = $fcc2->value;
         //
         $users = Student::all();
         foreach ($users as $user) {
             $student_id = $user->id;
             $student_email = $user->email;
-            $fixedCharge = $fixed_cost_charge;
+            if ($user->ms == 1) {
+                $fixedCharge = $masters_fixed_cost_charge;
+            } else {
+                $fixedCharge = $fixed_cost_charge;
+            }
             $startDate = Carbon::now()->startOfMonth();
             $endDate = Carbon::now()->endOfMonth();
             $sumofthatmonth = Order::whereBetween('created_at', [$startDate, $endDate])->where('student_id', '=', $student_id)->sum('price');

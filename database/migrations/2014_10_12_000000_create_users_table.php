@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('dept');
             $table->string('session');
+            $table->string('ms')->nullable();
             $table->string('address')->nullable();
             $table->string('photo')->nullable();
             $table->string('mobile')->nullable();

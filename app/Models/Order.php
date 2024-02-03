@@ -8,11 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Order extends Model
 {
     use HasFactory;
-    function food(){
-        return $this->belongsTo(Food::class,'food_item_id');
+    function food()
+    {
+        return $this->belongsTo(Food::class, 'food_item_id');
     }
-    function student(){
-        return $this->belongsTo(Student::class,'student_id');
+    function student()
+    {
+        return $this->belongsTo(Student::class, 'student_id');
     }
-    
 }

@@ -8,7 +8,7 @@
     <div class="p-3 mb-2 bg-danger text-white">
         <p>{{ session('danger') }} </p>
     </div>
-    @endif
+    @endif 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
@@ -31,11 +31,22 @@
                             <td>{{ Auth::user()->rollno }}</td>
                         </tr><tr>
                             <th>Allocation Date </th>
-                            <td>{{ $data->created_at }} </td>
+                            <td>{{ $data->created_at->format('F j , Y') }} </td>
                         </tr><tr>
                             <th>Position </th>
                             <td>{{ $data->position }}</td>
-                        </tr><tr>
+                        </tr>
+                        <tr>
+                                <th>Room Mates</th>
+                                <td>
+                                    <table>
+                                        @foreach ( $rooms->allocatedseats as $key => $allocatedseats  )
+                                        <tr>
+                                            <td width="50%">{{ $allocatedseats->position }}.{{ $allocatedseats->students->name }} - {{ $allocatedseats->students->rollno }} </td>
+                                        </tr>
+                                        @endforeach
+                                      </table>
+                                </td>
                             
                         </tr>
                         

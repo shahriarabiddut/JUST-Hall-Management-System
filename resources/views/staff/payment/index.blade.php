@@ -72,7 +72,7 @@
                             
                             <td class="text-center">
                                 <a href="{{ url('staff/payment/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
-                                @if($d->status ==1 || $d->status ==2)
+                                @if($d->status == 'Accepted' || $d->status == 'Rejected')
                                 @else
                                 <a href="{{ url('staff/payment/'.$d->id.'/accept') }}" class="btn btn-success btn-sm"><i class="fa fa-check"></i></a>
                                 <a onclick="return confirm('Are You Sure?')" href="{{ url('staff/payment/'.$d->id.'/reject') }}" class="btn btn-danger btn-sm"><i class="fa fa-ban"></i></a>

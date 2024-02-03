@@ -35,7 +35,8 @@ class FoodTimeController extends Controller
      */
     public function create()
     {
-        return view('staff.foodtime.create');
+        return redirect()->route('staff.foodtime.index')->with('danger', 'Not Permitted!');
+        // return view('staff.foodtime.create');
     }
 
     /**
@@ -43,26 +44,27 @@ class FoodTimeController extends Controller
      */
     public function store(Request $request)
     {
+        return redirect()->route('staff.foodtime.index')->with('danger', 'Not Permitted!');
         //
-        $data = new FoodTime;
-        $request->validate([
-            'title' => 'required',
-            'detail' => 'required',
-            'status' => 'required',
-            'price' => 'required',
-        ]);
-        $data->title = $request->title;
-        $data->detail = $request->detail;
-        $data->price = $request->price;
-        $data->status = $request->status;
-        $data->createdby = $request->createdby;
-        $data->save();
-        //Saving History 
-        $HistoryController = new HistoryController();
-        $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistory($staff_id, 'add', 'Food Time ( ' . $data->title . ' ) -  has been added Successfully!');
-        //Saved
-        return redirect()->route('staff.foodtime.index')->with('success', 'Foodtime has been added Successfully!');
+        // $data = new FoodTime;
+        // $request->validate([
+        //     'title' => 'required',
+        //     'detail' => 'required',
+        //     'status' => 'required',
+        //     'price' => 'required',
+        // ]);
+        // $data->title = $request->title;
+        // $data->detail = $request->detail;
+        // $data->price = $request->price;
+        // $data->status = $request->status;
+        // $data->createdby = $request->createdby;
+        // $data->save();
+        // //Saving History 
+        // $HistoryController = new HistoryController();
+        // $staff_id = Auth::guard('staff')->user()->id;
+        // $HistoryController->addHistory($staff_id, 'add', 'Food Time ( ' . $data->title . ' ) -  has been added Successfully!');
+        // //Saved
+        // return redirect()->route('staff.foodtime.index')->with('success', 'Foodtime has been added Successfully!');
     }
 
     /**

@@ -34,8 +34,7 @@
                         </td>
                     </tr>
                     @switch($data->transaction_id)
-                        @case(0)
-                            Cash
+                        @case('0')
                                 @break
                         @default
                         <th>Transaction ID</th>
@@ -49,7 +48,7 @@
                         <td>{{ $data->name }}</td>
                     </tr><tr>
                         <th>Created Date</th>
-                        <td>{{ $data->created_at }}</td>
+                        <td>{{ $data->created_at->format('F j, Y') }}</td>
                     </tr><tr>
                         <th>Status</th>
                         @switch($data->status)
@@ -71,7 +70,7 @@
                     </tr>
                     @if($data->status == 'Accepted' || $data->status =='Rejected')
                     <tr>
-                        <th>Accepted By</th>
+                        <th>Status Update</th>
                         @switch($data->status)
                         @case('Accepted')
                         <td class="bg-success text-white"> Accepted by {{ $data->staff->name }}</td>
@@ -87,11 +86,11 @@
                         @switch($data->status)
                                 @case('Accepted')
                                 <th>Accepted Date</th>
-                                <td class="bg-success text-white">{{ $data->updated_at }} </td>
+                                <td class="bg-success text-white">{{ $data->updated_at->format('F j, Y') }} </td>
                                     @break
                                 @case('Rejected')
-                                th>Rejected Date</th>
-                                <td class="bg-danger text-white"> {{ $data->updated_at }}</td>
+                                <th>Rejected Date</th>
+                                <td class="bg-danger text-white"> {{ $data->updated_at->format('F j, Y') }}</td>
                                     @break
                             @endswitch
                         @else

@@ -22,7 +22,6 @@
         <div class="card-body">
             @foreach ($datas as $data)
             <div class="table-responsive">
-                {{-- <form method="POST" action="{{ url('staff/settings/update/'.$data->id) }}" enctype="multipart/form-data"> --}}
                 <form method="POST" action="{{ route('staff.settings.update',$data->id) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
@@ -37,6 +36,9 @@
                                         @break
                                     @case($data->name=='fixed_cost_charge')
                                         Fixed Cost Charge
+                                    @break
+                                    @case($data->name=='masters_fixed_cost')
+                                        Masters Fixed Cost Charge
                                     @break
                                     @case($data->name=='systemname')
                                         Dashboard Header Title

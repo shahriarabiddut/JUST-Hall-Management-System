@@ -28,7 +28,7 @@ class HallOptionSeeder extends Seeder
                 'value' => 'Hall Automation System'
             ], [
                 'name' => 'dashboard_image',
-                'value' => 'img/justcse.png'
+                'value' => 'img/just.jpg'
             ],
             [
                 'name' => 'Favicon',
@@ -56,6 +56,10 @@ class HallOptionSeeder extends Seeder
             [
                 'name' => 'print',
                 'value' => '1'
+            ],
+            [
+                'name' => 'masters_fixed_cost',
+                'value' => '50'
             ],
         ];
         HallOption::insert($options);

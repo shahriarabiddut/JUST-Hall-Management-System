@@ -12,4 +12,12 @@ class MealToken extends Model
     {
         return $this->belongsTo(Order::class, 'order_id');
     }
+    function student()
+    {
+        return $this->belongsTo(Student::class, 'rollno', 'rollno');
+    }
+    function food()
+    {
+        return $this->belongsTo(Food::class, 'food_name', 'food_name');
+    }
 }

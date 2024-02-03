@@ -46,14 +46,13 @@
                     <tr>
                         <th>Status</th>
                         @switch($data->status)
-                            
-                            @case(1)
+                            @case('1')
                             <td class="bg-danger text-white"> Used </td>
                                 @break
-                            @case(2)
+                            @case('2')
                             <td class="bg-warning text-white"> Error</td>
                                 @break
-                            @case(3)
+                            @case('3')
                             <td class="bg-info text-white"> On Queue To Print </td>
                                 @break
                             @default
@@ -72,9 +71,8 @@
                     </tr>
                     
                     <tr>
-                        @if ($data->status==0 && $currentDateDash==$data->date)
+                        @if ($data->status==0 && $currentDateDash==$data->date && $data->print==1)
                         <td colspan="2">
-                            {{-- <a  href="{{ url('student/mealtoken/print/'.$data->id) }}" class="m-1 float-right btn btn-success btn-sm "><i class="fas fa-ticket-alt"> Print Meal Token </i></a> --}}
                             <a  href="{{ route('student.mealtoken.printnet',$data->order_id) }}" class="m-1 float-left btn btn-info btn-sm "><i class="fas fa-ticket-alt"> Print Meal Token Net </i></a>
                         </td>
                         @endif

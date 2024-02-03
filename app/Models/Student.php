@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Student extends Model
 {
     use HasFactory;
+    protected $attributes = ['ms' => '0',];
     protected $fillable = ['rollno', 'name', 'email', 'password', 'mobile', 'address', 'photo', 'dept', 'session'];
     public $table = 'users';
     function rooms()

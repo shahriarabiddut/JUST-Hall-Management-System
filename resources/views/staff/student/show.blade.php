@@ -29,6 +29,16 @@
                                  <td>{{ $data->dept }}</td>
                         </tr>
                         <tr>
+                            <th>Student Type </th>
+                            <td>
+                                @if($data->ms==0)
+                                Honours
+                                @else
+                                Masters
+                                @endif
+                            </td>
+                        </tr>
+                        <tr>
                             <th>Session </th>
                                  <td>{{ $data->session }}</td>
                         </tr>

@@ -34,7 +34,16 @@ class StudentController extends Controller
         $data = Student::all();
         return view('staff.student.index', ['data' => $data]);
     }
-
+    public function search(Request $request)
+    {
+        // dd($request);
+        $type = $request->type;
+        $data = Student::all();
+        if ($request->type != '') {
+            $data = $data->where('ms',  $type);
+        }
+        return view('staff.student.search', ['data' => $data, 'type' => $type,]);
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -66,7 +75,7 @@ class StudentController extends Controller
         $data->email = $request->email;
         $data->mobile = $request->mobile;
         $data->rollno = $request->rollno;
-
+        $data->ms = $request->ms;
 
         //If user Given address
         if ($request->has('address')) {
@@ -142,7 +151,7 @@ class StudentController extends Controller
         $data->email = $request->email;
         $data->mobile = $request->mobile;
         $data->rollno = $request->rollno;
-
+        $data->ms = $request->ms;
         //If user Given address
         if ($request->has('address')) {
             $data->address = $request->address;
@@ -207,6 +216,13 @@ class StudentController extends Controller
                 // dd($row);
                 $email = $row['email'];
                 $rollno = $row['rollno'];
+                //check ms or not
+                if (preg_match('/^\d+$/', $rollno)) {
+                    $ms = 0;
+                } else {
+                    $ms = 1;
+                }
+                //
                 $rollnoMain = str_replace(' ', '', $rollno);
                 $data = Student::where('email', $email)->first();
                 $data2 = Student::where('rollno', $rollnoMain)->first();
@@ -217,6 +233,7 @@ class StudentController extends Controller
                         'email' => $email,
                         'dept' => $row['dept'],
                         'session' => $row['session'],
+                        'ms' => $ms,
                         'password' => bcrypt($row['rollno']),
                     ]);
                     //Creating Balance account for student

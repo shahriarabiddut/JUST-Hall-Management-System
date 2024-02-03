@@ -138,13 +138,22 @@ class PaymentController extends Controller
                 $EmailController->paymentEmail($student_id, $newBalance, $staff_id, $status);
                 //updating Status
                 $data->save();
-
+                //Saving History 
+                $HistoryController = new HistoryController();
+                $staff_id = Auth::guard('staff')->user()->id;
+                $HistoryController->addHistory($staff_id, 'add', 'Payment of ' . $data->students->name . ' ( ' . $data->students->rollno . ' ) has been Accepted Successfully by ' . $data->staff->name . ' !');
+                //Saved
                 return redirect('staff/payment')->with('success', 'Payment has been accepted and added balance to Student!');
             } else {
                 $data->status = 'Accepted';
                 $data->staff_id = Auth::guard('staff')->user()->id;
                 //updating Status
                 $data->save();
+                //Saving History 
+                $HistoryController = new HistoryController();
+                $staff_id = Auth::guard('staff')->user()->id;
+                $HistoryController->addHistory($staff_id, 'add', 'Room Allocation Payment of ' . $data->students->name . ' ( ' . $data->students->rollno . ' ) has been Accepted Successfully by ' . $data->staff->name . ' !');
+                //Saved
                 return redirect('staff/payment')->with('success', 'Room Allocation Payment has been accepted!');
             }
         }
@@ -171,6 +180,11 @@ class PaymentController extends Controller
             $status = $data->status;
             $EmailController = new EmailController();
             $EmailController->paymentEmail($student_id, $newBalance, $staff_id, $status);
+            //Saving History 
+            $HistoryController = new HistoryController();
+            $staff_id = Auth::guard('staff')->user()->id;
+            $HistoryController->addHistory($staff_id, 'Rejected', 'Room Allocation Payment of ' . $data->students->name . ' ( ' . $data->students->rollno . ' ) has been Rejected by ' . $data->staff->name . ' !');
+            //Saved
             return redirect('staff/payment')->with('danger', 'Payment Data has been rejected!');
         }
     }

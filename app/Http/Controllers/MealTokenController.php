@@ -103,12 +103,16 @@ class MealTokenController extends Controller
             return redirect()->route('student.mealtoken.index')->with('danger', 'Token Expired!');
         }
         if ($data == null) {
-            return redirect()->back();
+            return redirect()->route('student.mealtoken.index')->with('danger', 'Error!');
+        }
+        if ($data->print >= 1) {
+            return redirect()->route('student.mealtoken.index')->with('danger', 'You can not print anymore!');
         }
         // Done
         if ($data->status == 0) {
             // Token Status Update
             $data->status = 3;
+            $data->print = 1;
             $data->save();
             //Check if printqueue Exist
             $printqueue = TokenPrintQueue::all()->where('id', '=', $data->id)->first();
@@ -198,7 +202,7 @@ class MealTokenController extends Controller
         if ($dataUpdate == null) {
             return response()->json(0);
         }
-        $dataUpdate->status = 1;
+        $dataUpdate->print = 1;
         $dataUpdate->save();
         //Delete
         $data = TokenPrintQueue::all()->where('token_id', '=', $id)->where('order_id', '=', $order_id)->where('rollno', '=', $rollno)->first();

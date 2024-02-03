@@ -5,7 +5,13 @@
 
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Orders Search by date</h1>
+    <h1 class="h3 mb-2 text-gray-800">Orders Search by date 
+        <form method="POST"class="d-inline" action="{{ route('staff.orders.searchByDateDownload') }}">
+        @csrf
+        <input type="hidden" name="date" value="{{ $date }}">
+        <input type="hidden" name="type" value="{{ $type }}">
+        <button type="submit" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-down"></i> Download Excel Sheet </button> 
+      </form></h1>
             <!-- Session Messages Starts -->
             @if(Session::has('success'))
             <div class="p-3 mb-2 bg-success text-white">
@@ -24,9 +30,15 @@
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Order History
                 <div class="float-right">
-                    <form method="POST" action="{{ route('staff.orders.searchByDate') }}">
+                    <form method="POST" class="form-control" action="{{ route('staff.orders.searchByDate') }}">
                         @csrf
-                        <label for="search-date">Search History by Date:</label>
+                        <label for="search-date">Meal Type : </label>
+                        <select  name="type" id="">
+                            @foreach ($dataFoodTime as $ft)
+                            <option @if($type == $ft->title) selected @endif value="{{$ft->title}}">{{$ft->title}}</option>
+                            @endforeach
+                        </select>
+                        <label for="search-date">Search History by Date : </label>
                         <input type="date" id="search-date" name="date" value="{{ $date }}">
                         <button type="submit">Search</button>
                       </form>
@@ -56,14 +68,14 @@
                             <th>Quantity</th>
                             <th>OrderNo</th>
                         </tr>
-                    </tfoot>
+                    </tfoot> 
                     <tbody>
                         @if($data)
                         @foreach ($data as $key => $d)
                         <tr>
                             <td>{{ ++$key }}</td>
                             <td>{{ $d->student->name }} - {{ $d->student->rollno }}</td>
-                            <td>{{ $d->order_type }}</td>
+                            <td>{{ $d->meal_type }}</td>
                             <td>{{ $d->food->food_name }}</td>
                             <td>{{ $d->date }}</td>
                             <td>{{ $d->quantity }}</td>

@@ -65,6 +65,7 @@ Route::middleware('staff')->prefix('staff')->name('staff.')->group(function () {
     Route::get('student/import-bulk', [StudentController::class, 'importUser'])->name('student.bulk');
     Route::post('student/import-bulk', [StudentController::class, 'handleImportUser'])->name('student.bulkUpload');
     Route::get('student/{id}/delete', [StudentController::class, 'destroy']);
+    Route::post('student/search/', [StudentController::class, 'search'])->name('student.search');
     Route::resource('student', StudentController::class);
 
     //RoomAllocation Requests
@@ -96,6 +97,7 @@ Route::middleware('staff')->prefix('staff')->name('staff.')->group(function () {
     Route::get('orders/printToken/{id}', [OrderController::class, 'printNet'])->name('orders.printToken');
     Route::post('orders/searchall/', [OrderController::class, 'searchByDate'])->name('orders.searchByDate');
     Route::post('orders/search/', [OrderController::class, 'searchByHistory'])->name('orders.searchByHistory');
+    Route::post('orders/searchByDateDownload/', [OrderController::class, 'searchByDateDownload'])->name('orders.searchByDateDownload');
     //Scan QR Code
     Route::get('orders/scan/', [OrderController::class, 'scan'])->name('orders.scan');
     Route::get('orders/scan/{id}', [OrderController::class, 'qrcodescanlink'])->name('orders.qrcodescanlink')->where('id', '(.*(?:%2F:)?.*)');

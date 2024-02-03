@@ -236,7 +236,7 @@ class OrderController extends Controller
         //checking if its tommorow
         $currentDate = Carbon::now(); // get current date and time
         //
-        $TokenTime = $date . ' 14:46:00'; // Token Time
+        $TokenTime = $date . ' 22:00:00'; // Token Time
         //
         $nextDate = $currentDate->addDay(); // add one day to current date
         $nextDateData = $nextDate->setTimezone('GMT+6')->format('Y-m-d'); // add one day to current date
