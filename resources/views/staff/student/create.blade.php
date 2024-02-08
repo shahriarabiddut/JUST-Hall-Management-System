@@ -46,7 +46,7 @@
                     </tr>
                     <tr>
                         <th>Masters <span class="text-danger">*</span></th>
-                        <td><select name="ms" id="" required class="form-control">
+                        <td><select required name="ms" id="" required class="form-control">
                             <option value="1"> Yes </option>
                             <option value="0"> No </option>
                         </select></td>

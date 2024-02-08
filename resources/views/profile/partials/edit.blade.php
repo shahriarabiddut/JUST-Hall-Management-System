@@ -33,6 +33,12 @@
                     <th>Session <span class="text-danger">*</span></th>
                     <td><input required name="session" type="text" class="form-control" value="{{ $user->session }}" placeholder="example : 2017-18"></td>
                 </tr><tr>
+                    <th>Masters <span class="text-danger">*</span></th>
+                    <td><select required name="ms" id="" required class="form-control">
+                        <option @if($user->ms==1) selected @endif  value="1"> Yes </option>
+                        <option @if($user->ms==0) selected @endif   value="0"> No </option>
+                    </select></td>
+                </tr><tr>
                     <th>Mobile No <span class="text-danger">*</span></th>
                     <td><input required name="mobile" type="text" maxlength="11" class="form-control" value="{{ $user->mobile }}"></td>
                 </tr><tr>

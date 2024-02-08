@@ -62,10 +62,18 @@ class OrderController extends Controller
         if ($food_time == null) {
             return redirect()->route('student.order.index')->with('danger', 'Not Found');
         }
-        //checking if its tommorow
+        //checking if its tommorow 
         $currentDate = Carbon::now(); // get current date and time
         $current_time = $currentDate->setTimezone('GMT+6')->format('H:i:s'); // "00:10:15"
-        $nextDate = $currentDate->addDay(); // add one day to current date
+        //Suhr 2 days 
+        if ($food_time_id == 3) {
+            $nextDate2 = $currentDate->addDay(); // add one day to current date
+            $nextDate = $nextDate2->addDay(); // add one day to current date
+        } else {
+            // Launch and Dinner 1 Day
+            $nextDate = $currentDate->addDay(); // add one day to current date
+        }
+        //
         $nextDate = $nextDate->setTimezone('GMT+6')->format('Y-m-d'); // 2023-03-17
         //check on that day student has how many order
         $data = Order::where('date', '=', $nextDate)
@@ -148,8 +156,13 @@ class OrderController extends Controller
             $data->date = $request->date;
 
             $givendate = $data->date;
-
-            $result = $this->isItTommorow($givendate);
+            //Suhr Ectra Rule
+            if ($food_time_id == 3) {
+                $result = $this->isItTommorowSuhr($givendate);
+            } else {
+                $result = $this->isItTommorow($givendate);
+            }
+            //Suhr Ectra Rule
             if ($result) {
 
                 $data->save();
@@ -191,6 +204,18 @@ class OrderController extends Controller
         $processedData = $id == $nextDate;
         return $processedData;
     }
+    public function isItTommorowSuhr(string $id)
+    {
+        //
+        //checking if its tommorow
+        $currentDate = Carbon::now(); // get current date and time
+        $nextDate2 = $currentDate->addDay(); // add one day to current date
+        $nextDate = $nextDate2->addDay(); // add one day to current date
+        $nextDate = $nextDate->setTimezone('GMT+6')->format('Y-m-d'); // 2023-03-17
+
+        $processedData = $id == $nextDate;
+        return $processedData;
+    }
     // Deduct balance if order is placed
     public function deductBalance(string $userid, string $dataPrice)
     {
@@ -211,12 +236,14 @@ class OrderController extends Controller
     {
         //
         $data = Order::all()->where('id', '=', $id)->first();
+        $foodItem = Food::all()->where('id', '=', $data->food_item_id)->first();
         if ($data == null) {
             return redirect()->route('student.order.index')->with('danger', 'Not Found');
         }
         $tokendata = MealToken::all()->where('order_id', '=', $id)->first();
         //Check Date is Valid To Delete
-        $validDate = $this->isDateValid2Cancel($data->date);
+        $validDate = $this->isDateValid2Cancel($data->date, $foodItem->food_time_id);
+
         //
         return view('profile.order.show', ['data' => $data, 'tokendata' => $tokendata, 'validDate' => $validDate]);
     }
@@ -230,21 +257,34 @@ class OrderController extends Controller
         $processedData = ($date > $nextDate);
         return $processedData;
     }
-    public function isDateValid2Cancel(string $date)
+    public function isDateValid2Cancel(string $date, string $food_time_id)
     {
         //
-        //checking if its tommorow
         $currentDate = Carbon::now(); // get current date and time
         //
-        $TokenTime = $date . ' 22:00:00'; // Token Time
+        $TokenDate = $date; // Token Date
         //
-        $nextDate = $currentDate->addDay(); // add one day to current date
+        //Suhr 2 days 
+        if ($food_time_id == 3) {
+            // $TokenDate = Carbon::createFromFormat('Y-m-d', $date); // Token Date
+            // $TokenDate = $TokenDate->addDay();
+            // $TokenDate = $TokenDate->toDateString();
+            $nextDate2 = $currentDate->addDay();
+            $nextDate = $nextDate2->addDay();
+        } else {
+            $nextDate = $currentDate->addDay(); // add one day to current date
+        }
+        //
+        $TokenTime = $TokenDate . ' 22:00:00'; // Token Time to Delete 10 PM
+        //
         $nextDateData = $nextDate->setTimezone('GMT+6')->format('Y-m-d'); // add one day to current date
-        //
         $currentTime = $nextDate->setTimezone('GMT+6')->format('Y-m-d H:i:s'); // 2023-03-17
-        $processedDate = ($date == $nextDateData);
-        if ($processedDate) {
-            $processedData = ($TokenTime < $currentTime);
+        //
+        $processedDate = ($TokenDate >= $nextDateData);
+        // dd($processedDate, $TokenDate, $nextDateData);
+        if (($processedDate)) {
+            $processedData = ($currentTime < $TokenTime);
+            // dd($processedData, $currentTime, $TokenTime);
             return $processedData;
         } else {
             return $processedDate;
@@ -341,11 +381,12 @@ class OrderController extends Controller
         $userid = Auth::user()->id;
         //
         $data = Order::all()->where('id', '=', $id)->first();
+        $foodItem = Food::all()->where('id', '=', $data->food_item_id)->first();
         if ($data == null) {
             return redirect()->route('student.order.index')->with('danger', 'Not Found');
         }
         //Check Date is Valid To Delete
-        $validDate = $this->isDateValid2Cancel($data->date);
+        $validDate = $this->isDateValid2Cancel($data->date, $foodItem->food_time_id);
         //
         if (!$validDate) {
             return redirect('student/order')->with('danger', 'You cannot edit anymore for this Order!Day Passed!');

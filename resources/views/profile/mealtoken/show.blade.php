@@ -71,7 +71,7 @@
                     </tr>
                     
                     <tr>
-                        @if ($data->status==0 && $currentDateDash==$data->date && $data->print==1)
+                        @if ($data->status==0 && $currentDateDash==$data->date && $data->print!=1)
                         <td colspan="2">
                             <a  href="{{ route('student.mealtoken.printnet',$data->order_id) }}" class="m-1 float-left btn btn-info btn-sm "><i class="fas fa-ticket-alt"> Print Meal Token Net </i></a>
                         </td>

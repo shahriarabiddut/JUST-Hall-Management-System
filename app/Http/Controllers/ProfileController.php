@@ -138,6 +138,7 @@ class ProfileController extends Controller
         $data->session = $request->session;
         $data->mobile = $request->mobile;
         $data->address = $request->address;
+        $data->ms = $request->ms;
         $data->photo =  $formFields['photo'];
 
         $data->save();
