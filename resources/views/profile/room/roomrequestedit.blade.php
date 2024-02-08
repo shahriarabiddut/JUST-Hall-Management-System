@@ -37,20 +37,6 @@
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <tbody>
                 <tr>
-                    <th>Select RoomNo</th>
-                        <td>
-                            <select required name="room_id" class="form-control room_id">
-                                <option value="0">--- Select Room No ---</option>
-                                @foreach ($rooms as $rm)
-                                <option value="{{$rm->id}}" @if ($data->room_id ==$rm->id)
-                                    @selected(true)
-                                @endif
-                                >{{$rm->title}} - (Vacancy {{$rm->vacancy}} )</option>
-                                @endforeach
-                            </select>
-                        </td>
-                </tr>
-                <tr>
                 <th>Your Application <span class="text-danger">*</span></th>
                     <td>
                         <textarea name="message" id="" cols="10" rows="20" class="form-control">{{ $data->message }}</textarea>

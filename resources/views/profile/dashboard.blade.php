@@ -15,21 +15,20 @@
 </div>
 
 <!-- Content Row For Order Data of Next Day -->
-                <div class="card-header p-1 my-1">
-                    <h4 class="m-0 p-3 font-weight-bold text-white bg-info">
-                        My Orders For Next Day </h4>
-                </div>
 
-<div class="row m-1 text-center bg-dark">
-    <div class="p-1 m-1 text-white">
+    <div class="row text-white bg-info m-1 p-1 card-header">
+      <div class="col-md-6">
+        <h4 class=" pt-2 font-weight-bold">My Orders For Next Day </h4>
+      </div>
+      <div class="col-md-6 font-weight-bold">
         <i class="fa fa-clock"></i>
         <h6 id="hours" class="d-inline"></h6>
         <h6 id="mins" class="d-inline"></h6>
         <h6 id="secs" class="d-inline"></h6>
         <h6 class="d-inline"> remaining to order today!</h6>
         <h2 id="end" class="d-inline"></h2>
+      </div>
     </div>
-</div>
 
 <div class="row">
 

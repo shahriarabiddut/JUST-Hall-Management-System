@@ -55,15 +55,15 @@
                     @endif
                     <tr>
                         <th>Application</th>
-                        <td>{{ $data->message }}</td>
+                        <td>{!! $data->message !!}</td>
                     </tr><tr>
                         <th>Application Date</th>
-                        <td>{{ $data->created_at }}</td>
+                        <td>{{ $data->created_at->format('F j,Y')  }}</td>
                     </tr>
                     <tr>
                         <td colspan="2">
                             <a onclick="return confirm('Are You Sure?')" href="{{ route('student.roomrequest.destroy',$data->id) }}" class="btn btn-danger btn-sm ml-1"><i class="fa fa-trash"></i></a>
-                            <a href="{{ route('student.roomrequest.destroy',$data->id) }}" class="float-right btn btn-info btn-sm"><i class="fa fa-edit"> Edit Room Request </i></a>
+                            {{-- <a href="{{ route('student.roomrequest.destroy',$data->id) }}" class="float-right btn btn-info btn-sm"><i class="fa fa-edit"> Edit Room Request </i></a> --}}
                         </td>
                     </tr>
                 </table>

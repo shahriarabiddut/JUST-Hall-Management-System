@@ -17,7 +17,10 @@
                 <table class="table table-bordered" width="100%">
                     <tr>
                         <th width="60%">Date</th>
-                        <td width="40%">{{ $data->order->date }}</td>
+                        @php
+                        $TokenDate = Carbon\Carbon::createFromFormat('Y-m-d', $data->order->date); // Token Date
+                        @endphp
+                        <td>{{ $TokenDate->format('F j,Y') }}</td>
                     </tr>
                     <tr>
                         <th>Meal Type</th>
@@ -32,7 +35,7 @@
                         <td>{{ $data->order->quantity }}</td>
                     </tr>
                     <tr>
-                        <th>Printed Date</th>
+                        <th>Printed Time</th>
                         <td>
                             @if ($data->created_at==$data->updated_at)
                                 Not Printed Yet

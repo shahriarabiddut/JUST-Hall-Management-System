@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Balance;
+use Carbon\Carbon;
 use App\Models\Food;
 use App\Models\Order;
+use App\Models\Balance;
 use App\Models\FoodTime;
 use App\Models\MealToken;
+// use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
@@ -236,10 +237,10 @@ class OrderController extends Controller
     {
         //
         $data = Order::all()->where('id', '=', $id)->first();
-        $foodItem = Food::all()->where('id', '=', $data->food_item_id)->first();
         if ($data == null) {
             return redirect()->route('student.order.index')->with('danger', 'Not Found');
         }
+        $foodItem = Food::all()->where('id', '=', $data->food_item_id)->first();
         $tokendata = MealToken::all()->where('order_id', '=', $id)->first();
         //Check Date is Valid To Delete
         $validDate = $this->isDateValid2Cancel($data->date, $foodItem->food_time_id);
@@ -298,15 +299,16 @@ class OrderController extends Controller
         //
         $currentDate = Carbon::now(); // get current date and time
         $current_Date = $currentDate->setTimezone('GMT+6')->format('Y-m-d'); // 2023-03-17
-        $current_time = $currentDate->setTimezone('GMT+6')->format('H:i:s'); // "00:10:15"
+        $current_time = $currentDate->setTimezone('GMT+6')->format('Y-m-d H:i:s'); // "00:10:15"
         $nextDate = $currentDate->addDay(); // add one day to current date
         $nextDate = $nextDate->setTimezone('GMT+6')->format('Y-m-d'); // 2023-03-17
         $data = Order::all()->where('id', '=', $id)->first();
-
-        if ($data->date <= $nextDate) {
+        $TokenDate = $data->date;
+        $TokenTime = $data->date . " 22:00:00";
+        if ($TokenDate <= $nextDate) {
             return redirect('student/order')->with('danger', 'You cannot edit anymore for this Order!Day Passed!');
         } else {
-            if ($current_time < "22:00:00") {
+            if ($current_time < $TokenTime) {
                 $foodItem = Food::all()->where('id', '=', $data->food_item_id)->first();
                 $foods = Food::all()->where('status', '=', '1')->where('food_time_id', '=', $foodItem->food_time_id);
                 return view('profile.order.edit', ['data' => $data, 'foods' => $foods]);

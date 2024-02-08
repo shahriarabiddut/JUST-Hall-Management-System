@@ -29,7 +29,10 @@
                     </tr>
                     <tr>
                         <th>Meal Ordered Date</th>
-                        <td>{{ $data->date }}</td>
+                        @php
+                            $TokenDate = Carbon\Carbon::createFromFormat('Y-m-d', $data->date); // Token Date
+                        @endphp
+                        <td>{{ $TokenDate->format('F j,Y') }}</td>
                     </tr>
                     <tr>
                         <th>Order Time</th>
