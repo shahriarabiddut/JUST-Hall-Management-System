@@ -31,7 +31,7 @@
 <div class="row">
 
     @foreach ($results as $key=> $result)
-        
+        @php $orders = 0; @endphp
         <div class="col-sm-6">
             <div class="card shadow mb-4">
                 <div class="card-header py-3 
@@ -91,6 +91,7 @@
                                             <tbody>
                                             @foreach ($ld as $key => $foodscount)
                                             <tr><th class="p-4 text-center">{{ $foodscount }}</th> </tr>
+                                            @php $orders = $orders + $foodscount; @endphp
                                             @endforeach
                                             </tbody>
                                         </table>
@@ -106,6 +107,7 @@
                             
                     </div>
                 </div>
+                <h6 class="p-1 text-center">Total Orders - {{ $orders }}</h6>
             </div>
         </div>
 
