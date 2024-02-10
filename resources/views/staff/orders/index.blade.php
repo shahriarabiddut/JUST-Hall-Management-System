@@ -37,6 +37,7 @@
                         @csrf
                         <label for="search-date">Meal Type : </label>
                         <select  name="type" id="">
+                            <option value="x">-- Select --</option>
                             @foreach ($dataFoodTime as $ft)
                             <option value="{{$ft->title}}">{{$ft->title}}</option>
                             @endforeach
@@ -46,6 +47,7 @@
                         <button type="submit">Search</button>
                     </form>
                 </div>
+            </h3>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -82,9 +84,21 @@
                                 $i=$key;
                             @endphp
                             <td>{{ ++$key }}</td>
-                            <td>{{ $d->student->name }} - {{ $d->student->rollno }}</td>
+                            <td>
+                                @if ($d->student==null)
+                                    User Deleted
+                                @else
+                                {{ $d->student->name }} - {{ $d->student->rollno }}
+                                @endif
+                            </td>
                             <td>{{ $d->order_type }}</td>
-                            <td>{{ $d->food->food_name }}</td>
+                            <td>
+                                @if ($d->food==null)
+                                    Food Item Deleted
+                                @else
+                                    {{ $d->food->food_name }}
+                                @endif
+                            </td>
                             <td>{{ $d->date }}</td>
                             <td>{{ $d->quantity }}</td>
                             <td>{{ $d->id }}</td>

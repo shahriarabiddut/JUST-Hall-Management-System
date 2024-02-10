@@ -239,7 +239,29 @@ class ProfileController extends Controller
         //
         $data = RoomRequest::find($id);
         $data->delete();
-        return Redirect::to('student/rooms/requestshow')->with('danger', 'Room Alloacation Request has been Dleted!');
+        return Redirect::to('student/rooms/requestshow')->with('danger', 'Room Alloacation Request has been Deleted!');
+    }
+    public function roomrequestpaymentdestroy($id)
+    {
+        $userid = Auth::user()->id;
+        // Check Room is allready allocated or not
+        $dataAllocatedSeats = AllocatedSeats::all()->where('user_id', '=', $userid)->first();
+        if ($dataAllocatedSeats != null) {
+            return redirect()->route('student.myroom')->with('danger', 'Access Denied!');
+        }
+        //
+        $data = Payment::find($id);
+        if ($data == null) {
+            return redirect()->route('student.roomrequestshow')->with('danger', 'Access Denied!');
+        }
+        if ($data->student_id != $userid) {
+            return redirect()->route('student.roomrequestshow')->with('danger', 'Access Denied! Warning!');
+        }
+        if ($data->status == 'Accepted') {
+            return redirect()->route('student.roomrequestshow')->with('danger', 'Access Denied! Payment Allready Accepted!');
+        }
+        $data->delete();
+        return Redirect::to('student/rooms/requestshow')->with('danger', 'Room Alloacation Request Payment has been Deleted!');
     }
     //Edit Room Request
     public function roomrequestedit(string $id)

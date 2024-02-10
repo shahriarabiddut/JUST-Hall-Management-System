@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\BalanceController;
+use App\Models\AllocatedSeats;
+use App\Models\RoomRequest;
 
 class StudentController extends Controller
 {
@@ -39,7 +41,7 @@ class StudentController extends Controller
         // dd($request);
         $type = $request->type;
         $data = Student::all();
-        if ($request->type != '') {
+        if ($request->type != '' && $request->type != '2') {
             $data = $data->where('ms',  $type);
         }
         return view('staff.student.search', ['data' => $data, 'type' => $type,]);
@@ -180,16 +182,29 @@ class StudentController extends Controller
         if ($data == null) {
             return redirect()->route('staff.student.index')->with('danger', 'Not Found!');
         }
-        $data->delete();
-        //Delete Balance Account
+        // Balance Account
         $BalanceAccount = Balance::all()->where('student_id', '=', $id)->first();
-        $BalanceAccount->delete();
+        // Iff Allocated Seat
+        $AllocatedSeat = AllocatedSeats::all()->where('user_id', '=', $id)->first();
+        // Iff Room Request Found
+        $RoomRequest = RoomRequest::all()->where('user_id', '=', $id)->first();
+        if ($RoomRequest != null) {
+            $RoomRequest->delete();
+        }
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistory($staff_id, 'delete', 'Student (' . $data->rollno . ' ) - ' . $data->name . '  and Associated Balance Account has been deleted Successfully!');
+        if ($AllocatedSeat != null) {
+            $HistoryController->addHistory($staff_id, 'delete', 'Student (' . $data->rollno . ' ) - ' . $data->name . '  and Associated Balance Account has been deleted Successfully! Last Balance was ' . $BalanceAccount->balance_amount . ' . And Allocated Seat no was ' . $AllocatedSeat->position . ' in Room No ' . $AllocatedSeat->rooms->title . ' .');
+            $AllocatedSeatController = new AllocatedSeatController();
+            $AllocatedSeatController->destroy($AllocatedSeat->id);
+        } else {
+            $HistoryController->addHistory($staff_id, 'delete', 'Student (' . $data->rollno . ' ) - ' . $data->name . '  and Associated Balance Account has been deleted Successfully! Last Balance was ' . $BalanceAccount->balance_amount . ' . And No seat was Allocated.');
+        }
         //Saved
-        return redirect()->route('staff.student.index')->with('danger', 'Student data and Associated Balance Account has been deleted Successfully!');
+        $data->delete();
+        $BalanceAccount->delete();
+        return redirect()->route('staff.student.index')->with('danger', 'Student data and Associated Balance Account and Allocation data has been deleted Successfully!');
     }
 
     // Import Bilk users from csv

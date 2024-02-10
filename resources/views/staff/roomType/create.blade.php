@@ -24,7 +24,7 @@
                         <th>Title</th>
                         <td><input name="title" type="text" class="form-control"></td>
                     </tr><tr>
-                        <th>Price</th>
+                        <th>Room Rent</th>
                         <td><input name="price" type="number" class="form-control"></td>
                     </tr><tr>
                         <th>Details</th>

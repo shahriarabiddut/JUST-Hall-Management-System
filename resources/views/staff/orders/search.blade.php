@@ -28,12 +28,13 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Order History
+            <h3 class="m-0 font-weight-bold text-primary">Order History
                 <div class="float-right">
                     <form method="POST" class="form-control" action="{{ route('staff.orders.searchByDate') }}">
                         @csrf
                         <label for="search-date">Meal Type : </label>
                         <select  name="type" id="">
+                            <option @if($type == 'x') selected @endif value="x">-- Select --</option>
                             @foreach ($dataFoodTime as $ft)
                             <option @if($type == $ft->title) selected @endif value="{{$ft->title}}">{{$ft->title}}</option>
                             @endforeach
@@ -43,6 +44,8 @@
                         <button type="submit">Search</button>
                       </form>
                 </div>
+                <a href="{{ url('staff/orders') }}" class="float-left mx-1 btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i></a>
+                </h3>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -74,9 +77,22 @@
                         @foreach ($data as $key => $d)
                         <tr>
                             <td>{{ ++$key }}</td>
-                            <td>{{ $d->student->name }} - {{ $d->student->rollno }}</td>
+                            <td>
+                                @if ($d->student==null)
+                                    User Deleted
+                                @else
+                                {{ $d->student->name }} - {{ $d->student->rollno }}
+                                @endif
+                                
+                            </td>
                             <td>{{ $d->meal_type }}</td>
-                            <td>{{ $d->food->food_name }}</td>
+                            <td>
+                                @if ($d->food==null)
+                                    Food Item Deleted
+                                @else
+                                    {{ $d->food->food_name }}
+                                @endif
+                            </td>
                             <td>{{ $d->date }}</td>
                             <td>{{ $d->quantity }}</td>
                             <td>{{ $d->id }}</td>

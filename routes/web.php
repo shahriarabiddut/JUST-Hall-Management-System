@@ -70,6 +70,7 @@ Route::middleware('auth')->prefix('student')->name('student.')->group(function (
     Route::get('rooms/requestshow/{id}/delete', [ProfileController::class, 'roomrequestdestroy'])->name('roomrequest.destroy');
     // Payment
     Route::get('rooms/request/payment/', [ProfileController::class, 'roomrequestpayment'])->name('roomrequest.roomrequestpayment');
+    Route::get('rooms/request/payments/{id}/delete', [ProfileController::class, 'roomrequestpaymentdestroy'])->name('roomrequestpayment.destroy');
     Route::post('rooms/roomrequestpayment', [ProfileController::class, 'roomrequestpaymentstore'])->name('roomrequestpaymentstore');
 
     //Support Routes

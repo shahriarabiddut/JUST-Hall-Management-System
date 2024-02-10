@@ -18,7 +18,13 @@
                     </tr>
                     <tr>
                         <th>Ticket By</th>
-                        <td>{{ $data->student->name }} - {{ $data->student->rollno }} </td>
+                        <td>
+                            @if ($data->student==null)
+                            User Deleted
+                            @else
+                                <b>{{ $data->student->name }} - {{ $data->student->rollno }}</b>
+                            @endif
+                        </td>
                     </tr>
                     <tr>
                         <th>Subject</th>

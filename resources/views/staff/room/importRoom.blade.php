@@ -21,7 +21,7 @@
                     <tbody>
                     <tr>
                         <th>Format (Excel)</th>
-                        <td>Coumn name should be in serial - title,room_type_id,totalseats or Error May Occur!</td>
+                        <td>Column name should be in serial - title,room_type_id,totalseats or Error May Occur!</td>
                     </tr>
                     <tr>
                         <th style="width: 50%">File</th>

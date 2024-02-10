@@ -35,6 +35,22 @@ class RoomTypeSeeder extends Seeder
                 'details' => 'shahriarabiddut@gmail.com',
                 'price' => '4000'
             ],
+            [
+                'title' => '5 Seats',
+                'details' => 'shahriarabiddut@gmail.com',
+                'price' => '5000'
+            ],
+            [
+                'title' => '6 Seats',
+                'details' => 'shahriarabiddut@gmail.com',
+                'price' => '6000'
+            ],
+
+            [
+                'title' => 'Gono Room',
+                'details' => 'shahriarabiddut@gmail.com',
+                'price' => '7000'
+            ],
         ];
         RoomType::insert($roomtypes);
     }

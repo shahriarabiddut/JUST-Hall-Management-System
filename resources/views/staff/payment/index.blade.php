@@ -51,7 +51,13 @@
                             <td>{{ ++$key }}</td>
                             <td>{{ $d->students->name }} - {{ $d->students->rollno }}</td>
                             <td>{{ $d->amount }}</td>
-                            <td>{{ $d->created_at }}</td>
+                            <td>
+                                @if ($d->created_at==null)
+                                    {{ $d->updated_at->format('F j, Y') }} (Update Date)
+                                    @else
+                                    {{ $d->created_at->format('F j, Y - H:i:s') }}
+                                @endif
+                            </td>
                             
                             @switch($d->status)
                                 @case('Processing')

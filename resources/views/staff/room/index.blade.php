@@ -28,7 +28,7 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h3 class="m-0 font-weight-bold text-primary">Room Data
-                <a href="{{ route('staff.rooms.create') }}" class="float-right btn btn-success btn-sm mx-2" target="_blank">Add New </a>  
+                <a href="{{ route('staff.rooms.create') }}" class="float-right btn btn-success btn-sm mx-2">Add New </a>  
                 <a href="{{ route('staff.rooms.bulk') }}" class="float-right btn btn-info btn-sm" target="_blank">Add From CSV </a>  </h3>
         </div>
         <div class="card-body">

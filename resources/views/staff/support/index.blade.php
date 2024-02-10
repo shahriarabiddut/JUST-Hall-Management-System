@@ -52,7 +52,13 @@
                         @foreach ($data as $key => $d)
                         <tr>
                             <td>{{ ++$key }}</td>
-                            <td>{{ $d->student->name }} - {{ $d->student->rollno }}</td>
+                            <td>
+                                @if ($d->student==null)
+                                    User Deleted
+                                @else
+                                    {{ $d->student->name }} - {{ $d->student->rollno }}
+                                @endif
+                            </td>
                             <td>{{ $d->subject }}</td>
                             <td>{{ $d->category }}</td>
                             <td>
@@ -63,7 +69,7 @@
                                 @endif
 
                             </td>
-                            <td>{{ $d->created_at }} </td>
+                            <td>{{ $d->created_at->format('F j, Y') }} </td>
                             
                                 @switch($d->status)
                                     @case('2')

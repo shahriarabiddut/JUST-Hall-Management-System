@@ -97,13 +97,13 @@
                                 <td class="bg-warning text-white"> Completed</td>
                                     @break
                                 @case('Accepted')
-                                <td class="bg-success text-white"> Accepted by {{ $d->staff->name }}</td>
+                                <td class="bg-success text-white"> Accepted by {{ $dataPayment->staff->name }}</td>
                                     @break
                                 @case('Rejected')
-                                <td class="bg-danger text-white"> Rejected by {{ $d->staff->name }}</td>
+                                <td class="bg-danger text-white"> Rejected by {{ $dataPayment->staff->name }}</td>
                                     @break
                                 @default
-                                   <td>{{$d->status}}</td>
+                                   <td>{{$dataPayment->status}}</td>
                             @endswitch
                         
                     </tr>
@@ -117,6 +117,11 @@
                     <tr>
                         <th>Payment Date</th>
                         <td>{{ $data->created_at->format('F j,Y') }}</td>
+                    </tr>
+                    <tr>
+                    <td colspan="2">
+                        <a onclick="return confirm('Are You Sure?')" href="{{ route('student.roomrequestpayment.destroy',$dataPayment->id) }}" class="btn btn-danger btn-sm ml-1"><i class="fa fa-trash"></i></a>
+                    </td>
                     </tr>
                     @endif
                 </table>

@@ -63,8 +63,20 @@
                             <td>{{ ++$key }}</td>
                             <td>{{ $d->rooms->title }}</td>
                             <td>{{ $d->position }}</td>
-                            <td>{{ $d->students->name }}</td>
-                            <td>{{ $d->students->rollno }}</td>
+                            <td>
+                                @if ($d->students==null)
+                                    User Deleted
+                                @else
+                                {{ $d->students->name }}
+                                @endif
+                            </td>
+                            <td>
+                                @if ($d->students==null)
+                                    User Deleted
+                                @else
+                                    {{ $d->students->rollno }}
+                                @endif
+                            </td>
                             <td>{{ $d->created_at->format("F j, Y")  }} </td>
 
                             <td class="text-center">

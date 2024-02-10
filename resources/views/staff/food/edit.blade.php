@@ -6,7 +6,7 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h3 class="m-0 font-weight-bold text-primary">Editing Food Item : {{ $data->title }}
-            <a href="{{ url('staff/food/'.$data->id) }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h3>
+            <a href="{{ url('staff/food/'.$data->id) }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> Go Back </a> </h3>
         </div>
         <div class="card-body">
             

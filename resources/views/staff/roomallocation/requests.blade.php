@@ -31,7 +31,6 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Room No</th>
                             <th>Student Name</th>
                             <th>Student Roll</th>
                             <th>Request Date</th>
@@ -42,7 +41,6 @@
                     <tfoot>
                         <tr>
                             <th>#</th>
-                            <th>Room No</th>
                             <th>Student Name</th>
                             <th>Student Roll</th>
                             <th>Request Date</th>
@@ -56,14 +54,19 @@
                         <tr>
                             <td>{{ ++$key }}</td>
                             <td>
-                                @if ($d->room_id ==0)
-                                    N/A
-                                @else
-                                {{ $d->rooms->title }}
-                                @endif
+                            @if ($d->students==null)
+                                User Deleted
+                            @else
+                            {{ $d->students->name }}
+                            @endif
                             </td>
-                            <td>{{ $d->students->name }}</td>
-                            <td>{{ $d->students->rollno }}</td>
+                            <td>
+                            @if ($d->students==null)
+                                User Deleted
+                            @else
+                            {{ $d->students->rollno }}
+                            @endif
+                            </td>
                             <td>{{ $d->created_at }}</td>
                             @if ($d->status=='1')
                             <td class="bg-success text-white"> Accepted </td>

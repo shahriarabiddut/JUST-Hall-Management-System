@@ -32,13 +32,14 @@
         <div class="card-header py-3">
             <h3 class="m-0 font-weight-bold text-primary">Students Data
                 
-            <a href="{{ route('staff.student.create') }}" class="float-right btn btn-success btn-sm mx-1" target="_blank">Add New </a>  
+            <a href="{{ route('staff.student.create') }}" class="float-right btn btn-success btn-sm mx-1">Add New </a>  
             <a href="{{ route('staff.student.bulk') }}" class="float-right btn btn-info btn-sm mx-1" target="_blank">Add From CSV </a> 
             <div class="float-right mx-1">
                 <form method="POST" class="form-control pb-1" action="{{ route('staff.student.search') }}">
                     @csrf
                     <label for="search-date"> Students : </label>
                     <select  name="type" id="">
+                        <option value="2">All</option>
                         <option value="1">MS</option>
                         <option value="0">Honours</option>
                     </select>

@@ -43,22 +43,32 @@
                     </tr>
                     <tr>
                         <th>Name</th>
-                        <td>{{ $data->students->name }} - {{ $data->students->rollno }}</td>
+                        <td>
+                            @if ($data->students==null)
+                                User Deleted
+                            @else
+                                {{ $data->students->name }} - {{ $data->students->rollno }}
+                            @endif
+                        </td>
                     </tr><tr>
                         <th>Room no</th>
                         <td>
-                            @if ($data->room_id ==0)
+                                @if ($data->room_id ==0)
                                     N/A
                                 @else
-                                {{ $data->rooms->title }} - {{ $data->rooms->RoomType->title }} type
+                                    @if ($data->rooms==null)
+                                    Room Deleted
+                                    @else
+                                        {{ $data->rooms->title }} - {{ $data->rooms->RoomType->title }} type
+                                    @endif
                                 @endif </td>
                     </tr>
                     <tr>
                         <th>Application</th>
-                        <td>{{ $data->message }}</td>
+                        <td>{!! $data->message !!}</td>
                     </tr><tr>
                         <th>Application Date</th>
-                        <td>{{ $data->created_at }}</td>
+                        <td>{{ $data->created_at->format('F j, Y - H:i:s') }}</td>
                     </tr>
                     <tr>    
                         @if ($data->status=='1')
@@ -71,13 +81,13 @@
                         <th> Last Checked Date </th>
                         @endif
                         @if ($data->status=='1')
-                        <td class="bg-success"> {{ $data->updated_at }} </td>
+                        <td class="bg-success"> {{ $data->updated_at->format('F j, Y - H:i:s') }} </td>
                         @elseif($data->status=='0')
-                        <td class="bg-warning"> {{ $data->updated_at }} </td>
+                        <td class="bg-warning"> {{ $data->updated_at->format('F j, Y - H:i:s') }} </td>
                         @elseif($data->status=='2')
-                        <td class="bg-danger"> {{ $data->updated_at }}</td>
+                        <td class="bg-danger"> {{ $data->updated_at->format('F j, Y - H:i:s') }}</td>
                         @else
-                        <td> {{ $data->updated_at }} </td>
+                        <td> {{ $data->updated_at->format('F j, Y - H:i:s') }} </td>
                         @endif
                     </tr>
                     
@@ -101,7 +111,6 @@
             </div>
         </div>
     </div>
-    @if ($dataPayment!=null)
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h3 class="m-0 font-weight-bold text-primary">Payment Details </h3>
@@ -110,6 +119,7 @@
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" width="100%">
+                    @if ($dataPayment!=null)
                     
                     <tr>
                         <th>Status</th>
@@ -150,12 +160,19 @@
                         </td>
                     </tr>
                     @endif
+                    
+                @else
+                <tr>
+                    <td colspan="2">
+                        No Payment Data Found
+                    </td>
+                </tr>
+                @endif
                 </table>
             </div>
             
         </div>
     </div>
-    @endif
     @if($data->status==1)
     <div class="card shadow mb-4">
         <div class="card-header py-3">

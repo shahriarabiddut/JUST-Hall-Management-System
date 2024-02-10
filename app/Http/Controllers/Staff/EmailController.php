@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Staff;
 use App\Models\Email;
 use App\Models\Student;
 use App\Mail\AdminEmail;
+use App\Mail\PaymentEmail;
 use Illuminate\Http\Request;
 use App\Mail\AllocationEmail;
 use App\Http\Controllers\Controller;
@@ -101,11 +102,11 @@ class EmailController extends Controller
         $RecieverName = $RecieverData->name;
         $RecieverAmount = $amount;
         //accept or reject
-        if ($status == 1) {
+        if ($status == 'Accepted') {
             $emailObjective = 'Payment Accepted';
             $emailSubject = 'Your Payment Has been Accepted and Added to balance';
             $emailBody = 'Your Payment Has been Accepted and your amount was ' . $RecieverAmount . ' and Added to balance.Login to check your Current Balance .';
-        } elseif ($status == 2) {
+        } elseif ($status == 'Rejected') {
             $emailObjective = 'Payment Rejected';
             $emailSubject = 'Your Payment Has been Rejected';
             $emailBody = 'Your Payment Has been Rejected and your amount was ' . $RecieverAmount . ' .Contact Administrator for support.';
@@ -114,19 +115,8 @@ class EmailController extends Controller
         }
         //Sending email with information
         if ($this->isOnline()) {
-            $mail_data = [
-                'objective' => $emailObjective,
-                'recipient' => $RecieverEmail,
-                'fromEmail' => 'cseengineerbiddut@gmail.com',
-                'fromName' => $RecieverName,
-                'subject' => $emailSubject,
-                'body' => $emailBody
-            ];
-            \Mail::send('staff.email.email-template-payment', $mail_data, function ($message) use ($mail_data) {
-                $message->to($mail_data['recipient'])
-                    ->from($mail_data['fromEmail'], $mail_data['fromName'])
-                    ->subject($mail_data['subject']);
-            });
+            // The email sending is done using the to method on the Mail facade
+            Mail::to($RecieverEmail)->send(new PaymentEmail($emailBody, $emailObjective, $emailSubject));
 
             //Saving data to email history
             $dataEmail = new Email;

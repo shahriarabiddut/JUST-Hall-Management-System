@@ -9,8 +9,8 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary"> Upload the CSV File
-            <a href="{{ url('staff/student') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h6>
+            <h3 class="m-0 font-weight-bold text-primary"> Upload the CSV File
+            <a href="{{ url('staff/student') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h3>
         </div>
         <div class="card-body">
             
@@ -26,7 +26,7 @@
                     <tbody>
                         <tr>
                             <th>Format (Excel)</th>
-                            <td>Coumn name should be in serial - rollno,name,email,dept,session or Error May Occur!</td>
+                            <td>Column name should be in serial - rollno,name,email,dept,session or Error May Occur!</td>
                         </tr>
                     <tr>
                         <th style="width: 50%">File</th>

@@ -28,7 +28,7 @@
     <li class="nav-item">
         <a class="nav-link @if(!request()->is('staff/roomtype*')) collapsed @endif" href="#" data-toggle="collapse" data-target="#collapseRoomType"
             aria-expanded="true" aria-controls="collapseRoomType">
-            <i class="fas fa-fw fa-users"></i>
+            <i class="fas fa-fw fa-table"></i>
             <span>Room Type</span>
         </a>
         <div id="collapseRoomType" class="collapse @if(request()->is('staff/roomtype*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
@@ -43,7 +43,7 @@
 <li class="nav-item">
     <a class="nav-link @if(!request()->is('staff/rooms*')) collapsed @endif" href="#" data-toggle="collapse" data-target="#collapseRoom"
         aria-expanded="true" aria-controls="collapseRoom">
-        <i class="fas fa-fw fa-users"></i>
+        <i class="fas fa-fw fa-table"></i>
         <span>Room</span>
     </a>
     <div id="collapseRoom" class="collapse @if(request()->is('staff/rooms*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
@@ -124,35 +124,18 @@
     </div>
     <!-- Nav FoodTime Services - Utilities Collapse Menu -->
     <li class="nav-item">
-        <a class="nav-link @if (!request()->is('staff/foodtime*'))
-            collapsed
-        @endif" href="#" data-toggle="collapse" data-target="#collapseSix"
-            aria-expanded="true" aria-controls="collapseSix">
-            <i class="fas fa-table"></i>
-            <span>FoodTime </span>
-        </a>
-        <div id="collapseSix" class="collapse @if(request()->is('staff/foodtime*')) show @endif" aria-labelledby="headingUtilities"
-            data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">FoodTime Management</h6>
-                <a class="collapse-item" href="{{ route('staff.foodtime.index') }}">View All</a>
-                <a class="collapse-item" href="{{ route('staff.foodtime.create') }}">Add new</a>
-            </div>
-        </div>
-    </li>
-    <!-- Nav FoodTime Services - Utilities Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link @if (!request()->is('staff/food*'))
+        <a class="nav-link @if (!request()->is('staff/food*') || !request()->is('staff/foodtime*'))
             collapsed
         @endif" href="#" data-toggle="collapse" data-target="#collapseSeven"
             aria-expanded="true" aria-controls="collapseSeven">
             <i class="fas fa-table"></i>
-            <span>Food Items </span>
+            <span>Food </span>
         </a>
-        <div id="collapseSeven" class="collapse @if(request()->is('staff/food/*')) show @endif" aria-labelledby="headingUtilities"
+        <div id="collapseSeven" class="collapse @if(request()->is('staff/food/*') || request()->is('staff/foodtime*')) show @endif" aria-labelledby="headingUtilities"
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Food Item Management</h6>
+                <h6 class="collapse-header">Food Management</h6>
+                <a class="collapse-item" href="{{ route('staff.foodtime.index') }}"> Food Time </a>
                 <a class="collapse-item" href="{{ route('staff.food.index') }}">View All</a>
                 <a class="collapse-item" href="{{ route('staff.food.create') }}">Add new</a>
             </div>
@@ -191,34 +174,19 @@
    <div class="sidebar-heading">
        Hall Balance System
    </div>
-
-   <!-- Nav Item Balance - Pages Collapse Menu -->
-   <li class="nav-item">
-       <a class="nav-link @if(!request()->is('staff/balance*')) collapsed @endif" href="#" data-toggle="collapse" data-target="#collapseTwo"
-           aria-expanded="true" aria-controls="collapseTwo">
-           <i class="fas fa-wallet"></i>
-           <span>Balance</span>
-       </a>
-       <div id="collapseTwo" class="collapse @if(request()->is('staff/balance*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-           <div class="bg-white py-2 collapse-inner rounded">
-               <h6 class="collapse-header">Balance Management</h6>
-               <a class="collapse-item" href="{{ route('staff.balance.index') }}">View All </a>
-               {{-- <a class="collapse-item" href="{{ route('staff.balance.create') }}">Add new Customer</a> --}}
-           </div>
-       </div>
-   </li>
       <!-- Nav Item Payment - Pages Collapse Menu -->
       <li class="nav-item">
-        <a class="nav-link @if(!request()->is('staff/payment*')) collapsed @endif" href="#" data-toggle="collapse" data-target="#collapseFour"
+        <a class="nav-link @if(!request()->is('staff/payment*') || !request()->is('staff/balance*')) collapsed @endif" href="#" data-toggle="collapse" data-target="#collapseFour"
             aria-expanded="true" aria-controls="collapseFour">
             <i class="fas fa-credit-card"></i>
             <span>Payment</span>
         </a>
-        <div id="collapseFour" class="collapse @if(request()->is('staff/payment*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="collapseFour" class="collapse @if(request()->is('staff/payment*') || request()->is('staff/balance*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Payment Management</h6>
                 <a class="collapse-item" href="{{ route('staff.payment.index') }}">View All Payment</a>
                 <a class="collapse-item" href="{{ route('staff.payment.create') }}">Add new Payment</a>
+                <a class="collapse-item" href="{{ route('staff.balance.index') }}">View Balances</a>
             </div>
         </div>
     </li>
@@ -226,9 +194,9 @@
     <hr class="sidebar-divider">
     <!-- Heading -->
     <div class="sidebar-heading">
-        Hall Email System
+        Hall Support System
     </div>
-    <!-- Nav Email Services - Utilities Collapse Menu -->
+    {{-- <!-- Nav Email Services - Utilities Collapse Menu -->
     <li class="nav-item">
         <a class="nav-link @if (!request()->is('staff/email*'))
             collapsed
@@ -245,7 +213,7 @@
                 <a class="collapse-item" href="{{ route('staff.email.create') }}">Add new</a>
             </div>
         </div>
-    </li>
+    </li> --}}
      <!-- Nav Item Support - Utilities Collapse Menu -->
      <li class="nav-item">
         <a class="nav-link @if (!request()->is('staff/support*'))

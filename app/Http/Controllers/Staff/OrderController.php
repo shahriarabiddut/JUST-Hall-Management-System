@@ -34,11 +34,14 @@ class OrderController extends Controller
         // dd($request);
         $date = $request->date;
         $type = $request->type;
+        // dd($date);
+        // dd($type);
         $data = MealToken::all();
-        if ($request->date != null) {
+        if ($date != null) {
             $data = $data->where('date', '=', $date);
         }
-        if ($request->type != '') {
+        // dd($data, $date);
+        if ($type != '' && $type != 'x') {
             $data = $data->where('meal_type', '=', $type);
         }
         $dataFoodTime = FoodTime::all()->where('status', '1');
