@@ -15,7 +15,11 @@ return new class extends Migration
             $table->id();
             $table->integer('user_id');
             $table->integer('room_id');
-            $table->text('message');
+            $table->string('banglaname');
+            $table->string('englishname');
+            $table->string('fathername');
+            $table->string('mothername');
+            $table->date('dob');
             $table->integer('status')->nullable();
             $table->integer('flag')->nullable();
             $table->integer('allocated_seat_id')->nullable();

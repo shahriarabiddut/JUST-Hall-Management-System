@@ -237,7 +237,7 @@ class StudentController extends Controller
         $rows = array_map("str_getcsv", explode("\n", $csvData));
         $header = array_shift($rows);
         $length = count($rows);
-        $importedStudents = 1;
+        $importedStudents = 0;
         $errorEmails = [];
         foreach ($rows as $key => $row) {
             if ($key != $length - 1) {
@@ -270,6 +270,11 @@ class StudentController extends Controller
                     $BalanceController->store($StudentData->id);
                     //
                     $importedStudents++;
+                    // Add History 
+                    $HistoryController = new HistoryController();
+                    $staff_id = Auth::guard('staff')->user()->id;
+                    $HistoryController->addHistory($staff_id, 'add', 'Student (' . $StudentData->rollno . ' ) - ' . $StudentData->name . ' have been added Successfully!');
+                    //Saved
                 } else {
                     if ($data != null) {
                         $errorEmails[] = $email;
@@ -282,12 +287,12 @@ class StudentController extends Controller
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistory($staff_id, 'add', 'Total ' . $importedStudents . ' Student has been imported Successfully!');
+        $HistoryController->addHistory($staff_id, 'add', 'Total ' . $importedStudents . ' Student have been imported Successfully!');
         //Saved
         if ($errorEmails == null) {
-            return redirect()->route('staff.student.index')->with('success', 'Total ' . $importedStudents . ' Student Data has been imported Successfully!');
+            return redirect()->route('staff.student.index')->with('success', 'Total ' . $importedStudents . ' Student Data have been imported Successfully!');
         } else {
-            return redirect()->route('staff.student.index')->with('success', 'Total ' . $importedStudents . ' Student Data has been imported Successfully!')->with('danger-email', $errorEmails);
+            return redirect()->route('staff.student.index')->with('success', 'Total ' . $importedStudents . ' Student Data have been imported Successfully!')->with('danger-email', $errorEmails);
         }
     }
 }

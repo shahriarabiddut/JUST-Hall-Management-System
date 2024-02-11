@@ -200,11 +200,21 @@ class ProfileController extends Controller
     {
         $data = new RoomRequest;
         $request->validate([
-            'message' => 'required',
+            'banglaname' => 'required',
+            'englishname' => 'required',
+            'fathername' => 'required',
+            'mothername' => 'required',
+            'dob' => 'required',
         ]);
         $data->room_id = 0;
         $data->user_id = $request->user_id;
-        $data->message = $request->message;
+        // New Added
+        $data->banglaname = $request->banglaname;
+        $data->englishname = $request->englishname;
+        $data->fathername = $request->fathername;
+        $data->mothername = $request->mothername;
+        $data->dob = $request->dob;
+        //
         $data->status = 3;
         $data->flag = 0;
         $data->save();
