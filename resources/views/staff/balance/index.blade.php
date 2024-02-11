@@ -18,6 +18,7 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h3 class="m-0 font-weight-bold text-primary">Balances</h3>
+            <a href="#deductBalanceModal" data-toggle="modal" data-target="#deductBalanceModal" class="float-right btn btn-warning btn-sm" >Deduct Fixed Cost</a> 
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -71,7 +72,26 @@
             </div>
         </div>
     </div>
-
+ {{-- Deduct Balance Confirmation --}}
+ <div class="modal fade" id="deductBalanceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+ aria-hidden="true">
+ <div class="modal-dialog" role="document">
+     <div class="modal-content">
+         <div class="modal-header">
+             <h5 class="modal-title" id="exampleModalLabel">Are You Sure?</h5>
+             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                 <span aria-hidden="true">×</span>
+             </button>
+         </div>
+         <div class="modal-body">Are You Sure You Want To Deduct Balance for Fixed Cost?</div>
+         <div class="modal-footer">
+             <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+             <a class="btn btn-danger" href="{{ route('staff.student.deductBalance') }}">Deduct Balance</a>
+         </div>
+     </div>
+ </div>
+ </div>
+ {{-- Deduct Balance Confirmation --}}
     @section('scripts')
     @endsection
 @endsection

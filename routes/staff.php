@@ -67,7 +67,8 @@ Route::middleware('staff')->prefix('staff')->name('staff.')->group(function () {
     Route::get('student/{id}/delete', [StudentController::class, 'destroy']);
     Route::post('student/search/', [StudentController::class, 'search'])->name('student.search');
     Route::resource('student', StudentController::class);
-
+    //deduct BalanceCommand  
+    Route::get("/deductBalance", [StudentController::class, 'deductBalanceStaff'])->name('student.deductBalance');
     //RoomAllocation Requests
     Route::get('roomallocation/roomrequests', [AllocatedSeatController::class, 'roomrequests'])->name('roomallocation.roomrequests');
     Route::get('roomallocation/accept/{id}', [AllocatedSeatController::class, 'roomrequestaccept'])->name('roomallocation.accept');

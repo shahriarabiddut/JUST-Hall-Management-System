@@ -87,16 +87,17 @@
 
     <!-- Nav Item Customer - Pages Collapse Menu -->
     <li class="nav-item">
-        <a class="nav-link @if(!request()->is('staff/student*')) collapsed @endif" href="#" data-toggle="collapse" data-target="#collapseStudent"
+        <a class="nav-link @if(!request()->is('staff/student*') || !request()->is('staff/balance*')) collapsed @endif" href="#" data-toggle="collapse" data-target="#collapseStudent"
             aria-expanded="true" aria-controls="collapseStudent">
             <i class="fas fa-fw fa-users"></i>
             <span>Student</span>
         </a>
-        <div id="collapseStudent" class="collapse @if(request()->is('staff/student*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="collapseStudent" class="collapse @if(request()->is('staff/student*') || request()->is('staff/balance*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Student Management</h6>
                 <a class="collapse-item" href="{{ route('staff.student.index') }}">View All</a>
                 <a class="collapse-item" href="{{ route('staff.student.create') }}">Add new</a>
+                <a class="collapse-item" href="{{ route('staff.balance.index') }}"><b>Balances</b></a>
             </div>
         </div>
     </li>
@@ -176,17 +177,16 @@
    </div>
       <!-- Nav Item Payment - Pages Collapse Menu -->
       <li class="nav-item">
-        <a class="nav-link @if(!request()->is('staff/payment*') || !request()->is('staff/balance*')) collapsed @endif" href="#" data-toggle="collapse" data-target="#collapseFour"
+        <a class="nav-link @if(!request()->is('staff/payment*')) collapsed @endif" href="#" data-toggle="collapse" data-target="#collapseFour"
             aria-expanded="true" aria-controls="collapseFour">
             <i class="fas fa-credit-card"></i>
             <span>Payment</span>
         </a>
-        <div id="collapseFour" class="collapse @if(request()->is('staff/payment*') || request()->is('staff/balance*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+        <div id="collapseFour" class="collapse @if(request()->is('staff/payment*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Payment Management</h6>
-                <a class="collapse-item" href="{{ route('staff.payment.index') }}">View All Payment</a>
+                <a class="collapse-item" href="{{ route('staff.payment.index') }}">View All </a>
                 <a class="collapse-item" href="{{ route('staff.payment.create') }}">Add new Payment</a>
-                <a class="collapse-item" href="{{ route('staff.balance.index') }}">View Balances</a>
             </div>
         </div>
     </li>

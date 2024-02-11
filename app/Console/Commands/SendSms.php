@@ -47,6 +47,7 @@ class SendSms extends Command
             } else {
                 $fixedCharge = $fixed_cost_charge;
             }
+            $today = Carbon::now();
             $startDate = Carbon::now()->startOfMonth();
             $endDate = Carbon::now()->endOfMonth();
             $sumofthatmonth = Order::whereBetween('created_at', [$startDate, $endDate])->where('student_id', '=', $student_id)->sum('price');
@@ -72,13 +73,13 @@ class SendSms extends Command
                 $data2->save();
                 // Order Done
 
-                $emailBody = 'You have ordered this month : ' . $sumofthatmonth . 'Your Old Balance was : ' . $balance . ' and deducting fixedCharge = ' . $fixedCharge . ' taka , Your Current Balance is : ' . $new_balance_amount;
+                $emailBody = 'You have ordered this month : ' . $sumofthatmonth . ' taka. Your Old Balance was : ' . $balance . ' taka and deducting fixed charge = ' . $fixedCharge . ' taka , Your Current Balance is : ' . $new_balance_amount;
             } else {
-                $emailBody = 'You have ordered this month : ' . $sumofthatmonth . 'Your Old Balance was : ' . $balance . ' and No Money was deducted today!';
+                $emailBody = 'You have ordered this month : ' . $sumofthatmonth . ' taka. Your Old Balance was : ' . $balance . ' taka and No Money was deducted today!';
             }
             //email
             // The email sending is done using the to method on the Mail facade
-            Mail::to($student_email)->send(new AdminEmail($emailBody, 'Monthly Deduction', 'Balance information of Last Month'));
+            Mail::to($student_email)->send(new AdminEmail($emailBody, 'Monthly Deduction', 'Balance information of Month ' . $today->format('F')));
             //email 
 
         }

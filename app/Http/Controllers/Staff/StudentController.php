@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Staff;
 
+use Carbon\Carbon;
 use App\Models\Balance;
 use App\Models\Student;
+use App\Models\RoomRequest;
 use Illuminate\Http\Request;
+use App\Models\AllocatedSeats;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Process;
 use App\Http\Controllers\BalanceController;
-use App\Models\AllocatedSeats;
-use App\Models\RoomRequest;
 
 class StudentController extends Controller
 {
@@ -26,6 +28,18 @@ class StudentController extends Controller
                 return $next($request);
             }
         });
+    }
+    // Command To Deduct Fixed Meal Cost from staff
+    public function deductBalanceStaff()
+    {
+        $result = Process::run('php artisan send:sms');
+        //Saving History 
+        $HistoryController = new HistoryController();
+        $staff_id = Auth::guard('staff')->user()->id;
+        $today = Carbon::now();
+        $HistoryController->addHistory($staff_id, 'Fixed Cost Charge', 'Fixed Cost Charged for Month ' . $today->format('F') . '!');
+        //Saved
+        return redirect()->route('staff.balance.index')->with('success', 'Fixed Cost Charged Successfully!');
     }
     /**
      * Display a listing of the resource.
