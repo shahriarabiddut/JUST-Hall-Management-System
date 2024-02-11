@@ -26,7 +26,7 @@
                         <td>
                             <table class="table table-bordered">
                                 <td>
-                                    <input type="file" accept="image/*" id="fileInput" name="photo" onchange="previewImage(event)">
+                                    <input type="file" accept="image/*" id="fileInput" name="photo" onchange="previewImage(event)" class="form-control">
                                     <img id="imagePreview" src="#" alt="Image Preview">
                                 </td>
                             <td> <img width="100" src="{{$data->photo ? asset('storage/'.$data->photo) : ''}}" >

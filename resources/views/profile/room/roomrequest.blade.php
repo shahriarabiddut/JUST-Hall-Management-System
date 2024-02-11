@@ -47,91 +47,91 @@
                     <th>০৪. জন্ম তারিখ</th>
                     <td><input type="date" required name="dob" value="{{ old('dob') }}" class="form-control"></td>
                     <th>০৫. জাতীয়তা	</th>
-                    <td><input type="text" name="nationality" class="form-control"></td>
+                    <td><input type="text" required name="nationality" value="{{ old('nationality') }}" class="form-control"></td>
                 </tr>
                 <tr>
                     <th>০৬.ধর্ম</th>
-                    <td><input type="text" name="religion" class="form-control"></td>
+                    <td><input type="text" required name="religion" class="form-control" value="{{ old('religion') }}"></td>
                     <th>০৭. বৈবাহিক অবস্থা</th>
-                    <td><input type="text" name="maritalstatus" class="form-control"></td>
+                    <td><input type="text" required name="maritalstatus" class="form-control" value="{{ old('maritalstatus') }}"></td>
                 </tr>
                 <tr>
                     <th colspan="4"> ০৮. স্থায়ী ঠিকানা </th>
                 </tr>
                 <tr>
-                    <td><label for="">গ্রামঃ </label><input type="text" name="village" class="form-control"></td>
-                    <td><label for="">পোষ্টঃ </label><input type="text" name="po" class="form-control"></td>
-                    <td><label for="">থানাঃ </label><input type="text" name="thana" class="form-control"></td>
-                    <td><label for="">জেলাঃ </label><input type="text" name="zilla" class="form-control"></td>
+                    <td><label for="">গ্রাম</label><input required type="text" name="village" class="form-control" value="{{ old('village') }}"></td>
+                    <td><label for="">পোষ্ট</label><input required type="text" name="postoffice"  value="{{ old('postoffice') }}"class="form-control"></td>
+                    <td><label for="">থানা</label><input required type="text" name="thana" class="form-control" value="{{ old('thana') }}"></td>
+                    <td><label for="">জেলা</label><input required type="text" name="zilla" class="form-control" value="{{ old('zilla') }}"></td>
                 </tr>
                 <tr>
                     <th>০৯. অভিভাবকের মোবাইল</th>
-                    <td><input type="text" name="parentmobile" class="form-control"></td>
+                    <td><input type="text" required name="parentmobile" class="form-control" maxlength="11" value="{{ old('parentmobile') }}"></td>
                     <th>শিক্ষার্থীর মোবাইল</th>
-                    <td><input type="text" name="mobile" class="form-control" value="{{ Auth::user()->mobile }}"></td>
+                    <td><input type="text" required name="mobile" class="form-control" value="{{ Auth::user()->mobile }}" maxlength="11" value="{{ old('mobile') }}"></td>
                 </tr>
                 <tr>
                     <th>১০. বর্তমান ঠিকানা</th>
-                    <td colspan="3"><textarea name="presentaddress" rows="2" class="form-control"></textarea></td>
+                    <td colspan="3"><textarea name="presentaddress" rows="2" class="form-control">{{ old('presentaddress') }}</textarea></td>
                 </tr>
                 <tr>
                     <th colspan="2">১১. আবেদনকারীর বর্তমান আবাসনের ধরনঃ</th>
                     <td colspan="2">
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="নিজ গৃহে" name="applicanthouse">
+                            <input class="form-check-input" type="radio" id="inlineRadio1" value="নিজ গৃহে" name="applicanthouse">
                             <label class="form-check-label" for="inlineRadio1">নিজ গৃহে</label>
                           </div>
                           <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="মেস" name="applicanthouse">
+                            <input class="form-check-input" type="radio" id="inlineRadio2" value="মেস" name="applicanthouse">
                             <label class="form-check-label" for="inlineRadio2">মেস</label>
                           </div>
                           <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="অন্যান্য" name="applicanthouse">
+                            <input class="form-check-input" type="radio" id="inlineRadio3" value="অন্যান্য" name="applicanthouse">
                             <label class="form-check-label" for="inlineRadio3">অন্যান্য</label>
                           </div>
                         </td>
                 </tr>
                 <tr>
-                    <th colspan="2">১২. পিতা/অভিভাবকের পেশা</th>
-                    <td colspan="2"><input type="text" name="occupation" class="form-control"></td>
+                    <th colspan="2">১২.পিতা/অভিভাবকের পেশা</th>
+                    <td colspan="2"><input required type="text" name="occupation" class="form-control" value="{{ old('occupation') }}"></td>
                 </tr>
                 <tr>
                     <th colspan="4"> স্থানীয় অভিভাবকের নাম </th>
                 </tr>
                 <tr>
-                    <td><label for="">নাম </label><input type="text" name="ovivabok" class="form-control"></td>
-                    <td><label for="">সম্পর্কঃ  </label><input type="text" name="ovivabokrelation" class="form-control"></td>
-                    <td><label for="">ঠিকানাঃ  </label><input type="text" name="ovivabokthikana" class="form-control"></td>
-                    <td><label for="">মোবাইল নং - </label><input type="text" name="ovivabokmobile" class="form-control"></td>
+                    <td><label for="">নাম</label><input type="text" name="ovivabok" class="form-control" value="{{ old('ovivabok') }}"></td>
+                    <td><label for="">সম্পর্ক</label><input type="text" name="ovivabokrelation" class="form-control" value="{{ old('ovivabokrelation') }}"></td>
+                    <td><label for="">ঠিকানা</label><input type="text" name="ovivabokthikana" class="form-control" value="{{ old('ovivabokthikana') }}"></td>
+                    <td><label for="">মোবাইল নং</label><input type="text" name="ovivabokmobile" class="form-control"  maxlength="11" value="{{ old('ovivabokmobile') }}"></td>
                 </tr>
                 <tr>
                     <th colspan="4"> ১৪. প্রয়োজনীয় তথ্যাবলী </th>
                 </tr>
                 <tr>
                     <th>ক.বিভাগের নামঃ</th>
-                    <td><input type="text" name="department" class="form-control" value="{{ Auth::user()->dept }}"></td>
+                    <td><input type="text" required name="department" class="form-control" value="{{ Auth::user()->dept }}"></td>
                     <th>খ.রোল নংঃ</th>
-                    <td><input type="text" name="rollno" class="form-control" value="{{ Auth::user()->rollno }}"></td>
+                    <td><input type="text" required name="rollno" class="form-control" value="{{ Auth::user()->rollno }}"></td>
                 </tr>
                 <tr>
                     <th>গ.রেজিস্ট্রেশন নংঃ</th>
-                    <td><input type="text" name="registrationno" class="form-control" ></td>
-                    <th>ঘ.শিক্ষাবর্ষঃ</th>
-                    <td><input type="text" name="session" class="form-control" value="{{ Auth::user()->session }}"></td>
+                    <td><input type="text" required name="registrationno" class="form-control" value="{{ old('registrationno') }}"></td>
+                    <th>ঘ.শিক্ষাবর্ষঃ</th> 
+                    <td><input type="text" required name="session" class="form-control" value="{{ Auth::user()->session }}"></td>
                 </tr>
                 <tr>
                     <th>ঙ.বর্ষঃ</th>
-                    <td><input type="text" name="borsho" class="form-control" ></td>
+                    <td><input type="text" required name="borsho" class="form-control" value="{{ old('borsho') }}"></td>
                     <th>চ.সেমিস্টারঃ</th>
-                    <td><input type="text" name="semester" class="form-control" value="{{ Auth::user()->rollno }}"></td>
+                    <td><input type="text" required name="semester" class="form-control" value="{{ old('semester') }}"></td>
                 </tr>
                 <tr>
                     <th colspan="2">খেলাধুলা, নাটক, সংগীত ইত্যাদিতে পারদর্শিতার বিবরণ (প্রমাণ সংযুক্ত করতে হবে)</th>
-                    <td colspan="2"><textarea name="culture" rows="3" class="form-control" ></textarea></td>
+                    <td colspan="2"><textarea name="culture" rows="3" class="form-control" >{{ old('culture') }}</textarea></td>
                 </tr>
                 <tr>
                     <th colspan="2">শারীরিক প্রতিবন্ধী কি না? (প্রমাণ করতে হবে)</th>
-                    <td colspan="2"><textarea name="otisitic" rows="2" class="form-control"></textarea></td>
+                    <td colspan="2"><textarea name="otisitic" rows="2" class="form-control">{{ old('otisitic') }}</textarea></td>
                 </tr>
                 
                 <tr>
@@ -139,17 +139,17 @@
                 </tr>
                 <tr>
                     <th>ক) নাগরিক সনদের/জন্ম নিবদ্ধন এর অনুলিপি (ছবি)</th>
-                    <td colspan="3"><input name="dobsonod" type="file" class="form-control" accept="image/*" ></td>
+                    <td colspan="3"><input required name="dobsonod" type="file" id="imageInput2" class="form-control" accept="image/*" onchange="validateFile2('imageInput2')" value="{{ old('dobsonod') }}"></td>
                     
                 </tr>
                 <tr>
                     <th>খ) সর্বশেষ পরীক্ষার নম্বর পত্রের অনুলিপি/প্রথম বর্ষের ভর্তির কাগজপত্রের অনুলিপি। (ছবি)</th>
-                    <td colspan="3"><input name="academic" type="file" class="form-control" accept="image/*" ></td>
+                    <td colspan="3"><input required name="academic" type="file" class="form-control" accept="image/*" id="imageInput3" onchange="validateFile2('imageInput3')"></td>
                     
                 </tr>
                 <tr>
                     <th>গ) অভিভাবকের মাসিক আয়ের প্রমাণ পত্র। (ছবি)</th>
-                    <td colspan="3"><input name="earning" type="file" class="form-control" accept="image/*" ></td>
+                    <td colspan="3"><input required name="earningproof" type="file" class="form-control" accept="image/*" id="imageInput4" onchange="validateFile2('imageInput4')"></td>
                     
                 </tr>
                 <tr>
@@ -179,7 +179,7 @@
         function validateFile() {
             const fileInput = document.getElementById('imageInput');
             const file = fileInput.files[0];
-            const maxSizeInBytes = 1 * 1024 * 1024; // 5 MB
+            const maxSizeInBytes = 1 * 1024 * 1024; // 1 MB
             const maxWidth = 300; // Maximum width in pixels
             const maxHeight = 300; // Maximum height in pixels
         
@@ -200,6 +200,34 @@
             } else {
                 // Invalid file
                 alert('Please select a valid image file under 1MB.');
+                fileInput.value = ''; // Clear the file input
+                return false;
+            }
+        }
+        function validateFile2(dynamicId) {
+            const fileInput = document.getElementById(dynamicId);
+            const file = fileInput.files[0];
+            const maxSizeInBytes = 2 * 1024 * 1024; // 2 MB
+            const maxWidth = 1000; // Maximum width in pixels
+            const maxHeight = 1000; // Maximum height in pixels
+        
+            if (file && file.type.startsWith('image/') && file.size <= maxSizeInBytes) {
+                const img = new Image();
+                img.onload = function() {
+                    if (img.width <= maxWidth && img.height <= maxHeight) {
+                        // Valid dimensions
+                        return true;
+                    } else {
+                        // Invalid dimensions
+                        alert('Please select an image with dimensions up to 1000x1000 pixels.');
+                        fileInput.value = ''; // Clear the file input
+                        return false;
+                    }
+                };
+                img.src = URL.createObjectURL(file);
+            } else {
+                // Invalid file
+                alert('Please select a valid image file under 2MB.');
                 fileInput.value = ''; // Clear the file input
                 return false;
             }

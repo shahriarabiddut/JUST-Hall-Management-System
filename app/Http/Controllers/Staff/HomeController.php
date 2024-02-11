@@ -156,7 +156,13 @@ class HomeController extends Controller
         $request->validate([
             'value' => 'required',
         ]);
-        $data->value = $request->value;
+        if ($id == 4 || $id == 5) {
+            if ($request->hasFile('value')) {
+                $data->value = 'storage/app/public/' . $request->file('value')->store('Website', 'public');
+            }
+        } else {
+            $data->value = $request->value;
+        }
         $data->save();
 
         return redirect()->route('staff.settings.index')->with('success', 'Settings has been updated Successfully!');
