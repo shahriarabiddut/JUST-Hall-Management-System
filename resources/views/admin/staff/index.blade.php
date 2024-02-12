@@ -29,7 +29,7 @@
                             <th>#</th>
                             <th>Photo</th>
                             <th>Name</th>
-                            <th>Email</th>
+                            <th>Hall</th>
                             <th>Type</th>
                             <th>Action</th>
                         </tr>
@@ -39,7 +39,7 @@
                             <th>#</th>
                             <th>Photo</th>
                             <th>Name</th>
-                            <th>Email</th>
+                            <th>Hall</th>
                             <th>Type</th>
                             <th>Action</th>
                         </tr>
@@ -55,7 +55,10 @@
                                 alt=""
                             /></td>
                             <td>{{ $d->name }}</td>
-                            <td>{{ $d->email }}</td>
+                            <td>
+                                @if ($d->hall!=null)
+                                {{ $d->hall->title }}
+                                @endif</td>
                             <td>{{ $d->type }}</td>
                             
                             

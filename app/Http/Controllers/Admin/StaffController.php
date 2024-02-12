@@ -5,13 +5,8 @@ namespace App\Http\Controllers\Admin;
 use Carbon\Carbon;
 use App\Models\Hall;
 use App\Models\Staff;
-use App\Models\Department;
-use App\Models\StaffPayment;
-
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Staff\HistoryController;
 
 class StaffController extends Controller
 {
@@ -31,8 +26,8 @@ class StaffController extends Controller
     public function create()
     {
         //
-        $hall = Hall::all();
-        return view('admin.staff.create', ['hall' => $hall]);
+        $halls = Hall::all();
+        return view('admin.staff.create', ['halls' => $halls]);
     }
 
     /**
@@ -45,7 +40,9 @@ class StaffController extends Controller
         $request->validate([
             'email' => 'required|email|unique:staff',
             'type' => 'required',
+            'hall_id' => 'required',
         ]);
+        $data->hall_id = $request->hall_id;
         $data->email = $request->email;
         $data->password = bcrypt($request->email);
         $data->type = $request->type;
@@ -75,10 +72,11 @@ class StaffController extends Controller
     {
         //
         $data = Staff::find($id);
+        $halls = Hall::all();
         if ($data == null) {
             return redirect()->route('admin.staff.index')->with('danger', 'Not Found!');
         }
-        return view('admin.staff.edit', ['data' => $data]);
+        return view('admin.staff.edit', ['data' => $data, 'halls' => $halls]);
     }
 
     /**
@@ -94,8 +92,9 @@ class StaffController extends Controller
             'address' => 'required',
             'phone' => 'required',
             'type' => 'required',
+            'hall_id' => 'required',
         ]);
-
+        $data->hall_id = $request->hall_id;
         $data->name = $request->name;
         $data->bio = $request->bio;
         $data->address = $request->address;
