@@ -50,7 +50,7 @@ class StudentController extends Controller
         $data->email = $request->email;
         $data->mobile = $request->mobile;
         $data->rollno = $request->rollno;
-
+        $data->ms = $request->ms;
 
         //If user Given address
         if ($request->has('address')) {
@@ -125,7 +125,7 @@ class StudentController extends Controller
         $data->email = $request->email;
         $data->mobile = $request->mobile;
         $data->rollno = $request->rollno;
-
+        $data->ms = $request->ms;
         //If user Given address
         if ($request->has('address')) {
             $data->address = $request->address;
@@ -172,36 +172,52 @@ class StudentController extends Controller
         $rows = array_map("str_getcsv", explode("\n", $csvData));
         $header = array_shift($rows);
         $length = count($rows);
+        $importedStudents = 0;
         $errorEmails = [];
         foreach ($rows as $key => $row) {
             if ($key != $length - 1) {
                 $row = array_combine($header, $row);
+                // dd($row);
                 $email = $row['email'];
                 $rollno = $row['rollno'];
-                dd($row['email']);
+                //check ms or not
+                if (preg_match('/^\d+$/', $rollno)) {
+                    $ms = 0;
+                } else {
+                    $ms = 1;
+                }
+                //
+                $rollnoMain = str_replace(' ', '', $rollno);
                 $data = Student::where('email', $email)->first();
-                $data2 = Student::where('rollno', $rollno)->first();
+                $data2 = Student::where('rollno', $rollnoMain)->first();
                 if ($data == null && $data2 == null) {
                     $StudentData =  Student::create([
-                        'rollno' => $row['rollno'],
+                        'rollno' => $rollnoMain,
                         'name' => $row['name'],
-                        'email' => $row['email'],
+                        'email' => $email,
                         'dept' => $row['dept'],
                         'session' => $row['session'],
+                        'ms' => $ms,
                         'password' => bcrypt($row['rollno']),
                     ]);
                     //Creating Balance account for student
                     $BalanceController = new BalanceController();
                     $BalanceController->store($StudentData->id);
+                    //
+                    $importedStudents++;
                 } else {
-                    $errorEmails[] = $email;
+                    if ($data != null) {
+                        $errorEmails[] = $email;
+                    } else {
+                        $errorEmails[] = 'rollno :' . $rollno;
+                    }
                 }
             }
         }
         if ($errorEmails == null) {
-            return redirect()->route('admin.student.index')->with('success', 'Student Data has been imported Successfully!');
+            return redirect()->route('admin.student.index')->with('success', 'Total ' . $importedStudents . ' Student Data have been imported Successfully!');
         } else {
-            return redirect()->route('admin.student.index')->with('success', 'Student Data has been imported Successfully!')->with('danger-email', $errorEmails);
+            return redirect()->route('admin.student.index')->with('success', 'Total ' . $importedStudents . ' Student Data have been imported Successfully!')->with('danger-email', $errorEmails);
         }
     }
 }

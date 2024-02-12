@@ -14,12 +14,22 @@
                 <table class="table table-bordered" width="100%">
                         <tr>
                             <th>Photo</th>
-                            <td><img width="100" src="{{$data->photo ? asset('storage/'.$data->photo) : url('storage/images/user.png')}}" alt="User Photo"></td>
+                            <td><img width="100" src="{{$data->photo ? asset('storage/'.$data->photo) : url('images/user.png')}}" alt="User Photo"></td>
                         </tr>
                         <tr>
                             <th>Roll No </th>
                                  <td>{{ $data->rollno }}</td>
-                             </tr>
+                        </tr>
+                        <tr>
+                            <th>Student Type </th>
+                            <td>
+                                @if($data->ms==0)
+                                Honours
+                                @else
+                                Masters
+                                @endif
+                            </td>
+                        </tr>
                         <tr>
                        <th>Full Name </th>
                             <td>{{ $data->name }}</td>

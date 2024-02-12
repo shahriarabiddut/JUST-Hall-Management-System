@@ -40,8 +40,11 @@
                                     @case($data->name=='systemname')
                                         Dashboard Header Title
                                     @break
-                                    @case($data->name=='print')
-                                        Print
+                                    @case($data->name=='systemname')
+                                        Dashboard Header Title
+                                    @break
+                                    @case($data->name=='masters_fixed_cost')
+                                        Masters Fixed Cost Charge
                                     @break
                                     @default
                                         {{ $data->name }}
@@ -50,7 +53,7 @@
                             </th>
                             <td width="40%">
                                 @switch($data->name)
-                                    @case($data->name=='print')
+                                    @case('print')
                                     <div class="form-check form-check-inline bg-danger py-2 px-3 text-white rounded-pill">
                                         <input class="form-check-input" type="radio" name="value" id="exampleRadios1" value="0" @if($data->value==0) @checked(true) @endif>
                                         <label class="form-check-label" for="exampleRadios1">
@@ -64,7 +67,7 @@
                                         </label>
                                       </div>
                                     @break
-                                    @case($data->id==10)
+                                    @case('Printing Secret')
                                     <input required name="value" type="password" class="form-control" value="" placeholder="Enter Secret Value">
                                     @break
                                     @default

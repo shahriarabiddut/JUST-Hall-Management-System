@@ -28,9 +28,9 @@
     <li class="nav-item">
         <a class="nav-link @if(!request()->is('staff/roomtype*')) collapsed @endif" href="#" data-toggle="collapse" data-target="#collapseRoomType"
             aria-expanded="true" aria-controls="collapseRoomType">
-            <i class="fas fa-fw fa-table"></i>
+            <i class="fas fa-fw fa-hotel"></i>
             <span>Room Type</span>
-        </a>
+        </a> 
         <div id="collapseRoomType" class="collapse @if(request()->is('staff/roomtype*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Room Type Management</h6>
@@ -43,7 +43,7 @@
 <li class="nav-item">
     <a class="nav-link @if(!request()->is('staff/rooms*')) collapsed @endif" href="#" data-toggle="collapse" data-target="#collapseRoom"
         aria-expanded="true" aria-controls="collapseRoom">
-        <i class="fas fa-fw fa-table"></i>
+        <i class="fas fa-fw fa-hotel"></i>
         <span>Room</span>
     </a>
     <div id="collapseRoom" class="collapse @if(request()->is('staff/rooms*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">

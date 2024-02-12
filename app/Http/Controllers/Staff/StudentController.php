@@ -41,9 +41,7 @@ class StudentController extends Controller
         //Saved
         return redirect()->route('staff.balance.index')->with('success', 'Fixed Cost Charged Successfully!');
     }
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
 

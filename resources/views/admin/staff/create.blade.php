@@ -33,29 +33,7 @@
                         </tr>
                     <tr>
                         <th>Email <span class="text-danger">*</span></th>
-                        <td><input required name="email" type="email" class="form-control"></td>
-                    </tr>
-                    <tr>
-                    <th>Password <span class="text-danger">*</span></th>
-                        <td><input required name="password" type="password" class="form-control"></td>
-                    </tr>
-                    <tr>
-                   <th>Full Name <span class="text-danger">*</span></th>
-                        <td><input required name="name" type="text" class="form-control"></td>
-                    </tr><tr>
-                        <th>Photo</th>
-                        <td><input name="photo" type="file"></td>
-                    </tr><tr>
-                        <th>Bio</th>
-                        <td><textarea name="bio" class="form-control"></textarea></td>
-                    </tr><tr>
-                        <th>Address <span class="text-danger">*</span></th>
-                        <td>
-                            <input required name="address" type="text" class="form-control">
-                        </td>
-                    </tr><tr>
-                        <th>Phone Number<span class="text-danger">*</span></th>
-                        <td><input required name="phone" type="text" class="form-control" maxlength="11"></td>
+                        <td><input required name="email" type="email" class="form-control" value="{{ old('email') }}"></td>
                     </tr>
                     <tr>
                         <td colspan="2">

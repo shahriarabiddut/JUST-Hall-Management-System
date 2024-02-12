@@ -41,25 +41,11 @@ class StaffController extends Controller
         //
         $data = new Staff;
         $request->validate([
-            'name' => 'required',
             'email' => 'required|email|unique:staff',
-            'password' => 'required',
-            'name' => 'required',
-            'bio' => 'required',
-            'address' => 'required',
-            'phone' => 'required',
-            'photo' => 'required',
             'type' => 'required',
         ]);
-        $imgpath = $request->file('photo')->store('StaffPhoto', 'public');
-
-        $data->name = $request->name;
         $data->email = $request->email;
-        $data->password = bcrypt($request->password);
-        $data->photo = 'app/public/' . $imgpath;
-        $data->bio = $request->bio;
-        $data->address = $request->address;
-        $data->phone = $request->phone;
+        $data->password = bcrypt($request->email);
         $data->type = $request->type;
 
         $data->save();

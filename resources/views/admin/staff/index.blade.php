@@ -51,7 +51,7 @@
                             <td>{{ ++$key }}</td>
                             <td><img width="100"
                                 class=""
-                                src="{{$d->photo ? asset('storage/'.$d->photo) : url('storage/images/user.png')}}"
+                                src="{{$d->photo ? asset('storage/'.$d->photo) : url('images/user.png')}}"
                                 alt=""
                             /></td>
                             <td>{{ $d->name }}</td>

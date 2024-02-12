@@ -44,7 +44,7 @@
                         <td><input required name="mobile" type="text" class="form-control" value="{{ $data->mobile }}" maxlength="11"></td>
                     </tr><tr>
                         <th>Photo</th>
-                        <td><input name="photo" type="file">
+                        <td><input name="photo" type="file" accept="image/*" >
                             <input name="prev_photo" type="hidden" value="{{ $data->photo }}">
                             <img width="100" src="{{$data->photo ? asset('storage/'.$data->photo) : ''}}" >
                         </td>

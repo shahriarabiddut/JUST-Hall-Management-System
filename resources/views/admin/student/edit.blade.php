@@ -27,6 +27,13 @@
                         <td><input required name="session" type="text" class="form-control" value="{{ $data->session }}"></td>
                     </tr>
                     <tr>
+                        <th>Masters <span class="text-danger">*</span></th>
+                        <td><select name="ms" id="" required class="form-control">
+                            <option @if($data->ms==1) selected @endif  value="1"> Yes </option>
+                            <option @if($data->ms==0) selected @endif   value="0"> No </option>
+                        </select></td>
+                    </tr>
+                    <tr>
                         <th>Full Name <span class="text-danger">*</span></th>
                         <td><input required name="name" type="text" class="form-control" value="{{ $data->name }}"></td>
                     </tr><tr>
@@ -37,7 +44,7 @@
                         <td><input required name="mobile" type="text" class="form-control" value="{{ $data->mobile }}" maxlength="11"></td>
                     </tr><tr>
                         <th>Photo</th>
-                        <td><input name="photo" type="file">
+                        <td><input name="photo" type="file" accept="image/*" >
                             <input name="prev_photo" type="hidden" value="{{ $data->photo }}">
                             <img width="100" src="{{$data->photo ? asset('storage/'.$data->photo) : ''}}" >
                         </td>

@@ -17,7 +17,28 @@
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
+    <hr class="sidebar-divider">
 
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Hall Room System
+    </div>
+
+    <!-- Nav Item Room Type - Pages Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link @if(!request()->is('admin/hall*')) collapsed @endif" href="#" data-toggle="collapse" data-target="#collapseHall"
+            aria-expanded="true" aria-controls="collapseHall">
+            <i class="fas fa-fw fa-hotel"></i>
+            <span>Halls</span>
+        </a>
+        <div id="collapseHall" class="collapse @if(request()->is('admin/hall*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Hall Management</h6>
+                <a class="collapse-item" href="{{ route('admin.hall.index') }}">View All</a>
+                <a class="collapse-item" href="{{ route('admin.hall.create') }}">Add new</a>
+            </div>
+        </div>
+    </li>
     <!-- Divider -->
     <hr class="sidebar-divider">
 

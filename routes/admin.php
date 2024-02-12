@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\RoomTypeController;
 use App\Http\Controllers\Admin\FoodTimeController;
 use App\Http\Controllers\Admin\AllocatedSeatController;
 use App\Http\Controllers\Admin\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Admin\HallController;
 
 //Admin
 Route::namespace('Admin')->prefix('admin')->name('admin.')->group(function () {
@@ -105,4 +106,10 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
     Route::get('food/{id}/disable', [FoodController::class, 'disable']);
     Route::get('food/{id}/delete', [FoodController::class, 'destroy']);
     Route::resource('food', FoodController::class);
+
+    // Foodtime Crud
+    Route::get('hall/{id}/active', [HallController::class, 'active']);
+    Route::get('hall/{id}/disable', [HallController::class, 'disable']);
+    Route::get('hall/{id}/delete', [HallController::class, 'destroy']);
+    Route::resource('hall', HallController::class);
 });

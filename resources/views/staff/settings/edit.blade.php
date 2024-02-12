@@ -88,7 +88,7 @@
                     @method('PUT')
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <tbody>
-                        <tr>
+                        <tr> 
                             <th width="30%">Website Favicon</th>
                             <td width="50%"><input required name="value" type="file" class="form-control" accept="image/*" id="fileInput" onchange="previewImage(event,'imagePreview2')" > <br> <img width="100" id="imagePreview2" src="{{asset($datas[4]->value)}}" >
                             </td>

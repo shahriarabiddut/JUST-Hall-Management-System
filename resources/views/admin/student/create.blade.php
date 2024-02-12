@@ -44,8 +44,14 @@
                         <th>Mobile No <span class="text-danger">*</span></th>
                         <td><input required name="mobile" type="text" class="form-control" maxlength="11"></td>
                     </tr><tr>
+                        <th>Masters <span class="text-danger">*</span></th>
+                        <td><select required name="ms" id="" required class="form-control">
+                            <option value="1"> Yes </option>
+                            <option value="0"> No </option>
+                        </select></td>
+                    </tr><tr>
                         <th>Photo</th>
-                        <td><input name="photo" type="file"></td>
+                        <td><input name="photo" type="file" accept="image/*" ></td>
                     </tr><tr>
                         <th>Address</th>
                         <td><textarea name="address" class="form-control"></textarea></td>

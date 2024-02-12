@@ -33,7 +33,7 @@
                         </tr>
                     <tr>
                         <th>Email <span class="text-danger">*</span></th>
-                        <td><input required name="email" type="email" class="form-control"></td>
+                        <td><input required name="email" type="email" class="form-control" value="{{ old('email') }}"></td>
                     </tr>
                     <tr>
                         <td colspan="2">

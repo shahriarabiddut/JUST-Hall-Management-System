@@ -14,7 +14,7 @@
                 <table class="table table-bordered" width="100%">
                         <tr>
                             <th>Photo</th>
-                            <td><img width="100" src="{{$data->photo ? asset('storage/'.$data->photo) : url('storage/images/user.png')}}" alt="User Photo"></td>
+                            <td><img width="100" src="{{$data->photo ? asset('storage/'.$data->photo) : url('images/user.png')}}" alt="User Photo"></td>
                         </tr>
                         <tr>
                             <th>Roll No </th>
