@@ -45,6 +45,11 @@ class HallController extends Controller
         $data->staff_id = $request->staff_id;
         $data->status = $request->status;
         $data->save();
+        //Staff
+        $dataStaff = Staff::find($request->staff_id);
+        $dataStaff->hall_id = $data->id;
+        $dataStaff->save();
+        //
 
         return redirect('admin/hall')->with('success', 'Hall Data has been added Successfully!');
     }
@@ -89,6 +94,16 @@ class HallController extends Controller
         $data = Hall::find($id);
         $data->title = $request->title;
         $data->staff_id = $request->staff_id;
+        if ($request->staff_id != $request->staff_id_old) {
+            //Staff
+            $dataStaff = Staff::find($request->staff_id);
+            $dataStaff->hall_id = $data->id;
+            $dataStaff->save();
+            //Update Previous Provost
+            $dataStaff2 = Staff::find($request->staff_id_old);
+            $dataStaff2->hall_id = 0;
+            $dataStaff2->save();
+        }
         $data->save();
         return redirect('admin/hall')->with('success', 'Hall Data has been updated Successfully!');
     }

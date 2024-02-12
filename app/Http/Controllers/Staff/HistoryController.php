@@ -2,15 +2,33 @@
 
 namespace App\Http\Controllers\Staff;
 
-use App\Http\Controllers\Controller;
 use App\Models\History;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class HistoryController extends Controller
 {
+    protected $hall_id;
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->hall_id = Auth::guard('staff')->user()->hall_id;
+            if ($this->hall_id == 0 || $this->hall_id == null) {
+                return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+            }
+            if (Auth::guard('staff')->user()->type == 'provost') {
+                return $next($request);
+                // return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+            } else {
+                return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+                return $next($request);
+            }
+        });
+    }
     public function index()
     {
-        $data = History::latest()->get();
+        $data = History::latest()->where('hall_id', $this->hall_id)->get();
         return view('staff.history.index', ['data' => $data]);
     }
     public function show(string $id)
@@ -44,6 +62,17 @@ class HistoryController extends Controller
         $dataHistory->data = $data;
         $dataHistory->flag = $flag;
         $dataHistory->status = 0;
+        $dataHistory->save();
+    }
+    public function addHistoryHall(string $staff_id, string $flag, string $data, string $hall_id)
+    {
+        //
+        $dataHistory = new History();
+        $dataHistory->staff_id = $staff_id;
+        $dataHistory->data = $data;
+        $dataHistory->flag = $flag;
+        $dataHistory->status = 0;
+        $dataHistory->hall_id = $hall_id;
         $dataHistory->save();
     }
 }

@@ -57,7 +57,7 @@
                                     @selected(true)
                                 @endif
                                  value="provost">Provost</option>
-                                 <option @if ($data->type=='provost')
+                                 <option @if ($data->type=='aprovost')
                                     @selected(true)
                                 @endif
                                  value="aprovost">Assistant Provost</option>

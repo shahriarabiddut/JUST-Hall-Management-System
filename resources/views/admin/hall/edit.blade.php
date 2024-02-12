@@ -34,6 +34,7 @@
                             </tr>  
                     <tr>
                         <td colspan="2">
+                            <input type="hidden" name="staff_id_old" value="{{ $data->staff_id }}">
                             <button type="submit" class="btn btn-primary">Update</button>
                         </td>
                     </tr>

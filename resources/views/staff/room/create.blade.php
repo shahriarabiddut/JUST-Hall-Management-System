@@ -44,29 +44,28 @@
             </div>
         </div>
     </div>
-
     @section('scripts')
     <script>
         // Function to extract and update number
-        function updateNumber() {
-            // Get the sentence text
-            let sentence = document.getElementById('type').value;
-        
-            // Use regular expression to extract the number
-            let extractedNumber = sentence.match(/\d+(\.\d+)?/);
-        
-            // Check if a number is found
-            if (extractedNumber) {
-                // Update the input value with the extracted number
-                document.getElementById('numberInput').value = extractedNumber[0];
-            }
+        function extractNumberAndDisplay() {
+            var selectElement = document.getElementById("type");
+            var selectedOption = selectElement.options[selectElement.selectedIndex];
+            var selectedText = selectedOption.textContent;
+            
+            // Extract number from selected text
+            var numberPattern = /\d+/;
+            var number = selectedText.match(numberPattern);
+
+            // Display number in input field
+            var numberInput = document.getElementById("numberInput");
+            numberInput.value = number;
         }
 
         // Add event listener to detect changes in the select input
-        document.getElementById('type').addEventListener('change', updateNumber);
+        document.getElementById('type').addEventListener('change', extractNumberAndDisplay);
 
         // Initial call to set the initial value
-        updateNumber();
+        extractNumberAndDisplay();
     </script>
 
     @endsection

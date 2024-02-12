@@ -10,9 +10,14 @@ use Illuminate\Support\Facades\Auth;
 
 class RoomController extends Controller
 {
+    protected $hall_id;
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
+            $this->hall_id = Auth::guard('staff')->user()->hall_id;
+            if ($this->hall_id == 0 || $this->hall_id == null) {
+                return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+            }
             if (Auth::guard('staff')->user()->type == 'provost') {
                 return $next($request);
                 // return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
@@ -27,7 +32,7 @@ class RoomController extends Controller
     //
     public function index()
     {
-        $data = Room::all();
+        $data = Room::all()->where('hall_id', $this->hall_id);
         return view('staff.room.index', ['data' => $data]);
     }
 
@@ -48,6 +53,7 @@ class RoomController extends Controller
     {
         //
         $data = new Room;
+        $data->hall_id = $this->hall_id;
         $data->room_type_id = $request->rt_id;
         $data->title = $request->title;
         $data->totalseats = $request->totalseats;
@@ -64,7 +70,7 @@ class RoomController extends Controller
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistory($staff_id, 'add', 'Room ' . $data->title . ' has been added Successfully!');
+        $HistoryController->addHistoryHall($staff_id, 'add', 'Room ' . $data->title . ' has been added Successfully!', $this->hall_id);
         //Saved
 
         return redirect()->route('staff.rooms.index')->with('success', 'Room has been added Successfully!');
@@ -80,6 +86,9 @@ class RoomController extends Controller
         if ($data == null) {
             return redirect()->route('staff.rooms.index')->with('danger', 'Not Found!');
         }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.rooms.index')->with('danger', 'Not Permitted!');
+        }
         return view('staff.room.show', ['data' => $data]);
     }
 
@@ -94,6 +103,9 @@ class RoomController extends Controller
         if ($data == null) {
             return redirect()->route('staff.rooms.index')->with('danger', 'Not Found!');
         }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.rooms.index')->with('danger', 'Not Permitted!');
+        }
         return view('staff.room.edit', ['data' => $data, 'roomtypes' => $roomtypes]);
     }
 
@@ -104,14 +116,15 @@ class RoomController extends Controller
     {
         //
         $data = Room::find($id);
-        $data->room_type_id = $request->rt_id;
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.rooms.index')->with('danger', 'Not Permitted!');
+        }
         $data->title = $request->title;
-        $data->totalseats = $request->totalseats;
         $data->save();
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistory($staff_id, 'update', 'Room ' . $data->title . ' has been updated Successfully!');
+        $HistoryController->addHistoryHall($staff_id, 'update', 'Room ' . $data->title . ' has been updated Successfully!', $this->hall_id);
         //Saved
         return redirect()->route('staff.rooms.index')->with('success', 'Room has been updated Successfully!');
     }
@@ -125,11 +138,14 @@ class RoomController extends Controller
         if ($data == null) {
             return redirect()->route('staff.rooms.index')->with('danger', 'Not Found!');
         }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.rooms.index')->with('danger', 'Not Permitted!');
+        }
         $data->delete();
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistory($staff_id, 'delete', 'Room ' . $data->title . ' has been deleted Successfully!');
+        $HistoryController->addHistoryHall($staff_id, 'delete', 'Room ' . $data->title . ' has been deleted Successfully!', $this->hall_id);
         //Saved
         return redirect()->route('staff.rooms.index')->with('danger', 'Room has been deleted Successfully!');
     }
@@ -182,10 +198,11 @@ class RoomController extends Controller
                         'room_type_id' => $roomType,
                         'totalseats' => $totalseats,
                         'vacancy' => $totalseats,
-                        'positions' => $positions
+                        'positions' => $positions,
+                        'hall_id' => $this->hall_id
                     ]);
                     $importedStudents++;
-                } elseif ($data->totalseats < $totalseats) {
+                } elseif ($data->totalseats < $totalseats && $data->hall_id == $this->hall_id) {
                     $data->positions = $positions;
                     $data->totalseats = $totalseats;
                     $data->vacancy = $totalseats;
@@ -198,7 +215,7 @@ class RoomController extends Controller
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistory($staff_id, 'add', 'Today ' . $importedStudents++ . ' Rooms has been imported Successfully!');
+        $HistoryController->addHistoryHall($staff_id, 'add', 'Today ' . $importedStudents++ . ' Rooms has been imported Successfully!', $this->hall_id);
         //Saved
         if ($errorTitles == null) {
             return redirect()->route('staff.rooms.index')->with('success', 'Today ' . $importedStudents++ . ' Rooms has been imported Successfully!');

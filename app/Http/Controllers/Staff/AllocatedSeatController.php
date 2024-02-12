@@ -19,6 +19,9 @@ class AllocatedSeatController extends Controller
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
+            if (Auth::guard('staff')->user()->hall_id == 0 || Auth::guard('staff')->user()->hall_id == null) {
+                return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+            }
             if (Auth::guard('staff')->user()->type == 'provost') {
                 return $next($request);
                 // return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
