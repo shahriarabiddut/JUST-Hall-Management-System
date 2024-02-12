@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('data');
             $table->integer('status')->nullable();
             $table->string('flag')->nullable();
+            $table->integer('hall_id')->references('id')->on('halls')->nullable();
             $table->timestamps();
         });
     }

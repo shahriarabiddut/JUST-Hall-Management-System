@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use Carbon\Carbon;
+use App\Models\Hall;
 use App\Models\Staff;
 use App\Models\Department;
 use App\Models\StaffPayment;
-use Illuminate\Http\Request;
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Staff\HistoryController;
@@ -30,7 +31,8 @@ class StaffController extends Controller
     public function create()
     {
         //
-        return view('admin.staff.create');
+        $hall = Hall::all();
+        return view('admin.staff.create', ['hall' => $hall]);
     }
 
     /**

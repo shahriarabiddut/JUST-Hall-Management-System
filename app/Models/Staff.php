@@ -41,4 +41,8 @@ class Staff extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    function hall()
+    {
+        return $this->belongsTo(Hall::class, 'hall_id');
+    }
 }

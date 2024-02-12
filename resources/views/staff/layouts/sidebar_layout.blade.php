@@ -17,6 +17,7 @@
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
+@if (Auth::guard('staff')->user()->hall_id!=0 && Auth::guard('staff')->user()->hall_id!=null)
     @if (Auth::guard('staff')->user()->type == 'provost')
     <!-- Divider -->
     <hr class="sidebar-divider">
@@ -24,31 +25,17 @@
     <div class="sidebar-heading">
         Hall Rooms
     </div>
-    <!-- Nav Item Room Type - Pages Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link @if(!request()->is('staff/roomtype*')) collapsed @endif" href="#" data-toggle="collapse" data-target="#collapseRoomType"
-            aria-expanded="true" aria-controls="collapseRoomType">
-            <i class="fas fa-fw fa-hotel"></i>
-            <span>Room Type</span>
-        </a> 
-        <div id="collapseRoomType" class="collapse @if(request()->is('staff/roomtype*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Room Type Management</h6>
-                <a class="collapse-item" href="{{ route('staff.roomtype.index') }}">View All</a>
-                <a class="collapse-item" href="{{ route('staff.roomtype.create') }}">Add new</a>
-            </div>
-        </div>
-    </li>
 <!-- Nav Item Room - Pages Collapse Menu -->
 <li class="nav-item">
-    <a class="nav-link @if(!request()->is('staff/rooms*')) collapsed @endif" href="#" data-toggle="collapse" data-target="#collapseRoom"
+    <a class="nav-link @if(!request()->is('staff/rooms*') || !request()->is('staff/roomtype*')) collapsed @endif" href="#" data-toggle="collapse" data-target="#collapseRoom"
         aria-expanded="true" aria-controls="collapseRoom">
         <i class="fas fa-fw fa-hotel"></i>
         <span>Room</span>
     </a>
-    <div id="collapseRoom" class="collapse @if(request()->is('staff/rooms*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+    <div id="collapseRoom" class="collapse @if(request()->is('staff/rooms*') || request()->is('staff/roomtype*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Room Management</h6>
+            <a class="collapse-item" href="{{ route('staff.roomtype.index') }}">Room Types</a>
             <a class="collapse-item" href="{{ route('staff.rooms.index') }}">View All</a>
             <a class="collapse-item" href="{{ route('staff.rooms.create') }}">Add new</a>
         </div>
@@ -257,7 +244,7 @@
     @endif
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
-
+@endif
     <!-- Sidebar Toggler (Sidebar - Logout - CopyRight) -->
     @include('../layouts/sidebar_toggle')
     <!-- End Sidebar Toggler (Sidebar - Logout - CopyRight) -->

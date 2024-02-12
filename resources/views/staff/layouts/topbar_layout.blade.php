@@ -4,9 +4,11 @@
         <i class="fa fa-bars"></i>
         </button>
     <h6 class="sidebar-brand-text mt-2" > 
-    @isset($HallOption)
-        {{ $HallOption[2]->value }}
-    @endisset 
+    @if (Auth::guard('staff')->user()->hall_id!=0 && Auth::guard('staff')->user()->hall_id!=null)
+        {{ Auth::guard('staff')->user()->hall->title }}
+    @else
+        Hall Automation System
+    @endif
     </h6>
     <script>
         if (/Mobi/.test(navigator.userAgent)) {

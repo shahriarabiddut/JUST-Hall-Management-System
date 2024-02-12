@@ -16,7 +16,7 @@ class StaffMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(!Auth::guard('staff')->check()){
+        if (!Auth::guard('staff')->check()) {
             return redirect()->route('staff.login');
         }
         return $next($request);

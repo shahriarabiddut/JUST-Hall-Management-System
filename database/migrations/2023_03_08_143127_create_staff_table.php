@@ -22,6 +22,7 @@ return new class extends Migration
             $table->text('bio')->nullable();
             $table->string('address')->nullable();
             $table->string('phone')->nullable();
+            $table->integer('hall_id')->references('id')->on('halls')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

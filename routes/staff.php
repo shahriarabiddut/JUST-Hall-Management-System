@@ -110,10 +110,8 @@ Route::middleware('userType:aprovost')->prefix('staff')->name('staff.')->group(f
 // Provost Extra
 Route::middleware('userType:provost')->prefix('staff')->name('staff.')->group(function () {
     // RoomTypes Routes
-    Route::get('roomtype/{id}/delete', [RoomTypeController::class, 'destroy']);
-    Route::resource('roomtype', RoomTypeController::class);
-    // Delete RoomType Images
-    Route::get('roomtypeImage/delete/{id}', [RoomTypeController::class, 'destroy_image'])->name('deleteImage');
+    Route::get('roomtype', [RoomTypeController::class, 'index'])->name('roomtype.index');
+    Route::get('roomtype/{id}', [RoomTypeController::class, 'show'])->name('roomtype.show');
 
     // Room Routes
     Route::get('rooms/{id}/delete', [RoomController::class, 'destroy']);
