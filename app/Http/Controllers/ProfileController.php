@@ -231,49 +231,50 @@ class ProfileController extends Controller
         $data->room_id = 0;
         $data->user_id = $request->user_id;
         // New Added
-        $data->banglaname = $request->banglaname;
-        $data->englishname = $request->englishname;
-        $data->fathername = $request->fathername;
-        $data->mothername = $request->mothername;
-        $data->dob = $request->dob;
-        $data->nationality = $request->nationality;
-        $data->religion = $request->religion;
-        $data->maritalstatus = $request->maritalstatus;
-        $data->village = $request->village;
-        $data->postoffice = $request->postoffice;
-        $data->thana = $request->thana;
-        $data->zilla = $request->zilla;
-        $data->parentmobile = $request->parentmobile;
-        $data->mobile = $request->mobile;
-        $data->presentaddress = $request->presentaddress;
-        $data->applicanthouse = $request->applicanthouse;
-        $data->occupation = $request->occupation;
-        $data->ovivabok = $request->ovivabok;
-        $data->ovivabokrelation = $request->ovivabokrelation;
-        $data->ovivabokthikana = $request->ovivabokthikana;
-        $data->ovivabokmobile = $request->ovivabokmobile;
-        $data->department = $request->department;
-        $data->rollno = $request->rollno;
-        $data->registrationno = $request->registrationno;
-        $data->session = $request->session;
-        $data->borsho = $request->borsho;
-        $data->semester = $request->semester;
-        $data->culture = $request->culture;
-        $data->otisitic = $request->otisitic;
+        $arrayData = [];
+        $arrayData['banglaname'] = $request->banglaname;
+        $arrayData['englishname'] = $request->englishname;
+        $arrayData['fathername'] = $request->fathername;
+        $arrayData['mothername'] = $request->mothername;
+        $arrayData['dob'] = $request->dob;
+        $arrayData['nationality'] = $request->nationality;
+        $arrayData['religion'] = $request->religion;
+        $arrayData['maritalstatus'] = $request->maritalstatus;
+        $arrayData['village'] = $request->village;
+        $arrayData['postoffice'] = $request->postoffice;
+        $arrayData['thana'] = $request->thana;
+        $arrayData['zilla'] = $request->zilla;
+        $arrayData['parentmobile'] = $request->parentmobile;
+        $arrayData['mobile'] = $request->mobile;
+        $arrayData['presentaddress'] = $request->presentaddress;
+        $arrayData['applicanthouse'] = $request->applicanthouse;
+        $arrayData['occupation'] = $request->occupation;
+        $arrayData['ovivabok'] = $request->ovivabok;
+        $arrayData['ovivabokrelation'] = $request->ovivabokrelation;
+        $arrayData['ovivabokthikana'] = $request->ovivabokthikana;
+        $arrayData['ovivabokmobile'] = $request->ovivabokmobile;
+        $arrayData['department'] = $request->department;
+        $arrayData['rollno'] = $request->rollno;
+        $arrayData['registrationno'] = $request->registrationno;
+        $arrayData['session'] = $request->session;
+        $arrayData['borsho'] = $request->borsho;
+        $arrayData['semester'] = $request->semester;
+        $arrayData['culture'] = $request->culture;
+        $arrayData['otisitic'] = $request->otisitic;
         //If user Given any PHOTO dobsonod , academic , earningproof , signature
         if ($request->hasFile('dobsonod')) {
-            $data->dobsonod = 'app/public/' . $request->file('dobsonod')->store('HallRequest', 'public');
+            $arrayData['dobsonod'] = 'app/public/' . $request->file('dobsonod')->store('HallRequest', 'public');
         }
         if ($request->hasFile('academic')) {
-            $data->academic = 'app/public/' . $request->file('academic')->store('HallRequest', 'public');
+            $arrayData['academic'] = 'app/public/' . $request->file('academic')->store('HallRequest', 'public');
         }
         if ($request->hasFile('earningproof')) {
-            $data->earningproof = 'app/public/' . $request->file('earningproof')->store('HallRequest', 'public');
+            $arrayData['earningproof'] = 'app/public/' . $request->file('earningproof')->store('HallRequest', 'public');
         }
         if ($request->hasFile('signature')) {
-            $data->signature = 'app/public/' . $request->file('signature')->store('HallRequest', 'public');
+            $arrayData['signature'] = 'app/public/' . $request->file('signature')->store('HallRequest', 'public');
         }
-        //
+        $data->application = json_encode($arrayData);
         //
         $data->status = 3;
         $data->flag = 0;
@@ -286,6 +287,7 @@ class ProfileController extends Controller
     {
         $userid = Auth::user()->id;
         $data = RoomRequest::all()->where('user_id', '=', $userid)->first();
+        $application = json_decode($data->application, true);
         $dataPayment = Payment::all()->where('type', 'roomrequest')->where('student_id', $userid)->first();
         // page redirection
         $dataAllocatedSeats = AllocatedSeats::all()->where('user_id', '=', $userid)->first();
@@ -293,7 +295,7 @@ class ProfileController extends Controller
             if ($dataAllocatedSeats != null) {
                 return redirect()->route('student.myroom');
             } else {
-                return view('profile.room.roomrequestshow', ['data' => $data, 'dataPayment' => $dataPayment]);
+                return view('profile.room.roomrequestshow', ['data' => $data, 'application' => $application, 'dataPayment' => $dataPayment]);
             }
         } else {
             return redirect()->route('student.dashboard')->with('danger', 'No Room Alloacation Request Found!');

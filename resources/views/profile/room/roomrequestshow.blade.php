@@ -38,92 +38,92 @@
                     </tr>
                     <tr>
                         <th> বাংলায়</th>
-                        <td>{{ $data->banglaname }}</td>
+                        <td>{{ $application['banglaname'] }}</td>
                         <th> ইংরেজীতে (বড় অক্ষরে)</th>
-                        <td>{{ $data->englishname }}</td>
+                        <td>{{ $application['englishname'] }}</td>
                     </tr>
                     <tr>
                         <th>০২. পিতার নাম</th>
-                        <td>{{ $data->fathername }}</td>
+                        <td>{{ $application['fathername'] }}</td>
                         <th>০৩. মাতার নাম	</th>
-                        <td>{{ $data->mothername }}</td>
+                        <td>{{ $application['mothername'] }}</td>
                     </tr>
                     <tr>
                         <th>০৪. জন্ম তারিখ</th>
-                        <td>{{ $data->dob }}</td>
+                        <td>{{ $application['dob'] }}</td>
                         <th>০৫. জাতীয়তা	</th>
-                        <td>{{ $data->nationality }}</td>
+                        <td>{{ $application['nationality'] }}</td>
                     </tr>
                     <tr>
                         <th>০৬.ধর্ম</th>
-                        <td>{{ $data->religion }}</td>
+                        <td>{{ $application['religion'] }}</td>
                         <th>০৭. বৈবাহিক অবস্থা</th>
-                        <td>{{ $data->maritalstatus }}</td>
+                        <td>{{ $application['maritalstatus'] }}</td>
                     </tr>
                     <tr>
                         <th colspan="4"> ০৮. স্থায়ী ঠিকানা </th>
                     </tr>
                     <tr>
-                        <td>গ্রাম - {{ $data->village }}</td>
-                        <td>পোষ্ট - {{ $data->postoffice }}</td>
-                        <td>থানা - {{ $data->thana }}</td>
-                        <td>জেলা - {{ $data->zilla }}</td>
+                        <td>গ্রাম - {{ $application['village'] }}</td>
+                        <td>পোষ্ট - {{ $application['postoffice'] }}</td>
+                        <td>থানা - {{ $application['thana'] }}</td>
+                        <td>জেলা - {{ $application['zilla'] }}</td>
                     </tr>
                     <tr>
                         <th>০৯. অভিভাবকের মোবাইল</th>
-                        <td>{{ $data->parentmobile }}</td>
+                        <td>{{ $application['parentmobile'] }}</td>
                         <th>শিক্ষার্থীর মোবাইল</th>
-                        <td>{{ $data->mobile }}</td>
+                        <td>{{ $application['mobile'] }}</td>
                     </tr>
                     <tr>
                         <th>১০. বর্তমান ঠিকানা</th>
-                        <td colspan="3">{{ $data->presentaddress }}</td>
+                        <td colspan="3">{{ $application['presentaddress'] }}</td>
                     </tr>
                     <tr>
                         <th colspan="2">১১. আবেদনকারীর বর্তমান আবাসনের ধরনঃ</th>
-                        <td colspan="2">{{ $data->applicanthouse }}</td>
+                        <td colspan="2">{{ $application['applicanthouse'] }}</td>
                     </tr>
                     <tr>
                         <th colspan="2">১২.পিতা/অভিভাবকের পেশা</th>
-                        <td colspan="2">{{ $data->occupation }}</td>
+                        <td colspan="2">{{ $application['occupation'] }}</td>
                     </tr>
                     <tr>
                         <th colspan="4"> স্থানীয় অভিভাবকের নাম </th>
                     </tr>
                     <tr>
-                        <td>নাম - {{ $data->ovivabok }}</td>
-                        <td>সম্পর্ক - {{ $data->ovivabokrelation }} </td>
-                        <td>ঠিকানা - {{ $data->ovivabokthikana }} </td>
-                        <td>মোবাইল নং - {{ $data->ovivabokmobile }} </td>
+                        <td>নাম - {{ $application['ovivabok'] }}</td>
+                        <td>সম্পর্ক - {{ $application['ovivabokrelation'] }} </td>
+                        <td>ঠিকানা - {{ $application['ovivabokthikana'] }} </td>
+                        <td>মোবাইল নং - {{ $application['ovivabokmobile'] }} </td>
                     </tr>
                     <tr>
                         <th colspan="4"> ১৪. প্রয়োজনীয় তথ্যাবলী </th>
                     </tr>
                     <tr>
                         <th>ক.বিভাগের নামঃ</th>
-                        <td>{{ $data->department }}</td>
+                        <td>{{ $application['department'] }}</td>
                         <th>খ.রোল নংঃ</th>
-                        <td>{{ $data->rollno }}</td>
+                        <td>{{ $application['rollno'] }}</td>
                     </tr>
                     <tr>
                         <th>গ.রেজিস্ট্রেশন নংঃ</th>
-                        <td>{{ $data->registrationno }}</td>
+                        <td>{{ $application['registrationno'] }}</td>
                         <th>ঘ.শিক্ষাবর্ষঃ</th> 
-                        <td>{{ $data->session }}</td>
+                        <td>{{ $application['session'] }}</td>
                     </tr>
                     <tr>
                         <th>ঙ.বর্ষঃ</th>
-                        <td>{{ $data->borsho }}</td>
+                        <td>{{ $application['borsho'] }}</td>
                         <th>চ.সেমিস্টারঃ</th>
-                        <td>{{ $data->semester }}</td>
+                        <td>{{ $application['semester'] }}</td>
                     </tr>
                     <tr>
                         <th colspan="2">খেলাধুলা, নাটক, সংগীত ইত্যাদিতে পারদর্শিতার বিবরণ (প্রমাণ সংযুক্ত করতে হবে)</th>
-                        <td colspan="2">{{ $data->culture }}</td>
+                        <td colspan="2">{{ $application['culture'] }}</td>
                     </tr>
                     <tr>
                         <th colspan="2">শারীরিক প্রতিবন্ধী কি না? (প্রমাণ করতে হবে)</th>
-                        <td colspan="2">{{ $data->otisitic }}</td>
+                        <td colspan="2">{{ $application['otisitic'] }}</td>
                     </tr>
                     
                     <tr>
@@ -131,25 +131,25 @@
                     </tr>
                     <tr>
                         <th>ক) নাগরিক সনদের/জন্ম নিবদ্ধন এর অনুলিপি (ছবি)</th>
-                        <td colspan="3"><img src="{{ asset('storage/'.$data->dobsonod) }}" alt=""></td>
+                        <td colspan="3"><img src="{{ asset('storage/'.$application['dobsonod']) }}" alt=""></td>
 
                         
                     </tr>
                     <tr>
                         <th>খ) সর্বশেষ পরীক্ষার নম্বর পত্রের অনুলিপি/প্রথম বর্ষের ভর্তির কাগজপত্রের অনুলিপি। (ছবি)</th>
-                        <td colspan="3"><img src="{{ asset('storage/'.$data->academic) }}" alt=""></td>
+                        <td colspan="3"><img src="{{ asset('storage/'.$application['academic']) }}" alt=""></td>
                         
                     </tr>
                     <tr>
                         <th>গ) অভিভাবকের মাসিক আয়ের প্রমাণ পত্র। (ছবি)</th>
-                        <td colspan="3"><img src="{{ asset('storage/'.$data->earningproof) }}" alt=""></td>
+                        <td colspan="3"><img src="{{ asset('storage/'.$application['earningproof']) }}" alt=""></td>
                         
                     </tr>
                     <tr>
                         <th width="25%">তারিখঃ</th>
                         <td width="25%">{{ Carbon\Carbon::today()->format('F j , Y') }}</td>
                         <th width="25%">আবেদনকারীর স্বাক্ষর</th>
-                        <td width="25%"><img src="{{ asset('storage/'.$data->signature) }}" alt=""></td>
+                        <td width="25%"><img src="{{ asset('storage/'.$application['signature']) }}" alt=""></td>
                     </tr>
                     <tr>
                         <td colspan="4"> <h5>প্রভোস্ট <br> @isset($HallOption) {{ $HallOption[8]->value }} @endisset <br> যশোর বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয়</h5>

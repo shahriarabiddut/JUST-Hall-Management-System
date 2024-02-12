@@ -261,6 +261,7 @@ class AllocatedSeatController extends Controller
     {
         //
         $data = RoomRequest::find($id);
+        $application = json_decode($data->application, true);
         $rooms = Room::all()->where('vacancy', '!=', 0);
         if ($data == null) {
             return redirect()->route('staff.roomallocation.index')->with('danger', 'Not Found!');
@@ -270,7 +271,7 @@ class AllocatedSeatController extends Controller
         if ($data) {
             $data->flag = 1;
             $data->save();
-            return view('staff.roomallocation.roomrequestshow', ['data' => $data, 'rooms' => $rooms, 'dataPayment' => $dataPayment]);
+            return view('staff.roomallocation.roomrequestshow', ['data' => $data, 'application' => $application, 'rooms' => $rooms, 'dataPayment' => $dataPayment]);
         } else {
             return redirect('staff/roomallocation')->with('danger', 'No Data Found');
         }
