@@ -36,23 +36,23 @@
                   @error('email')
                   <div class="text-bold bg-danger text-center text-white p-2">{{ $message }}</div>
                   @enderror
+                  @error('gender')
+                  <div class="text-bold bg-danger text-center text-white p-2">{{ $message }}</div>
+                  @enderror
                   @error('rollno')
                   <div class="text-bold bg-danger text-center text-white p-2">{{ $message }}</div>
                   @enderror
                   @error('password')
                   <div class="text-bold bg-danger text-center text-white p-2">{{ $message }}</div>
                   @enderror
+                  @error('dept')
+                  <div class="text-bold bg-danger text-center text-white p-2">{{ $message }}</div>
+                  @enderror
+                  @error('session')
+                  <div class="text-bold bg-danger text-center text-white p-2">{{ $message }}</div>
+                  @enderror
                   <h4 class="card-title mt-3 text-center">Create An Account</h4>
-                  {{-- <p class="text-center">Get started with your free account</p>
-                  <p>
-                    <a href="" class="btn btn-block btn-info">
-                      <i class="fab fa-twitter mr-2"></i>Login via Twitter</a>
-                    <a href="" class="btn btn-block btn-primary">
-                      <i class="fab fa-facebook-f mr-2"></i>Login via facebook</a>
-                  </p>
-                  <p class="text-muted font-weight-bold ">
-                    <span>OR</span>
-                  </p> --}}
+                  
                   <form method="POST" action="{{ route('register') }}">
                     @csrf
                     <div class="form-group input-group">
@@ -60,6 +60,28 @@
                         <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                       </div>
                       <input required name="name" class="form-control" placeholder="Full name" type="text" value="{{ old('name') }}">
+                    </div>
+                    <div class="form-group input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-user"></i> </span>
+                      </div>
+                      <select required name="gender" class="form-control room-list">
+                        <option >--- Gender ---</option>
+                        <option value="1"> Male </option>
+                        <option value="0"> Female </option>
+                    </select>
+                    </div>
+                    <div class="form-group input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-pen"></i> </span>
+                      </div>
+                      <input required name="dept" class="form-control" placeholder="Department - CSE , EEE" type="text" value="{{ old('dept') }}">
+                    </div>
+                    <div class="form-group input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text"> <i class="fa fa-clock"></i> </span>
+                      </div>
+                      <input required name="session" class="form-control" placeholder="Example - 2017-18,2018-19" type="text" value="{{ old('session') }}">
                     </div>
                     <div class="form-group input-group">
                       <div class="input-group-prepend">

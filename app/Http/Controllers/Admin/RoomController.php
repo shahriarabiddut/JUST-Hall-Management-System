@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
+use App\Models\Hall;
 use App\Models\Room;
 use App\Models\RoomType;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class RoomController extends Controller
@@ -23,7 +24,8 @@ class RoomController extends Controller
     {
         //
         $roomtypes = RoomType::all();
-        return view('admin.room.create', ['roomtypes' => $roomtypes]);
+        $halls = Hall::all();
+        return view('admin.room.create', ['roomtypes' => $roomtypes, 'halls' => $halls]);
     }
 
     /**
@@ -32,11 +34,18 @@ class RoomController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'title' => 'required',
+            'rt_id' => 'required',
+            'totalseats' => 'required',
+            'hall_id' => 'required',
+        ]);
         $data = new Room;
         $data->room_type_id = $request->rt_id;
         $data->title = $request->title;
         $data->totalseats = $request->totalseats;
         $data->vacancy = $request->totalseats;
+        $data->hall_id = $request->hall_id;
         //
         $positions = [];
         for ($i = 1; $i <= $request->totalseats; $i++) {
@@ -69,6 +78,7 @@ class RoomController extends Controller
     public function edit(string $id)
     {
         //
+
         $roomtypes = RoomType::all();
         $data = Room::find($id);
         if ($data == null) {
@@ -83,10 +93,11 @@ class RoomController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $request->validate([
+            'title' => 'required',
+        ]);
         $data = Room::find($id);
-        $data->room_type_id = $request->rt_id;
         $data->title = $request->title;
-        $data->totalseats = $request->totalseats;
         $data->save();
 
         return redirect('admin/rooms')->with('success', 'Room Data has been updated Successfully!');
@@ -127,6 +138,7 @@ class RoomController extends Controller
                 $row = array_combine($header, $row);
                 $title = $row['title'];
                 $room_type_id = $row['room_type_id'];
+                $hall_id = $row['hall_id'];
                 //
                 if ($room_type_id == 0) {
                     $roomType = 7;
@@ -153,7 +165,8 @@ class RoomController extends Controller
                         'room_type_id' => $roomType,
                         'totalseats' => $totalseats,
                         'vacancy' => $totalseats,
-                        'positions' => $positions
+                        'positions' => $positions,
+                        'hall_id' => $hall_id
                     ]);
                     $importedStudents++;
                 } elseif ($data->totalseats < $totalseats) {

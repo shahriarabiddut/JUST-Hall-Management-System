@@ -33,6 +33,9 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'gender' => ['required', 'string', 'max:255'],
+            'dept' => ['required', 'string', 'max:255'],
+            'session' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'regex:/(.+)@(.+)\.(.+)/i', 'max:255', 'unique:' . User::class],
             'rollno' => ['required', 'integer', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
@@ -46,8 +49,11 @@ class RegisteredUserController extends Controller
         $user = new User;
 
         $user->name = $request->name;
+        $user->dept = $request->dept;
+        $user->session = $request->session;
         $user->email = $request->email;
         $user->rollno = $request->rollno;
+        $user->gender = $request->gender;
         $user->password = Hash::make($request->password);
         if ($request->has('hall_id')) {
             $user->hall_id = $request->hall_id;

@@ -52,6 +52,11 @@ class RoomController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'title' => 'required',
+            'rt_id' => 'required',
+            'totalseats' => 'required',
+        ]);
         $data = new Room;
         $data->hall_id = $this->hall_id;
         $data->room_type_id = $request->rt_id;
@@ -115,6 +120,9 @@ class RoomController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $request->validate([
+            'title' => 'required',
+        ]);
         $data = Room::find($id);
         if ($data->hall_id != $this->hall_id) {
             return redirect()->route('staff.rooms.index')->with('danger', 'Not Permitted!');

@@ -22,6 +22,10 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <tbody>
                     <tr>
+                        <th>Format (Excel)</th>
+                        <td>Column name should be in serial - title,room_type_id,totalseats,hall_id or Error May Occur!</td>
+                    </tr>
+                    <tr>
                         <th style="width: 50%">File</th>
                         <td><input name="file" type="file" ></td>
                     </tr>

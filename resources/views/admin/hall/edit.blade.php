@@ -2,7 +2,7 @@
 @section('title', 'Edit Hall')
 @section('content')
 
-@if(Session::has('danger'))
+    @if(Session::has('danger'))
     <div class="p-3 mb-2 bg-danger text-white">
         <p>{{ session('danger') }} </p>
     </div>

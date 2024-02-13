@@ -12,6 +12,16 @@
             <div class="table-responsive">
                 <table class="table table-bordered" width="100%">
                     <tr>
+                        <th>Hall</th>
+                        <th>
+                            @if ($data->hall==null)
+                                No Hall Assigned
+                            @else
+                            {{ $data->hall->title }}
+                            @endif
+                        </th>
+                    </tr>
+                    <tr>
                         <th>Title</th>
                         <td>{{ $data->title }}</td>
                     </tr>

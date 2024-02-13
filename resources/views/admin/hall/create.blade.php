@@ -36,7 +36,7 @@
                     </tr>
                     <tr>
                         <th> Type <span class="text-danger">*</span></th>
-                            <td><select required name="tyoe" class="form-control room-list">
+                            <td><select required name="type" class="form-control room-list">
                                 <option >--- Select Type ---</option>
                                 <option value="1"> Boys - ছেলেদের হল</option>
                                 <option value="0"> Girls - মেয়েদের হল</option>

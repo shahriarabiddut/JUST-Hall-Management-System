@@ -191,7 +191,7 @@ class ProfileController extends Controller
         $rooms = Room::all()->where('vacancy', '!=', 0);
         $userid = Auth::user()->id;
         $data = RoomRequest::all()->where('user_id', '=', $userid)->first();
-        $halls = Hall::all();
+        $halls = Hall::all()->where('type', Auth::user()->gender);
         $sorryAllocatedSeat = 0;
         if ($data != null) {
             $sorryAllocatedSeat = 1;
