@@ -51,6 +51,7 @@
 
                     <tr>
                         <td colspan="2">
+                            <input type="hidden" name="hall_id" value="{{ $hall_id }}">
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </td>
                     </tr>

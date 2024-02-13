@@ -85,6 +85,7 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
     Route::get('roomallocation/allocate/{id}', [AllocatedSeatController::class, 'RoomRequestAllocate'])->name('roomallocation.RoomRequestAllocate');
     //RoomAllocation CRUD
     Route::get('roomallocation/{id}/delete', [AllocatedSeatController::class, 'destroy']);
+    Route::get('roomallocate/{id}/add', [AllocatedSeatController::class, 'create1'])->name('roomallocation.add');
     Route::resource('roomallocation', AllocatedSeatController::class);
     // Route::get('roomallocation/available-position/{room_id}', [AllocatedSeatController::class,'available_position']);
 

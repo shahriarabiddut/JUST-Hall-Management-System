@@ -7,6 +7,7 @@ use App\Models\Student;
 use Illuminate\Http\Request;
 use App\Models\AllocatedSeats;
 use App\Http\Controllers\Controller;
+use App\Models\Hall;
 use App\Models\RoomRequest;
 use Illuminate\Support\Facades\DB;
 
@@ -19,7 +20,8 @@ class AllocatedSeatController extends Controller
     public function index()
     {
         $data = AllocatedSeats::all();
-        return view('admin.roomallocation.index', ['data' => $data]);
+        $hall = Hall::all();
+        return view('admin.roomallocation.index', ['data' => $data, 'hall' => $hall]);
     }
 
     /**
@@ -27,16 +29,33 @@ class AllocatedSeatController extends Controller
      */
     public function create()
     {
+        return redirect()->route('admin.roomallocation.index');
+        // //Student Data segregation
+        // $unstudents = DB::select("SELECT * FROM users WHERE id NOT IN (SELECT user_id FROM allocated_seats)");
+        // $data = [];
+        // foreach ($unstudents as $student) {
+        //     $data[] = $student;
+        // }
+        // $students = $data;
+        // //Room Data segregation
+        // $rooms = Room::all()->where('vacancy', '!=', 0);
+        // $hall = Hall::all()->where('status', '!=', 0);
+        // return view('admin.roomallocation.create', ['students' => $students, 'rooms' => $rooms, 'hall' => $hall]);
+    }
+    public function create1(string $hall_id)
+    {
         //Student Data segregation
-        $unstudents = DB::select("SELECT * FROM users WHERE id NOT IN (SELECT user_id FROM allocated_seats)");
+        $unstudents = DB::select("SELECT * FROM users WHERE id NOT IN (SELECT user_id FROM allocated_seats) OR hall_id = 0 AND hall_id = $hall_id");
         $data = [];
         foreach ($unstudents as $student) {
-            $data[] = $student;
+            if ($student->hall_id == $hall_id || $student->hall_id == 0 || $student->hall_id == null) {
+                $data[] = $student;
+            }
         }
         $students = $data;
         //Room Data segregation
-        $rooms = Room::all()->where('vacancy', '!=', 0);
-        return view('admin.roomallocation.create', ['students' => $students, 'rooms' => $rooms]);
+        $rooms = Room::all()->where('vacancy', '!=', 0)->where('hall_id', $hall_id);
+        return view('admin.roomallocation.create', ['students' => $students, 'rooms' => $rooms, 'hall_id' => $hall_id]);
     }
     //Get Positions
     public function getPositions($selectedValue)
@@ -61,6 +80,7 @@ class AllocatedSeatController extends Controller
         $data->room_id = $request->room_id;
         $data->user_id = $request->user_id;
         $data->position = $request->position;
+        $data->hall_id = $request->hall_id;
         $data->save();
         // Room Vacancy - 1
         $roomid = $request->room_id;
@@ -100,12 +120,12 @@ class AllocatedSeatController extends Controller
     public function edit(string $id)
     {
         //
-        $students = Student::all();
-        $rooms = Room::all();
         $data = AllocatedSeats::find($id);
         if ($data == null) {
             return redirect()->route('admin.roomallocation.index')->with('danger', 'Not Found!');
         }
+        $students = Student::all()->where('hall_id', $data->hall_id);
+        $rooms = Room::all()->where('hall_id', $data->hall_id);
         return view('admin.roomallocation.edit', ['data' => $data, 'students' => $students, 'rooms' => $rooms]);
     }
 

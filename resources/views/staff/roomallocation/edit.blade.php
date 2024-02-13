@@ -34,10 +34,7 @@
                                 <select required name="room_id" class="form-control room_id" id="select_room" onchange="fetchAndPopulateData()">
                                     <option value="0">--- Select RoomNo ---</option>
                                     @foreach ($rooms as $rm)
-                                    <option @if ($data->room_id==$rm->id)
-                                        @selected(true)
-                                    @endif
-                                     value="{{$rm->id}}">{{$rm->title}}  @if ($data->room_id==$rm->id) (selected) @endif</option>
+                                    <option @if ($data->room_id==$rm->id)@selected(true) @endif value="{{$rm->id}}">{{$rm->title}}  @if ($data->room_id==$rm->id)(old room)@endif</option>
                                     @endforeach
                                 </select>
                             </td>

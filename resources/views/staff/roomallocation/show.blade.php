@@ -23,7 +23,7 @@
                             <td>{{ $data->students->name }} - {{ $data->students->rollno }}</td>
                         </tr><tr>
                             <th>Allocation Date </th>
-                            <td>{{ $data->created_at }} </td>
+                            <td>{{ $data->created_at->format("F j, Y H:i:s") }} </td>
                         </tr><tr>
                             <td colspan="2">
                                 <a href="{{ url('staff/roomallocation/'.$data->id.'/edit') }}" class="float-right btn btn-info btn-sm"><i class="fa fa-edit"> Edit {{ $data->title }} </i></a> 

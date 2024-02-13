@@ -42,7 +42,7 @@ class StudentController extends Controller
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
         $today = Carbon::now();
-        $HistoryController->addHistory($staff_id, 'Fixed Cost Charge', 'Fixed Cost Charged for Month ' . $today->format('F') . '!');
+        $HistoryController->addHistoryHall($staff_id, 'Fixed Cost Charge', 'Fixed Cost Charged for Month ' . $today->format('F') . '!', $this->hall_id);
         //Saved
         return redirect()->route('staff.balance.index')->with('success', 'Fixed Cost Charged Successfully!');
     }
@@ -115,7 +115,7 @@ class StudentController extends Controller
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistory($staff_id, 'add', 'Student (' . $data->rollno . ' ) - ' . $data->name . ' has been added Successfully!');
+        $HistoryController->addHistoryHall($staff_id, 'add', 'Student (' . $data->rollno . ' ) - ' . $data->name . ' has been added Successfully!', $this->hall_id);
         //Saved
         //Created
         return redirect()->route('staff.student.index')->with('success', 'Student has been added Successfully!');
@@ -192,7 +192,7 @@ class StudentController extends Controller
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistory($staff_id, 'update', 'Student (' . $data->rollno . ' ) - ' . $data->name . ' has been updated Successfully!');
+        $HistoryController->addHistoryHall($staff_id, 'update', 'Student (' . $data->rollno . ' ) - ' . $data->name . ' has been updated Successfully!', $this->hall_id);
         //Saved
         return redirect()->route('staff.student.index')->with('success', 'Student has been updated Successfully!');
     }
@@ -222,11 +222,11 @@ class StudentController extends Controller
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
         if ($AllocatedSeat != null) {
-            $HistoryController->addHistory($staff_id, 'delete', 'Student (' . $data->rollno . ' ) - ' . $data->name . '  and Associated Balance Account has been deleted Successfully! Last Balance was ' . $BalanceAccount->balance_amount . ' . And Allocated Seat no was ' . $AllocatedSeat->position . ' in Room No ' . $AllocatedSeat->rooms->title . ' .');
+            $HistoryController->addHistoryHall($staff_id, 'delete', 'Student (' . $data->rollno . ' ) - ' . $data->name . '  and Associated Balance Account has been deleted Successfully! Last Balance was ' . $BalanceAccount->balance_amount . ' . And Allocated Seat no was ' . $AllocatedSeat->position . ' in Room No ' . $AllocatedSeat->rooms->title . ' .', $this->hall_id);
             $AllocatedSeatController = new AllocatedSeatController();
             $AllocatedSeatController->destroy($AllocatedSeat->id);
         } else {
-            $HistoryController->addHistory($staff_id, 'delete', 'Student (' . $data->rollno . ' ) - ' . $data->name . '  and Associated Balance Account has been deleted Successfully! Last Balance was ' . $BalanceAccount->balance_amount . ' . And No seat was Allocated.');
+            $HistoryController->addHistoryHall($staff_id, 'delete', 'Student (' . $data->rollno . ' ) - ' . $data->name . '  and Associated Balance Account has been deleted Successfully! Last Balance was ' . $BalanceAccount->balance_amount . ' . And No seat was Allocated.', $this->hall_id);
         }
         //Saved
         $data->delete();
@@ -287,7 +287,7 @@ class StudentController extends Controller
                     // Add History 
                     $HistoryController = new HistoryController();
                     $staff_id = Auth::guard('staff')->user()->id;
-                    $HistoryController->addHistory($staff_id, 'add', 'Student (' . $StudentData->rollno . ' ) - ' . $StudentData->name . ' have been added Successfully!');
+                    $HistoryController->addHistoryHall($staff_id, 'add', 'Student (' . $StudentData->rollno . ' ) - ' . $StudentData->name . ' have been added Successfully!', $this->hall_id);
                     //Saved
                 } else {
                     if ($data != null) {
@@ -301,7 +301,7 @@ class StudentController extends Controller
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistory($staff_id, 'add', 'Total ' . $importedStudents . ' Student have been imported Successfully!');
+        $HistoryController->addHistoryHall($staff_id, 'add', 'Total ' . $importedStudents . ' Student have been imported Successfully!', $this->hall_id);
         //Saved
         if ($errorEmails == null) {
             return redirect()->route('staff.student.index')->with('success', 'Total ' . $importedStudents . ' Student Data have been imported Successfully!');

@@ -16,10 +16,12 @@ use Illuminate\Support\Facades\Auth;
 
 class AllocatedSeatController extends Controller
 {
+    protected $hall_id;
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
-            if (Auth::guard('staff')->user()->hall_id == 0 || Auth::guard('staff')->user()->hall_id == null) {
+            $this->hall_id = Auth::guard('staff')->user()->hall_id;
+            if ($this->hall_id == 0 || $this->hall_id == null) {
                 return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
             }
             if (Auth::guard('staff')->user()->type == 'provost') {
@@ -38,7 +40,7 @@ class AllocatedSeatController extends Controller
      */
     public function index()
     {
-        $data = AllocatedSeats::all();
+        $data = AllocatedSeats::all()->where('hall_id', $this->hall_id);
         return view('staff.roomallocation.index', ['data' => $data]);
     }
 
@@ -48,14 +50,16 @@ class AllocatedSeatController extends Controller
     public function create()
     {
         //Student Data segregation
-        $unstudents = DB::select("SELECT * FROM users WHERE id NOT IN (SELECT user_id FROM allocated_seats)");
+        $unstudents = DB::select("SELECT * FROM users WHERE id NOT IN (SELECT user_id FROM allocated_seats) OR hall_id = 0 AND hall_id = $this->hall_id");
         $data = [];
         foreach ($unstudents as $student) {
-            $data[] = $student;
+            if ($student->hall_id == $this->hall_id || $student->hall_id == 0 || $student->hall_id == null) {
+                $data[] = $student;
+            }
         }
         $students = $data;
         //Room Data segregation
-        $rooms = Room::all()->where('vacancy', '!=', 0);
+        $rooms = Room::all()->where('vacancy', '!=', 0)->where('hall_id', $this->hall_id);
         return view('staff.roomallocation.create', ['students' => $students, 'rooms' => $rooms]);
     }
 
@@ -79,12 +83,10 @@ class AllocatedSeatController extends Controller
             'user_id' => 'required',
             'position' => 'required',
         ]);
-
-
         $data->room_id = $request->room_id;
         $data->user_id = $request->user_id;
         $data->position = $request->position;
-        //
+        $data->hall_id = $this->hall_id;
         $data->save();
         // Room Vacancy - 1
         $roomid = $request->room_id;
@@ -100,13 +102,12 @@ class AllocatedSeatController extends Controller
         $room->positions = $jsonData;
         // Removed
         $room->save();
-        // 
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistory($staff_id, 'allocation', 'Student (' . $data->students->rollno . ' ) - ' . $data->students->name . ' , Room is Allocated Successfully!');
+        $HistoryController->addHistoryHall($staff_id, 'allocation', 'Student (' . $data->students->rollno . ' ) - ' . $data->students->name . ' , Room is Allocated Successfully!', $this->hall_id);
         //Saved
-        return redirect('staff/roomallocation')->with('success', 'Room Allocation Data has been added Successfully!');
+        return redirect()->route('staff.roomallocation.index')->with('success', 'Room Allocation Data has been added Successfully!');
     }
 
     /**
@@ -119,6 +120,9 @@ class AllocatedSeatController extends Controller
         if ($data == null) {
             return redirect()->route('staff.roomallocation.index')->with('danger', 'Not Found!');
         }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.roomallocation.index')->with('danger', 'Not Permitted!');
+        }
         return view('staff.roomallocation.show', ['data' => $data]);
     }
 
@@ -128,13 +132,15 @@ class AllocatedSeatController extends Controller
     public function edit(string $id)
     {
         //
-        $students = Student::all();
-        $rooms = Room::all();
+        $students = Student::all()->where('hall_id', $this->hall_id);
+        $rooms = Room::all()->where('hall_id', $this->hall_id);
         $data = AllocatedSeats::find($id);
         if ($data == null) {
             return redirect()->route('staff.roomallocation.index')->with('danger', 'Not Found!');
         }
-
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.roomallocation.index')->with('danger', 'Not Permitted!');
+        }
         return view('staff.roomallocation.edit', ['data' => $data, 'students' => $students, 'rooms' => $rooms]);
     }
 
@@ -152,7 +158,9 @@ class AllocatedSeatController extends Controller
         ]);
         $data->room_id = $request->room_id;
         $data->position = $request->position;
-        //
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.roomallocation.index')->with('danger', 'Not Permitted!');
+        }
         // room change
         if ($request->room_id != $request->old_room_id) {
             // Room Vacancy - 1 for new room
@@ -209,7 +217,7 @@ class AllocatedSeatController extends Controller
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistory($staff_id, 'allocation update', 'Student (' . $data->students->rollno . ' ) - ' . $data->students->name . ' , Room is Allocation Updated Successfully!');
+        $HistoryController->addHistoryHall($staff_id, 'allocation update', 'Student (' . $data->students->rollno . ' ) - ' . $data->students->name . ' , Room is Allocation Updated Successfully!', $this->hall_id);
         //Saved
         return redirect('staff/roomallocation')->with('success', 'AllocatedSeats Data has been updated Successfully!');
     }
@@ -222,6 +230,9 @@ class AllocatedSeatController extends Controller
         $data = AllocatedSeats::find($id);
         if ($data == null) {
             return redirect()->route('staff.roomallocation.index')->with('danger', 'Not Found!');
+        }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.roomallocation.index')->with('danger', 'Not Permitted!');
         }
         // Room Vacancy + 1
         $roomid = $data->room_id;
@@ -249,7 +260,7 @@ class AllocatedSeatController extends Controller
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistory($staff_id, 'delete', 'Student (' . $data->students->rollno . ' ) - ' . $data->students->name . ' , Room Allocation has been deleted Successfully!');
+        $HistoryController->addHistoryHall($staff_id, 'delete', 'Student (' . $data->students->rollno . ' ) - ' . $data->students->name . ' , Room Allocation has been deleted Successfully!', $this->hall_id);
         //Saved
         return redirect('staff/roomallocation')->with('danger', 'Data has been deleted Successfully!');
     }
@@ -330,7 +341,7 @@ class AllocatedSeatController extends Controller
             //Saving History 
             $HistoryController = new HistoryController();
             $staff_id = Auth::guard('staff')->user()->id;
-            $HistoryController->addHistory($staff_id, 'accept', 'Student (' . $data2->rollno . ' ) - ' . $data2->name . ' , Room Allocation Request has been accepted and Room is Allocated Successfully!');
+            $HistoryController->addHistoryHall($staff_id, 'accept', 'Student (' . $data2->rollno . ' ) - ' . $data2->name . ' , Room Allocation Request has been accepted and Room is Allocated Successfully!', $this->hall_id);
             //Saved
             return redirect('staff/roomallocation')->with('success', 'AllocatedSeats Data has been added Successfully!');
         } else {
@@ -366,7 +377,7 @@ class AllocatedSeatController extends Controller
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistory($staff_id, 'accept', 'Student (' . $data->students->rollno . ' ) - ' . $data->students->name . ' , Room Allocation Request has been accepted Successfully!');
+        $HistoryController->addHistoryHall($staff_id, 'accept', 'Student (' . $data->students->rollno . ' ) - ' . $data->students->name . ' , Room Allocation Request has been accepted Successfully!', $this->hall_id);
         //Saved
         return redirect('staff/roomallocation/roomrequests')->with('success', 'Accepted Successfully!');
     }
@@ -387,7 +398,7 @@ class AllocatedSeatController extends Controller
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistory($staff_id, 'reject', 'Student (' . $data->students->rollno . ' ) - ' . $data->students->name . ' , Room Allocation Request has been rejected Successfully!');
+        $HistoryController->addHistoryHall($staff_id, 'reject', 'Student (' . $data->students->rollno . ' ) - ' . $data->students->name . ' , Room Allocation Request has been rejected Successfully!', $this->hall_id);
         //Saved
         if ($allocated_seat_id) {
             //Room Allocation Seat Delete
@@ -413,7 +424,7 @@ class AllocatedSeatController extends Controller
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistory($staff_id, 'listed', 'Student (' . $data->students->rollno . ' ) - ' . $data->students->name . ' , Room Allocation Request has been listed for queue Successfully!');
+        $HistoryController->addHistoryHall($staff_id, 'listed', 'Student (' . $data->students->rollno . ' ) - ' . $data->students->name . ' , Room Allocation Request has been listed for queue Successfully!', $this->hall_id);
         //Saved
         return redirect()->route('staff.roomallocation.roomrequests')->with('warning', 'Listed for Queue Successfully!');
     }
@@ -507,7 +518,8 @@ class AllocatedSeatController extends Controller
                         $AllocatedSeatsData =  AllocatedSeats::create([
                             'room_id' => $room->id,
                             'user_id' => $user->id,
-                            'position' => $position
+                            'position' => $position,
+                            'hall_id' => $this->hall_id
                         ]);
                         $room->save();
                         $importedStudents++;
@@ -523,9 +535,9 @@ class AllocatedSeatController extends Controller
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
         if ($importedStudents == 1) {
-            $HistoryController->addHistory($staff_id, 'import', ' Room Allocation has been failed !');
+            $HistoryController->addHistoryHall($staff_id, 'import', ' Room Allocation has been failed !', $this->hall_id);
         } else {
-            $HistoryController->addHistory($staff_id, 'import', 'Today ' . $importedStudents . ' Room Allocation has been imported Successfully!');
+            $HistoryController->addHistoryHall($staff_id, 'import', 'Today ' . $importedStudents . ' Room Allocation has been imported Successfully!', $this->hall_id);
         }
         //Saved
         if ($errorTitles == null) {
