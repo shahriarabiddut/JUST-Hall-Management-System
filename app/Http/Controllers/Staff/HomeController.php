@@ -9,6 +9,7 @@ use App\Models\Staff;
 use App\Models\FoodTime;
 use Illuminate\View\View;
 use App\Models\HallOption;
+use App\Models\FoodTimeHall;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +18,14 @@ use Illuminate\Support\Facades\Redirect;
 
 class HomeController extends Controller
 {
+    protected $hall_id;
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->hall_id = Auth::guard('staff')->user()->hall_id;
+            return $next($request);
+        });
+    }
     //
     public function index()
     {
@@ -27,7 +36,13 @@ class HomeController extends Controller
         $nextDate = $currentDate->setTimezone('GMT+6')->format('Y-m-d'); // 2023-03-17
 
         $resulttitle = [];
-        $total_food_times = FoodTime::select('id')->where('status', '=', '1')->get();
+        //
+        $dataFoodTime = FoodTimeHall::all()->where('status', '1')->where('hall_id', $this->hall_id);
+        $total_food_times = [];
+        foreach ($dataFoodTime as $dFT) {
+            $total_food_times[] = FoodTime::find($dFT->food_time_id);
+        }
+        //
         $results = [];
         foreach ($total_food_times as $total_food_time) {
             $i = $total_food_time->id;
@@ -43,7 +58,7 @@ class HomeController extends Controller
         //foodtype
         $food_time = FoodTime::all()->where('status', '=', '1')->where('id', '=', $id)->first();
         //Food Item for search
-        $foods = Food::all()->where('status', '=', '1')->where('food_time_id', '=', $id);
+        $foods = Food::all()->where('status', '=', '1')->where('food_time_id', '=', $id)->where('hall_id', $this->hall_id);
         $food_id_data = [];
         foreach ($foods as $food) {
             $food_id_data[] = $food->id;

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Food;
+use App\Models\Hall;
 use App\Models\Room;
 use App\Models\Order;
 use App\Models\Payment;
@@ -11,9 +12,9 @@ use App\Models\Student;
 use App\Models\FoodTime;
 use Illuminate\View\View;
 use App\Models\RoomRequest;
+use App\Models\FoodTimeHall;
 use Illuminate\Http\Request;
 use App\Models\AllocatedSeats;
-use App\Models\Hall;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -21,6 +22,14 @@ use Illuminate\Support\Facades\Redirect;
 
 class ProfileController extends Controller
 {
+    protected $hall_id;
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->hall_id = Auth::user()->hall_id;
+            return $next($request);
+        });
+    }
 
     public function index()
     {
@@ -40,7 +49,13 @@ class ProfileController extends Controller
 
 
         $resulttitle = [];
-        $total_food_times = FoodTime::select('id')->where('status', '=', '1')->get();
+        //
+        $dataFoodTime = FoodTimeHall::all()->where('status', '1')->where('hall_id', $this->hall_id);
+        $total_food_times = [];
+        foreach ($dataFoodTime as $dFT) {
+            $total_food_times[] = FoodTime::find($dFT->food_time_id);
+        }
+        //
         $results = [];
         foreach ($total_food_times as $total_food_time) {
             $i = $total_food_time->id;
@@ -63,7 +78,7 @@ class ProfileController extends Controller
         //foodtype
         $food_time = FoodTime::all()->where('status', '=', '1')->where('id', '=', $id)->first();
         //Food Item for search
-        $foods = Food::all()->where('status', '=', '1')->where('food_time_id', '=', $id);
+        $foods = Food::all()->where('status', '=', '1')->where('food_time_id', '=', $id)->where('hall_id', $this->hall_id);
         $food_id_data = [];
         foreach ($foods as $food) {
             $food_id_data[] = $food->id;

@@ -17,15 +17,6 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <tbody>
                         <tr>
-                            <th>Title</th>
-                            <td><input readonly name="title" value="{{ $data->title }}" type="text" class="form-control"></td>
-                        </tr><tr>
-                            <th>Detail</th>
-                            <td>
-                            <textarea name="detail" id="" cols="10" rows="4"class="form-control">{{ $data->detail}}</textarea>
-                            </td>
-                        </tr>
-                        <tr>
                             <th>Food Price<span class="text-danger">*</span></th>
                             <td><input required value="{{ $data->price }}" name="price" type="number" class="form-control" step="0.01"></td>
                         </tr>   

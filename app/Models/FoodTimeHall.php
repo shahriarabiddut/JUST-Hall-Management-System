@@ -5,15 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class FoodTime extends Model
+class FoodTimeHall extends Model
 {
     use HasFactory;
-    function food()
+    function food_time()
     {
-        return $this->hasMany(Food::class, 'food_time_id');
+        return $this->belongsTo(FoodTime::class, 'food_time_id');
     }
     function hall()
     {
-        return $this->hasMany(FoodTimeHall::class, 'hall_id');
+        return $this->belongsTo(Hall::class, 'hall_id');
     }
 }

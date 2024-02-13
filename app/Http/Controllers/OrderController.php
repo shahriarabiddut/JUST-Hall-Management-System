@@ -7,6 +7,7 @@ use App\Models\Food;
 use App\Models\Order;
 use App\Models\Balance;
 use App\Models\FoodTime;
+use App\Models\FoodTimeHall;
 use App\Models\MealToken;
 // use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
@@ -45,15 +46,15 @@ class OrderController extends Controller
             $remainingTime = 0;
         }
         //
-        $dataFoodTime = FoodTime::all()->where('status', '=', '1');
+        $dataFoodTime = FoodTimeHall::all()->where('status', '1')->where('hall_id', $this->hall_id);
         $FoodTime = [];
         foreach ($dataFoodTime as $dFT) {
-            $FoodTime[] = $dFT;
+            $FoodTime[] = FoodTime::find($dFT->food_time_id);
         }
         $foods = [];
         foreach ($FoodTime as $ft) {
-            $dataFoodTime = Food::all()->where('status', '=', '1')->where('food_time_id', '=', $ft->id);
-            $foods[] = $dataFoodTime;
+            $dataFood = Food::all()->where('status', '=', '1')->where('food_time_id', '=', $ft->id)->where('hall_id', $this->hall_id);
+            $foods[] = $dataFood;
         }
 
 
@@ -70,7 +71,8 @@ class OrderController extends Controller
         $this->checkBalance($userid);
         //Check Food Time exist or not
         $food_time_id = $id;
-        $food_time = FoodTime::all()->where('status', '=', '1')->where('id', '=', $food_time_id)->first();
+        $food_time_hall = FoodTimeHall::all()->where('status', '=', '1')->where('food_time_id', '=', $food_time_id)->where('hall_id', $this->hall_id)->first();
+        $food_time = FoodTime::find($food_time_hall->food_time_id);
         if ($food_time == null) {
             return redirect()->route('student.order.index')->with('danger', 'Not Found');
         }
@@ -109,7 +111,7 @@ class OrderController extends Controller
             //check time if it is less then 10 PM
             if ($current_time < "22:00:00") {
                 if ($food_time != null) {
-                    $food = Food::all()->where('status', '=', '1')->where('food_time_id', '=', $food_time_id);
+                    $food = Food::all()->where('status', '=', '1')->where('food_time_id', '=', $food_time_id)->where('hall_id', $this->hall_id);
                     return view('profile.order.create', ['food_time' => $food_time, 'food' => $food, 'nextDate' => $nextDate]);
                 } else {
                     return redirect()->route('student.order.foodmenu')->with('danger', 'Select Valid Food Menu');
@@ -121,7 +123,7 @@ class OrderController extends Controller
             //check time if it is less then 10 PM
             if ($current_time < "22:00:00") {
                 if ($food_time != null) {
-                    $food = Food::all()->where('status', '=', '1')->where('food_time_id', '=', $food_time_id);
+                    $food = Food::all()->where('status', '=', '1')->where('food_time_id', '=', $food_time_id)->where('hall_id', $this->hall_id);
                     return view('profile.order.create', ['food_time' => $food_time, 'food' => $food, 'dataquantity' => $dataquantity, 'nextDate' => $nextDate]);
                 } else {
                     return redirect()->route('student.order.foodmenu')->with('danger', 'Select Valid Food Menu');
@@ -153,7 +155,7 @@ class OrderController extends Controller
             return redirect()->back()->with('danger', 'Please! Select Quantity!');
         } else {
             $food_time_id = $request->food_time_id;
-            $foodprice = FoodTime::all()->where('status', '=', '1')->where('id', '=', $food_time_id)->first();
+            $foodprice = FoodTimeHall::all()->where('food_time_id', '=', $food_time_id)->where('hall_id', $this->hall_id)->first();
             $request->validate([
                 'order_type' => 'required',
                 'food_item_id' => 'required',
@@ -251,7 +253,7 @@ class OrderController extends Controller
         if ($data == null) {
             return redirect()->route('student.order.index')->with('danger', 'Not Found');
         }
-        $foodItem = Food::all()->where('id', '=', $data->food_item_id)->first();
+        $foodItem = Food::all()->where('id', '=', $data->food_item_id)->where('hall_id', $this->hall_id)->first();
         $tokendata = MealToken::all()->where('order_id', '=', $id)->first();
         //Check Date is Valid To Delete
         $validDate = $this->isDateValid2Cancel($data->date, $foodItem->food_time_id);
@@ -320,8 +322,8 @@ class OrderController extends Controller
             return redirect('student/order')->with('danger', 'You cannot edit anymore for this Order!Day Passed!');
         } else {
             if ($current_time < $TokenTime) {
-                $foodItem = Food::all()->where('id', '=', $data->food_item_id)->first();
-                $foods = Food::all()->where('status', '=', '1')->where('food_time_id', '=', $foodItem->food_time_id);
+                $foodItem = Food::all()->where('id', '=', $data->food_item_id)->where('hall_id', $this->hall_id)->first();
+                $foods = Food::all()->where('status', '=', '1')->where('hall_id', $this->hall_id)->where('food_time_id', '=', $foodItem->food_time_id);
                 return view('profile.order.edit', ['data' => $data, 'foods' => $foods]);
             } else {
                 return redirect('student/order')->with('danger', 'You cannot edit anymore for this Order! Time Passed!');
@@ -347,7 +349,7 @@ class OrderController extends Controller
             $data->food_item_id = $request->food_item_id;
             $data->save();
             //Update in Meal Token
-            $food = Food::all()->where('id', '=', $request->food_item_id)->first();
+            $food = Food::all()->where('id', '=', $request->food_item_id)->where('hall_id', $this->hall_id)->first();
             $data2 = MealToken::all()->where('order_id', '=', $id)->first();
             $data2->food_name = $food->food_name;
             $data2->save();
@@ -394,7 +396,7 @@ class OrderController extends Controller
         $userid = Auth::user()->id;
         //
         $data = Order::all()->where('id', '=', $id)->first();
-        $foodItem = Food::all()->where('id', '=', $data->food_item_id)->first();
+        $foodItem = Food::all()->where('id', '=', $data->food_item_id)->where('hall_id', $this->hall_id)->first();
         if ($data == null) {
             return redirect()->route('student.order.index')->with('danger', 'Not Found');
         }
@@ -452,9 +454,10 @@ class OrderController extends Controller
         }
         //
         $food_time_id = $id;
-        $food_time = FoodTime::all()->where('status', '=', '1')->where('id', '=', $food_time_id)->first();
+        $food_time_hall = FoodTimeHall::all()->where('status', '=', '1')->where('food_time_id', '=', $food_time_id)->where('hall_id', $this->hall_id)->first();
+        $food_time = FoodTime::find($food_time_hall->food_time_id);
         if ($food_time != null) {
-            $food = Food::all()->where('status', '=', '1')->where('food_time_id', '=', $food_time_id);
+            $food = Food::all()->where('status', '=', '1')->where('hall_id', $this->hall_id)->where('food_time_id', '=', $food_time_id);
             return view('profile.order.createAdvance', ['food_time' => $food_time, 'food' => $food, 'nextDate' => $nextDate3]);
         } else {
             return redirect()->route('student.order.foodmenu')->with('danger', 'Select Valid Food Menu');
@@ -506,7 +509,7 @@ class OrderController extends Controller
             if ($dataquantity < 2) {
 
                 $food_time_id = $request->food_time_id;
-                $foodprice = FoodTime::all()->where('status', '=', '1')->where('id', '=', $food_time_id)->first();
+                $foodprice = FoodTimeHall::all()->where('food_time_id', '=', $food_time_id)->where('hall_id', $this->hall_id)->first();
                 $data = new Order;
                 $userid = Auth::user()->id;
                 $data->student_id = $userid;
