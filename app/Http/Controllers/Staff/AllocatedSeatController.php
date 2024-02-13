@@ -275,7 +275,7 @@ class AllocatedSeatController extends Controller
     {
         //
         $data = RoomRequest::find($id);
-        $rooms = Room::all()->where('vacancy', '!=', 0);
+        $rooms = Room::all()->where('vacancy', '!=', 0)->where('hall_id', $data->hall_id);
         if ($data == null) {
             return redirect()->route('staff.roomallocation.roomrequests')->with('danger', 'Not Found!');
         }
