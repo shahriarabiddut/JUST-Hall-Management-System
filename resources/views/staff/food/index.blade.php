@@ -48,9 +48,10 @@
                     </tfoot>
                     <tbody>
                         @if($data)
-                        @foreach ($data as $key => $d)
+                        @php $i =0; @endphp
+                        @foreach ($data as $d)
                         <tr>
-                            <td>{{ ++$key }}</td>
+                            <td>{{ ++$i }}</td>
                             <td>{{ $d->food_name }}</td>
                             <td>{{ $d->foodtime->price }} /= Taka</td>
                             @switch($d->foodtime->title)

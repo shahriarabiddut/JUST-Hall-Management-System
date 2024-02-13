@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Hall;
+use App\Models\Staff;
+use App\Models\FoodTime;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Staff;
+use App\Models\FoodTimeHall;
 
 class HallController extends Controller
 {
@@ -40,7 +42,6 @@ class HallController extends Controller
             'title' => 'required',
             'staff_id' => 'required',
             'banglatitle' => 'required',
-            'logo' => 'required',
             'type' => 'required',
             'status' => 'required',
         ]);
@@ -64,7 +65,17 @@ class HallController extends Controller
         $dataStaff->hall_id = $data->id;
         $dataStaff->save();
         //
-
+        //Create FoodTime Relation Table
+        $dataFoodTime = FoodTime::all();
+        foreach ($dataFoodTime as $FoodTime) {
+            $dataFoodTimeHall = new FoodTimeHall();
+            $dataFoodTimeHall->hall_id = $data->id;
+            $dataFoodTimeHall->food_time_id = $FoodTime->id;
+            $dataFoodTimeHall->price = $FoodTime->price;
+            $dataFoodTimeHall->status = 0;
+            $dataFoodTimeHall->save();
+        }
+        //
         return redirect('admin/hall')->with('success', 'Hall Data has been added Successfully!');
     }
 
@@ -144,6 +155,17 @@ class HallController extends Controller
         if ($data == null) {
             return redirect()->route('admin.hall.index')->with('danger', 'Not Found!');
         }
+        //Delete FoodTime Relation Table
+        $dataFoodTime = FoodTime::all();
+        foreach ($dataFoodTime as $FoodTime) {
+            $dataFoodTimeHall = FoodTimeHall::all()->where('hall_id', $data->id)->where('food_time_id', $FoodTime->id);
+            $dataFoodTimeHall->delete();
+        }
+        //Free Provost
+        $dataStaff2 = Staff::find($data->staff_id);
+        $dataStaff2->hall_id = 0;
+        $dataStaff2->save();
+        //
         $data->delete();
         return redirect('admin/hall')->with('danger', 'Data has been deleted Successfully!');
         // return redirect()->route('admin.hall.index')->with('danger', 'Not Permitted!');

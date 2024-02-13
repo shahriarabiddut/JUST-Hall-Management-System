@@ -147,7 +147,7 @@ class FoodTimeController extends Controller
         //
         $data->status = 0;
 
-        // foreach ($data->food as $fitem) {
+        // foreach ($data->food_time->food as $fitem) {
         //     $dataDisable = Food::find($fitem->id);
         //     $dataDisable->status = 0;
         //     $dataDisable->save();
