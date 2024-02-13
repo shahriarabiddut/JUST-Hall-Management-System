@@ -49,7 +49,6 @@ Route::middleware('staff')->prefix('staff')->name('staff.')->group(function () {
     Route::put('support/{id}', [SupportController::class, 'staffReplyUpdate'])->name('support.replyUpdate');
 
     // Balance Crud
-    Route::get('balance/{id}/delete', [BalanceController::class, 'destroy']);
     Route::resource('balance', BalanceController::class);
 
     // Payment Crud

@@ -33,8 +33,8 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email','regex:/(.+)@(.+)\.(.+)/i', 'max:255', 'unique:'.User::class],
-            'rollno' => ['required', 'integer', 'unique:'.User::class],
+            'email' => ['required', 'string', 'email', 'regex:/(.+)@(.+)\.(.+)/i', 'max:255', 'unique:' . User::class],
+            'rollno' => ['required', 'integer', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
         // $user = User::create([
@@ -49,11 +49,16 @@ class RegisteredUserController extends Controller
         $user->email = $request->email;
         $user->rollno = $request->rollno;
         $user->password = Hash::make($request->password);
+        if ($request->has('hall_id')) {
+            $user->hall_id = $request->hall_id;
+        } else {
+            $user->hall_id = 0;
+        }
         $user->save();
-        
+
         //Creating Balance account for student
         $BalanceController = new BalanceController();
-        $BalanceController->store($user->id);
+        $BalanceController->store($user->id, $user->hall_id);
 
         event(new Registered($user));
 

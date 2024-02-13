@@ -22,6 +22,17 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <tbody>
                     <tr>
+                        <th>Select Hall</th>
+                        <td>
+                            <select required name="hall_id" class="form-control">
+                                <option value="0">--- Select Hall ---</option>
+                                @foreach ($halls as $hall)
+                                <option value="{{ $hall->id }}">{{ $hall->title }}</option>
+                                @endforeach
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
                     <th>Roll No <span class="text-danger">*</span></th>
                     <td><input required name="rollno" type="text" class="form-control"></td>
                     </tr>

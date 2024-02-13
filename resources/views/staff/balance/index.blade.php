@@ -44,11 +44,16 @@
                         @foreach ($data as $key => $d)
                         <tr>
                             <td>{{ ++$key }}</td>
-                            <td>{{ $d->students->name }} - {{ $d->students->rollno }} - 
+                            <td>
+                                @if ($d->students != null)
+                                {{ $d->students->name }} - {{ $d->students->rollno }} - 
                                 @if ($d->students->ms==0)
                                 (Masters)
                                 @else
                                 (Honours)
+                                @endif
+                                @else
+                                User Deleted
                                 @endif
                             </td>
                             @if ($d->balance_amount<0)
@@ -61,7 +66,7 @@
                                 @if ($d->updated_at!=$d->created_at)
                                 {{ $d->updated_at->format('F j, Y')  }}
                                 @else
-                                No Transaction
+                                No Transaction Yet
                                 @endif
                             </td>
                         </tr>

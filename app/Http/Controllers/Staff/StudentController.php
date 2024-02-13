@@ -15,9 +15,14 @@ use App\Http\Controllers\BalanceController;
 
 class StudentController extends Controller
 {
+    protected $hall_id;
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
+            $this->hall_id = Auth::guard('staff')->user()->hall_id;
+            if ($this->hall_id == 0 || $this->hall_id == null) {
+                return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+            }
             if (Auth::guard('staff')->user()->type == 'provost') {
                 return $next($request);
                 // return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
@@ -45,14 +50,14 @@ class StudentController extends Controller
     public function index()
     {
 
-        $data = Student::all();
+        $data = Student::all()->where('hall_id', $this->hall_id);
         return view('staff.student.index', ['data' => $data]);
     }
     public function search(Request $request)
     {
         // dd($request);
         $type = $request->type;
-        $data = Student::all();
+        $data = Student::all()->where('hall_id', $this->hall_id);
         if ($request->type != '' && $request->type != '2') {
             $data = $data->where('ms',  $type);
         }
@@ -90,7 +95,7 @@ class StudentController extends Controller
         $data->mobile = $request->mobile;
         $data->rollno = $request->rollno;
         $data->ms = $request->ms;
-
+        $data->hall_id = $this->hall_id;
         //If user Given address
         if ($request->has('address')) {
             $data->address = $request->address;
@@ -105,7 +110,7 @@ class StudentController extends Controller
         $data->save();
         //Creating Balance account for student
         $BalanceController = new BalanceController();
-        $BalanceController->store($data->id);
+        $BalanceController->store($data->id, $this->hall_id);
         //
         //Saving History 
         $HistoryController = new HistoryController();
@@ -126,6 +131,9 @@ class StudentController extends Controller
         if ($data == null) {
             return redirect()->route('staff.student.index')->with('danger', 'Not Found!');
         }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.student.index')->with('danger', 'Not Permitted!');
+        }
         return view('staff.student.show', ['data' => $data]);
     }
 
@@ -139,7 +147,9 @@ class StudentController extends Controller
         if ($data == null) {
             return redirect()->route('staff.student.index')->with('danger', 'Not Found!');
         }
-
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.student.index')->with('danger', 'Not Permitted!');
+        }
         return view('staff.student.edit', ['data' => $data]);
     }
 
@@ -150,6 +160,9 @@ class StudentController extends Controller
     {
         //
         $data = Student::find($id);
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.student.index')->with('danger', 'Not Permitted!');
+        }
         $formFields = $request->validate([
             'name' => 'required',
             'email' => 'required|email',
@@ -158,7 +171,6 @@ class StudentController extends Controller
             'dept' => 'required',
             'session' => 'required',
         ]);
-
         $data->name = $request->name;
         $data->dept = $request->dept;
         $data->session = $request->session;
@@ -193,6 +205,9 @@ class StudentController extends Controller
         $data = Student::find($id);
         if ($data == null) {
             return redirect()->route('staff.student.index')->with('danger', 'Not Found!');
+        }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.student.index')->with('danger', 'Not Permitted!');
         }
         // Balance Account
         $BalanceAccount = Balance::all()->where('student_id', '=', $id)->first();
@@ -262,10 +277,11 @@ class StudentController extends Controller
                         'session' => $row['session'],
                         'ms' => $ms,
                         'password' => bcrypt($row['rollno']),
+                        'hall_id' => $this->hall_id,
                     ]);
                     //Creating Balance account for student
                     $BalanceController = new BalanceController();
-                    $BalanceController->store($StudentData->id);
+                    $BalanceController->store($StudentData->id, $this->hall_id);
                     //
                     $importedStudents++;
                     // Add History 

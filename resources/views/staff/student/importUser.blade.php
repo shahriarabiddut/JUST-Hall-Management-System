@@ -1,15 +1,10 @@
 @extends('staff/layout')
 @section('title', 'Import Student From CSV')
 @section('content')
-
-
-    <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Import Student From CSV File</h1>
-
-    <!-- DataTales Example -->
+<!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h3 class="m-0 font-weight-bold text-primary"> Upload the CSV File
+            <h3 class="m-0 font-weight-bold text-primary"> Import Student From CSV / Excel File
             <a href="{{ url('staff/student') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h3>
         </div>
         <div class="card-body">

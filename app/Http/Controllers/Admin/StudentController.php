@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Hall;
+use App\Models\Balance;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\BalanceController;
-use App\Models\Balance;
 
 class StudentController extends Controller
 {
@@ -25,7 +26,8 @@ class StudentController extends Controller
     public function create()
     {
         //
-        return view('admin.student.create');
+        $halls = Hall::all();
+        return view('admin.student.create', ['halls' => $halls]);
     }
 
     /**
@@ -51,7 +53,7 @@ class StudentController extends Controller
         $data->mobile = $request->mobile;
         $data->rollno = $request->rollno;
         $data->ms = $request->ms;
-
+        $data->hall_id = $request->hall_id;
         //If user Given address
         if ($request->has('address')) {
             $data->address = $request->address;
@@ -66,7 +68,7 @@ class StudentController extends Controller
         $data->save();
         //Creating Balance account for student
         $BalanceController = new BalanceController();
-        $BalanceController->store($data->id);
+        $BalanceController->store($data->id, $data->hall_id);
 
         //Created
         $ref = $request->ref;
@@ -97,10 +99,11 @@ class StudentController extends Controller
     {
         //
         $data = Student::find($id);
+        $halls = Hall::all();
         if ($data == null) {
             return redirect()->route('admin.student.index')->with('danger', 'Not Found!');
         }
-        return view('admin.student.edit', ['data' => $data]);
+        return view('admin.student.edit', ['data' => $data, 'halls' => $halls]);
     }
 
     /**
@@ -110,6 +113,12 @@ class StudentController extends Controller
     {
         //
         $data = Student::find($id);
+        if ($data->hall_id != $request->hall_id) {
+            // Balance Account Hall Update
+            $BalanceAccount = Balance::all()->where('student_id', '=', $data->id)->first();
+            $BalanceAccount->hall_id = $request->hall_id;
+            $BalanceAccount->save();
+        }
         $formFields = $request->validate([
             'name' => 'required',
             'email' => 'required|email',
@@ -126,6 +135,7 @@ class StudentController extends Controller
         $data->mobile = $request->mobile;
         $data->rollno = $request->rollno;
         $data->ms = $request->ms;
+        $data->hall_id = $request->hall_id;
         //If user Given address
         if ($request->has('address')) {
             $data->address = $request->address;
@@ -180,6 +190,7 @@ class StudentController extends Controller
                 // dd($row);
                 $email = $row['email'];
                 $rollno = $row['rollno'];
+                $hall_id = $row['hall'];
                 //check ms or not
                 if (preg_match('/^\d+$/', $rollno)) {
                     $ms = 0;
@@ -199,10 +210,11 @@ class StudentController extends Controller
                         'session' => $row['session'],
                         'ms' => $ms,
                         'password' => bcrypt($row['rollno']),
+                        'hall_id' => $hall_id,
                     ]);
                     //Creating Balance account for student
                     $BalanceController = new BalanceController();
-                    $BalanceController->store($StudentData->id);
+                    $BalanceController->store($StudentData->id, $hall_id);
                     //
                     $importedStudents++;
                 } else {

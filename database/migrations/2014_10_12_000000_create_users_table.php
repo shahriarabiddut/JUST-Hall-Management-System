@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('photo')->nullable();
             $table->string('mobile')->nullable();
+            $table->integer('hall_id')->references('id')->on('halls')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

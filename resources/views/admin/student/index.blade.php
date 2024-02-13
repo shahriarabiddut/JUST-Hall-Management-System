@@ -54,8 +54,8 @@
                             <th>Photo</th>
                             <th>RollNo</th>
                             <th>Name</th>
+                            <th>Hall</th>
                             <th>Email</th>
-                            <th>Mobile</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
@@ -71,8 +71,8 @@
                             /></td>
                             <td>{{ $d->rollno }}</td>
                             <td>{{ $d->name }}</td>
+                            <td>{{ $d->hall->title }}</td>
                             <td>{{ $d->email }}</td>
-                            <td>{{ $d->mobile }}</td>
                             
                             
                             <td class="text-center">

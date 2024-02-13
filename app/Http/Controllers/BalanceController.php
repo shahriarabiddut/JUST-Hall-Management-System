@@ -17,11 +17,12 @@ class BalanceController extends Controller
     }
 
 
-    public function store(String $id)
+    public function store(String $id, String $hall_id)
     {
         //
         $data = new Balance();
         $data->student_id = $id;
+        $data->hall_id = $hall_id;
         $data->balance_amount = 0;
 
         $data->save();

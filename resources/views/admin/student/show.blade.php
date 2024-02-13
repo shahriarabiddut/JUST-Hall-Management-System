@@ -13,6 +13,12 @@
             <div class="table-responsive">
                 <table class="table table-bordered" width="100%">
                         <tr>
+                        <th>Hall </th>
+                             <td>@if ($data->hall!=null)
+                                {{ $data->hall->title }}
+                                @endif</td>
+                         </tr>
+                        <tr>
                             <th>Photo</th>
                             <td><img width="100" src="{{$data->photo ? asset('storage/'.$data->photo) : url('images/user.png')}}" alt="User Photo"></td>
                         </tr>
