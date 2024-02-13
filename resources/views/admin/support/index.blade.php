@@ -27,7 +27,7 @@
                         <tr>
                             <th>#</th>
                             <th>Student</th>
-                            <th>Subject</th>
+                            <th>Hall</th>
                             <th>Category</th>
                             <th>RepliedBy</th>
                             <th>Date</th>
@@ -39,7 +39,7 @@
                         <tr>
                             <th>#</th>
                             <th>Student</th>
-                            <th>Subject</th>
+                            <th>Hall</th>
                             <th>Category</th>
                             <th>RepliedBy</th>
                             <th>Date</th>
@@ -53,7 +53,7 @@
                         <tr>
                             <td>{{ ++$key }}</td>
                             <td>{{ $d->student->name }} - {{ $d->student->rollno }}</td>
-                            <td>{{ $d->subject }}</td>
+                            <td>{{ $d->hall->title }}</td>
                             <td>{{ $d->category }}</td>
                             <td>
                                 @if ($d->repliedby)
@@ -63,7 +63,7 @@
                                 @endif
 
                             </td>
-                            <td>{{ $d->created_at }} </td>
+                            <td>{{ $d->created_at->format('F j,Y H:i:s')  }} </td>
                             
                                 @switch($d->status)
                                     @case('2')

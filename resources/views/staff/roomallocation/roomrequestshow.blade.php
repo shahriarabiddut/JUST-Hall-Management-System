@@ -30,9 +30,9 @@
                     <tbody>
                     <tr>
                         <th class="text-center"><h4 class="my-5">প্রভোস্ট এর কার্যালয়</h4></th>
-                        <td colspan="2" class="text-center"><img width="75px" src="{{ asset($HallOption[3]->value) }}" alt=""></td>
+                        <td colspan="2" class="text-center"><img width="75px" src="{{ asset($data->hall->logo) }}" alt=""></td>
                         <th class="text-center">
-                            <h4 class="my-5">@isset($HallOption) {{ $HallOption[8]->value }} @endisset
+                            <h4 class="my-5">{{ $data->hall->banglatitle }}
                     </h4></th>
                     </tr>
                     <tr>
@@ -154,7 +154,7 @@
                         <td width="25%"><img src="{{ asset('storage/'.$application['signature']) }}" alt=""></td>
                     </tr>
                     <tr>
-                        <td colspan="4"> <h5>প্রভোস্ট <br> @isset($HallOption) {{ $HallOption[8]->value }} @endisset <br> যশোর বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয়</h5>
+                        <td colspan="4"> <h5>প্রভোস্ট <br> {{ $data->hall->banglatitle }} <br> যশোর বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয়</h5>
                         </td>
                     </tr>
                     </tbody>
@@ -210,7 +210,7 @@
                         <td> {{ $data->updated_at->format('F j, Y - H:i:s') }} </td>
                         @endif
                     </tr>
-                    
+                    @if (($dataAllocation)==null)
                     <tr>
                         <th> Action </th>
                         <td class="text-center">
@@ -227,6 +227,11 @@
                             @endif
                         </td>
                     </tr>
+                    @else
+                        <tr>
+                            <td colspan="2"> Room Allocated </td>
+                        </tr>
+                    @endif
                 </table>
             </div>
         </div>

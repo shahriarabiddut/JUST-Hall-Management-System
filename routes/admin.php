@@ -90,8 +90,8 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
     // Route::get('roomallocation/available-position/{room_id}', [AllocatedSeatController::class,'available_position']);
 
     //Suport Ticekts View
-    Route::get('support', [SupportController::class, 'adminIndex'])->name('support.index');
-    Route::get('support/{id}', [SupportController::class, 'showAdmin'])->name('support.show');
+    Route::get('support', [HomeController::class, 'supportIndex'])->name('support.index');
+    Route::get('support/{id}', [HomeController::class, 'supportShow'])->name('support.show');
 
     //Command Test 
     Route::get("/deductBalance", [App\Http\Controllers\ProcessController::class, 'deductBalance'])->name('student.deductBalance');

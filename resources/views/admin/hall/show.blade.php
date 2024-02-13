@@ -13,6 +13,27 @@
             <div class="table-responsive">
                 <table class="table table-bordered" width="100%">
                     <tr>
+                        <th>logo</th>
+                        <td><img width="100" src="{{$data->logo ? asset('storage/'.$data->logo) : url('images/user.png')}}" alt="Hall Logo Photo"></td>
+                    </tr>
+                    <tr>
+                        <th>Type</th>
+                        <td>
+                        @switch($data->type)
+                            @case(0)
+                                Girls - মেয়েদের হল
+                                    @break
+                            @case(1)
+                                Boys - ছেলেদের হল
+                                @break
+                        @endswitch
+                    </td>
+                    </tr>
+                    <tr>
+                        <th>Bangla Title</th>
+                        <td>{{ $data->banglatitle }}</td>
+                    </tr>
+                    <tr>
                         <th>Title</th>
                         <td>{{ $data->title }}</td>
                     </tr><tr>

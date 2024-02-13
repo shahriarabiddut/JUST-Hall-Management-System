@@ -4,7 +4,11 @@
 
 
     <!-- Page Heading -->
-
+    @if(Session::has('danger'))
+    <div class="p-3 mb-2 bg-danger text-white">
+        <p>{{ session('danger') }} </p>
+    </div>
+    @endif
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
@@ -22,6 +26,22 @@
                         <th>Title</th>
                         <td><input required name="title" type="text" class="form-control"></td>
                     </tr>
+                    <tr>
+                        <th>Bangla Title</th>
+                        <td><input required name="banglatitle" type="text" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <th>Logo</th>
+                        <td><input name="logo" type="file" accept="image/*" ></td>
+                    </tr>
+                    <tr>
+                        <th> Type <span class="text-danger">*</span></th>
+                            <td><select required name="tyoe" class="form-control room-list">
+                                <option >--- Select Type ---</option>
+                                <option value="1"> Boys - ছেলেদের হল</option>
+                                <option value="0"> Girls - মেয়েদের হল</option>
+                            </select></td>
+                        </tr> 
                     <tr>
                         <th>Select Provost<span class="text-danger">*</span></th>
                             <td>

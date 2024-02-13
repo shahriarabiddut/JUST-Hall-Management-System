@@ -13,6 +13,7 @@ use Illuminate\View\View;
 use App\Models\RoomRequest;
 use Illuminate\Http\Request;
 use App\Models\AllocatedSeats;
+use App\Models\Hall;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -190,16 +191,18 @@ class ProfileController extends Controller
         $rooms = Room::all()->where('vacancy', '!=', 0);
         $userid = Auth::user()->id;
         $data = RoomRequest::all()->where('user_id', '=', $userid)->first();
+        $halls = Hall::all();
         $sorryAllocatedSeat = 0;
         if ($data != null) {
             $sorryAllocatedSeat = 1;
         }
-        return view('profile.room.roomrequest', ['rooms' => $rooms, 'sorryAllocatedSeat' => $sorryAllocatedSeat]);
+        return view('profile.room.roomrequest', ['halls' => $halls, 'rooms' => $rooms, 'sorryAllocatedSeat' => $sorryAllocatedSeat]);
     }
     public function roomrequeststore(Request $request)
     {
         $data = new RoomRequest;
         $request->validate([
+            'hall_id' => 'required',
             'banglaname' => 'required',
             'englishname' => 'required',
             'fathername' => 'required',
@@ -228,6 +231,7 @@ class ProfileController extends Controller
             'earningproof' => 'required',
             'signature' => 'required',
         ]);
+        $data->hall_id = $request->hall_id;
         $data->room_id = 0;
         $data->user_id = $request->user_id;
         // New Added
@@ -287,11 +291,12 @@ class ProfileController extends Controller
     {
         $userid = Auth::user()->id;
         $data = RoomRequest::all()->where('user_id', '=', $userid)->first();
-        $application = json_decode($data->application, true);
         $dataPayment = Payment::all()->where('type', 'roomrequest')->where('student_id', $userid)->first();
         // page redirection
         $dataAllocatedSeats = AllocatedSeats::all()->where('user_id', '=', $userid)->first();
         if ($data != null) {
+            $application = json_decode($data->application, true);
+
             if ($dataAllocatedSeats != null) {
                 return redirect()->route('student.myroom');
             } else {

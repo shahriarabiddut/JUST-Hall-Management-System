@@ -11,9 +11,17 @@ use App\Http\Controllers\Staff\HistoryController;
 
 class SupportController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    protected $hall_id;
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->hall_id = Auth::user()->hall_id;
+            if ($this->hall_id == 0 || $this->hall_id == null) {
+                return redirect()->route('student.dashboard')->with('danger', 'Please Get Hall Room Allocation to get access!');
+            }
+            return $next($request);
+        });
+    }
     public function index()
     {
 
@@ -49,6 +57,7 @@ class SupportController extends Controller
         $data->category = $request->category;
         $data->subject = $request->subject;
         $data->message = $request->message;
+        $data->hall_id = Auth::user()->hall_id;
         $data->save();
 
         return redirect('student/support')->with('success', 'Support Ticket has been added Successfully!');
@@ -115,58 +124,5 @@ class SupportController extends Controller
             $data->delete();
             return redirect('student/support')->with('danger', 'Support Ticket has been Deleted Successfully!');
         }
-    }
-
-    //Admin View
-    public function adminIndex()
-    {
-
-        $data = Support::all();
-        return view('admin.support.index', ['data' => $data]);
-    }
-    public function showAdmin(string $id)
-    {
-        //
-        $data = Support::find($id);
-        return view('admin.support.show', ['data' => $data]);
-    }
-    //Staff View
-    public function staffIndex()
-    {
-        //
-        $data = Support::all();
-        return view('staff.support.index', ['data' => $data]);
-    }
-    public function staffAdmin(string $id)
-    {
-        //
-        $data = Support::find($id);
-        return view('staff.support.show', ['data' => $data]);
-    }
-    public function staffReply(string $id)
-    {
-        //
-        $data = Support::find($id);
-        return view('staff.support.reply', ['data' => $data]);
-    }
-
-    public function staffReplyUpdate(Request $request, $id)
-    {
-        //
-        $data = Support::find($id);
-        $request->validate([
-            'reply' => 'required',
-            'status' => 'required',
-        ]);
-        $data->reply = $request->reply;
-        $data->status = $request->status;
-        $data->repliedby = $request->repliedby;
-        $data->save();
-        //Saving History 
-        $HistoryController = new HistoryController();
-        $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistory($staff_id, 'support Reply', 'Staff (' . $data->staff->name . ' ) Replied to Student (' . $data->student->rollno . ' ) - ' . $data->student->name . ' , Support Ticket!');
-        //Saved
-        return redirect('staff/support')->with('success', 'Support Ticket has been Replied Successfully!');
     }
 }

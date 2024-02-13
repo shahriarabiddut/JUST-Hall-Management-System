@@ -55,11 +55,11 @@
                     </tr>
                     <tr>
                         <th>Ticket Creation Date</th>
-                        <td>{{ $data->created_at }}</td>
+                        <td>{{ $data->created_at->format('F j,Y H:i:s') }}</td>
                     </tr>
                     <tr>
                         <th>Ticket Replied Date</th>
-                        <td>{{ $data->updated_at }}</td>
+                        <td>{{ $data->updated_at->format('F j,Y H:i:s')  }}</td>
                     </tr>
                    
                     

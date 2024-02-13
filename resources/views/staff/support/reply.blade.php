@@ -52,7 +52,6 @@
                         </td>
                     </tr><tr>
                         <td colspan="2">
-                            <input type="hidden" name="repliedby" value="{{ Auth::user()->id }}">
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </td>
                     </tr>

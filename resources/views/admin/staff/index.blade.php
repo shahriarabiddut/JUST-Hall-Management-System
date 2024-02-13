@@ -58,6 +58,8 @@
                             <td>
                                 @if ($d->hall!=null)
                                 {{ $d->hall->title }}
+                                @else
+                                N/A
                                 @endif</td>
                             <td>{{ $d->type }}</td>
                             

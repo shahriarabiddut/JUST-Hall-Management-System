@@ -14,9 +14,13 @@
                 <table class="table table-bordered" width="100%">
                         <tr>
                         <th>Hall </th>
-                             <td>@if ($data->hall!=null)
-                                {{ $data->hall->title }}
-                                @endif</td>
+                             <td>
+                                @if ($data->hall!=null)
+                                    {{ $data->hall->title }}
+                                @else
+                                    N/A 
+                                @endif
+                            </td>
                          </tr>
                         <tr>
                             <th>Photo</th>

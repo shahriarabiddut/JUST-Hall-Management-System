@@ -267,7 +267,7 @@ class AllocatedSeatController extends Controller
     //Room Allocation Requests
     public function roomrequests()
     {
-        $data = RoomRequest::orderBy('created_at', 'desc')->get();
+        $data = RoomRequest::orderBy('created_at', 'desc')->where('hall_id', $this->hall_id)->get();
         return view('staff.roomallocation.requests', ['data' => $data]);
     }
     //Room Allocation Requests Details
@@ -275,17 +275,21 @@ class AllocatedSeatController extends Controller
     {
         //
         $data = RoomRequest::find($id);
-        $application = json_decode($data->application, true);
         $rooms = Room::all()->where('vacancy', '!=', 0);
         if ($data == null) {
-            return redirect()->route('staff.roomallocation.index')->with('danger', 'Not Found!');
+            return redirect()->route('staff.roomallocation.roomrequests')->with('danger', 'Not Found!');
         }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.roomallocation.roomrequests')->with('danger', 'Not Permitted!');
+        }
+        $application = json_decode($data->application, true);
         $student_id = $data->user_id;
+        $dataAllocation = AllocatedSeats::all()->where('user_id', $student_id)->first();
         $dataPayment = Payment::all()->where('type', 'roomrequest')->where('student_id', $student_id)->first();
         if ($data) {
             $data->flag = 1;
             $data->save();
-            return view('staff.roomallocation.roomrequestshow', ['data' => $data, 'application' => $application, 'rooms' => $rooms, 'dataPayment' => $dataPayment]);
+            return view('staff.roomallocation.roomrequestshow', ['data' => $data, 'application' => $application, 'rooms' => $rooms, 'dataPayment' => $dataPayment, 'dataAllocation' => $dataAllocation]);
         } else {
             return redirect('staff/roomallocation')->with('danger', 'No Data Found');
         }
@@ -299,6 +303,13 @@ class AllocatedSeatController extends Controller
             return redirect()->route('staff.roomallocation.roomrequests')->with('danger', 'Not Found!');
         }
         if ($data->status != 1) {
+            return redirect()->route('staff.roomallocation.roomrequests')->with('danger', 'Not Permitted!');
+        }
+        $dataAllocation = AllocatedSeats::all()->where('user_id', $data->user_id)->first();
+        if ($dataAllocation != null) {
+            return redirect()->route('staff.roomallocation.index')->with('danger', ' Warning ! Room Allocation Found for this User!');
+        }
+        if ($data->hall_id != $this->hall_id) {
             return redirect()->route('staff.roomallocation.roomrequests')->with('danger', 'Not Permitted!');
         }
         $student_id = $data->user_id;
@@ -354,6 +365,9 @@ class AllocatedSeatController extends Controller
         if ($data == null) {
             return redirect()->route('staff.roomallocation.index')->with('danger', 'Not Found!');
         }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.roomallocation.roomrequests')->with('danger', 'Not Permitted!');
+        }
         $data->status = '4';
         $data->room_id = $room_id;
         $data->allocated_seat_id = $allocated_seat_id;
@@ -367,10 +381,20 @@ class AllocatedSeatController extends Controller
         if ($data == null) {
             return redirect()->route('staff.roomallocation.index')->with('danger', 'Not Found!');
         }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.roomallocation.roomrequests')->with('danger', 'Not Permitted!');
+        }
+        $dataAllocation = AllocatedSeats::all()->where('user_id', $data->user_id)->first();
+        if ($dataAllocation != null) {
+            return redirect()->route('staff.roomallocation.index')->with('danger', ' Warning ! Room Allocation Found for this User!');
+        }
         $data->status = '1';
         $data->save();
-
         $student_id = $data->user_id;
+        // Set Hall to that student
+        $data2 = Student::find($student_id);
+        $data2->hall_id = $data->hall_id;
+        $data2->save();
         //Sending Email to User That Room Allocation is Accepted
         $EmailController = new EmailController();
         $EmailController->RoomAllocationEmail2($student_id, 1);
@@ -386,6 +410,13 @@ class AllocatedSeatController extends Controller
         $data = RoomRequest::find($id);
         if ($data == null) {
             return redirect()->route('staff.roomallocation.index')->with('danger', 'Not Found!');
+        }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.roomallocation.roomrequests')->with('danger', 'Not Permitted!');
+        }
+        $dataAllocation = AllocatedSeats::all()->where('user_id', $data->user_id)->first();
+        if ($dataAllocation != null) {
+            return redirect()->route('staff.roomallocation.index')->with('danger', ' Warning ! Room Allocation Found for this User!');
         }
         $allocated_seat_id = $data->allocated_seat_id;
         $data->status = '2';
@@ -413,6 +444,13 @@ class AllocatedSeatController extends Controller
         $data = RoomRequest::find($id);
         if ($data == null) {
             return redirect()->route('staff.roomallocation.index')->with('danger', 'Not Found!');
+        }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.roomallocation.roomrequests')->with('danger', 'Not Permitted!');
+        }
+        $dataAllocation = AllocatedSeats::all()->where('user_id', $data->user_id)->first();
+        if ($dataAllocation != null) {
+            return redirect()->route('staff.roomallocation.index')->with('danger', ' Warning ! Room Allocation Found for this User!');
         }
         $data->status = '0';
         $data->save();

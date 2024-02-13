@@ -14,7 +14,10 @@ return new class extends Migration
         Schema::create('halls', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->string('banglatitle');
+            $table->string('logo');
             $table->integer('staff_id');
+            $table->integer('type');
             $table->integer('status')->nullable();
             $table->timestamps();
         });

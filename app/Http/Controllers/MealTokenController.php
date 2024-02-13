@@ -13,6 +13,17 @@ use App\Models\HallOption;
 
 class MealTokenController extends Controller
 {
+    protected $hall_id;
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->hall_id = Auth::user()->hall_id;
+            if ($this->hall_id == 0 || $this->hall_id == null) {
+                return redirect()->route('student.dashboard')->with('danger', 'Please Get Hall Room Allocation to get access!');
+            }
+            return $next($request);
+        });
+    }
     /**
      * Display a listing of the resource.
      */

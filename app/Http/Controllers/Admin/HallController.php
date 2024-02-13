@@ -25,7 +25,7 @@ class HallController extends Controller
     public function create()
     {
         //
-        $provost = Staff::all()->where('type', 'provost');
+        $provost = Staff::all()->where('type', 'provost')->where('hall_id', '0');
         return view('admin.hall.create', ['provost' => $provost]);
     }
 
@@ -39,14 +39,28 @@ class HallController extends Controller
         $request->validate([
             'title' => 'required',
             'staff_id' => 'required',
+            'banglatitle' => 'required',
+            'logo' => 'required',
+            'type' => 'required',
             'status' => 'required',
         ]);
         $data->title = $request->title;
+        $data->banglatitle = $request->banglatitle;
         $data->staff_id = $request->staff_id;
+        $data->type = $request->type;
         $data->status = $request->status;
+        //If user Given any PHOTO
+        if ($request->hasFile('logo')) {
+            $data->logo = 'app/public/' . $request->file('logo')->store('Website', 'public');
+        } else {
+            $data->logo = 'img/justcse.png';
+        }
+        $dataStaff = Staff::find($request->staff_id);
+        if ($dataStaff->hall_id != null) {
+            return redirect()->back()->with('danger', 'User is allready a Provost!');
+        }
         $data->save();
         //Staff
-        $dataStaff = Staff::find($request->staff_id);
         $dataStaff->hall_id = $data->id;
         $dataStaff->save();
         //
@@ -90,13 +104,25 @@ class HallController extends Controller
         $request->validate([
             'title' => 'required',
             'staff_id' => 'required',
+            'banglatitle' => 'required',
         ]);
         $data = Hall::find($id);
         $data->title = $request->title;
+        $data->banglatitle = $request->banglatitle;
         $data->staff_id = $request->staff_id;
-        if ($request->staff_id != $request->staff_id_old) {
+        //If user Given any PHOTO
+        if ($request->hasFile('logo')) {
+            $data->logo = 'app/public/' . $request->file('logo')->store('Website', 'public');
+        } else {
+            $data->logo = $request->prev_logo;
+        }
+
+        if ($request->staff_id != $request->staff_id_old && $request->staff_id != 0) {
             //Staff
             $dataStaff = Staff::find($request->staff_id);
+            if ($dataStaff->hall_id != null) {
+                return redirect()->back()->with('danger', 'User is allready a Provost!');
+            }
             $dataStaff->hall_id = $data->id;
             $dataStaff->save();
             //Update Previous Provost

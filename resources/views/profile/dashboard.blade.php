@@ -7,7 +7,7 @@
                 <p>{{ session('danger') }} </p>
             </div>
 @endif
-@if (!Auth::user()->allocated_seat)
+@if (Auth::user()->hall_id!=0 && Auth::user()->hall_id!=null)
 <!-- Content Row For Order Spent of Current Month -->
 <div class="card-header p-1 bg-success my-1">
     <h6 class="p-3 font-weight-bold text-white bg-success m-1">

@@ -20,7 +20,8 @@
                         <th>Select Hall</th>
                         <td>
                             <select required name="hall_id" class="form-control">
-                                <option value="0">--- Select Hall ---</option>
+                                <option>--- Select Hall ---</option>
+                                <option value="0">--- N/A ---</option>
                                 @foreach ($halls as $hall)
                                 <option @if ($data->hall_id == $hall->id) selected @endif value="{{ $hall->id }}">{{ $hall->title }}</option>
                                 @endforeach

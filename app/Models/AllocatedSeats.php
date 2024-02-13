@@ -13,11 +13,8 @@ class AllocatedSeats extends Model
         'position',
         'hall_id',
     ];
-    public $timestamps = true;
 
-    /**
-     * Boot the model.
-     */
+    public $timestamps = true;
     protected static function boot()
     {
         parent::boot();

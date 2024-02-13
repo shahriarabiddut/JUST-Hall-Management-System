@@ -29,6 +29,17 @@
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <tbody>
                     <tr>
+                        <th colspan="2">Select Hall</th>
+                        <td colspan="2">
+                            <select required name="hall_id" class="form-control">
+                                <option value="0">--- Select Hall ---</option>
+                                @foreach ($halls as $hall)
+                                <option value="{{ $hall->id }}">{{ $hall->title }}</option>
+                                @endforeach
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
                         <th colspan="4">০১.আবেদনকারীর নাম</th>
                     </tr>
                 <tr>

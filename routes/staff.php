@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\SupportController;
+use App\Http\Controllers\Staff\SupportController;
 use App\Http\Controllers\Staff\FoodController;
 use App\Http\Controllers\Staff\HomeController;
 use App\Http\Controllers\Staff\RoomController;
@@ -43,10 +43,10 @@ Route::middleware('staff')->prefix('staff')->name('staff.')->group(function () {
     Route::resource('email', EmailController::class);
 
     //Suport Ticekts View And Reply
-    Route::get('support', [SupportController::class, 'staffIndex'])->name('support.index');
-    Route::get('support/{id}', [SupportController::class, 'staffAdmin'])->name('support.show');
-    Route::get('support/{id}/reply', [SupportController::class, 'staffReply'])->name('support.reply');
-    Route::put('support/{id}', [SupportController::class, 'staffReplyUpdate'])->name('support.replyUpdate');
+    Route::get('support', [SupportController::class, 'index'])->name('support.index');
+    Route::get('support/{id}', [SupportController::class, 'show'])->name('support.show');
+    Route::get('support/{id}/reply', [SupportController::class, 'reply'])->name('support.reply');
+    Route::put('support/{id}', [SupportController::class, 'update'])->name('support.replyUpdate');
 
     // Balance Crud
     Route::resource('balance', BalanceController::class);

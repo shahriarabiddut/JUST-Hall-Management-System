@@ -4,7 +4,7 @@
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('student.dashboard') }}">
         <div class="sidebar-brand-icon rotate-n-15">
-            <img src="{{ asset($HallOption[3]->value) }}" class="rounded mx-auto d-block sidebar-card-illustration" alt="Logo" style="width:50%;">
+            <img src="{{ asset($HallOption[3]->value) }}" class="rounded mx-auto d-block sidebar-card-illustration" alt="Logo" style="width:50%;"> 
         </div>
         <div class="sidebar-brand-text mx-3">Student Panel</div>
     </a>
@@ -49,7 +49,7 @@
             </div>
         </div>
     </li>
- @if (!Auth::user()->allocated_seat)
+ @if (Auth::user()->hall_id!=0 && Auth::user()->hall_id!=null)
     <!-- Divider -->
     <hr class="sidebar-divider">
     <!-- Heading -->
@@ -98,6 +98,7 @@
             </div>
         </div>
     </li>
+@endif
     <!-- Nav Item Payment - Utilities Collapse Menu -->
     <li class="nav-item">
         <a class="nav-link @if (!request()->is('student/balance*'))
@@ -116,8 +117,8 @@
             </div>
         </div>
     </li>
+@if (Auth::user()->hall_id!=0 && Auth::user()->hall_id!=null)   
     <!-- Nav Item Support - Utilities Collapse Menu -->
-    @endif
     <li class="nav-item">
         <a class="nav-link @if (!request()->is('student/support*'))
             collapsed
@@ -135,7 +136,7 @@
             </div>
         </div>
     </li>
-   
+    @endif
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">

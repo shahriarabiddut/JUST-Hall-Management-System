@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Admin;
 use App\Models\Staff;
+use App\Models\Support;
 use App\Models\HallOption;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Admin;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
@@ -63,5 +64,18 @@ class HomeController extends Controller
         } else {
             return Redirect::back()->with('danger', "Current Password Didn't Match");
         }
+    }
+    //Admin Support
+    public function supportIndex()
+    {
+
+        $data = Support::all();
+        return view('admin.support.index', ['data' => $data]);
+    }
+    public function supportShow(string $id)
+    {
+        //
+        $data = Support::find($id);
+        return view('admin.support.show', ['data' => $data]);
     }
 }
