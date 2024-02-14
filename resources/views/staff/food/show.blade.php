@@ -35,22 +35,28 @@
                     </tr>
                     <tr>
                         <th>Food Price</th>
-                        <td>{{ $food_time->price }} /= Taka</td>
+                        <td>{{ $data->food_time_hall->price }} /= Taka</td>
                     </tr>
                     <tr>
                         <th>Status</th>
                         <td>{{ $data->status }}</td>
                     </tr>
+                    
                     <tr>
                         <th>Created Date</th>
-                        <td>{{ $data->created_at }}</td>
+                        @if ($data->created_at!=null)
+                        <td>{{ $data->created_at->format('F j , Y')}}</td>
+                        @else
+                        <td>{{ $data->updated_at->format('F j , Y') }}</td>
+                        @endif
                     </tr>
                     <tr>
                         <th>Updated Date</th>
-                        <td>{{ $data->updated_at }}</td>
+                        <td>{{ $data->updated_at->format('F j , Y') }}</td>
                     </tr>
                     <tr>
                         <td colspan="2">
+                            <a onclick="return confirm('Are You Sure?')" href="{{ url('staff/food/'.$data->id.'/delete') }}" class="float-right btn btn-danger btn-sm "><i class="fa fa-trash"> Delete </i></a>
                             <a href="{{ url('staff/food/'.$data->id.'/edit') }}" class="float-left btn btn-info btn-sm mr-1"><i class="fa fa-edit"> Edit {{ $data->title }}  </i></a> 
                             
                         </td>

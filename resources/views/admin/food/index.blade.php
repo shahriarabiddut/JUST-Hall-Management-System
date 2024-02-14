@@ -29,6 +29,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
+                            <th>Hall</th>
                             <th>Name</th>
                             <th>Price</th>
                             <th>Food Time</th>
@@ -39,6 +40,7 @@
                     <tfoot>
                         <tr>
                             <th>#</th>
+                            <th>Hall</th>
                             <th>Name</th>
                             <th>Price</th>
                             <th>Food Time</th>
@@ -51,8 +53,15 @@
                         @foreach ($data as $key => $d)
                         <tr>
                             <td>{{ ++$key }}</td>
+                            <td>
+                                @if ($d->hall==null)
+                                    N/A
+                                    @else
+                                    {{ $d->hall->title }}
+                                @endif
+                                </td>
                             <td>{{ $d->food_name }}</td>
-                            <td>{{ $d->foodtime->price }}</td>
+                            <td>{{ $d->food_time_hall->price }}</td>
                             @switch($d->foodtime->title)
                             @case('Launch')
                                 <td class="bg-warning text-white text-center"> {{ $d->foodtime->title }} <i class="fas fa-sun"></i></td>

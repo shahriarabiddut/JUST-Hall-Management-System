@@ -112,20 +112,20 @@
     </div>
     <!-- Nav FoodTime Services - Utilities Collapse Menu -->
     <li class="nav-item">
-        <a class="nav-link @if (!request()->is('staff/food*') || !request()->is('staff/foodtime*'))
+        <a class="nav-link @if (!request()->is('staff/food*'))
             collapsed
         @endif" href="#" data-toggle="collapse" data-target="#collapseSeven"
             aria-expanded="true" aria-controls="collapseSeven">
             <i class="fas fa-table"></i>
             <span>Food </span>
         </a>
-        <div id="collapseSeven" class="collapse @if(request()->is('staff/food/*') || request()->is('staff/foodtime*')) show @endif" aria-labelledby="headingUtilities"
+        <div id="collapseSeven" class="collapse @if(request()->is('staff/food*')) show @endif" aria-labelledby="headingUtilities"
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Food Management</h6>
-                <a class="collapse-item" href="{{ route('staff.foodtime.index') }}"> Food Time </a>
-                <a class="collapse-item" href="{{ route('staff.food.index') }}">View All</a>
-                <a class="collapse-item" href="{{ route('staff.food.create') }}">Add new</a>
+                <a class="collapse-item" href="{{ route('staff.foodtime.index') }}"> Food Times </a>
+                <a class="collapse-item" href="{{ route('staff.food.index') }}">View All Food</a>
+                <a class="collapse-item" href="{{ route('staff.food.create') }}">Add new Food</a>
             </div>
         </div>
     </li>

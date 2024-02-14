@@ -16,6 +16,14 @@
             <div class="table-responsive">
                 <table class="table table-bordered" width="100%">
                     <tr>
+                        <th>Hall</th>
+                        <th>@if ($data->hall==null)
+                            N/A
+                            @else
+                            {{ $data->hall->title }}
+                        @endif</th>
+                    </tr>
+                    <tr>
                         <th>Name</th>
                         <td>{{ $data->food_name }}</td>
                     </tr>
@@ -35,7 +43,7 @@
                     </tr>
                     <tr>
                         <th>Food Price</th>
-                        <td>{{ $food_time->price }}</td>
+                        <td>{{ $data->food_time_hall->price }} /= Taka </td>
                     </tr>
                     <tr>
                         <th>Status</th>
@@ -43,11 +51,15 @@
                     </tr>
                     <tr>
                         <th>Created Date</th>
-                        <td>{{ $data->created_at }}</td>
+                        @if ($data->created_at!=null)
+                        <td>{{ $data->created_at->format('F j , Y')}}</td>
+                        @else
+                        <td>{{ $data->updated_at->format('F j , Y') }}</td>
+                        @endif
                     </tr>
                     <tr>
                         <th>Updated Date</th>
-                        <td>{{ $data->updated_at }}</td>
+                        <td>{{ $data->updated_at->format('F j , Y') }}</td>
                     </tr>
                     <tr>
                         <td colspan="2">

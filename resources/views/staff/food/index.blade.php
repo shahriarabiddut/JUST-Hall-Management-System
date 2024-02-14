@@ -53,7 +53,7 @@
                         <tr>
                             <td>{{ ++$i }}</td>
                             <td>{{ $d->food_name }}</td>
-                            <td>{{ $d->foodtime->price }} /= Taka</td>
+                            <td>{{ $d->food_time_hall->price }} /= Taka</td>
                             @switch($d->foodtime->title)
                             @case('Launch')
                                 <td class="bg-warning text-white text-center"> {{ $d->foodtime->title }} <i class="fas fa-sun"></i></td>

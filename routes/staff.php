@@ -89,6 +89,7 @@ Route::middleware('staff')->prefix('staff')->name('staff.')->group(function () {
     // Food Crud
     Route::get('food/{id}/active', [FoodController::class, 'active']);
     Route::get('food/{id}/disable', [FoodController::class, 'disable']);
+    Route::get('food/{id}/delete', [FoodController::class, 'destroy']);
     Route::resource('food', FoodController::class);
     // Order Crud
     Route::get('orders', [OrderController::class, 'index'])->name('orders.index');

@@ -72,9 +72,12 @@ class OrderController extends Controller
         //Check Food Time exist or not
         $food_time_id = $id;
         $food_time_hall = FoodTimeHall::all()->where('status', '=', '1')->where('food_time_id', '=', $food_time_id)->where('hall_id', $this->hall_id)->first();
+        if ($food_time_hall == null) {
+            return redirect()->route('student.order.index')->with('danger', 'Food Time is Disabled!');
+        }
         $food_time = FoodTime::find($food_time_hall->food_time_id);
         if ($food_time == null) {
-            return redirect()->route('student.order.index')->with('danger', 'Not Found');
+            return redirect()->route('student.order.index')->with('danger', 'Select Valid Food Menu');
         }
         //checking if its tommorow 
         $currentDate = Carbon::now(); // get current date and time
@@ -455,12 +458,16 @@ class OrderController extends Controller
         //
         $food_time_id = $id;
         $food_time_hall = FoodTimeHall::all()->where('status', '=', '1')->where('food_time_id', '=', $food_time_id)->where('hall_id', $this->hall_id)->first();
+        if ($food_time_hall == null) {
+            return redirect()->route('student.order.index')->with('danger', 'Food Time is Disabled!');
+        }
         $food_time = FoodTime::find($food_time_hall->food_time_id);
+        if ($food_time == null) {
+            return redirect()->route('student.order.index')->with('danger', 'Select Valid Food Menu');
+        }
         if ($food_time != null) {
             $food = Food::all()->where('status', '=', '1')->where('hall_id', $this->hall_id)->where('food_time_id', '=', $food_time_id);
             return view('profile.order.createAdvance', ['food_time' => $food_time, 'food' => $food, 'nextDate' => $nextDate3]);
-        } else {
-            return redirect()->route('student.order.foodmenu')->with('danger', 'Select Valid Food Menu');
         }
     }
     public function storeOrderAdvance(Request $request)

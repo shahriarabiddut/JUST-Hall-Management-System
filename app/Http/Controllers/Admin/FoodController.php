@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Food;
+use App\Models\Hall;
 use App\Models\FoodTime;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -26,7 +27,8 @@ class FoodController extends Controller
     {
         //
         $food_time = FoodTime::all()->where('status', '=', '1');
-        return view('admin.food.create', ['food_time' => $food_time]);
+        $halls = Hall::all()->where('status', '=', '1');
+        return view('admin.food.create', ['food_time' => $food_time, 'halls' => $halls]);
     }
 
     /**
@@ -40,10 +42,12 @@ class FoodController extends Controller
             'food_name' => 'required',
             'food_time_id' => 'required',
             'status' => 'required',
+            'hall_id' => 'required',
         ]);
         $data->food_time_id = $request->food_time_id;
         $data->food_name = $request->food_name;
         $data->status = $request->status;
+        $data->hall_id = $request->hall_id;
         $data->save();
 
         return redirect('admin/food')->with('success', 'Food Item Data has been added Successfully!');

@@ -146,12 +146,12 @@ class FoodTimeController extends Controller
         }
         //
         $data->status = 0;
-
-        // foreach ($data->food_time->food as $fitem) {
-        //     $dataDisable = Food::find($fitem->id);
-        //     $dataDisable->status = 0;
-        //     $dataDisable->save();
-        // }
+        $dataFood = Food::all()->where('food_time_id', $data->food_time_id)->where('hall_id', $this->hall_id);
+        foreach ($dataFood as $fitem) {
+            $dataDisable = Food::find($fitem->id);
+            $dataDisable->status = 0;
+            $dataDisable->save();
+        }
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
