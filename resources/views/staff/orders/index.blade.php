@@ -80,9 +80,7 @@
                         @if($data)
                         @foreach ($data as $key => $d)
                         <tr>
-                            @php
-                                $i=$key;
-                            @endphp
+                            @php $i=$key; @endphp
                             <td>{{ ++$key }}</td>
                             <td>
                                 @if ($d->student==null)
@@ -103,9 +101,11 @@
                             <td>{{ $d->quantity }}</td>
                             <td>{{ $d->id }}</td>
                             <td>
+                                @if ($d->token!=null)
                                 <a  href="{{ url('staff/orders/status/'.$d->id) }}" class="m-1 float-right btn btn-success btn-sm "><i class="fas fa-ticket-alt"> Token</i></a>
-                                @if ($token[$i]==1)
+                                @if ($d->token->status==1)
                                 <p class="float-right btn btn-danger btn-sm m-1"><i class="fas fa-ticket-alt"> Used</i></p>
+                                @endif
                                 @endif
                                 
                             </td>

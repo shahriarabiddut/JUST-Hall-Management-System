@@ -171,7 +171,7 @@ class OrderController extends Controller
             $data->quantity = $request->quantity;
             $data->price = $foodprice->price * $data->quantity;
             $data->date = $request->date;
-
+            $data->hall_id = $this->hall_id;
             $givendate = $data->date;
             //Suhr Ectra Rule
             if ($food_time_id == 3) {
@@ -188,7 +188,7 @@ class OrderController extends Controller
                 $this->deductBalance($userid, $dataPrice);
                 //Generating Meal Token
                 $MealTokenController = new MealTokenController();
-                $MealTokenController->generateTokenAuto($data->id);
+                $MealTokenController->generateTokenAuto($data->id, $this->hall_id);
             } else {
                 return redirect()->route('student.order.index')->with('danger', 'Please! Select Correct Date');
             }
@@ -522,7 +522,7 @@ class OrderController extends Controller
                 $data->student_id = $userid;
                 $data->order_type = $request->order_type;
                 $data->food_item_id = $request->food_item_id;
-
+                $data->hall_id = $this->hall_id;
                 //Setting Quantity for security
                 $order_quantity = $request->quantity;
                 if ($dataquantity == 1) {
@@ -539,7 +539,7 @@ class OrderController extends Controller
                 $this->deductBalance($userid, $dataPrice);
                 //Generating Meal Token
                 $MealTokenController = new MealTokenController();
-                $MealTokenController->generateTokenAuto($data->id);
+                $MealTokenController->generateTokenAuto($data->id, $this->hall_id);
 
 
                 return redirect()->route('student.order.index')->with('success', 'Advance Meal Order placed Successfully for ' . $advanceDate . ' And Token Generated Successfully!');

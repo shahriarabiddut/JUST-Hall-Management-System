@@ -13,17 +13,17 @@ use App\Models\HallOption;
 
 class MealTokenController extends Controller
 {
-    protected $hall_id;
-    public function __construct()
-    {
-        $this->middleware(function ($request, $next) {
-            $this->hall_id = Auth::user()->hall_id;
-            if ($this->hall_id == 0 || $this->hall_id == null) {
-                return redirect()->route('student.dashboard')->with('danger', 'Please Get Hall Room Allocation to get access!');
-            }
-            return $next($request);
-        });
-    }
+    // protected $hall_id;
+    // public function __construct()
+    // {
+    //     $this->middleware(function ($request, $next) {
+    //         $this->hall_id = Auth::user()->hall_id;
+    //         if ($this->hall_id == 0 || $this->hall_id == null) {
+    //             return redirect()->route('student.dashboard')->with('danger', 'Please Get Hall Room Allocation to get access!');
+    //         }
+    //         return $next($request);
+    //     });
+    // }
     /**
      * Display a listing of the resource.
      */
@@ -55,7 +55,7 @@ class MealTokenController extends Controller
         $newdata->save();
         return redirect('student/mealtoken')->with('success', 'Mealtoken Generated Successfully!');
     }
-    public function generateTokenAuto(string $id)
+    public function generateTokenAuto(string $id, string $hall_id)
     {
         //
         $data = Order::all()->where('id', '=', $id)->first();
@@ -70,6 +70,7 @@ class MealTokenController extends Controller
         $newdata->quantity = $data->quantity;
         $newdata->order_id = $id;
         $newdata->meal_type = $data->order_type;
+        $newdata->hall_id = $hall_id;
         $newdata->save();
         return $newdata->id;
     }
@@ -83,9 +84,7 @@ class MealTokenController extends Controller
         //
         $data = MealToken::find($id);
         if ($data) {
-            $link = route('staff.orders.show', $data->order_id);
-            $qrcode = 0;
-            return view('profile.mealtoken.show', ['data' => $data, 'qrcode' => $qrcode]);
+            return view('profile.mealtoken.show', ['data' => $data]);
         } else {
             return redirect('student/mealtoken')->with('danger', ' Generate Mealtoken First!');
         }
@@ -95,10 +94,7 @@ class MealTokenController extends Controller
         //
         $data = MealToken::all()->where('order_id', '=', $id)->first();
         if ($data) {
-            $link = route('staff.orders.show', $data->order_id);
-            // $qrcode = QrCode::size(300)->generate($link);
-            $qrcode = 0;
-            return view('profile.mealtoken.show', ['data' => $data, 'qrcode' => $qrcode]);
+            return view('profile.mealtoken.show', ['data' => $data]);
         } else {
             return redirect('student/mealtoken')->with('danger', ' Generate Mealtoken First!');
         }

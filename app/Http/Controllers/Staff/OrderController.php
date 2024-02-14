@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\FoodTime;
 use App\Models\MealToken;
 use App\Models\HallOption;
+use App\Models\FoodTimeHall;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Models\TokenPrintQueue;
@@ -17,17 +18,27 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class OrderController extends Controller
 {
+    protected $hall_id;
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->hall_id = Auth::guard('staff')->user()->hall_id;
+            if ($this->hall_id == 0 || $this->hall_id == null) {
+                return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+            }
+            return $next($request);
+        });
+    }
     //
     public function index()
     {
-        $data = Order::select('*')->orderBy("id", "desc")->where('food_item_id', '!=', '0')->get();
-        $dataFoodTime = FoodTime::all()->where('status', '1');
-        $token = [];
-        foreach ($data as $d) {
-            $tokenData = MealToken::all()->where('order_id', '=', $d->id)->first();
-            $token[] = $tokenData->status;
+        $data = Order::select('*')->orderBy("id", "desc")->where('food_item_id', '!=', '0')->where('hall_id', $this->hall_id)->get();
+        $dataFoodTimeHall = FoodTimeHall::all()->where('status', '1')->where('hall_id', $this->hall_id);
+        $dataFoodTime = [];
+        foreach ($dataFoodTimeHall as $dFT) {
+            $dataFoodTime[] = FoodTime::find($dFT->food_time_id);
         }
-        return view('staff.orders.index', ['data' => $data, 'token' => $token, 'dataFoodTime' => $dataFoodTime]);
+        return view('staff.orders.index', ['data' => $data, 'dataFoodTime' => $dataFoodTime]);
     }
     public function searchByDate(Request $request)
     {
@@ -36,7 +47,7 @@ class OrderController extends Controller
         $type = $request->type;
         // dd($date);
         // dd($type);
-        $data = MealToken::all();
+        $data = MealToken::all()->where('hall_id', $this->hall_id);
         if ($date != null) {
             $data = $data->where('date', '=', $date);
         }
@@ -44,14 +55,18 @@ class OrderController extends Controller
         if ($type != '' && $type != 'x') {
             $data = $data->where('meal_type', '=', $type);
         }
-        $dataFoodTime = FoodTime::all()->where('status', '1');
+        $dataFoodTimeHall = FoodTimeHall::all()->where('status', '1')->where('hall_id', $this->hall_id);
+        $dataFoodTime = [];
+        foreach ($dataFoodTimeHall as $dFT) {
+            $dataFoodTime[] = FoodTime::find($dFT->food_time_id);
+        }
         return view('staff.orders.search', ['data' => $data, 'type' => $type, 'date' => $date, 'dataFoodTime' => $dataFoodTime]);
     }
     public function searchByDateDownload(Request $request)
     {
         $date = $request->date;
         $type = $request->type;
-        $data = MealToken::all();
+        $data = MealToken::all()->where('hall_id', $this->hall_id);
         if ($request->date != null) {
             $data = $data->where('date', '=', $date);
         }
@@ -94,7 +109,7 @@ class OrderController extends Controller
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistory($staff_id, 'download', 'MealType - ' . $type . ' of ' . $date . '  data has been downloaded Successfully!');
+        $HistoryController->addHistoryHall($staff_id, 'download', 'MealType - ' . $type . ' of ' . $date . '  data has been downloaded Successfully!', $this->hall_id);
         //Saved
 
         // Return a download response
@@ -107,45 +122,49 @@ class OrderController extends Controller
 
         $resulttitle = [];
 
-        $total_food_times = FoodTime::select('id')->get();
+        $dataFoodTime = FoodTimeHall::all()->where('status', '1')->where('hall_id', $this->hall_id);
+        $total_food_times = [];
+        foreach ($dataFoodTime as $dFT) {
+            $total_food_times[] = FoodTime::find($dFT->food_time_id);
+        }
         $results = [];
         foreach ($total_food_times as $total_food_time) {
-            $i = $total_food_time->id;
-            $results[] = $this->foodTimeSearch($date, $i);
-            $resulttitle[] = FoodTime::all()->where('id', '=', $i)->first();
+            $food_time_id = $total_food_time->id;
+            $results[] = $this->foodTimeSearch($date, $food_time_id);
+            $resulttitle[] = FoodTime::find($food_time_id);
         }
 
 
         return view('staff.orders.searchHistory', ['results' => $results, 'resulttitle' => $resulttitle, 'date' => $date]);
     }
-    public function foodTime(string $nextDate, string $id)
-    {
-        //foodtype
-        $food_time = FoodTime::all()->where('status', '=', '1')->where('id', '=', $id)->first();
-        //Food Item for search
-        $foods = Food::all()->where('status', '=', '1')->where('food_time_id', '=', $id);
-        $food_id_data = [];
-        foreach ($foods as $food) {
-            $food_id_data[] = $food->id;
-        }
-        // total count of foods for forloop
-        $total_food_count = count($foods);
-        $food_data = [];
-        for ($i = 1; $i <= $total_food_count; $i++) {
-            $food_item_id = $food_id_data[$i - 1];
-            $food_data[$i] = Order::where('date', '=', $nextDate)
-                ->where('order_type', '=', $food_time->title)
-                ->where('food_item_id', '=', $food_item_id)->sum('quantity');
-        }
+    // public function foodTime(string $nextDate, string $id)
+    // {
+    //     //foodtype
+    //     $food_time = FoodTime::all()->where('status', '=', '1')->where('id', '=', $id)->first();
+    //     //Food Item for search
+    //     $foods = Food::all()->where('status', '=', '1')->where('food_time_id', '=', $id)->where('hall_id', $this->hall_id);
+    //     $food_id_data = [];
+    //     foreach ($foods as $food) {
+    //         $food_id_data[] = $food->id;
+    //     }
+    //     // total count of foods for forloop
+    //     $total_food_count = count($foods);
+    //     $food_data = [];
+    //     for ($i = 1; $i <= $total_food_count; $i++) {
+    //         $food_item_id = $food_id_data[$i - 1];
+    //         $food_data[$i] = Order::where('date', '=', $nextDate)
+    //             ->where('order_type', '=', $food_time->title)
+    //             ->where('food_item_id', '=', $food_item_id)->sum('quantity');
+    //     }
 
-        return [$food_data, $foods];
-    }
+    //     return [$food_data, $foods];
+    // }
     public function foodTimeSearch(string $nextDate, string $id)
     {
         //foodtype
         $food_time = FoodTime::all()->where('id', '=', $id)->first();
         //Food Item for search
-        $foods = Food::all()->where('food_time_id', '=', $id);
+        $foods = Food::all()->where('food_time_id', '=', $id)->where('hall_id', $this->hall_id);
         $food_id_data = [];
         foreach ($foods as $food) {
             $food_id_data[] = $food->id;
@@ -157,7 +176,7 @@ class OrderController extends Controller
             $food_item_id = $food_id_data[$i - 1];
             $food_data[$i] = Order::where('date', '=', $nextDate)
                 ->where('order_type', '=', $food_time->title)
-                ->where('food_item_id', '=', $food_item_id)->sum('quantity');
+                ->where('food_item_id', '=', $food_item_id)->where('hall_id', $this->hall_id)->sum('quantity');
         }
 
         return [$food_data, $foods];
@@ -168,6 +187,9 @@ class OrderController extends Controller
         $data = MealToken::all()->where('order_id', '=', $id)->first();
         if ($data == null) {
             return redirect()->route('staff.orders.index')->with('danger', 'Not Found');
+        }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.orders.index')->with('danger', 'Not Permitted!');
         }
         $data2 = Order::all()->where('id', '=', $data->order_id)->first();
         $currentDate = Carbon::now(); // get current date and time
@@ -199,6 +221,9 @@ class OrderController extends Controller
         if ($data == null) {
             return redirect()->route('staff.orders.index')->with('danger', 'Not Found');
         }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.orders.index')->with('danger', 'Not Permitted!');
+        }
         if ($data->status >= 1) {
             return redirect()->back()->with('danger', 'Warning!');
         } else {
@@ -219,6 +244,9 @@ class OrderController extends Controller
         }
         if ($data == null) {
             return redirect()->back()->with('danger', 'Not Found!');
+        }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.orders.index')->with('danger', 'Not Permitted!');
         }
         // Done
         if ($data->status == 0) {
@@ -293,6 +321,12 @@ class OrderController extends Controller
         $falseCheck = 0;
         $data = MealToken::all()->where('token_number', $tokenid)->first();
         $token = MealToken::all()->where('token_number', $tokenid)->first();
+        if ($data == null) {
+            return redirect()->route('staff.orders.scan')->with('danger', 'Not Found!');
+        }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.orders.index')->with('danger', 'Not Permitted!');
+        }
         //Check Date is Valid 
         $result = $this->isDateValid($data->date);
         if ($result == false) {
@@ -306,9 +340,6 @@ class OrderController extends Controller
             return view('staff.orders.scan.index', ['token' => $token, 'falseCheck' => $falseCheck]);
         }
         //
-        if ($data == null) {
-            return redirect()->route('staff.orders.scan')->with('danger', 'Not Found!');
-        }
         if ($data->meal_type == 'Launch') {
             //If today time is greater than remaining time , Token Invalid
             $today = Carbon::now(); // get current date and time
@@ -384,10 +415,13 @@ class OrderController extends Controller
     public function qrcodescan(Request $request)
     {
         $falseCheck = 0;
-        $data = MealToken::all()->where('id', $request->token_number)->first();
-        $token = MealToken::all()->where('id', $request->token_number)->first();
+        $data = MealToken::all()->where('token_number', $request->token_number)->first();
+        $token = MealToken::all()->where('token_number', $request->token_number)->first();
         if ($data == null) {
             return redirect()->route('staff.orders.scan')->with('danger', 'Not Found!');
+        }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.orders.index')->with('danger', 'Not Permitted!');
         }
         //Check Date is Valid To Print
         $result = $this->isDateValid($data->date);
@@ -475,7 +509,7 @@ class OrderController extends Controller
             return view('staff.orders.scan.index', ['token' => $token, 'falseCheck' => $falseCheck]);
         }
     }
-    public function qrcodescanesp(string $value, string $tokenid)
+    public function qrcodescanesp(string $hall_id, string $value, string $tokenid)
     {
         function capitalizeAndLowercase($str)
         {
@@ -502,8 +536,10 @@ class OrderController extends Controller
         //
         $falseCheck = 0;
         $data = MealToken::all()->where('token_number', $result2)->first();
-
         if ($data == null) {
+            return 0;
+        }
+        if ($data->hall_id != $hall_id) {
             return 0;
         }
         //Check Date is Valid To Print

@@ -16,4 +16,8 @@ class Order extends Model
     {
         return $this->belongsTo(Student::class, 'student_id');
     }
+    function token()
+    {
+        return $this->hasOne(MealToken::class, 'order_id', 'id');
+    }
 }

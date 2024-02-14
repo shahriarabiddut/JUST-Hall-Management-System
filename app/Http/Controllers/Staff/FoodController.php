@@ -149,6 +149,9 @@ class FoodController extends Controller
         if ($data == null) {
             return redirect()->route('staff.food.index')->with('danger', 'Not Found!');
         }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.food.index')->with('danger', 'Not Permitted!');
+        }
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('quantity');
             $table->integer('status');
             $table->string('token_number');
+            $table->integer('hall_id')->references('id')->on('halls')->nullable();
             $table->integer('print')->nullable();
             $table->timestamps();
         });

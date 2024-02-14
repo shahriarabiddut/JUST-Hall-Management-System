@@ -89,7 +89,7 @@
                             <td>{{ $d->date }}</td>
                             <td>{{ $d->order_type }}</td>
                             <td>{{ $d->quantity }}</td>
-                            <td>{{ $d->price }}</td>
+                            <td>৳ {{ $d->price }} /=</td>
                             
                             
                             <td class="text-center">
