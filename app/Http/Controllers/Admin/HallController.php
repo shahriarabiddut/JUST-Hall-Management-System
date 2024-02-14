@@ -50,6 +50,8 @@ class HallController extends Controller
         $data->staff_id = $request->staff_id;
         $data->type = $request->type;
         $data->status = $request->status;
+        $data->print = 0;
+        $data->secret = 'value';
         //If user Given any PHOTO
         if ($request->hasFile('logo')) {
             $data->logo = 'app/public/' . $request->file('logo')->store('Website', 'public');
@@ -116,11 +118,15 @@ class HallController extends Controller
             'title' => 'required',
             'staff_id' => 'required',
             'banglatitle' => 'required',
+            'print' => 'required',
+            'secret' => 'required',
         ]);
         $data = Hall::find($id);
         $data->title = $request->title;
         $data->banglatitle = $request->banglatitle;
         $data->staff_id = $request->staff_id;
+        $data->print = $request->print;
+        $data->secret = $request->secret;
         //If user Given any PHOTO
         if ($request->hasFile('logo')) {
             $data->logo = 'app/public/' . $request->file('logo')->store('Website', 'public');

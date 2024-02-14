@@ -256,6 +256,9 @@ class OrderController extends Controller
         if ($data == null) {
             return redirect()->route('student.order.index')->with('danger', 'Not Found');
         }
+        if ($data->student_id != Auth::user()->id) {
+            return redirect()->route('student.dashboard')->with('danger', ' Unauthorized Access!');
+        }
         $foodItem = Food::all()->where('id', '=', $data->food_item_id)->where('hall_id', $this->hall_id)->first();
         $tokendata = MealToken::all()->where('order_id', '=', $id)->first();
         //Check Date is Valid To Delete
@@ -312,13 +315,22 @@ class OrderController extends Controller
      */
     public function edit(string $id)
     {
+        $userid = Auth::user()->id;
         //
         $currentDate = Carbon::now(); // get current date and time
         $current_Date = $currentDate->setTimezone('GMT+6')->format('Y-m-d'); // 2023-03-17
         $current_time = $currentDate->setTimezone('GMT+6')->format('Y-m-d H:i:s'); // "00:10:15"
         $nextDate = $currentDate->addDay(); // add one day to current date
         $nextDate = $nextDate->setTimezone('GMT+6')->format('Y-m-d'); // 2023-03-17
-        $data = Order::all()->where('id', '=', $id)->first();
+        //
+        $data = Order::find($id);
+        if ($data == null) {
+            return redirect()->route('student.order.index')->with('danger', 'Not Found');
+        }
+        if ($data->student_id != $userid) {
+            return redirect()->route('student.dashboard')->with('danger', ' Unauthorized Access!');
+        }
+        //
         $TokenDate = $data->date;
         $TokenTime = $data->date . " 22:00:00";
         if ($TokenDate <= $nextDate) {
@@ -395,14 +407,16 @@ class OrderController extends Controller
      */
     public function destroy(string $id)
     {
-        //Id 
         $userid = Auth::user()->id;
         //
-        $data = Order::all()->where('id', '=', $id)->first();
-        $foodItem = Food::all()->where('id', '=', $data->food_item_id)->where('hall_id', $this->hall_id)->first();
+        $data = Order::find($id);
         if ($data == null) {
             return redirect()->route('student.order.index')->with('danger', 'Not Found');
         }
+        if ($data->student_id != $userid) {
+            return redirect()->route('student.dashboard')->with('danger', ' Unauthorized Access!');
+        }
+        $foodItem = Food::all()->where('id', '=', $data->food_item_id)->where('hall_id', $this->hall_id)->first();
         //Check Date is Valid To Delete
         $validDate = $this->isDateValid2Cancel($data->date, $foodItem->food_time_id);
         //

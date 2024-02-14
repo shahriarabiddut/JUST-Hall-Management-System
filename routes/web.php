@@ -4,6 +4,7 @@ use App\Mail\MyTestEmail;
 use App\Models\HallOption;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EspController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\PaymentController;
@@ -37,16 +38,13 @@ Route::get('/', function () {
 //
 $printingOption = HallOption::all()->where('name', 'print')->first();
 if ($printingOption->value != 0) {
-    // Route::get('/tokenPrint', [MealTokenController::class, 'TokenPrintQueue'])->name('tokenPrint');
-    Route::get('/tokenPrint/{value1}', [MealTokenController::class, 'TokenPrintQueue2'])->name('tokenPrint');
-    Route::get('/tpqd/{id}&{order_id}&{rollno}/delete', [MealTokenController::class, 'TokenPrintQueueDelete'])->name('tokenprint.delete');
-    Route::get('/tpqd/{value}/{id}&{order_id}&{rollno}/delete', [MealTokenController::class, 'TokenPrintQueueDelete2'])->name('tokenprint.delete2');
-    // Change made here added hall_id to identify the scanner and the function need to be moved from staff to open 
-    Route::get('orders/scan/{hall_id}/{value}/{id}', [App\Http\Controllers\Staff\OrderController::class, 'qrcodescanesp'])->name('orders.qrcodescanlink')->where('id', '(.*(?:%2F:)?.*)');
+    // Changed here added hall_id  
+    Route::get('/tokenPrint/{hall_id}/{value1}', [EspController::class, 'TokenPrintQueue2'])->name('tokenPrint');
+    //ESP 32 Token Print Queue Delete & added hall_id
+    Route::get('/tpqd/{hall_id}/{value}&{id}&{order_id}&{rollno}/delete', [EspController::class, 'TokenPrintQueueDelete2'])->name('tokenprint.delete2');
+    // Changed here added hall_id to identify the scanner 
+    Route::get('orders/scan/{hall_id}/{value}/{id}', [EspController::class, 'qrcodescanesp'])->name('orders.qrcodescanlink')->where('id', '(.*(?:%2F:)?.*)');
 }
-//
-//ESP 32 Token Print Queue Delete
-// Route::get('/tpqd/{id}&{order_id}&{rollno}', [MealTokenController::class, 'TokenPrintQueueDelete'])->name('tokenprint.delete');
 
 //User Routes
 Route::get('student', [ProfileController::class, 'index'])->middleware(['auth'])->name('student.dashboard');

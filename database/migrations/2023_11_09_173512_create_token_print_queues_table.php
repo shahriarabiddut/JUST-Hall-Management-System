@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('token_id');
             $table->integer('order_id');
             $table->integer('rollno');
+            $table->integer('hall_id')->references('id')->on('halls')->nullable();
             $table->timestamps();
         });
     }

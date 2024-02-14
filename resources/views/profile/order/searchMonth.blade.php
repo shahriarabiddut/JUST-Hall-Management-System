@@ -63,7 +63,7 @@
                             <td>{{ ++$key }}</td>
                             <td>
                                 @if ($d->food_item_id==0)
-                                System 
+                                System Fixed Cost Charge
                                 @else    
                                 {{ $d->food->food_name }}
                                 @endif

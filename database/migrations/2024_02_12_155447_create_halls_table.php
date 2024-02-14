@@ -19,6 +19,8 @@ return new class extends Migration
             $table->integer('staff_id');
             $table->integer('type');
             $table->integer('status')->nullable();
+            $table->integer('print');
+            $table->string('secret');
             $table->timestamps();
         });
     }
