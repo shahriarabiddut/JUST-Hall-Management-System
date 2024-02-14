@@ -18,12 +18,26 @@
             @endif
             <!-- Session Messages Ends -->
             
-            <div class="card shadow mb-1 p-1 bg-secondary text-white">
-                <form method="POST" class=" p-1 m-1" action="{{ route('staff.orders.searchByHistory') }}">
+            <div class="card shadow mb-4 pl-4 py-2 bg-secondary text-white">
+                <form method="POST" class="p-1" action="{{ route('staff.orders.searchByDate') }}">
                     @csrf
-                    <label for="search-date">Search by Date with Details :</label>
-                    <input type="date" id="search-date" name="date">
-                    <button type="submit">Search</button>
+                    <div class="form-row">
+                        <div class="col-md-3 mt-1"> <button class="form-control btn btn-dark" type="reset">Search by Date :</button> </div>
+                    <div class="col-md-3 mt-1">
+                    <select class="form-control" name="type" id="">
+                        <option value="x">-- Select Meal Type--</option>
+                        @foreach ($dataFoodTime as $ft)
+                        <option value="{{$ft->title}}">{{$ft->title}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-3 mt-1">
+                    <input class="form-control"  required type="date" id="search-date" name="date">
+                </div>
+                <div class="col-md-3 mt-1">
+                    <button class="form-control btn btn-info"  type="submit">Search</button>
+                </div>
+            </div>
                   </form>
             </div>
 
@@ -31,23 +45,24 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h3 class="m-0 font-weight-bold text-primary d-inline" >Order History</h3>
-                <div class="float-right">
-                    <form method="POST" class="form-control p-1" action="{{ route('staff.orders.searchByDate') }}">
+            <h3 class="m-0 font-weight-bold text-primary d-inline" >All Orders</h3>
+                <div class="float-right h6">
+                    <form method="POST" class="p-1 " action="{{ route('staff.orders.searchByHistory') }}">
                         @csrf
-                        <label for="search-date">Meal Type : </label>
-                        <select  name="type" id="">
-                            <option value="x">-- Select --</option>
-                            @foreach ($dataFoodTime as $ft)
-                            <option value="{{$ft->title}}">{{$ft->title}}</option>
-                            @endforeach
-                        </select>
-                        <label for="search-date">Search History by Date : </label>
-                        <input type="date" id="search-date" name="date" >
-                        <button type="submit">Search</button>
-                    </form>
+                        <div class="form-row">
+                            <div class="col-md-4 mt-1">
+                        <button class="form-control btn btn-dark p-1" type="reset"> Order History </button>
+                    </div>
+                    <div class="col-md-4 mt-1">
+                        <input  class="form-control" required type="date" id="search-date" name="date">
+                    </div>
+                    <div class="col-md-4 mt-1">
+                        <button class="form-control btn btn-info" type="submit">Search</button>
+                    </div>
+                    </div>
+                      </form>
                 </div>
-            </h3>
+            
         </div>
         <div class="card-body">
             <div class="table-responsive">

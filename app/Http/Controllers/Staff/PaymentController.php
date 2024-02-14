@@ -12,13 +12,24 @@ use App\Http\Controllers\Staff\EmailController;
 
 class PaymentController extends Controller
 {
+    protected $hall_id;
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->hall_id = Auth::guard('staff')->user()->hall_id;
+            if ($this->hall_id == 0 || $this->hall_id == null) {
+                return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+            }
+            return $next($request);
+        });
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         //
-        $data = Payment::latest()->get();
+        $data = Payment::latest()->where('hall_id', $this->hall_id)->get();
         return view('staff.payment.index', ['data' => $data]);
     }
 
@@ -28,7 +39,7 @@ class PaymentController extends Controller
     public function create()
     {
         //
-        $studentdata = Student::all();
+        $studentdata = Student::all()->where('hall_id', $this->hall_id);
         return view('staff.payment.create', ['studentdata' => $studentdata]);
     }
 
@@ -46,8 +57,6 @@ class PaymentController extends Controller
             'amount' => 'required',
             'status' => 'required',
         ]);
-
-
         $data->student_id = $request->student_id;
         $data->staff_id = $request->staff_id;
         $data->transaction_id = 0;
@@ -58,6 +67,7 @@ class PaymentController extends Controller
         $data->email = Auth::guard('staff')->user()->email;
         $data->address = Auth::guard('staff')->user()->email;
         $data->currency = 'BDT';
+        $data->hall_id =  $this->hall_id;
         $data->save();
         $status = $data->status;
         // Add in Balance if accepted
@@ -93,6 +103,9 @@ class PaymentController extends Controller
         if ($data == null) {
             return redirect()->route('staff.payment.index')->with('danger', 'Not Found!');
         }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.payment.index')->with('danger', 'Not Permitted!');
+        }
         return view('staff.payment.show', ['data' => $data]);
     }
     public function acceptby(string $id)
@@ -101,6 +114,9 @@ class PaymentController extends Controller
         $data = Payment::find($id);
         if ($data == null) {
             return redirect()->route('staff.payment.index')->with('danger', 'Not Found!');
+        }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.payment.index')->with('danger', 'Not Permitted!');
         }
         if ($data->status == 'Accepted' || $data->status == 'Rejected') {
             return redirect('staff/payment')->with('danger', 'You are Warned!');
@@ -164,6 +180,9 @@ class PaymentController extends Controller
         $data = Payment::find($id);
         if ($data == null) {
             return redirect()->route('staff.payment.index')->with('danger', 'Not Found!');
+        }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.payment.index')->with('danger', 'Not Permitted!');
         }
         if ($data->status == 'Accepted' || $data->status == 'Rejected') {
             return redirect('staff/payment')->with('danger', 'You are Warned!');

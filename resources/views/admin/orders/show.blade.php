@@ -28,6 +28,15 @@
             <div class="table-responsive">
                 <table class="table table-bordered" width="100%">
                     <tr>
+                        <th width="60%">Hall</th>
+                        <th width="40%">@if ($data->hall==null)
+                            N/A
+                        @else
+                        {{ $data->hall->title }} 
+                        @endif
+                        </th>
+                    </tr>
+                    <tr>
                         <th width="60%">Meal Type</th>
                         <td width="40%">{{ $data->meal_type }}</td>
                     </tr>

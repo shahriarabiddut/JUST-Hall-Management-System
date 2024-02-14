@@ -24,26 +24,31 @@
             </div>
             @endif
             <!-- Session Messages Ends -->
-            
-    <!-- DataTales Example -->
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h3 class="m-0 font-weight-bold text-primary">Order History
-                <div class="float-right">
-                    <form method="POST" class="form-control" action="{{ route('staff.orders.searchByDate') }}">
-                        @csrf
-                        <label for="search-date">Meal Type : </label>
-                        <select  name="type" id="">
-                            <option @if($type == 'x') selected @endif value="x">-- Select --</option>
+            <div class="card shadow mb-4 pl-4 py-2 bg-secondary text-white">
+                <form method="POST" class="p-1" action="{{ route('staff.orders.searchByDate') }}">
+                    @csrf
+                    <div class="form-row">
+                    <div class="col-md-3 mt-1">
+                        <select class="form-control"  name="type" id="">
+                            <option @if($type == 'x') selected @endif value="x">-- Select Meal Type --</option>
                             @foreach ($dataFoodTime as $ft)
                             <option @if($type == $ft->title) selected @endif value="{{$ft->title}}">{{$ft->title}}</option>
                             @endforeach
                         </select>
-                        <label for="search-date">Search History by Date : </label>
-                        <input type="date" id="search-date" name="date" value="{{ $date }}">
-                        <button type="submit">Search</button>
-                      </form>
+                    </div>
+                    <div class="col-md-3 mt-1">
+                        <input class="form-control"  type="date" id="search-date" name="date" value="{{ $date }}">
+                    </div>
+                    <div class="col-md-3 mt-1">
+                    <button class="form-control btn btn-info" type="submit">Search</button>
                 </div>
+                    </div>
+                  </form>
+            </div>
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h3 class="m-0 font-weight-bold text-primary">Order History
                 <a href="{{ url('staff/orders') }}" class="float-left mx-1 btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i></a>
                 </h3>
         </div>

@@ -14,17 +14,41 @@
             </div>
             @endif
             <!-- Session Messages Ends -->
-            
+            <div class="card shadow mb-4 pl-4 py-2 bg-secondary text-white">
+                <form method="POST" class="p-1" action="{{ route('admin.orders.searchByDate') }}">
+                    @csrf
+                    <div class="form-row">
+                        <div class="col-md-3 mt-1">
+                        <select class="form-control" required name="hall_id" id="">
+                            <option value="0">-- Select Hall--</option>
+                            @foreach ($halls as $ft)
+                            <option @if($hall_id == $ft->id) selected @endif value="{{$ft->id}}">{{$ft->title}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-3 mt-1">
+                        <select class="form-control"  name="type" id="">
+                            <option @if($type == 'x') selected @endif value="x">-- Select Meal Type --</option>
+                            @foreach ($dataFoodTime as $ft)
+                            <option @if($type == $ft->title) selected @endif value="{{$ft->title}}">{{$ft->title}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-3 mt-1">
+                        <input class="form-control"  type="date" id="search-date" name="date" value="{{ $date }}">
+                    </div>
+                    <div class="col-md-3 mt-1">
+                    <button class="form-control btn btn-info" type="submit">Search</button>
+                </div>
+                    </div>
+                  </form>
+            </div>
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
                 <div class="float-left">
-                    <form method="POST" action="{{ route('admin.orders.searchByDate') }}">
-                        @csrf
-                        <h3 class="m-0 font-weight-bold text-primary"> Order History :
-                        <input type="date" id="search-date" name="date" value="{{ $date }}">
-                        <button type="submit">Search</button>
-                      </form>
+                    <h3 class="m-0 font-weight-bold text-primary"> Order History : 
+                    
                 </div>
             <h6 class="m-0 font-weight-bold text-primary"><a href="{{ route('admin.orders.index') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> All Orders</a> </h6>
 

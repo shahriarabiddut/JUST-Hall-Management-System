@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DB;
 use Illuminate\Http\Request;
 use App\Library\SslCommerz\SslCommerzNotification;
+use App\Models\Student;
 
 class SslCommerzPaymentController extends Controller
 {
@@ -25,6 +26,9 @@ class SslCommerzPaymentController extends Controller
         $post_data['product_name'] = "Computer";
         $post_data['product_category'] = "Goods";
         $post_data['product_profile'] = "physical-goods";
+
+        //Get Hall Id
+        $student = Student::find($request->student_id);
         #Before  going to initiate the payment order status need to insert or update as Pending.
         $update_product = DB::table('payments')
             ->where('transaction_id', $post_data['tran_id'])
@@ -37,7 +41,8 @@ class SslCommerzPaymentController extends Controller
                 'address' => $post_data['cus_add1'],
                 'transaction_id' => $post_data['tran_id'],
                 'currency' => $post_data['currency'],
-                'student_id' => $post_data['cus_student_id']
+                'student_id' => $post_data['cus_student_id'],
+                'hall_id' => $student->hall_id
             ]);
 
         $sslc = new SslCommerzNotification();
@@ -67,6 +72,8 @@ class SslCommerzPaymentController extends Controller
         $post_data['product_name'] = "Computer";
         $post_data['product_category'] = "Goods";
         $post_data['product_profile'] = "physical-goods";
+        //Get Hall Id
+        $student = Student::find($request->student_id);
         #Before  going to initiate the payment order status need to insert or update as Pending.
         $update_product = DB::table('payments')
             ->where('transaction_id', $post_data['tran_id'])
@@ -79,7 +86,8 @@ class SslCommerzPaymentController extends Controller
                 'address' => $post_data['cus_add1'],
                 'transaction_id' => $post_data['tran_id'],
                 'currency' => $post_data['currency'],
-                'student_id' => $post_data['cus_student_id']
+                'student_id' => $post_data['cus_student_id'],
+                'hall_id' => $student->hall_id
             ]);
 
         $sslc = new SslCommerzNotification();
