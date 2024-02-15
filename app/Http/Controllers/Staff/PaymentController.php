@@ -87,6 +87,10 @@ class PaymentController extends Controller
             $EmailController->paymentEmail($student_id, $newBalance, $staff_id, $status);
 
             return redirect('staff/payment')->with('success', 'Payment Data has been accepted and added balance to Student!');
+            //Saving History 
+            $HistoryController = new HistoryController();
+            $HistoryController->addHistoryHall(Auth::guard('staff')->user()->id, 'Payment', 'New Payment of ' . $data->students->name . ' ( ' . $data->students->rollno . ' ) has been added by ' . $data->staff->name . ' !', $this->hall_id);
+            //Saved
         } else {
             return redirect('staff/payment')->with('success', 'Payment Data has been added Successfully!');
         }
@@ -168,7 +172,7 @@ class PaymentController extends Controller
                 //Saving History 
                 $HistoryController = new HistoryController();
                 $staff_id = Auth::guard('staff')->user()->id;
-                $HistoryController->addHistory($staff_id, 'add', 'Room Allocation Payment of ' . $data->students->name . ' ( ' . $data->students->rollno . ' ) has been Accepted Successfully by ' . $data->staff->name . ' !');
+                $HistoryController->addHistoryHall($staff_id, 'add', 'Room Allocation Payment of ' . $data->students->name . ' ( ' . $data->students->rollno . ' ) has been Accepted Successfully by ' . $data->staff->name . ' !', $this->hall_id);
                 //Saved
                 return redirect('staff/payment')->with('success', 'Room Allocation Payment has been accepted!');
             }
@@ -201,8 +205,7 @@ class PaymentController extends Controller
             $EmailController->paymentEmail($student_id, $newBalance, $staff_id, $status);
             //Saving History 
             $HistoryController = new HistoryController();
-            $staff_id = Auth::guard('staff')->user()->id;
-            $HistoryController->addHistory($staff_id, 'Rejected', 'Room Allocation Payment of ' . $data->students->name . ' ( ' . $data->students->rollno . ' ) has been Rejected by ' . $data->staff->name . ' !');
+            $HistoryController->addHistoryHall(Auth::guard('staff')->user()->id, 'Rejected', 'Room Allocation Payment of ' . $data->students->name . ' ( ' . $data->students->rollno . ' ) has been Rejected by ' . $data->staff->name . ' !', $this->hall_id);
             //Saved
             return redirect('staff/payment')->with('danger', 'Payment Data has been rejected!');
         }

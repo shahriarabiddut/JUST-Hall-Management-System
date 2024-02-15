@@ -47,7 +47,7 @@
                             <td>
                                 @if ($d->students != null)
                                 {{ $d->students->name }} - {{ $d->students->rollno }} - 
-                                @if ($d->students->ms==0)
+                                @if ($d->students->ms==1)
                                 (Masters)
                                 @else
                                 (Honours)

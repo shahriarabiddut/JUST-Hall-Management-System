@@ -213,14 +213,11 @@ class SslCommerzPaymentController extends Controller
                     return view('layouts.success', ['data' => $data]);
                 }
             } else if ($order_details->status == 'Processing' || $order_details->status == 'Complete') {
-
                 #That means Order status already updated. No need to udate database.
-
                 $data = 2;
                 return view('layouts.success', ['data' => $data]);
             } else {
                 #That means something wrong happened. You can redirect customer to your product page.
-
                 $data = 1;
                 return view('layouts.failed', ['data' => $data]);
             }

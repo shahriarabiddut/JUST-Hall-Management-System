@@ -14,6 +14,17 @@ use Illuminate\Support\Facades\Mail;
 
 class EmailController extends Controller
 {
+    protected $hall_id;
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->hall_id = Auth::guard('staff')->user()->hall_id;
+            if ($this->hall_id == 0 || $this->hall_id == null) {
+                return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+            }
+            return $next($request);
+        });
+    }
     /**
      * Display a listing of the resource.
      */
@@ -58,6 +69,7 @@ class EmailController extends Controller
         $dataEmail->message = $request->message;
         $dataEmail->objective = $request->objective;
         $dataEmail->staff_id = $request->staff_id;
+        $dataEmail->hall_id = $this->hall_id;
         $dataEmail->save();
         return redirect('staff/email')->with('success', 'Email Sent Successfully!');
     }
@@ -88,6 +100,9 @@ class EmailController extends Controller
     {
         //
         $data = Email::find($id);
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.email.index')->with('danger', 'Not Permitted!');
+        }
         $data->delete();
         return redirect('staff/email')->with('danger', 'Email Data has been deleted Successfully!');
     }
@@ -116,8 +131,7 @@ class EmailController extends Controller
         //Sending email with information
         if ($this->isOnline()) {
             // The email sending is done using the to method on the Mail facade
-            Mail::to($RecieverEmail)->send(new PaymentEmail($emailBody, $emailObjective, $emailSubject));
-
+            Mail::to($RecieverEmail)->send(new PaymentEmail($emailBody, $emailObjective, $emailSubject, $RecieverData->hall->title));
             //Saving data to email history
             $dataEmail = new Email;
             $dataEmail->name = $RecieverName;
@@ -126,6 +140,7 @@ class EmailController extends Controller
             $dataEmail->message = $emailBody;
             $dataEmail->objective = $emailObjective;
             $dataEmail->staff_id = $staff_id;
+            $dataEmail->hall_id = $RecieverData->hall->id;
             $dataEmail->save();
         } else {
 
@@ -171,6 +186,7 @@ class EmailController extends Controller
             $dataEmail->message = $emailBody;
             $dataEmail->objective = $emailObjective;
             $dataEmail->staff_id = 0;
+            $dataEmail->hall_id = $RecieverData->hall->id;
             $dataEmail->save();
         } else {
 
@@ -215,6 +231,7 @@ class EmailController extends Controller
             $dataEmail->message = $emailBody;
             $dataEmail->objective = $emailObjective;
             $dataEmail->staff_id = 0;
+            $dataEmail->hall_id = $RecieverData->hall->id;
             $dataEmail->save();
         } else {
 

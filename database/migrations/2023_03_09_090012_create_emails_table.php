@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('message');
             $table->string('objective');
             $table->integer('staff_id');
+            $table->integer('hall_id')->references('id')->on('halls')->nullable();
             $table->timestamps();
         });
     }

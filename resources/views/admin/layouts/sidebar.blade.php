@@ -256,6 +256,28 @@
             </div>
         </div>
     </li>
+    <hr class="sidebar-divider d-none d-md-block">
+    <div class="sidebar-heading">
+        Settings System
+    </div>
+    <!-- Nav Item Settings - Utilities Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link @if (!request()->is('admin/settings*'))
+            collapsed
+        @endif" href="#" data-toggle="collapse" data-target="#collapseSettings"
+            aria-expanded="true" aria-controls="collapseSettings">
+            <i class="fas fa-ticket-alt"></i>
+            <span>Settings</span>
+        </a>
+        <div id="collapseSettings" class="collapse @if(request()->is('admin/settings*')) show @endif" aria-labelledby="headingUtilities"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Site Management</h6>
+                <a class="collapse-item" href="{{ route('admin.settings.index') }}">View Settings</a>
+                <a class="collapse-item" href="{{ route('admin.history.index') }}">View History</a>
+            </div>
+        </div>
+    </li>
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
     <!-- Sidebar Toggler (Sidebar - Logout - CopyRight) -->

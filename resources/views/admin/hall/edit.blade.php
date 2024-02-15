@@ -63,8 +63,16 @@
                     </tr>
                     <tr>
                         <th>Print Secret</th>
-                        <td><input required name="secret" value="{{ $data->secret }}" type="password" class="form-control"></td>
+                        <td><input required name="secret" value="{{ $data->secret }}" type="text" class="form-control"></td>
                     </tr>
+                    <tr>
+                        <th>Fixed Cost Honours</th>
+                        <td><input required name="fixed_cost" type="number" value="{{ $data->fixed_cost }}" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <th>Fixed Cost Masters</th>
+                        <td><input required name="fixed_cost_masters" type="number" value="{{ $data->fixed_cost_masters }}" class="form-control"></td>
+                    </tr> 
                     <tr>
                         <td colspan="2">
                             <input type="hidden" name="prev_logo" value="{{ $data->logo }}">

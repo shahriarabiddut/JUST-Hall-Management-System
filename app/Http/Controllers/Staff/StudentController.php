@@ -37,12 +37,11 @@ class StudentController extends Controller
     // Command To Deduct Fixed Meal Cost from staff
     public function deductBalanceStaff()
     {
-        $result = Process::run('php artisan send:sms');
+        $result = Process::run('php artisan deduct:balance ' . $this->hall_id);
         //Saving History 
         $HistoryController = new HistoryController();
-        $staff_id = Auth::guard('staff')->user()->id;
         $today = Carbon::now();
-        $HistoryController->addHistoryHall($staff_id, 'Fixed Cost Charge', 'Fixed Cost Charged for Month ' . $today->format('F') . '!', $this->hall_id);
+        $HistoryController->addHistoryHall(Auth::guard('staff')->user()->id, 'Fixed Cost Charge', 'Fixed Cost Charged for Month ' . $today->format('F') . '!', $this->hall_id);
         //Saved
         return redirect()->route('staff.balance.index')->with('success', 'Fixed Cost Charged Successfully!');
     }

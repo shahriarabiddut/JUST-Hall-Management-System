@@ -38,6 +38,9 @@ class HistoryController extends Controller
         if ($data == null) {
             return redirect()->route('staff.history.index')->with('danger', 'Not Found!');
         }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.history.index')->with('danger', 'Not Permitted!');
+        }
         if ($data->status != 1) {
             $data->status = 1;
             $data->save();
@@ -46,7 +49,7 @@ class HistoryController extends Controller
     }
     public function read()
     {
-        $data = History::all()->where('status', '0');
+        $data = History::all()->where('status', '0')->where('hall_id', $this->hall_id);
         foreach ($data as $d) {
             $data2 = History::find($d->id);
             $data2->status = 1;

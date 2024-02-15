@@ -9,8 +9,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Email extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'email','subject', 'message','objective','staff_id'];
-    function Staff(){
-        return $this->belongsTo(Staff::class,'staff_id');
+    protected $fillable = ['name', 'email', 'subject', 'message', 'objective', 'staff_id', 'hall_id'];
+    function Staff()
+    {
+        return $this->belongsTo(Staff::class, 'staff_id');
+    }
+    function hall()
+    {
+        return $this->belongsTo(Hall::class, 'hall_id');
     }
 }

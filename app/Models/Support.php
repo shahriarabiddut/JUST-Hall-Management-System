@@ -8,18 +8,18 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Support extends Model
 {
     public $timestamps = true;
-    protected static function boot()
-    {
-        parent::boot();
+    // protected static function boot()
+    // {
+    //     parent::boot();
 
-        static::creating(function ($model) {
-            $model->setCreatedAt($model->freshTimestamp()->setTimezone('GMT+6'));
-        });
+    //     static::creating(function ($model) {
+    //         $model->setCreatedAt($model->freshTimestamp()->setTimezone('GMT+6'));
+    //     });
 
-        static::updating(function ($model) {
-            $model->setUpdatedAt($model->freshTimestamp()->setTimezone('GMT+6'));
-        });
-    }
+    //     static::updating(function ($model) {
+    //         $model->setUpdatedAt($model->freshTimestamp()->setTimezone('GMT+6'));
+    //     });
+    // }
 
     use HasFactory;
     function student()

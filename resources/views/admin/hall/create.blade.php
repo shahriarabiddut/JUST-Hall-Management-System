@@ -60,6 +60,14 @@
                             <option value="1">Active</option>
                             <option value="0">Disable</option>
                         </select></td>
+                    </tr>
+                    <tr>
+                        <th>Fixed Cost Honours</th>
+                        <td><input required name="fixed_cost" type="number" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <th>Fixed Cost Masters</th>
+                        <td><input required name="fixed_cost_masters" type="number" class="form-control"></td>
                     </tr> 
                     <tr>
                         <td colspan="2">

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Admin;
 use App\Models\Staff;
+use App\Models\History;
 use App\Models\Support;
 use App\Models\HallOption;
 use Illuminate\Http\Request;
@@ -77,5 +78,34 @@ class HomeController extends Controller
         //
         $data = Support::find($id);
         return view('admin.support.show', ['data' => $data]);
+    }
+    //History
+    public function historyIndex()
+    {
+        $data = History::latest()->get();
+        return view('admin.history.index', ['data' => $data]);
+    }
+    public function historyShow(string $id)
+    {
+        //
+        $data = History::find($id);
+        if ($data == null) {
+            return redirect()->route('staff.history.index')->with('danger', 'Not Found!');
+        }
+        // if ($data->status != 1) {
+        //     $data->status = 1;
+        //     $data->save();
+        // }
+        return view('admin.history.show', ['data' => $data]);
+    }
+    public function historyRead()
+    {
+        $data = History::all()->where('status', '0');
+        foreach ($data as $d) {
+            $data2 = History::find($d->id);
+            $data2->status = 1;
+            $data2->save();
+        }
+        return redirect()->route('admin.history.index')->with('success', 'Marked As Read!');
     }
 }

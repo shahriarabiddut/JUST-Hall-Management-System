@@ -225,7 +225,7 @@
     </div>
     <!-- Nav Item Settings - Utilities Collapse Menu -->
     <li class="nav-item">
-        <a class="nav-link @if (!request()->is('student/settings*'))
+        <a class="nav-link @if (!request()->is('staff/settings*'))
             collapsed
         @endif" href="#" data-toggle="collapse" data-target="#collapseSettings"
             aria-expanded="true" aria-controls="collapseSettings">

@@ -44,6 +44,8 @@ class HallController extends Controller
             'banglatitle' => 'required',
             'type' => 'required',
             'status' => 'required',
+            'fixed_cost' => 'required',
+            'fixed_cost_masters' => 'required',
         ]);
         $data->title = $request->title;
         $data->banglatitle = $request->banglatitle;
@@ -52,6 +54,8 @@ class HallController extends Controller
         $data->status = $request->status;
         $data->print = 0;
         $data->secret = 'value';
+        $data->fixed_cost = $request->fixed_cost;
+        $data->fixed_cost_masters = $request->fixed_cost_masters;
         //If user Given any PHOTO
         if ($request->hasFile('logo')) {
             $data->logo = 'app/public/' . $request->file('logo')->store('Website', 'public');
@@ -120,6 +124,8 @@ class HallController extends Controller
             'banglatitle' => 'required',
             'print' => 'required',
             'secret' => 'required',
+            'fixed_cost' => 'required',
+            'fixed_cost_masters' => 'required',
         ]);
         $data = Hall::find($id);
         $data->title = $request->title;
@@ -127,6 +133,8 @@ class HallController extends Controller
         $data->staff_id = $request->staff_id;
         $data->print = $request->print;
         $data->secret = $request->secret;
+        $data->fixed_cost = $request->fixed_cost;
+        $data->fixed_cost_masters = $request->fixed_cost_masters;
         //If user Given any PHOTO
         if ($request->hasFile('logo')) {
             $data->logo = 'app/public/' . $request->file('logo')->store('Website', 'public');

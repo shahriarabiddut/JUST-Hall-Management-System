@@ -50,6 +50,14 @@
                                 @break
                         @endswitch
                     </tr>
+                    <tr>
+                        <th>Fixed Cost Honours</th>
+                        <td>{{ $data->fixed_cost }}</td>
+                    </tr>
+                    <tr>
+                        <th>Fixed Cost Masters</th>
+                        <td>{{ $data->fixed_cost_masters }}</td>
+                    </tr>
                     {{-- <tr>
                         <td colspan="2">
                             <a onclick="return confirm('Are You Sure?')" href="{{ url('admin/hall/'.$data->id.'/delete') }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"> DELETE</i></a>

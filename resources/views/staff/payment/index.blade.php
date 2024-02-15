@@ -53,7 +53,7 @@
                             <td>{{ $d->amount }}</td>
                             <td>
                                 @if ($d->created_at==null)
-                                    {{ $d->updated_at->format('F j, Y') }} (Update Date)
+                                     N/A
                                     @else
                                     {{ $d->created_at->format('F j, Y - H:i:s') }}
                                 @endif

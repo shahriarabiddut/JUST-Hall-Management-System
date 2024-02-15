@@ -33,8 +33,12 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/profile/changePassword', [HomeController::class, 'editPassword'])->name('profile.editPassword');
     Route::put('/profile/changePassword', [HomeController::class, 'passwordUpdate'])->name('profile.passwordUpdate');
     // Settings Crud
-    Route::get('settings/', [HomeController::class, 'edit']);
+    Route::get('settings/', [HomeController::class, 'edit'])->name('settings.index');
     Route::put('settings/update/{id}', [HomeController::class, 'update']);
+    // History
+    Route::get('settings/history', [HomeController::class, 'historyIndex'])->name('history.index');
+    Route::get('settings/history/{id}', [HomeController::class, 'historyShow'])->name('history.show');
+    Route::get('settings/historyRead', [HomeController::class, 'historyRead'])->name('history.read');
     // Email Crud
     Route::get('email/{id}/delete', [EmailController::class, 'destroy']);
     Route::resource('email', EmailController::class);

@@ -51,7 +51,12 @@
                             <td>{{ ++$key }}</td>
                             <td>{{ $d->students->name }}</td>
                             <td>{{ $d->amount }}</td>
-                            <td>{{ $d->created_at }}</td>
+                            <td>@if ($d->created_at==null)
+                                N/A
+                            @else
+                            {{ $d->created_at->format('F j, Y - H:i:s') }}
+                            @endif
+                                </td>
                             
                             @switch($d->status)
                                 @case('Pending')

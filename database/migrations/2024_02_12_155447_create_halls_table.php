@@ -21,6 +21,8 @@ return new class extends Migration
             $table->integer('status')->nullable();
             $table->integer('print');
             $table->string('secret');
+            $table->integer('fixed_cost');
+            $table->integer('fixed_cost_masters');
             $table->timestamps();
         });
     }

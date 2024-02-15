@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Staff;
 
 use Carbon\Carbon;
 use App\Models\Food;
+use App\Models\Hall;
 use App\Models\Order;
 use App\Models\Staff;
 use App\Models\FoodTime;
@@ -161,22 +162,51 @@ class HomeController extends Controller
     }
     public function settings()
     {
-        $datas = HallOption::all();
-        return view('staff.settings.edit', ['datas' => $datas]);
+        $data = Hall::find($this->hall_id);
+        if ($data == null) {
+            return redirect()->route('staff.dashboard')->with('danger', 'Not Found!');
+        }
+        if ($data->id != $this->hall_id) {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized Access!');
+        }
+        return view('staff.settings.edit', ['data' => $data]);
     }
     public function settingsUpdate(Request $request, $id)
     {
         //
-        $data = HallOption::find($id);
         $request->validate([
-            'value' => 'required',
+            'print' => 'required',
+            'secret' => 'required',
+            'fixed_cost' => 'required',
+            'fixed_cost_masters' => 'required',
         ]);
-        if ($id == 4 || $id == 5) {
-            if ($request->hasFile('value')) {
-                $data->value = 'storage/app/public/' . $request->file('value')->store('Website', 'public');
-            }
+        $data = Hall::find($id);
+        if ($data->id != $this->hall_id) {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized Access!');
+        }
+        $data->print = $request->print;
+        $data->secret = $request->secret;
+        $data->fixed_cost = $request->fixed_cost;
+        $data->fixed_cost_masters = $request->fixed_cost_masters;
+        //If user Given any PHOTO
+        if ($request->hasFile('logo')) {
+            $data->logo = 'app/public/' . $request->file('logo')->store('Website', 'public');
         } else {
-            $data->value = $request->value;
+            $data->logo = $request->prev_logo;
+        }
+
+        if ($request->staff_id != $request->staff_id_old && $request->staff_id != 0) {
+            //Staff
+            $dataStaff = Staff::find($request->staff_id);
+            if ($dataStaff->hall_id != null) {
+                return redirect()->back()->with('danger', 'User is allready a Provost!');
+            }
+            $dataStaff->hall_id = $data->id;
+            $dataStaff->save();
+            //Update Previous Provost
+            $dataStaff2 = Staff::find($request->staff_id_old);
+            $dataStaff2->hall_id = 0;
+            $dataStaff2->save();
         }
         $data->save();
 
