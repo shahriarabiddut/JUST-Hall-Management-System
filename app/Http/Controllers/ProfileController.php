@@ -306,7 +306,7 @@ class ProfileController extends Controller
     {
         $userid = Auth::user()->id;
         $data = RoomRequest::all()->where('user_id', '=', $userid)->first();
-        $dataPayment = Payment::all()->where('type', 'roomrequest')->where('student_id', $userid)->first();
+        $dataPayment = Payment::all()->where('type', 'roomrequest')->where('student_id', $userid)->where('service_id', $data->id)->first();
         // page redirection
         $dataAllocatedSeats = AllocatedSeats::all()->where('user_id', '=', $userid)->first();
         if ($data != null) {
@@ -391,12 +391,12 @@ class ProfileController extends Controller
     {
         $userid = Auth::user()->id;
         $data = RoomRequest::all()->where('user_id', '=', $userid)->first();
-        $dataPayment = Payment::all()->where('type', 'roomrequest')->where('student_id', $userid)->first();
+        $dataPayment = Payment::all()->where('type', 'roomrequest')->where('student_id', $userid)->where('service_id', $data->id)->first();
         // IF User has Room Allocation
         if ($dataPayment != null) {
             return redirect()->route('student.roomrequestshow');
         }
-        return view('profile.room.roomrequestpayment', ['dataPayment' => $dataPayment]);
+        return view('profile.room.roomrequestpayment', ['dataPayment' => $dataPayment, 'data' => $data]);
     }
     public function roomrequestpaymentstore(Request $request)
     {
@@ -418,6 +418,7 @@ class ProfileController extends Controller
         $data->currency = 'BDT';
         $data->type = 'roomrequest';
         $data->phone = $request->mobileno;
+        $data->service_id = $request->service_id;
         $data->save();
 
         return redirect()->route('student.roomrequestshow')->with('success', 'Room Alloacation Request Payment has been added Successfully!');

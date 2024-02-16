@@ -58,12 +58,12 @@
                         <th>Fixed Cost Masters</th>
                         <td>{{ $data->fixed_cost_masters }}</td>
                     </tr>
-                    {{-- <tr>
+                    <tr>
                         <td colspan="2">
-                            <a onclick="return confirm('Are You Sure?')" href="{{ url('admin/hall/'.$data->id.'/delete') }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"> DELETE</i></a>
+                            <a onclick="return confirm('Are You Sure? Related all things will be deleted also!')" href="{{ url('admin/hall/'.$data->id.'/delete') }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"> DELETE</i></a>
                         </td>
                         
-                    </tr> --}}
+                    </tr>
                    
                     
                 </table>

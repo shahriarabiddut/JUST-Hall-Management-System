@@ -2,12 +2,22 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Food;
 use App\Models\Hall;
+use App\Models\Room;
+use App\Models\Order;
 use App\Models\Staff;
+use App\Models\History;
+use App\Models\Payment;
+use App\Models\Student;
 use App\Models\FoodTime;
+use App\Models\MealToken;
+use App\Models\RoomRequest;
+use App\Models\FoodTimeHall;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\FoodTimeHall;
+use App\Models\AllocatedSeats;
+use App\Models\Balance;
 
 class HallController extends Controller
 {
@@ -172,13 +182,63 @@ class HallController extends Controller
         //Delete FoodTime Relation Table
         $dataFoodTime = FoodTime::all();
         foreach ($dataFoodTime as $FoodTime) {
-            $dataFoodTimeHall = FoodTimeHall::all()->where('hall_id', $data->id)->where('food_time_id', $FoodTime->id);
+            $dataFoodTimeHall = FoodTimeHall::all()->where('hall_id', $data->id)->where('food_time_id', $FoodTime->id)->first();
             $dataFoodTimeHall->delete();
         }
         //Free Provost
         $dataStaff2 = Staff::find($data->staff_id);
         $dataStaff2->hall_id = 0;
         $dataStaff2->save();
+        //Free Staffs
+        $Staffs = Staff::all()->where('hall_id', $data->id);
+        foreach ($Staffs as $Staff) {
+            $Staff->hall_id = 0;
+            $Staff->save();
+        }
+        //Delete Students
+        $Students = Student::all()->where('hall_id', $data->id);
+        foreach ($Students as $student) {
+            $balance = Balance::all()->where('student_id', $student->id)->first();
+            $balance->delete();
+            $allocatedseat = new AllocatedSeatController();
+            $allocatedseat->destroy($student->allocatedRoom->id);
+            $student->delete();
+        }
+        //Delete Foods
+        $Foods = Food::all()->where('hall_id', $data->id);
+        foreach ($Foods as $student) {
+            $student->delete();
+        }
+        //Delete Orders
+        $Orders = Order::all()->where('hall_id', $data->id);
+        foreach ($Orders as $student) {
+            $student->delete();
+        }
+        //Delete Meal Token
+        $MealToken = MealToken::all()->where('hall_id', $data->id);
+        foreach ($MealToken as $student) {
+            $student->delete();
+        }
+        //Delete Room Requests
+        $RoomRequests = RoomRequest::all()->where('hall_id', $data->id);
+        foreach ($RoomRequests as $student) {
+            $student->delete();
+        }
+        //Delete Rooms
+        $Rooms = Room::all()->where('hall_id', $data->id);
+        foreach ($Rooms as $student) {
+            $student->delete();
+        }
+        //Delete Payments
+        $Payments = Payment::all()->where('hall_id', $data->id);
+        foreach ($Payments as $student) {
+            $student->delete();
+        }
+        //Delete Histories
+        $Histories = History::all()->where('hall_id', $data->id);
+        foreach ($Histories as $student) {
+            $student->delete();
+        }
         //
         $data->delete();
         return redirect('admin/hall')->with('danger', 'Data has been deleted Successfully!');

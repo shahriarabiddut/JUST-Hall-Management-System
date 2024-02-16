@@ -285,7 +285,7 @@ class AllocatedSeatController extends Controller
         $application = json_decode($data->application, true);
         $student_id = $data->user_id;
         $dataAllocation = AllocatedSeats::all()->where('user_id', $student_id)->first();
-        $dataPayment = Payment::all()->where('type', 'roomrequest')->where('student_id', $student_id)->first();
+        $dataPayment = Payment::all()->where('type', 'roomrequest')->where('student_id', $student_id)->where('service_id', $data->id)->first();
         if ($data) {
             $data->flag = 1;
             $data->save();
