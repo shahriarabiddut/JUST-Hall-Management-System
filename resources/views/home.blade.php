@@ -23,8 +23,6 @@
 
     <!-- Libraries Stylesheet -->
     <link href="{{ asset('css/lib/animate/animate.min.css') }}" rel="stylesheet">
-    {{-- <link href="{{ asset('css/lib/owlcarousel/assets/owl.carousel.min.css') }}" rel="stylesheet"> --}}
-    {{-- <link href="{{ asset('css/lib/lightbox/css/lightbox.min.css') }}" rel="stylesheet"> --}}
 
     <!-- Customized Bootstrap Stylesheet -->
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
@@ -106,7 +104,7 @@
                         <div class="feature-item bg-light rounded text-center p-4">
                             <i class="fa fa-3x fa-mail-bulk text-primary mb-4"></i>
                             <h5 class="mb-3">Room Allocation</h5>
-                            <p class="m-0">Erat ipsum justo amet duo et elitr dolor, est duo duo eos lorem sed diam stet diam sed stet lorem.</p>
+                            <p class="m-0">Room Allocation Request Application.</p>
                         </div>
                     </div>
                     <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.3s">

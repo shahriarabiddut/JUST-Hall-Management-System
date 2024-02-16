@@ -4,9 +4,7 @@
       <i class="fa fa-bars"></i>
       </button>
   <h6 class="sidebar-brand-text mt-2" > 
-  @isset($HallOption)
-      {{ $HallOption[2]->value }}
-  @endisset 
+  @isset($HallOption) {{ $HallOption[2]->value }} @endisset 
   </h6>
   <script>
     if (/Mobi/.test(navigator.userAgent)) {

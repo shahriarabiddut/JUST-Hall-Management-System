@@ -28,13 +28,24 @@ class HomeController extends Controller
     public function update(Request $request, $id)
     {
         //
+
         $data = HallOption::find($id);
         $request->validate([
             'value' => 'required',
         ]);
-        $data->value = $request->value;
+        if ($id == 4 || $id == 5) {
+            if ($request->hasFile('value')) {
+                $data->value = 'storage/app/public/' . $request->file('value')->store('Website', 'public');
+            }
+        } else {
+            $data->value = $request->value;
+        }
         $data->save();
-
+        if ($id == 1) {
+            $data2 = HallOption::find(9);
+            $data2->value = $request->value;
+            $data2->save();
+        }
         return redirect('admin/settings')->with('success', 'Settings has been updated Successfully!');
     }
     public function editPassword()

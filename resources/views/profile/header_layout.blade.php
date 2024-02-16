@@ -7,7 +7,7 @@
     @if (Auth::user()->hall_id!=0 && Auth::user()->hall_id!=null)
     {{ Auth::user()->hall->title }}
     @else
-        Hall Automation System
+        @isset($HallOption) {{ $HallOption[2]->value }} @endisset
     @endif
   </h6>
   <script>

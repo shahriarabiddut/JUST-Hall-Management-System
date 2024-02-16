@@ -34,7 +34,7 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
     Route::put('/profile/changePassword', [HomeController::class, 'passwordUpdate'])->name('profile.passwordUpdate');
     // Settings Crud
     Route::get('settings/', [HomeController::class, 'edit'])->name('settings.index');
-    Route::put('settings/update/{id}', [HomeController::class, 'update']);
+    Route::put('settings/update/{id}', [HomeController::class, 'update'])->name('settings.update');
     // History
     Route::get('settings/history', [HomeController::class, 'historyIndex'])->name('history.index');
     Route::get('settings/history/{id}', [HomeController::class, 'historyShow'])->name('history.show');
