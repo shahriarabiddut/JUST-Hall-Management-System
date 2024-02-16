@@ -20,7 +20,7 @@ return new class extends Migration
             $table->longText('message');
             $table->integer('repliedby')->nullable();
             $table->string('reply')->nullable();
-            $table->integer('hall_id')->references('id')->on('halls')->nullable();
+            $table->integer('hall_id')->references('id')->on('halls');
             $table->timestamps();
         });
     }

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->integer('room_id');
             $table->integer('user_id');
             $table->integer('position');
-            $table->integer('hall_id')->references('id')->on('halls')->nullable();
+            $table->integer('hall_id')->references('id')->on('halls');
             $table->timestamps();
         });
     }

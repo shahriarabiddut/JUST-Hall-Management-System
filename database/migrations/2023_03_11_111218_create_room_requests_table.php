@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('status')->nullable();
             $table->integer('flag')->nullable();
             $table->integer('allocated_seat_id')->nullable();
-            $table->integer('hall_id')->references('id')->on('halls')->nullable();
+            $table->integer('hall_id')->references('id')->on('halls');
             $table->timestamps();
         });
     }

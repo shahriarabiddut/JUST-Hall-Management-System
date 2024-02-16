@@ -46,7 +46,7 @@
 
         <!-- Navbar & Hero Start -->
         <div class="container-xxl position-relative p-0">
-            <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-1 py-lg-0">
+            <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-2 py-lg-0">
                 <a href="" class="navbar-brand p-0">
                     <h1 class="m-0">@isset($HallOption) {{ $HallOption[8]->value }} @endisset</h1>
                     {{-- <img src="img/logo.png" alt="Logo"> --}}
@@ -72,9 +72,9 @@
                         </div>
                     </div>
                     @auth
-                    <a href="{{ route('login') }}" class="btn rounded-pill py-1 px-4 ms-3 d-none d-lg-block">Login</a>
+                    <a href="{{ route('login') }}" class="btn rounded-pill py-2 px-4 ms-3 d-none d-lg-block">Login</a>
                     @else
-                    <a href="{{ route('login') }}" class="btn rounded-pill py-1 px-4 ms-3 d-none d-lg-block">Login</a>
+                    <a href="{{ route('login') }}" class="btn rounded-pill py-2 px-4 ms-3 d-none d-lg-block">Login</a>
                     @endauth
                 </div>
             </nav>
@@ -83,8 +83,8 @@
                 <div class="container px-lg-5">
                     <div class="row g-5 align-items-end">
                         <div class="col-lg-6 text-center text-lg-start">
-                            <h1 class="text-white mb-2 animated slideInDown">Just Hall Automation System</h1>
-                            <p class="text-white pb-2 animated slideInDown">Tempor rebum no at dolore lorem clita rebum rebum ipsum rebum stet dolor sed justo kasd. Ut dolor sed magna dolor sea diam. Sit diam sit justo amet ipsum vero ipsum clita lorem</p>
+                            <h1 class="text-white mb-4 animated slideInDown">Just Hall Automation System</h1>
+                            <p class="text-white pb-3 animated slideInDown">Tempor rebum no at dolore lorem clita rebum rebum ipsum rebum stet dolor sed justo kasd. Ut dolor sed magna dolor sea diam. Sit diam sit justo amet ipsum vero ipsum clita lorem</p>
                             {{-- <a href="" class="btn btn-secondary py-sm-3 px-sm-5 rounded-pill me-3 animated slideInLeft">Read More</a>
                             <a href="" class="btn btn-light py-sm-3 px-sm-5 rounded-pill animated slideInRight">Contact Us</a> --}}
                         </div>

@@ -19,28 +19,34 @@ class FoodSeeder extends Seeder
                 'food_time_id' => '1',
                 'food_name' => 'Chicken',
                 'status' => 0,
+                'hall_id' => 1,
             ],
             [
                 'food_time_id' => '1',
                 'food_name' => 'Fish',
                 'status' => 0,
+                'hall_id' => 1,
             ], [
                 'food_time_id' => '1',
                 'food_name' => 'Egg',
                 'status' => 0,
+                'hall_id' => 1,
             ], [
                 'food_time_id' => '2',
                 'food_name' => 'Chicken',
                 'status' => 0,
+                'hall_id' => 1,
             ],
             [
                 'food_time_id' => '2',
                 'food_name' => 'Fish',
                 'status' => 0,
+                'hall_id' => 1,
             ], [
                 'food_time_id' => '2',
                 'food_name' => 'Egg',
                 'status' => 0,
+                'hall_id' => 1,
             ],
         ];
         Food::insert($foods);

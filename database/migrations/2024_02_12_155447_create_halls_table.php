@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('banglatitle');
             $table->string('logo');
-            $table->integer('staff_id');
+            $table->integer('staff_id')->references('id')->on('staff');
             $table->integer('type');
             $table->integer('status')->nullable();
             $table->integer('print');

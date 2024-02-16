@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('totalseats');
             $table->integer('vacancy');
             $table->longText('positions');
-            $table->integer('hall_id')->references('id')->on('halls')->nullable();
+            $table->integer('hall_id')->references('id')->on('halls');
             $table->timestamps();
         });
     }

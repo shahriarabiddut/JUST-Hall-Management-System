@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('quantity');
             $table->integer('price');
             $table->date('date');
-            $table->integer('hall_id')->references('id')->on('halls')->nullable();
+            $table->integer('hall_id')->references('id')->on('halls');
             $table->timestamps();
         });
     }

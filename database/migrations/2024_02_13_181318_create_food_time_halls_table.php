@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('food_time_halls', function (Blueprint $table) {
             $table->id();
-            $table->integer('hall_id')->references('id')->on('halls')->nullable();
+            $table->integer('hall_id')->references('id')->on('halls');
             $table->integer('food_time_id');
             $table->integer('status');
             $table->timestamps();
