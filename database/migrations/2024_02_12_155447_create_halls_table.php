@@ -16,14 +16,14 @@ return new class extends Migration
             $table->string('title');
             $table->string('banglatitle');
             $table->string('logo');
-            $table->integer('staff_id')->references('id')->on('staff');
+            $table->integer('createdby');
             $table->integer('type');
             $table->integer('status')->nullable();
-            $table->integer('print');
+            $table->integer('enable_print');
             $table->string('secret');
             $table->integer('fixed_cost');
             $table->integer('fixed_cost_masters');
-            $table->integer('payment');
+            $table->integer('enable_payment');
             $table->timestamps();
         });
     }

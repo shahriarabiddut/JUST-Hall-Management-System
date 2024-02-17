@@ -42,17 +42,7 @@
                                 <option value="0"> Girls - মেয়েদের হল</option>
                             </select></td>
                         </tr> 
-                    <tr>
-                        <th>Select Provost<span class="text-danger">*</span></th>
-                            <td>
-                                <select required name="staff_id" class="form-control">
-                                    <option value="0">--- Select Provost ---</option>
-                                    @foreach ($provost as $ft)
-                                    <option value="{{$ft->id}}">{{$ft->name}}</option>
-                                    @endforeach
-                                </select>
-                            </td>
-                    </tr>
+                    
                     <tr>
                     <th> Status <span class="text-danger">*</span></th>
                         <td><select required name="status" class="form-control room-list">

@@ -7,6 +7,7 @@ use App\Models\Hall;
 use App\Models\Room;
 use App\Models\Order;
 use App\Models\Staff;
+use App\Models\Balance;
 use App\Models\History;
 use App\Models\Payment;
 use App\Models\Student;
@@ -16,8 +17,7 @@ use App\Models\RoomRequest;
 use App\Models\FoodTimeHall;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\AllocatedSeats;
-use App\Models\Balance;
+use Illuminate\Support\Facades\Auth;
 
 class HallController extends Controller
 {
@@ -47,10 +47,9 @@ class HallController extends Controller
     public function store(Request $request)
     {
         //
-        $data = new Hall;
+        $data = new Hall();
         $request->validate([
             'title' => 'required',
-            'staff_id' => 'required',
             'banglatitle' => 'required',
             'type' => 'required',
             'status' => 'required',
@@ -59,29 +58,21 @@ class HallController extends Controller
         ]);
         $data->title = $request->title;
         $data->banglatitle = $request->banglatitle;
-        $data->staff_id = $request->staff_id;
+        $data->createdby =  Auth::guard('admin')->user()->id;
         $data->type = $request->type;
         $data->status = $request->status;
-        $data->print = 0;
+        $data->enable_print = 0;
         $data->secret = 'value';
         $data->fixed_cost = $request->fixed_cost;
         $data->fixed_cost_masters = $request->fixed_cost_masters;
-        $data->payment = 0;
+        $data->enable_payment = 0;
         //If user Given any PHOTO
         if ($request->hasFile('logo')) {
             $data->logo = 'app/public/' . $request->file('logo')->store('Website', 'public');
         } else {
             $data->logo = 'img/justcse.png';
         }
-        $dataStaff = Staff::find($request->staff_id);
-        if ($dataStaff->hall_id != null) {
-            return redirect()->back()->with('danger', 'User is allready a Provost!');
-        }
         $data->save();
-        //Staff
-        $dataStaff->hall_id = $data->id;
-        $dataStaff->save();
-        //
         //Create FoodTime Relation Table
         $dataFoodTime = FoodTime::all();
         foreach ($dataFoodTime as $FoodTime) {
@@ -131,7 +122,6 @@ class HallController extends Controller
         //
         $request->validate([
             'title' => 'required',
-            'staff_id' => 'required',
             'banglatitle' => 'required',
             'print' => 'required',
             'secret' => 'required',
@@ -142,12 +132,11 @@ class HallController extends Controller
         $data = Hall::find($id);
         $data->title = $request->title;
         $data->banglatitle = $request->banglatitle;
-        $data->staff_id = $request->staff_id;
-        $data->print = $request->print;
+        $data->enable_print = $request->print;
         $data->secret = $request->secret;
         $data->fixed_cost = $request->fixed_cost;
         $data->fixed_cost_masters = $request->fixed_cost_masters;
-        $data->payment = $request->payment;
+        $data->enable_payment = $request->payment;
         //If user Given any PHOTO
         if ($request->hasFile('logo')) {
             $data->logo = 'app/public/' . $request->file('logo')->store('Website', 'public');
@@ -188,10 +177,6 @@ class HallController extends Controller
             $dataFoodTimeHall = FoodTimeHall::all()->where('hall_id', $data->id)->where('food_time_id', $FoodTime->id)->first();
             $dataFoodTimeHall->delete();
         }
-        //Free Provost
-        $dataStaff2 = Staff::find($data->staff_id);
-        $dataStaff2->hall_id = 0;
-        $dataStaff2->save();
         //Free Staffs
         $Staffs = Staff::all()->where('hall_id', $data->id);
         foreach ($Staffs as $Staff) {

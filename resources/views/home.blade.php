@@ -10,7 +10,7 @@
     <title>Home - @isset($HallOption)
         {{ $HallOption[0]->value }}
     @endisset </title>
-    <link rel="icon" type="image/x-icon" href="{{ asset($HallOption[4]->value) }}" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico')}}" />
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -87,7 +87,7 @@
                             <a href="" class="btn btn-light py-sm-3 px-sm-5 rounded-pill animated slideInRight">Contact Us</a> --}}
                         </div>
                         <div class="col-lg-6 text-center text-lg-start">
-                            <img src="{{ asset('img/hall.jpeg') }}" style="max-height: 50vh" alt="Lab" class="img-fluid">
+                            <img src="{{ asset('img/2_2k.jpg') }}" style="max-height: 50vh" alt="Lab" class="img-fluid">
                         </div>
                     </div>
                 </div>

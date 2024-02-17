@@ -30,7 +30,6 @@
                         <tr>
                             <th>#</th>
                             <th>Title</th>
-                            <th>Provost</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -39,7 +38,6 @@
                         <tr>
                             <th>#</th>
                             <th>Title</th>
-                            <th>Provost</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -49,8 +47,7 @@
                         @foreach ($data as $key => $d)
                         <tr>
                             <td>{{ ++$key }}</td>
-                            <td>{{ $d->title }}</td>
-                            <td>{{ $d->staff->name }}</td>
+                            <td>{{ $d->title }} - {{ $d->banglatitle }}</td>
                             @switch($d->status)
                             @case(0)
                                 <td class="bg-danger text-white"> Disable</td>

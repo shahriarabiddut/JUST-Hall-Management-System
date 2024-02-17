@@ -38,7 +38,18 @@
                         <td>{{ $data->title }}</td>
                     </tr><tr>
                         <th>Provost</th>
-                        <td>{{ $data->staff->name }}</td>
+                        <td>
+                        @foreach ($data->provost as $key => $provost)
+                           {{ $key+1  }}. {{ $provost->name }} <br>
+                        @endforeach    
+                        </td>
+                    </tr><tr>
+                        <th>Assitant Provost</th>
+                        <td>
+                        @foreach ($data->aprovost as $key => $aprovost)
+                        {{ $key+1  }}. {{ $aprovost->name }} <br>
+                        @endforeach    
+                        </td>
                     </tr><tr>
                         <th>Status</th>
                         @switch($data->status)
@@ -60,7 +71,7 @@
                     </tr>
                     <tr>
                         <th>Token Print</th>
-                        @switch($data->print)
+                        @switch($data->enable_print)
                             @case(0)
                                 <td class="bg-danger text-white"> Disabled</td>
                                     @break
@@ -70,8 +81,8 @@
                         @endswitch
                     </tr>
                     <tr>
-                        <th>Payments</th>
-                        @switch($data->payment)
+                        <th>Online Payments</th>
+                        @switch($data->enable_payment)
                             @case(0)
                                 <td class="bg-danger text-white"> Disabled</td>
                                     @break
@@ -79,6 +90,10 @@
                             <td class="bg-success text-white"> Active</td>
                                 @break
                         @endswitch
+                    </tr>
+                    <tr>
+                        <th>Created By</th>
+                        <td>{{ $data->admin->name }}</td>
                     </tr>
                     <tr>
                         <td colspan="2">
@@ -92,7 +107,7 @@
             </div>
         </div>
     </div>
-    <div class="card shadow mb-4">
+    {{-- <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h3 class="m-0 font-weight-bold text-primary"> {{ $data->staff->name }} - Provost ({{ $data->title }})</h3>
         </div>
@@ -124,7 +139,7 @@
                 </table>
             </div>
         </div>
-    </div>
+    </div> --}}
     @section('scripts')
     @endsection
 @endsection

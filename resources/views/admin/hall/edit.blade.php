@@ -31,30 +31,18 @@
                         <tr>
                             <th>Logo</th>
                             <td><input name="logo" type="file" accept="image/*" ></td>
-                        </tr><tr>
-                            <th>Select Provost<span class="text-danger">*</span></th>
-                                <td>
-                                    <select required name="staff_id" class="form-control">
-                                        @foreach ($provost as $ft)
-                                        <option @if ($data->staff_id==$ft->id)
-                                            @selected(true)
-                                        @endif
-                                         value="{{$ft->id}}">{{$ft->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </td>
-                            </tr>  
+                        </tr> 
                     <tr>
                         <th>Print</th>
                         <td>
                             <div class="form-check form-check-inline bg-danger py-2 px-3 text-white rounded-pill">
-                                <input class="form-check-input" type="radio" name="print" id="exampleRadios1" value="0" @if($data->print==0) @checked(true) @endif>
+                                <input class="form-check-input" type="radio" name="print" id="exampleRadios1" value="0" @if($data->enable_print==0) @checked(true) @endif>
                                 <label class="form-check-label" for="exampleRadios1">
                                   Off
                                 </label>
                               </div>
                               <div class="form-check form-check-inline bg-success py-2 px-3 text-white rounded-pill">
-                                <input class="form-check-input" type="radio" name="print" id="exampleRadios2" value="1" @if($data->print==1) @checked(true) @endif>
+                                <input class="form-check-input" type="radio" name="print" id="exampleRadios2" value="1" @if($data->enable_print==1) @checked(true) @endif>
                                 <label class="form-check-label" for="exampleRadios2">
                                  On
                                 </label>
@@ -77,13 +65,13 @@
                         <th>Online Payment</th>
                         <td>
                             <div class="form-check form-check-inline bg-danger py-2 px-3 text-white rounded-pill">
-                                <input class="form-check-input" type="radio" name="payment" id="exampleRadios1" value="0" @if($data->payment==0) @checked(true) @endif>
+                                <input class="form-check-input" type="radio" name="payment" id="exampleRadios1" value="0" @if($data->enable_payment==0) @checked(true) @endif>
                                 <label class="form-check-label" for="exampleRadios1">
                                   Off
                                 </label>
                               </div>
                               <div class="form-check form-check-inline bg-success py-2 px-3 text-white rounded-pill">
-                                <input class="form-check-input" type="radio" name="payment" id="exampleRadios2" value="1" @if($data->payment==1) @checked(true) @endif>
+                                <input class="form-check-input" type="radio" name="payment" id="exampleRadios2" value="1" @if($data->enable_payment==1) @checked(true) @endif>
                                 <label class="form-check-label" for="exampleRadios2">
                                  On
                                 </label>

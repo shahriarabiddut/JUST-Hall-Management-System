@@ -8,8 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Hall extends Model
 {
     use HasFactory;
-    function staff()
+    function provost()
     {
-        return $this->belongsTo(Staff::class, 'staff_id');
+        return $this->hasMany(Staff::class, 'hall_id')->where('type', 'provost');
+    }
+    function aprovost()
+    {
+        return $this->hasMany(Staff::class, 'hall_id')->where('type', 'aprovost');
+    }
+    function admin()
+    {
+        return $this->belongsTo(Admin::class, 'createdby');
     }
 }
