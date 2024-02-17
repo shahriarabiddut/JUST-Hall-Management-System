@@ -43,7 +43,7 @@
                         <th>Status</th>
                         @switch($data->status)
                             @case(0)
-                                <td class="bg-warning text-white"> Disable</td>
+                                <td class="bg-warning text-white"> Disabled</td>
                                     @break
                             @case(1)
                             <td class="bg-success text-white"> Active</td>
@@ -57,6 +57,28 @@
                     <tr>
                         <th>Fixed Cost Masters</th>
                         <td>{{ $data->fixed_cost_masters }}</td>
+                    </tr>
+                    <tr>
+                        <th>Token Print</th>
+                        @switch($data->print)
+                            @case(0)
+                                <td class="bg-danger text-white"> Disabled</td>
+                                    @break
+                            @case(1)
+                            <td class="bg-success text-white"> Active</td>
+                                @break
+                        @endswitch
+                    </tr>
+                    <tr>
+                        <th>Payments</th>
+                        @switch($data->payment)
+                            @case(0)
+                                <td class="bg-danger text-white"> Disabled</td>
+                                    @break
+                            @case(1)
+                            <td class="bg-success text-white"> Active</td>
+                                @break
+                        @endswitch
                     </tr>
                     <tr>
                         <td colspan="2">

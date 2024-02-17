@@ -20,6 +20,9 @@ class PaymentController extends Controller
             if ($this->hall_id == 0 || $this->hall_id == null) {
                 return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
             }
+            if (Auth::guard('staff')->user()->hall->status == 0) {
+                return redirect()->route('staff.dashboard')->with('danger', 'This Hall has been Disabled by System Administrator!');
+            }
             return $next($request);
         });
     }

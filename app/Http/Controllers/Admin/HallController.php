@@ -66,6 +66,7 @@ class HallController extends Controller
         $data->secret = 'value';
         $data->fixed_cost = $request->fixed_cost;
         $data->fixed_cost_masters = $request->fixed_cost_masters;
+        $data->payment = 0;
         //If user Given any PHOTO
         if ($request->hasFile('logo')) {
             $data->logo = 'app/public/' . $request->file('logo')->store('Website', 'public');
@@ -136,6 +137,7 @@ class HallController extends Controller
             'secret' => 'required',
             'fixed_cost' => 'required',
             'fixed_cost_masters' => 'required',
+            'payment' => 'required',
         ]);
         $data = Hall::find($id);
         $data->title = $request->title;
@@ -145,6 +147,7 @@ class HallController extends Controller
         $data->secret = $request->secret;
         $data->fixed_cost = $request->fixed_cost;
         $data->fixed_cost_masters = $request->fixed_cost_masters;
+        $data->payment = $request->payment;
         //If user Given any PHOTO
         if ($request->hasFile('logo')) {
             $data->logo = 'app/public/' . $request->file('logo')->store('Website', 'public');
@@ -262,6 +265,8 @@ class HallController extends Controller
             return redirect()->route('admin.hall.index')->with('danger', 'Not Found!');
         }
         $data->status = 0;
+        $data->payment = 0;
+        $data->print = 0;
         $data->save();
         return redirect('admin/hall')->with('danger', 'Hall Disabled Successfully!');
     }

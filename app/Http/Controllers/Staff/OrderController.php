@@ -6,7 +6,6 @@ use App\Models\Food;
 use App\Models\Order;
 use App\Models\FoodTime;
 use App\Models\MealToken;
-use App\Models\HallOption;
 use App\Models\FoodTimeHall;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -25,6 +24,9 @@ class OrderController extends Controller
             $this->hall_id = Auth::guard('staff')->user()->hall_id;
             if ($this->hall_id == 0 || $this->hall_id == null) {
                 return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+            }
+            if (Auth::guard('staff')->user()->hall->status == 0) {
+                return redirect()->route('staff.dashboard')->with('danger', 'This Hall has been Disabled by System Administrator!');
             }
             return $next($request);
         });

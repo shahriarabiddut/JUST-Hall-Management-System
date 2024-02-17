@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Staff;
 
 use App\Models\Food;
-use App\Models\FoodTime;
+use App\Models\FoodTimeHall;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\FoodTimeHall;
 use Illuminate\Support\Facades\Auth;
 
 class FoodTimeController extends Controller
@@ -18,6 +17,9 @@ class FoodTimeController extends Controller
             $this->hall_id = Auth::guard('staff')->user()->hall_id;
             if ($this->hall_id == 0 || $this->hall_id == null) {
                 return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+            }
+            if (Auth::guard('staff')->user()->hall->status == 0) {
+                return redirect()->route('staff.dashboard')->with('danger', 'This Hall has been Disabled by System Administrator!');
             }
             if (Auth::guard('staff')->user()->type == 'provost') {
                 return $next($request);

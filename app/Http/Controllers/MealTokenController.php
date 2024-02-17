@@ -21,6 +21,9 @@ class MealTokenController extends Controller
             if ($this->hall_id == 0 || $this->hall_id == null) {
                 return redirect()->route('student.dashboard')->with('danger', 'Please Get Hall Room Allocation to get access!');
             }
+            if (Auth::user()->hall->status == 0) {
+                return redirect()->route('student.dashboard')->with('danger', 'This Hall has been Disabled by System Administrator!');
+            }
             return $next($request);
         });
     }

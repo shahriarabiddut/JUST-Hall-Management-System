@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('secret');
             $table->integer('fixed_cost');
             $table->integer('fixed_cost_masters');
+            $table->integer('payment');
             $table->timestamps();
         });
     }

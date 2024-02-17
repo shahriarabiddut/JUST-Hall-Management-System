@@ -72,7 +72,24 @@
                     <tr>
                         <th>Fixed Cost Masters</th>
                         <td><input required name="fixed_cost_masters" type="number" value="{{ $data->fixed_cost_masters }}" class="form-control"></td>
-                    </tr> 
+                    </tr>
+                    <tr>
+                        <th>Online Payment</th>
+                        <td>
+                            <div class="form-check form-check-inline bg-danger py-2 px-3 text-white rounded-pill">
+                                <input class="form-check-input" type="radio" name="payment" id="exampleRadios1" value="0" @if($data->payment==0) @checked(true) @endif>
+                                <label class="form-check-label" for="exampleRadios1">
+                                  Off
+                                </label>
+                              </div>
+                              <div class="form-check form-check-inline bg-success py-2 px-3 text-white rounded-pill">
+                                <input class="form-check-input" type="radio" name="payment" id="exampleRadios2" value="1" @if($data->payment==1) @checked(true) @endif>
+                                <label class="form-check-label" for="exampleRadios2">
+                                 On
+                                </label>
+                              </div>
+                        </td>
+                    </tr>
                     <tr>
                         <td colspan="2">
                             <input type="hidden" name="prev_logo" value="{{ $data->logo }}">

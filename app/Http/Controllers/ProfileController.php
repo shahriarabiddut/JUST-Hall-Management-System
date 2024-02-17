@@ -27,6 +27,13 @@ class ProfileController extends Controller
     {
         $this->middleware(function ($request, $next) {
             $this->hall_id = Auth::user()->hall_id;
+            $routeName = $request->route()->getName();
+            $includedRoutes = ['student.myroom', 'student.roomrequest', 'student.roomrequeststore', 'student.roomrequestshow', 'student.roomrequestdestroy', 'student.roomrequestpayment.destroy', 'student.roomrequestpayment', 'student.roomrequestpaymentstore'];
+            if (in_array($routeName, $includedRoutes)) {
+                if (Auth::user()->hall->status == 0) {
+                    return redirect()->route('student.dashboard')->with('danger', 'This Hall has been Disabled by System Administrator!');
+                }
+            }
             return $next($request);
         });
     }
@@ -162,26 +169,6 @@ class ProfileController extends Controller
         return Redirect::route('student.profile.view')->with('success', 'Profile Updated');
     }
 
-    /**
-     * Delete the user's account.
-     */
-    // public function destroy(Request $request): RedirectResponse
-    // {
-    //     $request->validateWithBag('userDeletion', [
-    //         'password' => ['required', 'current-password'],
-    //     ]);
-
-    //     $user = $request->user();
-
-    //     Auth::logout();
-
-    //     $user->delete();
-
-    //     $request->session()->invalidate();
-    //     $request->session()->regenerateToken();
-
-    //     return Redirect::to('/');
-    // }
     //Room Details
     public function myroom()
     {

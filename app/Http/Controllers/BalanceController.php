@@ -12,6 +12,9 @@ class BalanceController extends Controller
     public function index()
     {
         $userid = Auth::user()->id;
+        if (Auth::user()->hall->status == 0) {
+            return redirect()->route('student.dashboard')->with('danger', 'This Hall has been Disabled by System Administrator!');
+        }
         $data = Balance::all()->where('student_id', '=', $userid)->first();
         return view('profile.balance.index', ['data' => $data]);
     }

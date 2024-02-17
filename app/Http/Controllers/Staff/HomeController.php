@@ -169,6 +169,9 @@ class HomeController extends Controller
         if ($data->id != $this->hall_id) {
             return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized Access!');
         }
+        if ($data->status == 0) {
+            return redirect()->route('staff.dashboard')->with('danger', 'This Hall has been Disabled by System Administrator!');
+        }
         return view('staff.settings.edit', ['data' => $data]);
     }
     public function settingsUpdate(Request $request, $id)
