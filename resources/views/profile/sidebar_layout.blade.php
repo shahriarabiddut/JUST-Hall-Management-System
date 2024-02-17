@@ -4,7 +4,11 @@
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('student.dashboard') }}">
         <div class="sidebar-brand-icon rotate-n-15">
-            <img src="{{ asset($HallOption[3]->value) }}" class="rounded mx-auto d-block sidebar-card-illustration" alt="Logo" style="width:50%;"> 
+            @if (Auth::user()->hall->logo == null)
+            <img src="{{ asset($HallOption[3]->value) }}" class="rounded mx-auto d-block sidebar-card-illustration" alt="Logo" style="width:50%;">
+            @else
+            <img src="{{ asset('storage/'.Auth::user()->hall->logo) }}" class="rounded mx-auto d-block sidebar-card-illustration" alt="Logo" style="width:50%;">
+            @endif
         </div>
         <div class="sidebar-brand-text mx-3">Student Panel</div>
     </a>
