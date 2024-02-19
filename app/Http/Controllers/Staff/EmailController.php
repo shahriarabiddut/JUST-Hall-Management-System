@@ -160,7 +160,7 @@ class EmailController extends Controller
         if ($status == 1) {
             $emailObjective = 'Your Room Allocation Request Accepted';
             $emailSubject = 'Your Room Allocation Request Accepted ! Contact Hall Provost Soon!';
-            $emailBody = 'Your Room Allocation Request has been Accepted by Hall Provost! To get allocated Room no is ' . $RoomTitle . ' please contact Hall Provost . Login to See Further Details.';
+            $emailBody = 'Your Room Allocation Request has been Accepted by Hall Provost! To get allocated in Room no ' . $RoomTitle . ' ,Please contact Hall Provost as soon as possible. Login to See Further Details.';
         } elseif ($status == 2) {
             $emailObjective = 'Your Room Allocation Request Rejected';
             $emailSubject = 'Your Room Allocation Request Rejected! Contact Hall Provost Soon!';
@@ -168,7 +168,7 @@ class EmailController extends Controller
         } elseif ($status == 3) {
             $emailObjective = 'Your Room Allocation Request is on Waiting';
             $emailSubject = 'Your Room Allocation Request is on Waiting! Contact Hall Provost Soon!';
-            $emailBody = 'Your Room Allocation Request is on Waiting by Hall Provost! Your requested room was Room no ' . $RoomTitle . ' and Login to See Further Details.';
+            $emailBody = 'Your Room Allocation Request is on Waiting by Hall Provost! Your requested room was, Room no ' . $RoomTitle . ' and Login to See Further Details.';
         } else {
             return redirect()->back()->withInput()->with('danger', 'Server Error');
         }

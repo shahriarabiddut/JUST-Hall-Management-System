@@ -323,6 +323,12 @@ class ProfileController extends Controller
         }
         //
         $data = RoomRequest::find($id);
+        if ($data == null) {
+            return redirect()->route('student.dashboard')->with('danger', 'Access Denied!');
+        }
+        if ($data->user_id != $userid) {
+            return redirect()->route('student.dashboard')->with('danger', 'Access Denied! Warning!');
+        }
         if ($data != null) {
             $dataPayment = Payment::all()->where('type', 'roomrequest')->where('student_id', $userid)->where('service_id', $data->id)->first();
             if ($dataPayment != null) {

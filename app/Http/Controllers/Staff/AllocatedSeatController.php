@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Staff;
 
 use App\Models\Room;
 use App\Models\User;
+use App\Models\Balance;
 use App\Models\Payment;
 use App\Models\Student;
 use App\Models\RoomRequest;
@@ -114,6 +115,10 @@ class AllocatedSeatController extends Controller
         $studentData = Student::find($data->user_id);
         $studentData->hall_id = $this->hall_id;
         $studentData->save();
+        //Connect Balance Account
+        $dataBalance = Balance::all()->where('student_id', $data->user_id)->first();
+        $dataBalance->hall_id = $this->hall_id;
+        $dataBalance->save();
         //
         return redirect()->route('staff.roomallocation.index')->with('success', 'Room Allocation Data has been added Successfully!');
     }
@@ -246,6 +251,10 @@ class AllocatedSeatController extends Controller
         $studentData = Student::find($data->user_id);
         $studentData->hall_id = 0;
         $studentData->save();
+        //Connect Balance Account
+        $dataBalance = Balance::all()->where('student_id', $studentData->id)->first();
+        $dataBalance->hall_id = 0;
+        $dataBalance->save();
         // Room Vacancy + 1
         $roomid = $data->room_id;
         $room = Room::find($roomid);
@@ -326,10 +335,15 @@ class AllocatedSeatController extends Controller
         }
         $student_id = $data->user_id;
         $room_id = $request->room_id;
-
+        //
         $data2 = Student::find($student_id);
         $data2->hall_id = $this->hall_id;
         $data2->save();
+        //Connect Balance Account
+        $dataBalance = Balance::all()->where('student_id', $data2->id)->first();
+        $dataBalance->hall_id = $this->hall_id;
+        $dataBalance->save();
+        //
         $room = Room::find($room_id);
         if ($room->vacancy == 0) {
             return redirect()->route('staff.roomallocation.index')->with('danger', 'Room is Full!');

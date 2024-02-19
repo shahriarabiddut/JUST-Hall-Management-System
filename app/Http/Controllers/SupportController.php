@@ -76,6 +76,9 @@ class SupportController extends Controller
         if ($data == null) {
             return redirect()->route('student.support.index')->with('danger', 'Not Found');
         }
+        if ($data->user_id != Auth::user()->id) {
+            return redirect()->route('student.support.index')->with('danger', 'Access Denied! Warning!');
+        }
         return view('profile.support.show', ['data' => $data]);
     }
 
@@ -124,6 +127,9 @@ class SupportController extends Controller
         if ($data->status != null || $data->status != 0) {
             return redirect('student/support')->with('danger', 'You cannot delete Support Ticket!');
         } else {
+            if ($data->user_id != Auth::user()->id) {
+                return redirect()->route('student.support.index')->with('danger', 'Access Denied! Warning!');
+            }
             $data->delete();
             return redirect('student/support')->with('danger', 'Support Ticket has been Deleted Successfully!');
         }

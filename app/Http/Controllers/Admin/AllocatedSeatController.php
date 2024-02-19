@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Hall;
 use App\Models\Room;
+use App\Models\Balance;
 use App\Models\Payment;
 use App\Models\Student;
 use App\Models\RoomRequest;
@@ -101,6 +102,10 @@ class AllocatedSeatController extends Controller
         $studentData = Student::find($data->user_id);
         $studentData->hall_id = $data->hall_id;
         $studentData->save();
+        //Connect Balance Account
+        $dataBalance = Balance::all()->where('student_id', $data->user_id)->first();
+        $dataBalance->hall_id = $data->hall_id;
+        $dataBalance->save();
         //
 
         return redirect('admin/roomallocation')->with('success', 'AllocatedSeats Data has been added Successfully!');
@@ -220,6 +225,10 @@ class AllocatedSeatController extends Controller
         $studentData = Student::find($data->user_id);
         $studentData->hall_id = 0;
         $studentData->save();
+        //Connect Balance Account
+        $dataBalance = Balance::all()->where('student_id', $studentData->id)->first();
+        $dataBalance->hall_id = 0;
+        $dataBalance->save();
         // Room Vacancy + 1
         $roomid = $data->room_id;
         $room = Room::find($roomid);
