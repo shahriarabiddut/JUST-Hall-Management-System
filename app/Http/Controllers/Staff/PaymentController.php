@@ -66,7 +66,7 @@ class PaymentController extends Controller
         $data->phone = $request->mobileno;
         $data->amount = $request->amount;
         $data->status = $request->status;
-        $data->name = Auth::guard('staff')->user()->name;
+        $data->name = 'Staff - ' . Auth::guard('staff')->user()->name;
         $data->email = Auth::guard('staff')->user()->email;
         $data->address = Auth::guard('staff')->user()->email;
         $data->currency = 'BDT';

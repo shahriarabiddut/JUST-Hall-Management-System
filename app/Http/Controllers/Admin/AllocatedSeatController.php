@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Hall;
 use App\Models\Room;
+use App\Models\Payment;
 use App\Models\Student;
+use App\Models\RoomRequest;
 use Illuminate\Http\Request;
 use App\Models\AllocatedSeats;
-use App\Http\Controllers\Controller;
-use App\Models\Hall;
-use App\Models\RoomRequest;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 
 class AllocatedSeatController extends Controller
@@ -96,7 +97,11 @@ class AllocatedSeatController extends Controller
         $room->positions = $jsonData;
         // Removed
         $room->save();
-        // 
+        // User Data Update
+        $studentData = Student::find($data->user_id);
+        $studentData->hall_id = $data->hall_id;
+        $studentData->save();
+        //
 
         return redirect('admin/roomallocation')->with('success', 'AllocatedSeats Data has been added Successfully!');
     }
@@ -211,6 +216,10 @@ class AllocatedSeatController extends Controller
         if ($data == null) {
             return redirect()->route('admin.roomallocation.index')->with('danger', 'Not Found!');
         }
+        // User Data Update
+        $studentData = Student::find($data->user_id);
+        $studentData->hall_id = 0;
+        $studentData->save();
         // Room Vacancy + 1
         $roomid = $data->room_id;
         $room = Room::find($roomid);
@@ -245,8 +254,12 @@ class AllocatedSeatController extends Controller
         }
         $student_id = $data->user_id;
         $data2 = Student::find($student_id);
-        if ($data) {
-            return view('admin.roomallocation.roomrequestshow', ['data' => $data, 'data2' => $data2]);
+        if ($data != null) {
+            $application = json_decode($data->application, true);
+            $student_id = $data->user_id;
+            $dataAllocation = AllocatedSeats::all()->where('user_id', $student_id)->first();
+            $dataPayment = Payment::all()->where('type', 'roomrequest')->where('student_id', $student_id)->where('service_id', $data->id)->first();
+            return view('admin.roomallocation.roomrequestshow', ['data' => $data, 'data2' => $data2, 'application' => $application, 'dataPayment' => $dataPayment, 'dataAllocation' => $dataAllocation]);
         } else {
             return redirect('admin/roomallocation')->with('danger', 'No Data Found');
         }

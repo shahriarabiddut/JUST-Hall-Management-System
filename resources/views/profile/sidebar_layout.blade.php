@@ -4,7 +4,7 @@
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('student.dashboard') }}">
         <div class="sidebar-brand-icon rotate-n-15">
-            @if (Auth::user()->hall->logo == null)
+            @if (Auth::user()->hall_id==0 || Auth::user()->hall_id==null)
             <img src="{{ asset($HallOption[3]->value) }}" class="rounded mx-auto d-block sidebar-card-illustration" alt="Logo" style="width:50%;">
             @else
             <img src="{{ asset('storage/'.Auth::user()->hall->logo) }}" class="rounded mx-auto d-block sidebar-card-illustration" alt="Logo" style="width:50%;">
@@ -102,7 +102,6 @@
             </div>
         </div>
     </li>
-@endif
     <!-- Nav Item Payment - Utilities Collapse Menu -->
     <li class="nav-item">
         <a class="nav-link @if (!request()->is('student/balance*'))
@@ -120,8 +119,7 @@
                 <a class="collapse-item" href="{{ route('student.payments.create') }}">Add new prepayment</a>
             </div>
         </div>
-    </li>
-@if (Auth::user()->hall_id!=0 && Auth::user()->hall_id!=null)   
+    </li>  
     <!-- Nav Item Support - Utilities Collapse Menu -->
     <li class="nav-item">
         <a class="nav-link @if (!request()->is('student/support*'))

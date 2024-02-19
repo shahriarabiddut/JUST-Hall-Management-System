@@ -110,6 +110,11 @@ class AllocatedSeatController extends Controller
         $staff_id = Auth::guard('staff')->user()->id;
         $HistoryController->addHistoryHall($staff_id, 'allocation', 'Student (' . $data->students->rollno . ' ) - ' . $data->students->name . ' , Room is Allocated Successfully!', $this->hall_id);
         //Saved
+        // User Data Update
+        $studentData = Student::find($data->user_id);
+        $studentData->hall_id = $this->hall_id;
+        $studentData->save();
+        //
         return redirect()->route('staff.roomallocation.index')->with('success', 'Room Allocation Data has been added Successfully!');
     }
 
@@ -237,6 +242,10 @@ class AllocatedSeatController extends Controller
         if ($data->hall_id != $this->hall_id) {
             return redirect()->route('staff.roomallocation.index')->with('danger', 'Not Permitted!');
         }
+        // User Data Update
+        $studentData = Student::find($data->user_id);
+        $studentData->hall_id = 0;
+        $studentData->save();
         // Room Vacancy + 1
         $roomid = $data->room_id;
         $room = Room::find($roomid);
@@ -319,7 +328,8 @@ class AllocatedSeatController extends Controller
         $room_id = $request->room_id;
 
         $data2 = Student::find($student_id);
-
+        $data2->hall_id = $this->hall_id;
+        $data2->save();
         $room = Room::find($room_id);
         if ($room->vacancy == 0) {
             return redirect()->route('staff.roomallocation.index')->with('danger', 'Room is Full!');
@@ -338,11 +348,11 @@ class AllocatedSeatController extends Controller
         // Room Vancacy deleted
         if ($data) {
             //Allocating seat 
-            $data3 = new AllocatedSeats;
+            $data3 = new AllocatedSeats();
             $data3->room_id = $room_id;
             $data3->user_id = $student_id;
-
             $data3->position = $request->position;
+            $data3->hall_id =  $this->hall_id;
             $data3->save();
 
             //Room Allocation Requests Accepted

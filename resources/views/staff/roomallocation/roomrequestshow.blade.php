@@ -30,7 +30,7 @@
                     <tbody>
                     <tr>
                         <th class="text-center"><h4 class="my-5">প্রভোস্ট এর কার্যালয়</h4></th>
-                        <td colspan="2" class="text-center"><img width="75px" src="{{ asset($data->hall->logo) }}" alt=""></td>
+                        <td colspan="2" class="text-center"><img width="75px" src="{{ asset('storage/'.$data->hall->logo) }}" alt=""></td>
                         <th class="text-center">
                             <h4 class="my-5">{{ $data->hall->banglatitle }}
                     </h4></th>

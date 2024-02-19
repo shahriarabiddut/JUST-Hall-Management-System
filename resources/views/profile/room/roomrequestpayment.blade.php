@@ -51,6 +51,7 @@
                 <tr>
                     <td colspan="2">
                         <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+                        <input type="hidden" name="hall_id" value="{{ $data->hall_id }}">
                         <input type="hidden" name="type" value="roomrequest">
                         <input type="hidden" name="service_id" value="{{ $data->id }}">
                         <button type="submit" class="btn btn-primary">Submit</button>

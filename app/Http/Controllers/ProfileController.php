@@ -26,12 +26,14 @@ class ProfileController extends Controller
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
-            $this->hall_id = Auth::user()->hall_id;
-            $routeName = $request->route()->getName();
-            $includedRoutes = ['student.myroom', 'student.roomrequest', 'student.roomrequeststore', 'student.roomrequestshow', 'student.roomrequestdestroy', 'student.roomrequestpayment.destroy', 'student.roomrequestpayment', 'student.roomrequestpaymentstore'];
-            if (in_array($routeName, $includedRoutes)) {
-                if (Auth::user()->hall->status == 0) {
-                    return redirect()->route('student.dashboard')->with('danger', 'This Hall has been Disabled by System Administrator!');
+            if (Auth::user()->hall_id != 0 || Auth::user()->hall_id != null) {
+                $this->hall_id = Auth::user()->hall_id;
+                $routeName = $request->route()->getName();
+                $includedRoutes = ['student.myroom', 'student.roomrequest', 'student.roomrequeststore', 'student.roomrequestshow', 'student.roomrequestdestroy', 'student.roomrequestpayment.destroy', 'student.roomrequestpayment', 'student.roomrequestpaymentstore'];
+                if (in_array($routeName, $includedRoutes)) {
+                    if (Auth::user()->hall->status == 0) {
+                        return redirect()->route('student.dashboard')->with('danger', 'This Hall has been Disabled by System Administrator!');
+                    }
                 }
             }
             return $next($request);
@@ -156,6 +158,9 @@ class ProfileController extends Controller
         }
 
         $data->name = $request->name;
+        if ($data->email != $request->email) {
+            $data->email_verified_at = null;
+        }
         $data->email = $request->email;
         $data->dept = $request->dept;
         $data->session = $request->session;
@@ -293,12 +298,12 @@ class ProfileController extends Controller
     {
         $userid = Auth::user()->id;
         $data = RoomRequest::all()->where('user_id', '=', $userid)->first();
-        $dataPayment = Payment::all()->where('type', 'roomrequest')->where('student_id', $userid)->where('service_id', $data->id)->first();
+
         // page redirection
         $dataAllocatedSeats = AllocatedSeats::all()->where('user_id', '=', $userid)->first();
         if ($data != null) {
             $application = json_decode($data->application, true);
-
+            $dataPayment = Payment::all()->where('type', 'roomrequest')->where('student_id', $userid)->where('service_id', $data->id)->first();
             if ($dataAllocatedSeats != null) {
                 return redirect()->route('student.myroom');
             } else {
@@ -318,7 +323,13 @@ class ProfileController extends Controller
         }
         //
         $data = RoomRequest::find($id);
-        $data->delete();
+        if ($data != null) {
+            $dataPayment = Payment::all()->where('type', 'roomrequest')->where('student_id', $userid)->where('service_id', $data->id)->first();
+            if ($dataPayment != null) {
+                $dataPayment->delete();
+            }
+            $data->delete();
+        }
         return Redirect::to('student/rooms/requestshow')->with('danger', 'Room Alloacation Request has been Deleted!');
     }
     public function roomrequestpaymentdestroy($id)
@@ -406,6 +417,7 @@ class ProfileController extends Controller
         $data->type = 'roomrequest';
         $data->phone = $request->mobileno;
         $data->service_id = $request->service_id;
+        $data->hall_id = $request->hall_id;
         $data->save();
 
         return redirect()->route('student.roomrequestshow')->with('success', 'Room Alloacation Request Payment has been added Successfully!');

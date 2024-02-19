@@ -72,7 +72,7 @@ class EmailController extends Controller
         $dataEmail->message = $request->message;
         $dataEmail->objective = $request->objective;
         $dataEmail->staff_id = $request->staff_id;
-        $dataEmail->hall_id = $this->hall_id;
+        $dataEmail->hall_id = Auth::guard('staff')->user()->hall_id;
         $dataEmail->save();
         return redirect('staff/email')->with('success', 'Email Sent Successfully!');
     }
@@ -132,23 +132,19 @@ class EmailController extends Controller
             return redirect()->back()->withInput()->with('danger', 'Server Error');
         }
         //Sending email with information
-        if ($this->isOnline()) {
-            // The email sending is done using the to method on the Mail facade
-            Mail::to($RecieverEmail)->send(new PaymentEmail($emailBody, $emailObjective, $emailSubject, $RecieverData->hall->title));
-            //Saving data to email history
-            $dataEmail = new Email;
-            $dataEmail->name = $RecieverName;
-            $dataEmail->email = $RecieverEmail;
-            $dataEmail->subject = $emailSubject;
-            $dataEmail->message = $emailBody;
-            $dataEmail->objective = $emailObjective;
-            $dataEmail->staff_id = $staff_id;
-            $dataEmail->hall_id = $RecieverData->hall->id;
-            $dataEmail->save();
-        } else {
 
-            return redirect()->back()->withInput()->with('error', 'No Internet Connection');
-        }
+        //Saving data to email history
+        $dataEmail = new Email;
+        $dataEmail->name = $RecieverName;
+        $dataEmail->email = $RecieverEmail;
+        $dataEmail->subject = $emailSubject;
+        $dataEmail->message = $emailBody;
+        $dataEmail->objective = $emailObjective;
+        $dataEmail->staff_id = $staff_id;
+        $dataEmail->hall_id = Auth::guard('staff')->user()->hall_id;
+        $dataEmail->save();
+        // The email sending is done using the to method on the Mail facade
+        Mail::to($RecieverEmail)->send(new PaymentEmail($emailBody, $emailObjective, $emailSubject, $dataEmail->title));
     }
     public function RoomAllocationEmail(string $id, string $roomtitle, string $status)
     {
@@ -177,24 +173,18 @@ class EmailController extends Controller
             return redirect()->back()->withInput()->with('danger', 'Server Error');
         }
         //Sending email with information
-        if ($this->isOnline()) {
-            // The email sending is done using the to method on the Mail facade
-            Mail::to($RecieverEmail)->send(new AllocationEmail($emailBody, $emailObjective, $emailSubject));
-
-            //Saving data to email history
-            $dataEmail = new Email;
-            $dataEmail->name = $RecieverName;
-            $dataEmail->email = $RecieverEmail;
-            $dataEmail->subject = $emailSubject;
-            $dataEmail->message = $emailBody;
-            $dataEmail->objective = $emailObjective;
-            $dataEmail->staff_id = 0;
-            $dataEmail->hall_id = $RecieverData->hall->id;
-            $dataEmail->save();
-        } else {
-
-            return redirect()->back()->withInput()->with('error', 'No Internet Connection');
-        }
+        //Saving data to email history
+        $dataEmail = new Email;
+        $dataEmail->name = $RecieverName;
+        $dataEmail->email = $RecieverEmail;
+        $dataEmail->subject = $emailSubject;
+        $dataEmail->message = $emailBody;
+        $dataEmail->objective = $emailObjective;
+        $dataEmail->staff_id = Auth::guard('staff')->user()->id;
+        $dataEmail->hall_id = Auth::guard('staff')->user()->hall_id;
+        $dataEmail->save();
+        // The email sending is done using the to method on the Mail facade
+        Mail::to($RecieverEmail)->send(new PaymentEmail($emailBody, $emailObjective, $emailSubject, $dataEmail->hall->title));
     }
     public function RoomAllocationEmail2(string $id,  string $status)
     {
@@ -222,23 +212,17 @@ class EmailController extends Controller
             return redirect()->back()->withInput()->with('danger', 'Server Error');
         }
         //Sending email with information
-        if ($this->isOnline()) {
-            // The email sending is done using the to method on the Mail facade
-            Mail::to($RecieverEmail)->send(new AllocationEmail($emailBody, $emailObjective, $emailSubject));
-
-            //Saving data to email history
-            $dataEmail = new Email;
-            $dataEmail->name = $RecieverName;
-            $dataEmail->email = $RecieverEmail;
-            $dataEmail->subject = $emailSubject;
-            $dataEmail->message = $emailBody;
-            $dataEmail->objective = $emailObjective;
-            $dataEmail->staff_id = 0;
-            $dataEmail->hall_id = $RecieverData->hall->id;
-            $dataEmail->save();
-        } else {
-
-            return redirect()->back()->withInput()->with('error', 'No Internet Connection');
-        }
+        //Saving data to email history
+        $dataEmail = new Email;
+        $dataEmail->name = $RecieverName;
+        $dataEmail->email = $RecieverEmail;
+        $dataEmail->subject = $emailSubject;
+        $dataEmail->message = $emailBody;
+        $dataEmail->objective = $emailObjective;
+        $dataEmail->staff_id = Auth::guard('staff')->user()->id;
+        $dataEmail->hall_id = Auth::guard('staff')->user()->hall_id;
+        $dataEmail->save();
+        // The email sending is done using the to method on the Mail facade
+        Mail::to($RecieverEmail)->send(new PaymentEmail($emailBody, $emailObjective, $emailSubject, $dataEmail->hall->title));
     }
 }

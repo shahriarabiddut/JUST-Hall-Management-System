@@ -55,6 +55,7 @@ class EmailController extends Controller
         $dataEmail->message = $request->message;
         $dataEmail->objective = $request->objective;
         $dataEmail->staff_id = 0;
+        $dataEmail->hall_id = 0;
         $dataEmail->save();
         return redirect('admin/email')->with('danger', 'Email Sent Successfully!');
     }
@@ -124,6 +125,7 @@ class EmailController extends Controller
             $dataEmail->message = $emailBody;
             $dataEmail->objective = $emailObjective;
             $dataEmail->staff_id = 0;
+            $dataEmail->hall_id = $RecieverData->hall_id;
             $dataEmail->save();
         } else {
 
