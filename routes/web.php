@@ -24,16 +24,12 @@ use App\Http\Controllers\SslCommerzPaymentController;
 */
 
 
-Route::get('/testroute', function () {
-    $name = "Biddut";
-
-    // The email sending is done using the to method on the Mail facade
-    Mail::to('shahriarabiddut@gmail.com')->send(new MyTestEmail($name));
-});
-
 Route::get('/', function () {
     return view('home');
 })->name('root');
+Route::get('/manual', function () {
+    return view('manual');
+})->name('manual');
 
 //
 $printingOption = HallOption::all()->where('name', 'print')->first();
