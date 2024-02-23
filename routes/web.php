@@ -24,12 +24,20 @@ use App\Http\Controllers\SslCommerzPaymentController;
 */
 
 
+Route::get('/testroute', function () {
+    $name = "Biddut";
+
+    // The email sending is done using the to method on the Mail facade
+    Mail::to('shahriarabiddut@gmail.com')->send(new MyTestEmail($name));
+});
+
 Route::get('/', function () {
     return view('home');
 })->name('root');
 Route::get('/manual', function () {
     return view('manual');
 })->name('manual');
+
 
 //
 $printingOption = HallOption::all()->where('name', 'print')->first();
@@ -43,10 +51,10 @@ if ($printingOption->value != 0) {
 }
 
 //User Routes
-Route::get('student', [ProfileController::class, 'index'])->middleware(['auth', 'verified'])->name('student.dashboard');
+Route::get('student', [ProfileController::class, 'index'])->middleware(['auth'])->name('student.dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware(['auth', 'verified'])->prefix('student')->name('student.')->group(function () {
+Route::middleware(['auth'])->prefix('student')->name('student.')->group(function () {
 
     //Profile Routes
     Route::get('/profile', [ProfileController::class, 'view'])->name('profile.view');

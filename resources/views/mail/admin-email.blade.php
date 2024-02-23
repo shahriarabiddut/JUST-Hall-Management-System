@@ -11,9 +11,11 @@
 	@else
 	{{ $objective }}
 	@endif
+
 	<p>{{ $body }}</p>
+
+	
 	<p>Thank You.</p>
-	<h1> Hall Automation Just</h1>
 
 </body>
 </html>

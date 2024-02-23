@@ -90,7 +90,12 @@
                                 
                                 </span>
                                 <img class="img-profile rounded-circle"
-                                    src="{{ asset('storage/'.Auth::user()->photo) }}">
+                                @if (Auth::user()->photo!=null)
+                                src="{{ asset('storage/'.Auth::user()->photo) }}"
+                                @else
+                                src="{{ asset('images/user.png') }}"
+                                @endif
+                                >
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"

@@ -43,8 +43,8 @@
                             <th>Photo</th>
                             <th>RollNo</th>
                             <th>Name</th>
+                            <th>Hall</th>
                             <th>Email</th>
-                            <th>Mobile</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -71,14 +71,20 @@
                             /></td>
                             <td>{{ $d->rollno }}</td>
                             <td>{{ $d->name }}</td>
-                            <td>{{ $d->hall->title }}</td>
+                            <td>@if($d->hall==null)
+                                Not Allocated
+                                @else
+                                {{ $d->hall->title }}
+                                @endif
+                                
+                            </td>
                             <td>{{ $d->email }}</td>
                             
                             
                             <td class="text-center">
-                                <a href="{{ url('admin/student/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
-                                <a href="{{ url('admin/student/'.$d->id.'/edit') }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
-                                <a onclick="return confirm('Are You Sure?')" href="{{ url('admin/student/'.$d->id.'/delete') }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                <a href="{{ url('admin/student/'.$d->id) }}" class="btn btn-info btn-sm m-1"><i class="fa fa-eye"></i></a>
+                                <a href="{{ url('admin/student/'.$d->id.'/edit') }}" class="btn btn-primary btn-sm m-1"><i class="fa fa-edit"></i></a>
+                                <a onclick="return confirm('Are You Sure?')" href="{{ url('admin/student/'.$d->id.'/delete') }}" class="btn btn-danger btn-sm m-1"><i class="fa fa-trash"></i></a>
                             </td>
 
                         </tr>

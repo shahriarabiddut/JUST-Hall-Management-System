@@ -28,11 +28,9 @@ class AllocatedSeatController extends Controller
             if (Auth::guard('staff')->user()->hall->status == 0) {
                 return redirect()->route('staff.dashboard')->with('danger', 'This Hall has been Disabled by System Administrator!');
             }
-            if (Auth::guard('staff')->user()->type == 'provost') {
+            if (Auth::guard('staff')->user()->type == 'provost' || Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'aprovost') {
                 return $next($request);
                 // return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
-            } elseif (Auth::guard('staff')->user()->type == 'aprovost') {
-                return $next($request);
             } else {
                 return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
                 return $next($request);
@@ -44,6 +42,9 @@ class AllocatedSeatController extends Controller
      */
     public function index()
     {
+        if (Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'staff') {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+        }
         $data = AllocatedSeats::all()->where('hall_id', $this->hall_id);
         return view('staff.roomallocation.index', ['data' => $data]);
     }
@@ -53,6 +54,9 @@ class AllocatedSeatController extends Controller
      */
     public function create()
     {
+        if (Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'staff') {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+        }
         //Student Data segregation
         $unstudents = DB::select("SELECT * FROM users WHERE id NOT IN (SELECT user_id FROM allocated_seats) OR hall_id = 0 AND hall_id = $this->hall_id");
         $data = [];
@@ -80,6 +84,9 @@ class AllocatedSeatController extends Controller
      */
     public function store(Request $request)
     {
+        if (Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'staff') {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+        }
         //
         $data = new AllocatedSeats;
         $request->validate([
@@ -128,6 +135,9 @@ class AllocatedSeatController extends Controller
      */
     public function show(string $id)
     {
+        if (Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'staff') {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+        }
         //
         $data = AllocatedSeats::find($id);
         if ($data == null) {
@@ -144,6 +154,9 @@ class AllocatedSeatController extends Controller
      */
     public function edit(string $id)
     {
+        if (Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'staff') {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+        }
         //
         $students = Student::all()->where('hall_id', $this->hall_id);
         $rooms = Room::all()->where('hall_id', $this->hall_id);
@@ -162,6 +175,9 @@ class AllocatedSeatController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if (Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'staff') {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+        }
         //
         $data = AllocatedSeats::find($id);
 
@@ -240,6 +256,9 @@ class AllocatedSeatController extends Controller
      */
     public function destroy($id)
     {
+        if (Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'staff') {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+        }
         $data = AllocatedSeats::find($id);
         if ($data == null) {
             return redirect()->route('staff.roomallocation.index')->with('danger', 'Not Found!');
@@ -318,6 +337,9 @@ class AllocatedSeatController extends Controller
     //Room Allocation Requests Details
     public function RoomRequestAllocate(Request $request)
     {
+        if (Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'staff') {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+        }
         //
         $data = RoomRequest::find($request->id);
         if ($data == null) {
@@ -388,6 +410,9 @@ class AllocatedSeatController extends Controller
     }
     public function roomrequestaccept2(string $id, string $allocated_seat_id, string $room_id)
     {
+        if (Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'staff') {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+        }
         $data = RoomRequest::find($id);
         if ($data == null) {
             return redirect()->route('staff.roomallocation.index')->with('danger', 'Not Found!');
@@ -404,6 +429,9 @@ class AllocatedSeatController extends Controller
     //Room Allocation Requests
     public function roomrequestaccept(string $id)
     {
+        if (Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'staff') {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+        }
         $data = RoomRequest::find($id);
         if ($data == null) {
             return redirect()->route('staff.roomallocation.index')->with('danger', 'Not Found!');
@@ -434,6 +462,9 @@ class AllocatedSeatController extends Controller
     }
     public function roomrequestban(string $id)
     {
+        if (Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'staff') {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+        }
         $data = RoomRequest::find($id);
         if ($data == null) {
             return redirect()->route('staff.roomallocation.index')->with('danger', 'Not Found!');
@@ -468,6 +499,9 @@ class AllocatedSeatController extends Controller
     }
     public function roomrequestlist(string $id)
     {
+        if (Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'staff') {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+        }
         $data = RoomRequest::find($id);
         if ($data == null) {
             return redirect()->route('staff.roomallocation.index')->with('danger', 'Not Found!');
@@ -496,11 +530,17 @@ class AllocatedSeatController extends Controller
     // Import Bulk users and room allocation from csv
     public function importAllocation()
     {
+        if (Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'staff') {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+        }
         return view('staff.roomallocation.importAllocation');
     }
 
     public function handleImportAllocation(Request $request)
     {
+        if (Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'staff') {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+        }
         $validator = $request->validate([
             'file' => 'required',
         ]);

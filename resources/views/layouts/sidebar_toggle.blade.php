@@ -21,5 +21,5 @@
 <div class="sidebar-card d-none d-lg-flex">
     <img class="sidebar-card-illustration mb-2" src="{{ asset('img/just.jpg') }}" alt="...">
     <p class="text-center mb-2">@isset($HallOption) {{ $HallOption[2]->value }} @endisset</p>
-    <a class="btn btn-success btn-sm" href="#">Shahriar Ahmed Biddut</a>
+    <a class="btn btn-success btn-sm" href="#">JUST CSE</a>
 </div>

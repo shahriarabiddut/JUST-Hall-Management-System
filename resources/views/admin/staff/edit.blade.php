@@ -73,6 +73,10 @@
                                     @selected(true)
                                 @endif
                                  value="aprovost">Assistant Provost</option>
+                                 <option @if ($data->type=='officer')
+                                    @selected(true)
+                                @endif
+                                 value="officer">Officer</option>
                             </select>
                         </td>
                     </tr>

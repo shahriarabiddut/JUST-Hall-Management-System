@@ -68,7 +68,7 @@
         </div>
     </li>
     @endif
-    @if (Auth::guard('staff')->user()->type == 'provost' || Auth::guard('staff')->user()->type == 'aprovost')
+    @if (Auth::guard('staff')->user()->type == 'provost' || Auth::guard('staff')->user()->type == 'aprovost' || Auth::guard('staff')->user()->type == 'officer')
     <!-- Divider -->
     <hr class="sidebar-divider">
     <!-- Heading -->
@@ -87,8 +87,10 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Student Management</h6>
                 <a class="collapse-item" href="{{ route('staff.student.index') }}">View All</a>
+                @if (Auth::guard('staff')->user()->type == 'provost' || Auth::guard('staff')->user()->type == 'aprovost')
                 <a class="collapse-item" href="{{ route('staff.student.create') }}">Add new</a>
                 <a class="collapse-item" href="{{ route('staff.balance.index') }}"><b>Balances</b></a>
+                @endif
             </div>
         </div>
     </li>
@@ -102,12 +104,15 @@
         <div id="collapseStudentRoom" class="collapse @if(request()->is('staff/roomallocation*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Student Room Alocation</h6>
+                @if (Auth::guard('staff')->user()->type == 'provost' || Auth::guard('staff')->user()->type == 'aprovost')
                 <a class="collapse-item" href="{{ route('staff.roomallocation.index') }}">View All</a>
                 <a class="collapse-item" href="{{ route('staff.roomallocation.create') }}">Add new </a>
+                @endif
                 <a class="collapse-item" href="{{ route('staff.roomallocation.roomrequests') }}">Allocation Requests </a>
             </div>
         </div>
     </li>
+    @if (Auth::guard('staff')->user()->type == 'provost' || Auth::guard('staff')->user()->type == 'aprovost')
     <!-- Divider -->
     <hr class="sidebar-divider">
     <!-- Heading -->
@@ -133,10 +138,11 @@
             </div>
         </div>
     </li>
+    @endif
   <!-- Divider -->
     @endif
     <hr class="sidebar-divider">
-    @if (Auth::guard('staff')->user()->type == 'staff' || Auth::guard('staff')->user()->type == 'provost' || Auth::guard('staff')->user()->type == 'aprovost')
+    @if (Auth::guard('staff')->user()->type == 'staff' || Auth::guard('staff')->user()->type == 'provost' || Auth::guard('staff')->user()->type == 'aprovost' || Auth::guard('staff')->user()->type == 'officer')
     <!-- Heading -->
     <div class="sidebar-heading">
         Hall Orders System
@@ -187,6 +193,24 @@
     <div class="sidebar-heading">
         Hall Support System
     </div>
+    
+     <!-- Nav Item Support - Utilities Collapse Menu -->
+     <li class="nav-item">
+        <a class="nav-link @if (!request()->is('staff/support*'))
+            collapsed
+        @endif" href="#" data-toggle="collapse" data-target="#collapseOne"
+            aria-expanded="true" aria-controls="collapseOne">
+            <i class="fas fa-ticket-alt"></i>
+            <span>Support</span>
+        </a>
+        <div id="collapseOne" class="collapse @if(request()->is('staff/support*')) show @endif" aria-labelledby="headingUtilities"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Support Ticket Management</h6>
+                <a class="collapse-item" href="{{ route('staff.support.index') }}">View Support Tickets</a>
+            </div>
+        </div>
+    </li>
     {{-- <!-- Nav Email Services - Utilities Collapse Menu -->
     <li class="nav-item">
         <a class="nav-link @if (!request()->is('staff/email*'))
@@ -205,23 +229,6 @@
             </div>
         </div>
     </li> --}}
-     <!-- Nav Item Support - Utilities Collapse Menu -->
-     <li class="nav-item">
-        <a class="nav-link @if (!request()->is('staff/support*'))
-            collapsed
-        @endif" href="#" data-toggle="collapse" data-target="#collapseOne"
-            aria-expanded="true" aria-controls="collapseOne">
-            <i class="fas fa-ticket-alt"></i>
-            <span>Support</span>
-        </a>
-        <div id="collapseOne" class="collapse @if(request()->is('staff/support*')) show @endif" aria-labelledby="headingUtilities"
-            data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Support Ticket Management</h6>
-                <a class="collapse-item" href="{{ route('staff.support.index') }}">View Support Tickets</a>
-            </div>
-        </div>
-    </li>
     @if (Auth::guard('staff')->user()->type == 'provost')
     <hr class="sidebar-divider d-none d-md-block">
     <div class="sidebar-heading">

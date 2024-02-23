@@ -66,7 +66,7 @@
                         <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                       </div>
                       <select required name="gender" class="form-control room-list">
-                        <option >--- Gender ---</option>
+                        <option value="3">--- Select Gender ---</option>
                         <option value="1"> Male </option>
                         <option value="0"> Female </option>
                     </select>
@@ -81,13 +81,13 @@
                       <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fa fa-clock"></i> </span>
                       </div>
-                      <input required name="session" class="form-control" placeholder="Example - 2017-18,2018-19" type="text" value="{{ old('session') }}">
+                      <input required name="session" class="form-control" placeholder="Session - 2017-18,2018-19" type="text" value="{{ old('session') }}">
                     </div>
                     <div class="form-group input-group">
                       <div class="input-group-prepend">
                         <span class="input-group-text"> <i class="fa fa-user"></i> </span>
                       </div>
-                      <input required name="rollno" class="form-control" placeholder="Enter Roll No" type="text" value="{{ old('rollno') }}">
+                      <input required name="rollno" class="form-control" placeholder="Enter Roll No - 123456 , MS-123456" type="text" value="{{ old('rollno') }}">
                     </div>
                     <div class="form-group input-group">
                       <div class="input-group-prepend">

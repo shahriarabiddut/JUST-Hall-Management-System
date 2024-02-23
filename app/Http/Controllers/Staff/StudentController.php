@@ -23,14 +23,14 @@ class StudentController extends Controller
             if ($this->hall_id == 0 || $this->hall_id == null) {
                 return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
             }
-            if (Auth::guard('staff')->user()->hall->status == 0) {
-                return redirect()->route('staff.dashboard')->with('danger', 'This Hall has been Disabled by System Administrator!');
+            if (Auth::guard('staff')->user()->hall_id != 0) {
+                if (Auth::guard('staff')->user()->hall->status == 0) {
+                    return redirect()->route('staff.dashboard')->with('danger', 'This Hall has been Disabled by System Administrator!');
+                }
             }
-            if (Auth::guard('staff')->user()->type == 'provost') {
+            if (Auth::guard('staff')->user()->type == 'provost' || Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'aprovost') {
                 return $next($request);
                 // return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
-            } elseif (Auth::guard('staff')->user()->type == 'aprovost') {
-                return $next($request);
             } else {
                 return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
                 return $next($request);
@@ -40,6 +40,9 @@ class StudentController extends Controller
     // Command To Deduct Fixed Meal Cost from staff
     public function deductBalanceStaff()
     {
+        if (Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'staff') {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+        }
         $result = Process::run('php artisan deduct:balance ' . $this->hall_id);
         //Saving History 
         $HistoryController = new HistoryController();
@@ -71,6 +74,9 @@ class StudentController extends Controller
     public function create()
     {
         //
+        if (Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'staff') {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+        }
         return view('staff.student.create');
     }
 
@@ -79,6 +85,9 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
+        if (Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'staff') {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+        }
         //
         $data = new Student;
         $request->validate([
@@ -145,6 +154,9 @@ class StudentController extends Controller
     public function edit(string $id)
     {
         //
+        if (Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'staff') {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+        }
         $data = Student::find($id);
         if ($data == null) {
             return redirect()->route('staff.student.index')->with('danger', 'Not Found!');
@@ -160,6 +172,9 @@ class StudentController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if (Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'staff') {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+        }
         //
         $data = Student::find($id);
         if ($data->hall_id != $this->hall_id) {
@@ -204,6 +219,10 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
+        if (Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'staff') {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+        }
+        //
         $data = Student::find($id);
         if ($data == null) {
             return redirect()->route('staff.student.index')->with('danger', 'Not Found!');
@@ -239,11 +258,19 @@ class StudentController extends Controller
     // Import Bilk users from csv
     public function importUser()
     {
+        if (Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'staff') {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+        }
+        //
         return view('staff.student.importUser');
     }
 
     public function handleImportUser(Request $request)
     {
+        if (Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'staff') {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+        }
+        //
         $validator = $request->validate([
             'file' => 'required',
         ]);

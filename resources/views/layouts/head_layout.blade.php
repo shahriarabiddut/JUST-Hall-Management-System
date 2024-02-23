@@ -7,6 +7,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico')}}" />
+    {{-- <link rel="icon" type="image/x-icon" href="{{ asset('img/fav.png')}}" /> --}}
     <title> @isset($HallOption)
         {{ $HallOption[0]->value }}
     @endisset - @yield('title')</title>

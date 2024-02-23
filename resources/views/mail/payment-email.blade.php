@@ -6,11 +6,11 @@
 	<title>Hall Room Balance Payment </title>
 </head>
 <body>
-	<h4>{{ $objective }}</h4>
+	<h3>{{ $objective }}</h3>
 	<p>{{ $body }}</p>
 	<p>Thank You.</p>
-	<h5>{{ $title }} ,</h5>
-	<h5>Hall Automation Just</h5>
+	<h4>{{ $title }} ,</h4>
+	<h4>Hall Automation Just</h4>
 
 </body>
 </html>

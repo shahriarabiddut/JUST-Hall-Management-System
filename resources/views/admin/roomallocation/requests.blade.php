@@ -67,7 +67,7 @@
                         {{ $d->students->rollno }}
                         @endif
                         </td>
-                        <td>{{ $d->created_at }}</td>
+                        <td>{{ $d->created_at->format('F j , Y , H:i') }}</td>
                         @if ($d->status=='1')
                         <td class="bg-success text-white"> Accepted </td>
                         @elseif($d->status=='0')

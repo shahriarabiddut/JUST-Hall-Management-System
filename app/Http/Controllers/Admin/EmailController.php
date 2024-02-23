@@ -112,8 +112,6 @@ class EmailController extends Controller
         } else {
             return redirect()->back()->withInput()->with('danger', 'Server Error');
         }
-        //Sending email with information
-        if ($this->isOnline()) {
             // The email sending is done using the to method on the Mail facade
             Mail::to($RecieverEmail)->send(new AllocationEmail($emailBody, $emailObjective, $emailSubject));
 
@@ -127,9 +125,6 @@ class EmailController extends Controller
             $dataEmail->staff_id = 0;
             $dataEmail->hall_id = $RecieverData->hall_id;
             $dataEmail->save();
-        } else {
-
-            return redirect()->back()->withInput()->with('error', 'No Internet Connection');
-        }
+        
     }
 }

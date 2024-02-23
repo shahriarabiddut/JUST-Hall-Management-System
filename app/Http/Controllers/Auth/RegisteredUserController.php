@@ -33,11 +33,11 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'gender' => ['required', 'string', 'max:255'],
+            'gender' => ['required', 'string', 'not_in:3', 'max:255'],
             'dept' => ['required', 'string', 'max:255'],
             'session' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'regex:/(.+)@(.+)\.(.+)/i', 'max:255', 'unique:' . User::class],
-            'rollno' => ['required', 'integer', 'unique:' . User::class],
+            'rollno' => ['required', 'string', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
         // $user = User::create([
@@ -46,13 +46,17 @@ class RegisteredUserController extends Controller
         //     'rollno' => $request->rollno,
         //     'password' => Hash::make($request->password),
         // ]);
+        if ($request->gender == '3') {
+            return redirect()->back()->with('danger', 'Please Select Gender!');
+        }
+        $rollno = str_replace(' ', '', $request->rollno);
         $user = new User;
 
         $user->name = $request->name;
         $user->dept = $request->dept;
         $user->session = $request->session;
         $user->email = $request->email;
-        $user->rollno = $request->rollno;
+        $user->rollno = $rollno;
         $user->gender = $request->gender;
         $user->password = Hash::make($request->password);
         if ($request->has('hall_id')) {

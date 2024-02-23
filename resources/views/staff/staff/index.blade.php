@@ -64,6 +64,9 @@
                                     @case('aprovost')
                                         Assistant Provost
                                         @break
+                                    @case('officer')
+                                        Officer
+                                        @break
                                     @default
                                         Staff
                                 @endswitch

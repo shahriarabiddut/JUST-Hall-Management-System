@@ -222,6 +222,7 @@
 <div class="card-header p-1 bg-success my-1">
     <h6 class="p-3 font-weight-bold text-white bg-success m-1">
         Welcome to System ! {{ Auth::user()->name }}.</h6>
+        <!--<p>Email Verification to access system is currently off due to testing purpose!</p>-->
         
 </div>
 @endif

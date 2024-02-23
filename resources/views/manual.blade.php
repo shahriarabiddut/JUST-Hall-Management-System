@@ -86,7 +86,7 @@
                                 User manual for the JustEHall system. If you have any further questions or need assistance, please feel free to contact our support team. Thank you for using JustEHall!</p>
                         </div>
                         <div class="col-lg-6 text-center text-lg-start">
-                            <img src="{{ asset('img/2_2k.jpg') }}" style="max-height: 50vh" alt="Lab" class="img-fluid">
+                            <img src="{{ asset('img/usermanual.png') }}" style="max-height: 50vh" alt="Lab" class="img-fluid">
                         </div>
                     </div>
                 </div>
@@ -166,7 +166,7 @@
                         <p class="pb-2 animated slideInDown">After your room allocation application is approved, you will receive a payment slip option for the application fees. Here's how to access your payment slip: <br>
                             - Log in to your JustEHall account. <br>
                             - Navigate to the Room Requests section. <br>
-                            - O Room Room Request page find the add payment slip option and upload your reciept image <br>
+                            - On Room Room Request page find the add payment slip option and upload your reciept image <br>
                             </p>
                     </div>
                     
@@ -186,7 +186,7 @@
                             - Browse the available menu options for that Food Time.<br>
                             - Select the items you wish to order and add quantity.<br>
                             - Click Place order. Once Order is placed money will be deducted from balance<br>
-                            - You can also cancel order. Deadline to cancel - Previous day , 10 PM .<br>
+                            - You can also cancel order. Deadline to cancel - Previous day , Before 10 PM .<br>
                             </p>
                     </div>
                     <div class="col-lg-6 text-center float-right">

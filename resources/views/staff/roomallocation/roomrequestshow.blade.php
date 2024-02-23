@@ -160,6 +160,8 @@
                     </tbody>
                 </table>
             </div>
+            @if (Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'staff')
+            @else
             <div class="table-responsive">
 
                 <table class="table table-bordered" width="100%">  
@@ -234,6 +236,7 @@
                     @endif
                 </table>
             </div>
+            @endif
         </div>
     </div>
     <div class="card shadow mb-4">

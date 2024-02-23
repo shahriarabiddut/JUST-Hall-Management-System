@@ -57,6 +57,8 @@
                                 <option @if ($data->type=='staff') @selected(true) @endif value="staff">Staff</option>
                                 <option @if ($data->type=='provost') @selected(true) @endif value="provost">Provost</option>
                                 <option @if ($data->type=='aprovost') @selected(true) @endif value="aprovost">Assistant Provost</option>
+                                <option @if ($data->type=='officer') @selected(true) @endif
+                                 value="officer">Officer</option>
                             </select>
                         </td>
                     </tr>

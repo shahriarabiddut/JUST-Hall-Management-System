@@ -51,12 +51,16 @@
                         </tr><tr>
                             <th>Address</th>
                             <td>{{ $data->address }}</td>
-                        </tr><tr>
+                        </tr>
+                        @if (Auth::guard('staff')->user()->type == 'provost' || Auth::guard('staff')->user()->type == 'aprovost')
+                        <tr>
                             <td colspan="2">
                                 <a href="{{ url('staff/student/'.$data->id.'/edit') }}" class="float-right btn btn-info btn-sm"><i class="fa fa-edit"> Edit {{ $data->title }}  </i></a>
+                                
                             </td>
                             
                         </tr>
+                        @endif
                         
                 </table>
             </div>

@@ -19,6 +19,24 @@
                             <th>Email </th>
                                  <td>{{ $data->email }}</td>
                              </tr>
+                             <tr>
+                            <th>Type </th>
+                            <td>
+                                @switch($data->type)
+                                    @case('provost')
+                                        Provost
+                                        @break
+                                    @case('aprovost')
+                                        Assistant Provost
+                                        @break
+                                    @case('officer')
+                                        Officer
+                                        @break
+                                    @default
+                                        Staff
+                                @endswitch
+                            </td>
+                            </tr>
                         <tr>
                        <th>Full Name </th>
                             <td>{{ $data->name }}</td>

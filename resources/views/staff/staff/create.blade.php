@@ -28,6 +28,7 @@
                                     <option value="staff">Staff</option>
                                      <option value="provost">Provost</option>
                                      <option value="aprovost">Assistant Provost</option>
+                                     <option value="officer">Officer</option>
                                 </select>
                             </td>
                         </tr>

@@ -31,9 +31,10 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h3 class="m-0 font-weight-bold text-primary">Students Data
-                
+            @if (Auth::guard('staff')->user()->type == 'provost' || Auth::guard('staff')->user()->type == 'aprovost')
             <a href="{{ route('staff.student.create') }}" class="float-right btn btn-success btn-sm mx-1" target="_blank">Add New </a>  
             <a href="{{ route('staff.student.bulk') }}" class="float-right btn btn-info btn-sm mx-1" target="_blank">Add From CSV </a> 
+            @endif
             <div class="float-right mx-1">
                 <form method="POST" class="form-control pb-1" action="{{ route('staff.student.search') }}">
                     @csrf
@@ -99,8 +100,10 @@
                             
                             <td class="text-center">
                                 <a href="{{ url('staff/student/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
+                                @if (Auth::guard('staff')->user()->type == 'provost' || Auth::guard('staff')->user()->type == 'aprovost')
                                 <a href="{{ url('staff/student/'.$d->id.'/edit') }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
                                 <a onclick="return confirm('Are You Sure?')" href="{{ url('staff/student/'.$d->id.'/delete') }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                @endif
                             </td>
 
                         </tr>
