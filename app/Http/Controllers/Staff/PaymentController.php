@@ -56,11 +56,11 @@ class PaymentController extends Controller
         //
         $data = new Payment;
         $request->validate([
-            'student_id' => 'required',
+            'student_id' => 'required|not_in:0',
             'staff_id' => 'required',
             'mobileno' => 'required',
             'amount' => 'required',
-            'status' => 'required',
+            'status' => 'required|not_in:0',
         ]);
         $data->student_id = $request->student_id;
         $data->staff_id = $request->staff_id;

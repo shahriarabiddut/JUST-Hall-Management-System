@@ -11,7 +11,11 @@
             <a href="{{ url('admin/roomallocation') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h3>
         </div>
         <div class="card-body">
-            
+            @if ($errors->any())
+                @foreach ($errors->all() as $error)
+                    <div class="bg-danger p-1 text-white">{{$error}}</div>
+                @endforeach
+            @endif
             <div class="table-responsive">
                 @if ($errors->any())
                 @foreach ($errors->all() as $error)

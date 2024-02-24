@@ -75,9 +75,10 @@ class AllocatedSeatController extends Controller
         //
         $data = new AllocatedSeats;
         $request->validate([
-            'room_id' => 'required',
-            'user_id' => 'required',
+            'room_id' => 'required|not_in:0',
+            'user_id' => 'required|not_in:0',
             'position' => 'required',
+            'hall_id' => 'required',
         ]);
         $data->room_id = $request->room_id;
         $data->user_id = $request->user_id;
@@ -148,7 +149,7 @@ class AllocatedSeatController extends Controller
         $data = AllocatedSeats::find($id);
 
         $request->validate([
-            'room_id' => 'required',
+            'room_id' => 'required|not_in:0',
             'position' => 'required',
         ]);
         $data->room_id = $request->room_id;

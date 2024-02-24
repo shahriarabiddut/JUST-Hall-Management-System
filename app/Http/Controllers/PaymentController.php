@@ -16,9 +16,12 @@ class PaymentController extends Controller
             if ($this->hall_id == 0 || $this->hall_id == null) {
                 return redirect()->route('student.dashboard')->with('danger', 'Please Get Hall Room Allocation to get access!');
             }
-            if (Auth::user()->hall->status == 0) {
-                return redirect()->route('student.dashboard')->with('danger', 'This Hall has been Disabled by System Administrator!');
+            if ($this->hall_id != 0) {
+                if (Auth::user()->hall->status == 0) {
+                    return redirect()->route('student.dashboard')->with('danger', 'This Hall has been Disabled by System Administrator!');
+                }
             }
+
             return $next($request);
         });
     }
@@ -39,7 +42,7 @@ class PaymentController extends Controller
     public function create()
     {
         //
-        if (Auth::user()->hall->payment == 0) {
+        if (Auth::user()->hall->enable_payment == 0) {
             return redirect()->route('student.dashboard')->with('danger', 'New Payments are Disabled by Hall Administrator!');
         }
         return view('profile.balance.payment.create');

@@ -40,9 +40,9 @@ class FoodController extends Controller
         $data = new Food;
         $request->validate([
             'food_name' => 'required',
-            'food_time_id' => 'required',
-            'status' => 'required',
-            'hall_id' => 'required',
+            'food_time_id' => 'required|not_in:0',
+            'status' => 'required|not_in:0',
+            'hall_id' => 'required|not_in:0',
         ]);
         $data->food_time_id = $request->food_time_id;
         $data->food_name = $request->food_name;
@@ -89,7 +89,7 @@ class FoodController extends Controller
         //
         $request->validate([
             'food_name' => 'required',
-            'food_time_id' => 'required',
+            'food_time_id' => 'required|not_in:0',
         ]);
         $data = Food::find($id);
         $data->food_time_id = $request->food_time_id;

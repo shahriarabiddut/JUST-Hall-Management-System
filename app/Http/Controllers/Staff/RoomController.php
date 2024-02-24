@@ -56,7 +56,7 @@ class RoomController extends Controller
         //
         $request->validate([
             'title' => 'required',
-            'rt_id' => 'required',
+            'rt_id' => 'required|not_in:0',
             'totalseats' => 'required',
         ]);
         $data = new Room;

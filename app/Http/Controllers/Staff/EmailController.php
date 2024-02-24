@@ -57,7 +57,7 @@ class EmailController extends Controller
     {
         //
         $request->validate([
-            'staff_id' => 'required',
+            'staff_id' => 'required|not_in:0',
             'name' => 'required',
             'email' => 'required',
             'subject' => 'required',

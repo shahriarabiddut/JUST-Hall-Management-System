@@ -52,7 +52,7 @@ class HallController extends Controller
             'title' => 'required',
             'banglatitle' => 'required',
             'type' => 'required',
-            'status' => 'required',
+            'status' => 'required|not_in:0',
             'fixed_cost' => 'required',
             'fixed_cost_masters' => 'required',
         ]);

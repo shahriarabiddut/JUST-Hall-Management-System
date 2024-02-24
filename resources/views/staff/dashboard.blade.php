@@ -7,11 +7,13 @@
                 <p>{{ session('danger') }} </p>
             </div>
             @endif
-@if(App\Models\RoomRequest::where('flag', 0)->count()!=0)
-<!-- Content Row Notificaton -->
-<div class="row mt-1 p-2 mx-2 bg-warning text-white mb-2">
-    <p> {{ App\Models\RoomRequest::where('flag', 0)->count(); }} Unread Room Allocation Request</p>
-</div>
+@if(Auth::guard('staff')->user()->hall_id != 0 || Auth::guard('staff')->user()->hall_id != null)
+    @if(App\Models\RoomRequest::where('flag', 0)->where('hall_id', Auth::guard('staff')->user()->hall_id)->count()!=0)
+    <!-- Content Row Notificaton -->
+    <div class="row mt-1 p-2 mx-2 bg-warning text-white mb-2">
+        <p> {{ App\Models\RoomRequest::where('flag', 0)->where('hall_id', Auth::guard('staff')->user()->hall_id)->count(); }} Unread Room Allocation Request</p>
+    </div>
+    @endif
 @endif
 <!-- Content Row -->
 <div class="row">

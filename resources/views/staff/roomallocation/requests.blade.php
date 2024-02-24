@@ -83,8 +83,11 @@
                             <td class="text-center">
 
                                 <a  title="View Request" href="{{ url('staff/roomallocation/roomrequests/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
+                                @if (Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'staff')
+                                @else
                                 @if ($d->status!='1' || $d->status!='4')
                                 <a title="Reject" onclick="return confirm('Are You Sure?')" href="{{ url('staff/roomallocation/ban/'.$d->id) }}" class="btn btn-danger btn-sm"><i class="fa fa-ban" aria-hidden="true"></i></a>
+                                @endif
                                 @endif
                             </td>
 

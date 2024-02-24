@@ -34,7 +34,7 @@
             <div class="col-12 col-md-4 col-lg-4 h-50 ">
               <div class="card shadow">
                 <div class="card-body mx-2">
-                    @error('rollno')
+                  @error('rollno')
                   <div class="text-bold bg-danger text-center text-white p-2">{{ $message }}</div>
                   @enderror
                   @error('password')

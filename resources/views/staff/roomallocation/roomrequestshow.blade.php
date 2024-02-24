@@ -301,6 +301,8 @@
             
         </div>
     </div>
+    @if (Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'staff')
+    @else
     @if($data->status==1)
     <div class="card shadow mb-4">
         <div class="card-header py-3">
@@ -349,6 +351,7 @@
             </div>
         </div>
     </div>
+    @endif
     @endif
     @section('scripts')
     <script>

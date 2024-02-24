@@ -90,8 +90,8 @@ class AllocatedSeatController extends Controller
         //
         $data = new AllocatedSeats;
         $request->validate([
-            'room_id' => 'required',
-            'user_id' => 'required',
+            'room_id' => 'required|not_in:0',
+            'user_id' => 'required|not_in:0',
             'position' => 'required',
         ]);
         $data->room_id = $request->room_id;
@@ -182,7 +182,7 @@ class AllocatedSeatController extends Controller
         $data = AllocatedSeats::find($id);
 
         $request->validate([
-            'room_id' => 'required',
+            'room_id' => 'required|not_in:0',
             'position' => 'required',
         ]);
         $data->room_id = $request->room_id;
@@ -337,6 +337,11 @@ class AllocatedSeatController extends Controller
     //Room Allocation Requests Details
     public function RoomRequestAllocate(Request $request)
     {
+        $request->validate([
+            'room_id' => 'required|not_in:0',
+            'position' => 'required',
+            'id' => 'required|not_in:0',
+        ]);
         if (Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'staff') {
             return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
         }

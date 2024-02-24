@@ -209,7 +209,7 @@ class ProfileController extends Controller
     {
         $data = new RoomRequest;
         $request->validate([
-            'hall_id' => 'required',
+            'hall_id' => 'required|not_in:0',
             'banglaname' => 'required',
             'englishname' => 'required',
             'fathername' => 'required',
@@ -326,6 +326,9 @@ class ProfileController extends Controller
         }
         //
         $data = RoomRequest::find($id);
+        if ($data->user_id != $userid) {
+            return redirect()->route('student.roomrequestshow')->with('danger', 'Access Denied! Warning!');
+        }
         if ($data != null) {
             $dataPayment = Payment::all()->where('type', 'roomrequest')->where('student_id', $userid)->where('service_id', $data->id)->first();
             if ($dataPayment != null) {

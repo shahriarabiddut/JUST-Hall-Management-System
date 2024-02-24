@@ -9,7 +9,11 @@
             <a href="{{ url('staff/rooms') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h3>
         </div>
         <div class="card-body">
-            
+            @if ($errors->any())
+                @foreach ($errors->all() as $error)
+                    <div class="bg-danger p-1 text-white">{{$error}}</div>
+                @endforeach
+            @endif
             <div class="table-responsive">
             <form method="POST" action="{{ route('staff.rooms.store') }}" enctype="multipart/form-data">
                 @csrf
@@ -31,7 +35,7 @@
                     </tr>
                     <tr>
                         <th>Total Seats</th>
-                        <td><input required name="totalseats" id="numberInput" type="number" class="form-control"></td>
+                        <td><input required name="totalseats" id="numberInput" type="number" value="{{ old('totalseats') }}" class="form-control"></td>
                     </tr>
                     <tr>
                         <td colspan="2">

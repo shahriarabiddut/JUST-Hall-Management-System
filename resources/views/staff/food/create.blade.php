@@ -12,7 +12,11 @@
             <a href="{{ url('staff/food') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h3>
         </div>
         <div class="card-body">
-            
+            @if ($errors->any())
+                @foreach ($errors->all() as $error)
+                    <div class="bg-danger p-1 text-white">{{$error}}</div>
+                @endforeach
+            @endif
             <div class="table-responsive">
             <form method="POST" action="{{ route('staff.food.store') }}" enctype="multipart/form-data">
                 @csrf
@@ -31,7 +35,7 @@
                     </tr>
                     <tr>
                         <th>Food Name<span class="text-danger">*</span></th>
-                        <td><input required name="food_name" type="text" class="form-control"></td>
+                        <td><input required name="food_name" type="text" value="{{ old('food_name') }}" class="form-control"></td>
                     </tr>
                     <tr>
                         <th> Status <span class="text-danger">*</span></th>

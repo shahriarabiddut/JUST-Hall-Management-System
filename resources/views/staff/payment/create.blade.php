@@ -1,7 +1,7 @@
 @extends('staff/layout')
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha384-vk5WoKIaW/vJyUAd9n/wmopsmNhiy+L2Z+SBxGYnUkunIxVxAv/UtMOhba/xskxh" crossorigin="anonymous"></script>
 <script src="{{ asset('js/jquery-searchbox.js') }}"></script>
-@section('title', 'Create Payment')
+@section('title', 'Add New Payment')
 @section('content')
 
     <!-- DataTales Example -->
@@ -13,7 +13,7 @@
         <div class="card-body">
             
             <div class="table-responsive">
-            <form method="POST" action="{{ route('staff.payment.store') }}" enctype="multipart/form-data">
+            <form method="POST" action="{{ route('staff.payment.store') }}" enctype="multipart/form-data"  id="myForm">
                 @csrf
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <tbody>
@@ -34,7 +34,7 @@
                             </tr>
                     <tr>
                         <th>Amount</th>
-                        <td><input required name="amount" type="text" class="form-control"></td>
+                        <td><input id="myInput" required type="number" min="1" name="amount" type="text" class="form-control"></td>
                     </tr>
                     <tr>
                         <th>Payment Status <span class="text-danger">*</span></th>
@@ -70,7 +70,35 @@
         $('.js-searchBox').searchBox({ elementWidth: '100%'});
         $('.user_id').searchBox({ elementWidth: '100%'});
         $('.room_id').searchBox({ elementWidth: '100%'});
-       </script>
+       
+            // Get the form, input field, and warning message elements
+            const form = document.getElementById('myForm');
+            const input = document.getElementById('myInput');
+            const warningMessage = document.getElementById('warningMessage');
+        
+            // Function to check if the input is negative
+            function checkInput() {
+                const value = parseFloat(input.value);
+                if (value < 0 || isNaN(value)) { // Show warning if input is negative or not a number
+                    warningMessage.style.display = 'inline';
+                    return false; // Prevent form submission
+                } else {
+                    warningMessage.style.display = 'none';
+                    return true; // Allow form submission
+                }
+            }
+        
+            // Listen for input event on the input field
+            input.addEventListener('input', checkInput);
+        
+            // Listen for form submission
+            form.addEventListener('submit', function(event) {
+                if (!checkInput()) {
+                    event.preventDefault(); // Prevent form submission if input is negative
+                }
+            });
+        
+            </script>
     @endsection
 @endsection
 
