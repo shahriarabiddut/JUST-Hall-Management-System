@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Staff;
 
+use Carbon\Carbon;
 use App\Models\Room;
 use App\Models\User;
 use App\Models\Balance;
@@ -322,12 +323,26 @@ class AllocatedSeatController extends Controller
         if ($data->hall_id != $this->hall_id) {
             return redirect()->route('staff.roomallocation.roomrequests')->with('danger', 'Not Permitted!');
         }
+        //
+        if ($data->visited_at != null) {
+            // Compare with current time
+            $currentTime = Carbon::now();
+            $maxVisitTime = $data->visited_at;
+            $diff = $currentTime->diff($maxVisitTime);
+            if ($maxVisitTime >= $currentTime && $data->visitor != Auth::guard('staff')->user()->id) {
+                // Less than 10 minutes ago, redirect back
+                return redirect()->back()->with('danger', 'You can view after ' . $diff->format('%i minutes %s seconds') . ' . ' . $data->visit->name . ' is currently reading the application.');
+            }
+        }
+        //
         $application = json_decode($data->application, true);
         $student_id = $data->user_id;
         $dataAllocation = AllocatedSeats::all()->where('user_id', $student_id)->first();
         $dataPayment = Payment::all()->where('type', 'roomrequest')->where('student_id', $student_id)->where('service_id', $data->id)->first();
         if ($data) {
             $data->flag = 1;
+            $data->visited_at = Carbon::now()->addMinutes(10);
+            $data->visitor = Auth::guard('staff')->user()->id;
             $data->save();
             return view('staff.roomallocation.roomrequestshow', ['data' => $data, 'application' => $application, 'rooms' => $rooms, 'dataPayment' => $dataPayment, 'dataAllocation' => $dataAllocation]);
         } else {
@@ -425,6 +440,16 @@ class AllocatedSeatController extends Controller
         if ($data->hall_id != $this->hall_id) {
             return redirect()->route('staff.roomallocation.roomrequests')->with('danger', 'Not Permitted!');
         }
+        // Less than 10 minutes ago, redirect back
+        if ($data->visited_at != null) {
+            $currentTime = Carbon::now();
+            $maxVisitTime = $data->visited_at;
+            $diff = $currentTime->diff($maxVisitTime);
+            if ($maxVisitTime >= $currentTime && $data->visitor != Auth::guard('staff')->user()->id) {
+                return redirect()->back()->with('danger', 'You can perform any action again after ' . $diff->format('%i minutes %s seconds') . ' . ' . $data->visit->name . ' is currently reading the application.');
+            }
+        }
+        //
         $data->status = '4';
         $data->room_id = $room_id;
         $data->allocated_seat_id = $allocated_seat_id;
@@ -444,6 +469,16 @@ class AllocatedSeatController extends Controller
         if ($data->hall_id != $this->hall_id) {
             return redirect()->route('staff.roomallocation.roomrequests')->with('danger', 'Not Permitted!');
         }
+        // Less than 10 minutes ago, redirect back
+        if ($data->visited_at != null) {
+            $currentTime = Carbon::now();
+            $maxVisitTime = $data->visited_at;
+            $diff = $currentTime->diff($maxVisitTime);
+            if ($maxVisitTime >= $currentTime && $data->visitor != Auth::guard('staff')->user()->id) {
+                return redirect()->back()->with('danger', 'You can perform any action again after ' . $diff->format('%i minutes %s seconds') . ' . ' . $data->visit->name . ' is currently reading the application.');
+            }
+        }
+        //
         $dataAllocation = AllocatedSeats::all()->where('user_id', $data->user_id)->first();
         if ($dataAllocation != null) {
             return redirect()->route('staff.roomallocation.index')->with('danger', ' Warning ! Room Allocation Found for this User!');
@@ -477,6 +512,16 @@ class AllocatedSeatController extends Controller
         if ($data->hall_id != $this->hall_id) {
             return redirect()->route('staff.roomallocation.roomrequests')->with('danger', 'Not Permitted!');
         }
+        // Less than 10 minutes ago, redirect back
+        if ($data->visited_at != null) {
+            $currentTime = Carbon::now();
+            $maxVisitTime = $data->visited_at;
+            $diff = $currentTime->diff($maxVisitTime);
+            if ($maxVisitTime >= $currentTime && $data->visitor != Auth::guard('staff')->user()->id) {
+                return redirect()->back()->with('danger', 'You can perform any action again after ' . $diff->format('%i minutes %s seconds') . ' . ' . $data->visit->name . ' is currently reading the application.');
+            }
+        }
+        //
         $dataAllocation = AllocatedSeats::all()->where('user_id', $data->user_id)->first();
         if ($dataAllocation != null) {
             return redirect()->route('staff.roomallocation.index')->with('danger', ' Warning ! Room Allocation Found for this User!');
@@ -514,6 +559,16 @@ class AllocatedSeatController extends Controller
         if ($data->hall_id != $this->hall_id) {
             return redirect()->route('staff.roomallocation.roomrequests')->with('danger', 'Not Permitted!');
         }
+        // Less than 10 minutes ago, redirect back
+        if ($data->visited_at != null) {
+            $currentTime = Carbon::now();
+            $maxVisitTime = $data->visited_at;
+            $diff = $currentTime->diff($maxVisitTime);
+            if ($maxVisitTime >= $currentTime && $data->visitor != Auth::guard('staff')->user()->id) {
+                return redirect()->back()->with('danger', 'You can perform any action again after ' . $diff->format('%i minutes %s seconds') . ' . ' . $data->visit->name . ' is currently reading the application.');
+            }
+        }
+        //
         $dataAllocation = AllocatedSeats::all()->where('user_id', $data->user_id)->first();
         if ($dataAllocation != null) {
             return redirect()->route('staff.roomallocation.index')->with('danger', ' Warning ! Room Allocation Found for this User!');

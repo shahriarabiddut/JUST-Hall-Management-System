@@ -20,4 +20,8 @@ class RoomRequest extends Model
     {
         return $this->belongsTo(Hall::class, 'hall_id');
     }
+    function visit()
+    {
+        return $this->belongsTo(Staff::class, 'visitor');
+    }
 }

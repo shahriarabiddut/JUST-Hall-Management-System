@@ -23,8 +23,10 @@ class OrderController extends Controller
             if ($this->hall_id == 0 || $this->hall_id == null) {
                 return redirect()->route('student.dashboard')->with('danger', 'Please Get Hall Room Allocation to get access!');
             }
-            if (Auth::user()->hall->status == 0) {
-                return redirect()->route('student.dashboard')->with('danger', 'This Hall has been Disabled by System Administrator!');
+            if (Auth::user()->hall_id != 0 || Auth::user()->hall_id != null) {
+                if (Auth::user()->hall->status == 0) {
+                    return redirect()->route('student.dashboard')->with('danger', 'This Hall has been Disabled by System Administrator!');
+                }
             }
             return $next($request);
         });
@@ -415,27 +417,28 @@ class OrderController extends Controller
         $data = Order::find($id);
         if ($data == null) {
             return redirect()->route('student.order.index')->with('danger', 'Not Found');
-        }
-        if ($data->student_id != $userid) {
-            return redirect()->route('student.dashboard')->with('danger', ' Unauthorized Access!');
-        }
-        $foodItem = Food::all()->where('id', '=', $data->food_item_id)->where('hall_id', $this->hall_id)->first();
-        //Check Date is Valid To Delete
-        $validDate = $this->isDateValid2Cancel($data->date, $foodItem->food_time_id);
-        //
-        if (!$validDate) {
-            return redirect('student/order')->with('danger', 'You cannot edit anymore for this Order!Day Passed!');
         } else {
-            //Food Price
-            $dataPrice = $data->price;
-            //Add Deducted Balance
-            $this->AddBalance($userid, $dataPrice);
-            //Meal Token Delete
-            $MealToken = MealToken::all()->where('order_id', '=', $id)->first();
-            $MealToken->delete();
-            //Order Delete
-            $data->delete();
-            return redirect()->route('student.order.index')->with('success', 'Order Deleted!');
+            if ($data->student_id != $userid) {
+                return redirect()->route('student.dashboard')->with('danger', ' Unauthorized Access!');
+            }
+            $foodItem = Food::all()->where('id', '=', $data->food_item_id)->where('hall_id', $this->hall_id)->first();
+            //Check Date is Valid To Delete
+            $validDate = $this->isDateValid2Cancel($data->date, $foodItem->food_time_id);
+            //
+            if (!$validDate) {
+                return redirect('student/order')->with('danger', 'You cannot edit anymore for this Order!Day Passed!');
+            } else {
+                //Food Price
+                $dataPrice = $data->price;
+                //Add Deducted Balance
+                $this->AddBalance($userid, $dataPrice);
+                //Meal Token Delete
+                $MealToken = MealToken::all()->where('order_id', '=', $id)->first();
+                $MealToken->delete();
+                //Order Delete
+                $data->delete();
+                return redirect()->route('student.order.index')->with('success', 'Order Deleted!');
+            }
         }
     }
     //Add Balance

@@ -58,7 +58,7 @@ class PaymentController extends Controller
         $request->validate([
             'student_id' => 'required|not_in:0',
             'staff_id' => 'required',
-            'mobileno' => 'required',
+            'mobileno' => 'required|regex:/^[0-9]+$/',
             'amount' => 'required',
             'status' => 'required|not_in:0',
         ]);

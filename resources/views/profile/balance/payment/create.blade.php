@@ -16,7 +16,7 @@
                     <tbody>
                     <tr>
                         <th>Mobile <span class="text-danger">(Only if used mobile banking)</span></th>
-                        <td><input required name="mobile" type="text" class="form-control"></td>
+                        <td><input required name="mobile" type="text" class="form-control" id="inputField" ></td>
                     </tr>
                     <tr>
                         <th>Amount<span class="text-danger">*</span></th>
@@ -65,7 +65,18 @@
                 event.preventDefault(); // Prevent form submission if input is negative
             }
         });
-    
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('myForm').addEventListener('submit', function(event) {
+                let input2 = document.getElementById('inputField').value;
+                let pattern = /^[0-9]+$/;
+            
+                if (!pattern.test(input2)) {
+                    alert('Use Valid Mobile Number!');
+                    event.preventDefault(); // Prevent form submission if input is invalid
+                    window.location.reload();
+                }
+            });
+        });
         </script>
     @endsection
 @endsection

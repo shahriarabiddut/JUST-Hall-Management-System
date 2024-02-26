@@ -52,7 +52,7 @@
                         @if($data)
                         @foreach ($data as $key=> $d)
                         <tr>
-                            <td>{{ ++$key }}</td>
+                            <td> {{ ++$key }} @if($d->flag==0 || $d->flag==null)<span class="bg-warning p-1 text-white rounded">New</span>@endif</td>
                             <td>
                             @if ($d->students==null)
                                 User Deleted

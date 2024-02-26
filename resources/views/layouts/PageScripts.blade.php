@@ -15,3 +15,18 @@
 <!-- Page level custom scripts -->
 <script defer src="{{ asset('js/demo/datatables-demo.js') }}"></script>
 <link href="{{ asset('vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+
+<script>
+    // Disable once click submit
+    document.addEventListener('DOMContentLoaded', function() {
+    let forms = document.getElementsByTagName('form');
+    
+    for (let i = 0; i < 1; i++) {
+        forms[i].addEventListener('submit', function() {
+            let submitButton = this.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+        });
+    }
+});
+
+</script>

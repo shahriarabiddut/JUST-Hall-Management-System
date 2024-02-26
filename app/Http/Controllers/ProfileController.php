@@ -326,15 +326,18 @@ class ProfileController extends Controller
         }
         //
         $data = RoomRequest::find($id);
-        if ($data->user_id != $userid) {
-            return redirect()->route('student.roomrequestshow')->with('danger', 'Access Denied! Warning!');
-        }
+
         if ($data != null) {
+            if ($data->user_id != $userid) {
+                return redirect()->route('student.roomrequestshow')->with('danger', 'Access Denied! Warning!');
+            }
             $dataPayment = Payment::all()->where('type', 'roomrequest')->where('student_id', $userid)->where('service_id', $data->id)->first();
             if ($dataPayment != null) {
                 $dataPayment->delete();
             }
             $data->delete();
+        } else {
+            return redirect()->route('student.roomrequestshow')->with('danger', 'Not Found!');
         }
         return Redirect::to('student/rooms/requestshow')->with('danger', 'Room Alloacation Request has been Deleted!');
     }
@@ -407,6 +410,7 @@ class ProfileController extends Controller
         $data = new Payment;
         $request->validate([
             'proof' => 'required',
+            'mobileno' => 'required|regex:/^[0-9]+$/',
             'amount' => 'required',
         ]);
         $imgPath = $request->proof->store('PaymentSlips', 'public');

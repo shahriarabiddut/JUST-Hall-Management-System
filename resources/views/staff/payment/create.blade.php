@@ -30,7 +30,7 @@
                         </tr>
                             <tr>
                                 <th>Mobile</th>
-                                <td><input required name="mobileno" type="text" class="form-control"></td>
+                                <td><input required id="inputField" name="mobileno" type="text" class="form-control"></td>
                             </tr>
                     <tr>
                         <th>Amount</th>
@@ -97,8 +97,19 @@
                     event.preventDefault(); // Prevent form submission if input is negative
                 }
             });
-        
-            </script>
+            document.addEventListener('DOMContentLoaded', function() {
+                    document.getElementById('myForm').addEventListener('submit', function(event) {
+                        let input2 = document.getElementById('inputField').value;
+                        let pattern = /^[0-9]+$/;
+                    
+                        if (!pattern.test(input2)) {
+                            alert('Use Valid Mobile Number!');
+                            event.preventDefault(); // Prevent form submission if input is invalid
+                            window.location.reload();
+                        }
+                    });
+                });
+    </script>
     @endsection
 @endsection
 
