@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Staff;
 
+use App\Models\Staff;
 use App\Models\History;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,7 +35,8 @@ class HistoryController extends Controller
     public function index()
     {
         $data = History::latest()->where('hall_id', $this->hall_id)->get();
-        return view('staff.history.index', ['data' => $data]);
+        $staff = Staff::all()->where('hall_id', $this->hall_id);
+        return view('staff.history.index', ['data' => $data, 'staff' => $staff]);
     }
     public function show(string $id)
     {
@@ -81,5 +84,60 @@ class HistoryController extends Controller
         $dataHistory->status = 0;
         $dataHistory->hall_id = $hall_id;
         $dataHistory->save();
+    }
+    public function searchByMonth(Request $request)
+    {
+        $request->validate([
+            'staff_id' => 'required|not_in:x',
+            'month' => 'required',
+        ]);
+        $staff = Staff::all();
+        $staffData = Staff::find($request->staff_id);
+        $dataMo = [];
+        foreach (explode('-', $request->month) as $dataMonth) {
+            $dataMo[] = $dataMonth;
+        }
+        $year = $dataMo[0]; // Replace with the year you want to search for
+        $month = $dataMo[1];   // Replace with the month you want to search for
+        $SearchData = $request->month;   // Replace with the month you want to search for
+        $data = History::whereYear('created_at', $year)
+            ->whereMonth('created_at', $month)
+            ->where('staff_id', '=', $request->staff_id)
+            ->where('hall_id', $this->hall_id)
+            ->get();
+
+        return view('staff.history.searchMonth', ['data' => $data, 'staffData' => $staffData, 'staff' => $staff, 'month' => $SearchData, 'message' => '0']);
+    }
+    public function readSearch(Request $request)
+    {
+        $request->validate([
+            'staff_id' => 'required|not_in:x',
+            'month' => 'required',
+        ]);
+        $staff = Staff::all();
+        $staffData = Staff::find($request->staff_id);
+        $dataMo = [];
+        foreach (explode('-', $request->month) as $dataMonth) {
+            $dataMo[] = $dataMonth;
+        }
+        $year = $dataMo[0]; // Replace with the year you want to search for
+        $month = $dataMo[1];   // Replace with the month you want to search for
+        $SearchData = $request->month;   // Replace with the month you want to search for
+        $data = History::whereYear('created_at', $year)
+            ->whereMonth('created_at', $month)
+            ->where('staff_id', '=', $request->staff_id)
+            ->where('hall_id', $this->hall_id)
+            ->get();
+        foreach ($data as $d) {
+            $data2 = History::find($d->id);
+            $data2->status = 1;
+            $data2->save();
+        }
+        $data = History::whereYear('created_at', $year)
+            ->whereMonth('created_at', $month)
+            ->where('staff_id', '=', $request->staff_id)
+            ->where('hall_id', $this->hall_id)
+            ->get();
+        return view('staff.history.searchMonth', ['data' => $data, 'staffData' => $staffData, 'staff' => $staff, 'month' => $SearchData, 'message' => '1']);
     }
 }

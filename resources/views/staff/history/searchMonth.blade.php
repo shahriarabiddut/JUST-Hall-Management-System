@@ -4,14 +4,9 @@
 @section('content')
 
             <!-- Session Messages Starts -->
-            @if(Session::has('success'))
+            @if($message == 1)
             <div class="p-3 mb-2 bg-success text-white">
-                <p>{{ session('success') }} </p>
-            </div>
-            @endif
-            @if(Session::has('danger'))
-            <div class="p-3 mb-2 bg-danger text-white">
-                <p>{{ session('danger') }} </p>
+                <p> Marked All as Read</p>
             </div>
             @endif
             @if ($errors->any())
@@ -24,20 +19,20 @@
                 <form method="POST" class="p-1" action="{{ route('staff.history.searchByMonth') }}">
                     @csrf
                     <div class="form-row">
-                        <div class="col-md-3 mt-1"> <button class="form-control btn btn-dark" type="reset">Search by Date :</button> </div>
+                        <div class="col-md-3 mt-1"> <button class="form-control btn btn-dark" type="reset">Search by Month :</button> </div>
                     <div class="col-md-3 mt-1">
                     <select required class="form-control" name="staff_id" id="">
                         <option value="x">-- Select Staff--</option>
                         @foreach ($staff as $ft)
-                        <option value="{{$ft->id}}">{{$ft->name}}</option>
+                        <option @if ($ft->id==$staffData->id) selected @endif value="{{$ft->id}}">{{$ft->name}}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="col-md-3 mt-1">
-                    <input required type="month" class="form-control" id="search-month" name="month">
+                    <input required type="month" class="form-control" id="search-month" value="{{ $month }}"  name="month">
                 </div>
                 <div class="col-md-3 mt-1">
-                    <button class="form-control btn btn-info"  type="submit">Search</button>
+                    <button class="form-control btn btn-info" type="submit">Search</button>
                 </div>
             </div>
                   </form>
@@ -45,7 +40,9 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h3 class="m-0 font-weight-bold text-primary">History <a href="{{ route('staff.history.read') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-check"></i> Mark All As Read </a>
+            <h3 class="m-0 font-weight-bold text-primary">History ({{ count($data) }} records found!) 
+                <form method="POST" class="d-inline" action="{{ route('staff.history.readSearch') }}">
+                    @csrf <input required type="hidden" value="{{ $month }}"  name="month"><input required type="hidden" value="{{ $staffData->id }}" name="staff_id"><button class="float-right btn btn-success btn-sm" type="submit"><i class="fa fa-check"></i> Mark All As Read </button></form>
         </div>
         <div class="card-body">
             <div class="table-responsive">

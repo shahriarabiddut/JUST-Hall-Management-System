@@ -1,5 +1,5 @@
 @extends('staff/layout')
-@section('title', 'Room Allocation Requests')
+@section('title', 'Room Allocation Applications / Requests')
 @section('content')
 
             <!-- Session Messages Starts -->
@@ -22,7 +22,7 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h3 class="m-0 font-weight-bold text-primary">Room Allocation Requests
+            <h3 class="m-0 font-weight-bold text-primary">Room Allocation Applications / Requests
             <a href="{{ route('staff.roomallocation.create') }}" class="float-right btn btn-success btn-sm" target="_blank">Add New Room Allocation</a> </h3>
         </div>
         <div class="card-body">
@@ -52,7 +52,16 @@
                         @if($data)
                         @foreach ($data as $key=> $d)
                         <tr>
-                            <td> {{ ++$key }} @if($d->flag==0 || $d->flag==null)<span class="bg-warning p-1 text-white rounded">New</span>@endif</td>
+                            <td> {{ ++$key }} @if($d->flag==0 || $d->flag==null)<span class="bg-warning p-1 text-white rounded">New</span>@endif
+                                @if ($d->visited_at != null) 
+                                @php
+                                    $currentTime = Carbon\Carbon::now();
+                                    $maxVisitTime = $d->visited_at;
+                                    $diff = $currentTime->diff($maxVisitTime);
+                                @endphp
+                                @if ($currentTime->lt($maxVisitTime)) <span title="{{ $diff->format('%i minutes %s seconds more') }}" class="bg-danger p-1 text-white rounded">{{ $d->visit->name }}</span> @endif
+                                @endif
+                            </td>
                             <td>
                             @if ($d->students==null)
                                 User Deleted
@@ -67,7 +76,7 @@
                             {{ $d->students->rollno }}
                             @endif
                             </td>
-                            <td>{{ $d->created_at }}</td>
+                            <td>{{ $d->created_at->format('F j, Y') }}</td>
                             @if ($d->status=='1')
                             <td class="bg-success text-white"> Accepted </td>
                             @elseif($d->status=='0')

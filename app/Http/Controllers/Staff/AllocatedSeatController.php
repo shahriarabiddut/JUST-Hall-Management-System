@@ -325,12 +325,10 @@ class AllocatedSeatController extends Controller
         }
         //
         if ($data->visited_at != null) {
-            // Compare with current time
             $currentTime = Carbon::now();
             $maxVisitTime = $data->visited_at;
             $diff = $currentTime->diff($maxVisitTime);
             if ($maxVisitTime >= $currentTime && $data->visitor != Auth::guard('staff')->user()->id) {
-                // Less than 10 minutes ago, redirect back
                 return redirect()->back()->with('danger', 'You can view after ' . $diff->format('%i minutes %s seconds') . ' . ' . $data->visit->name . ' is currently reading the application.');
             }
         }
