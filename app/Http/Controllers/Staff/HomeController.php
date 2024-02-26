@@ -52,32 +52,8 @@ class HomeController extends Controller
             $resulttitle[] = FoodTime::all()->where('id', '=', $i)->first();
         }
 
-        //Provost Dashboard - bar chart
-        $histories = History::all()->where('hall_id', $this->hall_id);
-        $staff = [];
-        foreach ($histories as $history) {
-            if (isset($staff[$history->staff_id])) {
-                $staff[$history->staff_id]++;
-            } else {
-                $staff[$history->staff_id] = 1;
-            }
-        }
-        $labelStaff = [];
-        $labelStaff['N/A'] = 0;
-        foreach ($staff as $key => $staffData) {
-            $labelStaffDummy = Staff::find($key);
-            if ($labelStaffDummy->name != null) {
-                $labelStaff[$labelStaffDummy->name] = $staff[$key];
-            } else {
-                $labelStaff['N/A'] = $labelStaff['N/A'] + $staff[$key];
-            }
-        }
-        if ($labelStaff['N/A'] == 0) {
-            unset($labelStaff['N/A']);
-        }
-        //
 
-        return view('staff.dashboard', ['results' => $results, 'resulttitle' => $resulttitle, 'nextDate' => $nextDate, 'labelStaff' => $labelStaff,]);
+        return view('staff.dashboard', ['results' => $results, 'resulttitle' => $resulttitle, 'nextDate' => $nextDate]);
     }
     public function foodTime(string $nextDate, string $id)
     {

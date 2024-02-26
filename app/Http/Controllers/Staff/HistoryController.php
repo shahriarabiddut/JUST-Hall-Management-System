@@ -140,4 +140,33 @@ class HistoryController extends Controller
             ->get();
         return view('staff.history.searchMonth', ['data' => $data, 'staffData' => $staffData, 'staff' => $staff, 'month' => $SearchData, 'message' => '1']);
     }
+    public function chartData()
+    {
+        //Provost Dashboard - bar chart
+        $histories = History::all()->where('hall_id', $this->hall_id);
+        $staff = [];
+        foreach ($histories as $history) {
+            if (isset($staff[$history->staff_id])) {
+                $staff[$history->staff_id]++;
+            } else {
+                $staff[$history->staff_id] = 1;
+            }
+        }
+        $labelStaff = [];
+        $labelStaff['N/A'] = 0;
+        foreach ($staff as $key => $staffData) {
+            $labelStaffDummy = Staff::find($key);
+            if ($labelStaffDummy->name != null) {
+                $labelStaff[$labelStaffDummy->name] = $staff[$key];
+            } else {
+                $labelStaff['N/A'] = $labelStaff['N/A'] + $staff[$key];
+            }
+        }
+        if ($labelStaff['N/A'] == 0) {
+            unset($labelStaff['N/A']);
+        }
+        //
+
+        return response()->json($labelStaff);
+    }
 }

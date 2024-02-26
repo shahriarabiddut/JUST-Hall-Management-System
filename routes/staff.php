@@ -129,8 +129,9 @@ Route::middleware('userType:provost')->prefix('staff')->name('staff.')->group(fu
     Route::get('settings/history/{id}', [HistoryController::class, 'show'])->name('history.show');
     Route::get('settings/historyRead', [HistoryController::class, 'read'])->name('history.read');
 
-    Route::post('settings/history/searchMonth/', [HistoryController::class, 'searchByMonth'])->name('history.searchByMonth');
-    Route::post('settings/history/readSearch', [HistoryController::class, 'readSearch'])->name('history.readSearch');
+    Route::post('settings/historyD/searchMonth/', [HistoryController::class, 'searchByMonth'])->name('history.searchByMonth');
+    Route::post('settings/historyD/readSearch', [HistoryController::class, 'readSearch'])->name('history.readSearch');
+    Route::get('settings/historyD/chart-data', [HistoryController::class, 'chartData'])->name('chartData');;
 
     // Settings Crud
     Route::get('settings/', [HomeController::class, 'settings'])->name('settings.index');

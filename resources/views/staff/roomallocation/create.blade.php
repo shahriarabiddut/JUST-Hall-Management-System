@@ -46,7 +46,7 @@
                     </tr>
                     <th>Position <span class="text-danger">*</span></th>
                         <td>
-                            <select name="position" class="form-control" id="positions">
+                            <select required name="position" class="form-control" id="positions">
                             </select>
                         </td>
                     </tr>
