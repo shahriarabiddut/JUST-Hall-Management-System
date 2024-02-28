@@ -237,6 +237,12 @@ class ProfileController extends Controller
             'academic' => 'required',
             'earningproof' => 'required',
             'signature' => 'required',
+            'gpa' => 'required',
+            'ssc' => 'required',
+            'hsc' => 'required',
+            'school' => 'required',
+            'college' => 'required',
+            'meritposition' => 'required',
         ]);
         if ($request->hall_id == 0) {
             return redirect()->back()->with('danger', 'Please Select Hall!');
@@ -275,6 +281,12 @@ class ProfileController extends Controller
         $arrayData['semester'] = $request->semester;
         $arrayData['culture'] = $request->culture;
         $arrayData['otisitic'] = $request->otisitic;
+        $arrayData['gpa'] = $request->gpa;
+        $arrayData['meritposition'] = $request->meritposition;
+        $arrayData['ssc'] = $request->ssc;
+        $arrayData['hsc'] = $request->hsc;
+        $arrayData['school'] = $request->school;
+        $arrayData['college'] = $request->college;
         //If user Given any PHOTO dobsonod , academic , earningproof , signature
         if ($request->hasFile('dobsonod')) {
             $arrayData['dobsonod'] = 'app/public/' . $request->file('dobsonod')->store('HallRequest', 'public');
@@ -462,5 +474,13 @@ class ProfileController extends Controller
         } else {
             return Redirect::back()->with('danger', "Current Password Didn't Match");
         }
+    }
+    public function generatePDF()
+    {
+        $userid = Auth::user()->id;
+        $data = RoomRequest::all()->where('user_id', '=', $userid)->first();
+        $data = $data->toArray();
+        $pdf = \PDF::loadView('profile.room.rr', $data);
+        return $pdf->download(Auth::user()->rollno . ' - RoomRequest.pdf');
     }
 }

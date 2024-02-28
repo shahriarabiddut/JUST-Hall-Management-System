@@ -48,4 +48,8 @@ class User extends Authenticatable  implements MustVerifyEmail
     {
         return $this->belongsTo(Hall::class, 'hall_id');
     }
+    function roomrequest()
+    {
+        return $this->hasOne(RoomRequest::class, 'user_id');
+    }
 }

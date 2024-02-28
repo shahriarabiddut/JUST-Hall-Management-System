@@ -126,20 +126,38 @@
                 <tr>
                     <th>ক.বিভাগের নামঃ <span class="text-danger">*</span></th>
                     <td><input type="text" required name="department" class="form-control" value="{{ Auth::user()->dept }}"></td>
+                    <th>ছ.GPA (সর্বশেষ)<span class="text-danger">*</span></th>
+                    <td><input type="text" required name="gpa" class="form-control" value="{{ old('gpa') }}"></td>
+                </tr>
+                <tr>
                     <th>খ.রোল নংঃ <span class="text-danger">*</span></th>
                     <td><input type="text" required name="rollno" class="form-control" value="{{ Auth::user()->rollno }}"></td>
+                    <th>জ.ভর্তির মেধাক্রমঃ<span class="text-danger">*</span></th>
+                    <td><input type="text" required name="meritposition" class="form-control" value="{{ old('meritposition') }}"></td>
                 </tr>
                 <tr>
                     <th>গ.রেজিস্ট্রেশন নংঃ <span class="text-danger">*</span></th>
                     <td><input type="text" required name="registrationno" class="form-control" value="{{ old('registrationno') }}"></td>
+                    <th>ঝ.HSC GPA -<span class="text-danger">*</span></th>
+                    <td><input type="text" required name="hsc" class="form-control" value="{{ old('hsc') }}"></td>
+                </tr>
+                <tr>
                     <th>ঘ.শিক্ষাবর্ষঃ <span class="text-danger">*</span></th> 
                     <td><input type="text" required name="session" class="form-control" value="{{ Auth::user()->session }}"></td>
+                    <th>ঞ.HSC কলেজের নামঃ<span class="text-danger">*</span></th>
+                    <td><input type="text" required name="college" class="form-control" value="{{ old('college') }}"></td>
                 </tr>
                 <tr>
                     <th>ঙ.বর্ষঃ <span class="text-danger">*</span></th>
                     <td><input type="text" required name="borsho" class="form-control" value="{{ old('borsho') }}"></td>
+                    <th>ট.SSC GPA -<span class="text-danger">*</span></th>
+                    <td><input type="text" required name="ssc" class="form-control" value="{{ old('ssc') }}"></td>
+                </tr>
+                <tr>
                     <th>চ.সেমিস্টারঃ <span class="text-danger">*</span></th>
                     <td><input type="text" required name="semester" class="form-control" value="{{ old('semester') }}"></td>
+                    <th>ঠ.SSC স্কুলের নামঃ<span class="text-danger">*</span></th>
+                    <td><input type="text" required name="school" class="form-control" value="{{ old('school') }}"></td>
                 </tr>
                 <tr>
                     <th colspan="2">খেলাধুলা, নাটক, সংগীত ইত্যাদিতে পারদর্শিতার বিবরণ (প্রমাণ সংযুক্ত করতে হবে) <span class="text-danger">*</span></th>

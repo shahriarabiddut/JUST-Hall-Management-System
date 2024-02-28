@@ -6,7 +6,9 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h3 class="m-0 font-weight-bold text-primary">Room Request Details <a onclick="return confirm('Are You Sure?')" href="{{ route('student.roomrequest.destroy',$data->id) }}" class="btn btn-danger btn-sm ml-1 float-right mx-1"><i class="fa fa-trash"> Delete Request</i></a> <button class="btn btn-info btn-sm ml-1 float-right mx-1" onclick="convertDivToPDF()"><i class="fa fa-print"> Get PDF </i></button> <a href=" {{ route('student.generate-pdf') }}" class="btn btn-primary btn-sm ml-1 float-right mx-1"><i class="fa fa-print"> Download</i></a></h3>
+            <h3 class="m-0 font-weight-bold text-primary">Room Request Details <a onclick="return confirm('Are You Sure?')" href="{{ route('student.roomrequest.destroy',$data->id) }}" class="btn btn-danger btn-sm ml-1 float-right mx-1"><i class="fa fa-trash"> Delete Request</i></a> <button class="btn btn-info btn-sm ml-1 float-right mx-1" onclick="convertDivToPDF()"><i class="fa fa-print"> Get PDF </i></button> 
+                {{-- <a href=" {{ route('student.generate-pdf') }}" class="btn btn-primary btn-sm ml-1 float-right mx-1"><i class="fa fa-print"> Download</i></a> --}}
+            </h3>
             
         </div>
         <div class="card-body">
@@ -24,7 +26,7 @@
             <!-- Session Messages Ends -->
             
             <div class="table-responsive" id="myDiv">
-                <table class="table table-bordered" width="100%" >
+                <table class="table table-bordered" width="100%" id="myDiv2">
                     <tbody>
                     <tr>
                         <th class="text-center"><h4 class="my-5">প্রভোস্ট এর কার্যালয়</h4></th>
@@ -253,8 +255,10 @@
     </script> --}}
     <script>
         function convertDivToPDF() {
-          const content = document.getElementById('myDiv');
-          const filename = '{{ $data->rollno }}' + ' Room Request';
+          let content = document.getElementById('myDiv');
+          let content2 = document.getElementById('myDiv2');
+          content2.style.margin = '100px';
+          const filename = '{{ Auth::user()->rollno }} Room Request';
           html2pdf()
             .from(content)
             .save(filename + '.pdf');
