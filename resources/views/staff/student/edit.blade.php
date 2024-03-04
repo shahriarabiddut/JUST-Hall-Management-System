@@ -10,7 +10,7 @@
         <div class="card-body">
             
             <div class="table-responsive">
-            <form method="POST" action="{{ route('staff.student.update',$data->id) }}" enctype="multipart/form-data">
+            <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('staff.student.update',$data->id) }}" enctype="multipart/form-data" onsubmit="handleSubmit(event)">
                 @csrf
                 @method('PUT')
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -32,6 +32,13 @@
                             <option @if($data->ms==1) selected @endif  value="1"> Yes </option>
                             <option @if($data->ms==0) selected @endif   value="0"> No </option>
                         </select></td>
+                    </tr>
+                    <tr>
+                        <th>Gender <span class="text-danger">*</span></th>
+                        <td><select required name="gender" class="form-control room-list">
+                        <option @if($data->gender==1) selected @endif  value="1"> Male </option>
+                        <option @if($data->gender==0) selected @endif  value="0"> Female </option>
+                    </select></td>
                     </tr>
                     <tr>
                         <th>Full Name <span class="text-danger">*</span></th>

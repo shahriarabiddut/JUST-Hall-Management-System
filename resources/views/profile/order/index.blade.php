@@ -36,7 +36,7 @@
                 </div>
                 <div class="col-6 float-right">
                     <div id="myDiv" style="display: none;" >
-                        <form method="POST" action="{{ route('student.order.searchByDate') }}">
+                        <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('student.order.searchByDate') }}">
                             @csrf
                             <label for="search-date">Search by Date:</label>
                             <input type="date" id="search-date" name="date">
@@ -44,7 +44,7 @@
                           </form>
                       </div>
                       <div id="myDiv2" style="display: none;">
-                        <form method="POST" action="{{ route('student.order.searchByMonth') }}">
+                        <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('student.order.searchByMonth') }}">
                             @csrf
                             <label for="search-month">Search by Month:</label>
                             <input type="month" id="search-month" name="month">

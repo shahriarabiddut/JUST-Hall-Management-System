@@ -384,4 +384,23 @@ class AllocatedSeatController extends Controller
         $EmailController->RoomAllocationEmail($student_id, $room->title, 3);
         return redirect()->route('admin.roomallocation.roomrequests')->with('warning', 'Listed for Queue Successfully!');
     }
+    public function generatePDF(string $rollno)
+    {
+        $mpdf = new \Mpdf\Mpdf(([
+            'default_font_size' => 12,
+            'default_font' => 'nikosh'
+        ]));
+        $Student = Student::all()->where('rollno', $rollno)->first();
+        if ($Student == null) {
+            return redirect()->route('admin.dashboard')->with('danger', 'Not Found');
+        }
+        $data = RoomRequest::all()->where('user_id', $Student->id)->first();
+        if ($data == null) {
+            return redirect()->route('admin.dashboard')->with('danger', 'Not Found');
+        }
+        $datahtml = $data->toArray();
+        $html = view('admin.roomallocation.rr', $datahtml)->render();
+        $mpdf->WriteHTML($html);
+        return $mpdf->output($rollno . ' - RoomRequest.pdf', 'D');
+    }
 }

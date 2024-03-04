@@ -21,7 +21,7 @@
             @endif
             <!-- Session Messages Ends -->
             <div class="card shadow mb-4 pl-4 py-2 bg-secondary text-white">
-                <form method="POST" class="p-1" action="{{ route('staff.history.searchByMonth') }}">
+                <form onsubmit="handleSubmit(event)"  method="POST" class="p-1" action="{{ route('staff.history.searchByMonth') }}">
                     @csrf
                     <div class="form-row">
                         <div class="col-md-3 mt-1"> <button class="form-control btn btn-dark" type="reset">Search by Date :</button> </div>

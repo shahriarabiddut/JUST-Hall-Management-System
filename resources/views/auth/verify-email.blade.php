@@ -44,7 +44,7 @@
                   @error('email')
                   <div class="text-bold bg-danger text-center text-white p-2">{{ $message }}</div>
                   @enderror
-                  <form method="POST" action="{{ route('verification.send') }}">
+                  <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('verification.send') }}" >
                     @csrf
                     <div class="form-group">
                       <button type="submit" class="btn btn-primary btn-block"> Resend Verification Email </button>

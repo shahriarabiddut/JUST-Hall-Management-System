@@ -23,7 +23,7 @@
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Money Spent This Month : {{ $sumofthatmonth }} Taka
                 <div class="float-right">
-                    <form method="POST" action="{{ route('student.order.searchByMonth') }}">
+                    <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('student.order.searchByMonth') }}">
                         @csrf
                         <label for="search-month">Search by Month:</label>
                         <input type="month" id="search-month" name="month" value="{{ $month }}">

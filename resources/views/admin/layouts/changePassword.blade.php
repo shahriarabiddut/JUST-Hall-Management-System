@@ -21,7 +21,7 @@
         <div class="p-3 mb-2 bg-danger text-white">{{ $message }}</div>
         @enderror
         {{-- Errors --}}
-        <form method="POST" action="{{ route('admin.profile.passwordUpdate') }}" enctype="multipart/form-data">
+        <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('admin.profile.passwordUpdate') }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">

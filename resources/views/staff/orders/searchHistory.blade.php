@@ -21,7 +21,7 @@
             @endif
             <!-- Session Messages Ends -->
             <div class="card shadow mb-4 pl-4 py-2 bg-secondary text-white">
-                <form method="POST" action="{{ route('staff.orders.searchByHistory') }}">
+                <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('staff.orders.searchByHistory') }}">
                     @csrf
                     <div class="form-row rounded">
                         @csrf

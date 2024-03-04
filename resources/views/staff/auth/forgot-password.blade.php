@@ -6,7 +6,7 @@
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <form method="POST" action="{{ route('staff.password.email') }}">
+    <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('staff.password.email') }}">
         @csrf
 
         <!-- Email Address -->

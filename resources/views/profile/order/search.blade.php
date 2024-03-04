@@ -23,7 +23,7 @@
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Order History
                 <div class="float-right">
-                    <form method="POST" action="{{ route('student.order.searchByDate') }}">
+                    <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('student.order.searchByDate') }}">
                         @csrf
                         <label for="search-date">Search by Date:</label>
                         <input type="date" id="search-date" name="date" value="{{ $date }}">

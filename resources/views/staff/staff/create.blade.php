@@ -15,7 +15,7 @@
                    <p class="text-danger"> {{ $error }} </p>
                 @endforeach
                 @endif
-            <form method="POST" action="{{ route('staff.staff.store') }}" enctype="multipart/form-data">
+            <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('staff.staff.store') }}" enctype="multipart/form-data">
                 @csrf
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <tbody>
@@ -23,11 +23,10 @@
                             <th>Select User Type</th>
                             <td>
                                 <select required name="type" class="form-control">
-                                    <option>--- Select User Type ---</option>
-                                    
+                                    <option value="0">--- Select User Type ---</option>
+                                    <option value="provost">Provost</option>
+                                    <option value="aprovost">Assistant Provost</option>
                                     <option value="staff">Staff</option>
-                                     <option value="provost">Provost</option>
-                                     <option value="aprovost">Assistant Provost</option>
                                      <option value="officer">Officer</option>
                                 </select>
                             </td>

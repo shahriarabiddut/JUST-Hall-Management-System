@@ -30,3 +30,4 @@
 });
 
 </script>
+@include('../layouts/validateinput')

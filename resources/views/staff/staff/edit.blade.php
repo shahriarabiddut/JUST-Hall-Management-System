@@ -16,7 +16,7 @@
                    <p class="text-danger"> {{ $error }} </p>
                 @endforeach
                 @endif
-            <form method="POST" action="{{ route('staff.staff.update',$data->id) }}" enctype="multipart/form-data">
+            <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('staff.staff.update',$data->id) }}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">

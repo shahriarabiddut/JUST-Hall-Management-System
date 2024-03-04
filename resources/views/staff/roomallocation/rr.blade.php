@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{{ Auth::user()->rollno }} - Room Request</title>
+    @php $data = App\Models\RoomRequest::find($id);  @endphp
+    <title>{{ $data->students->rollno }} - Room Request</title>
     <style>
 table {
     border-collapse: collapse;
@@ -27,15 +28,15 @@ body {
     </style>
 </head>
 <body>
-    @php $application = json_decode(Auth::user()->roomrequest->application, true); @endphp 
+    @php $application = json_decode($data->application, true); @endphp 
     <table class="table table-bordered" width="100%">
         <tbody>
         <tr>
             <th width="25%" class="text-center"><h4 class="my-5">প্রভোস্ট এর কার্যালয়</h4></th>
             {{-- <td width="50%" colspan="2" class="text-center"><img width="75px" src="{{ asset('img/just.jpg') }}" alt=""></td> --}}
-            <td width="50%" colspan="2" class="text-center"><img width="75px" src="{{ file_exists(asset('storage/'.Auth::user()->roomrequest->hall->logo)) ? asset('storage/'.Auth::user()->roomrequest->hall->logo) : asset('img/just.jpg')  }}" alt=""></td>
+            <td width="50%" colspan="2" class="text-center"><img width="75px" src="{{ file_exists(asset('storage/'.$data->hall->logo)) ? asset('storage/'.$data->hall->logo) : asset('img/just.jpg')  }}" alt=""></td>
             <th width="25%" class="text-center">
-                <h3 class="my-5"> {{ Auth::user()->roomrequest->hall->banglatitle }}
+                <h3 class="my-5"> {{ $data->hall->banglatitle }}
         </h3></th>
         </tr>
         <tr>
@@ -98,8 +99,7 @@ body {
             <td>ঠিকানা - {{ $application['ovivabokthikana'] }} </td>
             <td>মোবাইল নং - {{ $application['ovivabokmobile'] }} </td>
         </tr>
-    
-        <tr>
+    <tr>
                         <th colspan="4"> ১৪. প্রয়োজনীয় তথ্যাবলী </th>
                     </tr>
                     <tr>
@@ -167,13 +167,13 @@ body {
             
         </tr>
         <tr>
-            <td colspan="2"><img width="150px" @if (Auth::user()->photo!=null) src="{{ asset('storage/'.Auth::user()->photo) }}" @else src="{{ asset('images/user.png') }}" @endif alt="Application Photo"> <br>
+            <td colspan="2"><img width="150px" @if ($data->students->photo!=null) src="{{ asset('storage/'.$data->students->photo) }}" @else src="{{ asset('images/user.png') }}" @endif alt="Application Photo"> <br>
                 <p>তারিখঃ {{ Carbon\Carbon::today()->format('F j , Y') }} </p></td>
             <th width="20%">আবেদনকারীর স্বাক্ষর</th>
             <td width="30%" ><img  width="125px" src="{{ asset('storage/'.$application['signature']) }}" alt=""></td>
         </tr>
         <tr>
-            <td colspan="4"> <h3>প্রভোস্ট <br> {{ Auth::user()->roomrequest->hall->banglatitle }} <br> যশোর বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয়</h3>
+            <td colspan="4"> <h3>প্রভোস্ট <br> {{ $data->hall->banglatitle }} <br> যশোর বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয়</h3>
             </td>
         </tr>
         </tbody>

@@ -36,7 +36,7 @@
             <a href="{{ route('staff.student.bulk') }}" class="float-right btn btn-info btn-sm mx-1" target="_blank">Add From CSV </a> 
             @endif
             <div class="float-right mx-1">
-                <form method="POST" class="form-control pb-1" action="{{ route('staff.student.search') }}">
+                <form onsubmit="handleSubmit(event)"  method="POST" class="form-control pb-1" action="{{ route('staff.student.search') }}">
                     @csrf
                     <label for="search-date"> Students : </label>
                     <select  name="type" id="">

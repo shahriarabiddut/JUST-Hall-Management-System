@@ -29,7 +29,7 @@
                <p class="text-danger"> {{ $error }} </p>
             @endforeach
             @endif
-        <form method="POST" action="{{ route('student.roomrequeststore') }}" enctype="multipart/form-data">
+        <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('student.roomrequeststore') }}" enctype="multipart/form-data">
             @csrf
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <tbody>
@@ -131,7 +131,7 @@
                 </tr>
                 <tr>
                     <th>খ.রোল নংঃ <span class="text-danger">*</span></th>
-                    <td><input type="text" required name="rollno" class="form-control" value="{{ Auth::user()->rollno }}"></td>
+                    <td><input type="text" readonly required name="rollno" class="form-control" value="{{ Auth::user()->rollno }}"></td>
                     <th>জ.ভর্তির মেধাক্রমঃ<span class="text-danger">*</span></th>
                     <td><input type="text" required name="meritposition" class="form-control" value="{{ old('meritposition') }}"></td>
                 </tr>

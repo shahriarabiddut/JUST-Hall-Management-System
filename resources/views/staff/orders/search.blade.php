@@ -6,7 +6,7 @@
 
     <!-- Page Heading -->
     <h1 class="h3 mb-2 text-gray-800">Orders Search by date 
-        <form method="POST"class="d-inline" action="{{ route('staff.orders.searchByDateDownload') }}">
+        <form onsubmit="handleSubmit(event)"  method="POST"class="d-inline" action="{{ route('staff.orders.searchByDateDownload') }}">
         @csrf
         <input type="hidden" name="date" value="{{ $date }}">
         <input type="hidden" name="type" value="{{ $type }}">
@@ -25,7 +25,7 @@
             @endif
             <!-- Session Messages Ends -->
             <div class="card shadow mb-4 pl-4 py-2 bg-secondary text-white">
-                <form method="POST" class="p-1" action="{{ route('staff.orders.searchByDate') }}">
+                <form onsubmit="handleSubmit(event)"  method="POST" class="p-1" action="{{ route('staff.orders.searchByDate') }}">
                     @csrf
                     <div class="form-row">
                     <div class="col-md-3 mt-1">

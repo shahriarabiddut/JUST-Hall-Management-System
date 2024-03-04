@@ -75,6 +75,7 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
     Route::get('roomallocation/ban/{id}', [AllocatedSeatController::class, 'roomrequestban'])->name('roomallocation.ban');
     Route::get('roomallocation/list/{id}', [AllocatedSeatController::class, 'roomrequestlist'])->name('roomallocation.list');
     Route::get('roomallocation/roomrequests/{id}', [AllocatedSeatController::class, 'showRoomRequest'])->name('roomallocation.showRoomRequest');
+    Route::get('roomrequest/generate-pdf/{id}',  [AllocatedSeatController::class, 'generatePdf'])->name('generatepdf');
     //Available Positions
     Route::get('room/postion/{selectedValue}', [AllocatedSeatController::class, 'getPositions']);
     // Order Crud

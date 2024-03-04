@@ -13,7 +13,7 @@
         <div class="card-body">
             
             <div class="table-responsive">
-            <form method="POST" action="{{ route('staff.payment.store') }}" enctype="multipart/form-data"  id="myForm">
+            <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('staff.payment.store') }}" enctype="multipart/form-data"  id="myForm">
                 @csrf
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <tbody>

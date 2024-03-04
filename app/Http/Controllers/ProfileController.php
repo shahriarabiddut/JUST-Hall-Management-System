@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use PDF;
 use Carbon\Carbon;
 use App\Models\Food;
 use App\Models\Hall;
@@ -475,12 +476,14 @@ class ProfileController extends Controller
             return Redirect::back()->with('danger', "Current Password Didn't Match");
         }
     }
-    public function generatePDF()
+    public function generatePDF(string $rollno)
     {
-        $userid = Auth::user()->id;
-        $data = RoomRequest::all()->where('user_id', '=', $userid)->first();
-        $data = $data->toArray();
-        $pdf = \PDF::loadView('profile.room.rr', $data);
-        return $pdf->download(Auth::user()->rollno . ' - RoomRequest.pdf');
+        $mpdf = new \Mpdf\Mpdf(([
+            'default_font_size' => 12,
+            'default_font' => 'nikosh'
+        ]));
+        $html = view('profile.room.rr')->render();
+        $mpdf->WriteHTML($html);
+        return $mpdf->output($rollno . ' - RoomRequest.pdf', 'D');
     }
 }

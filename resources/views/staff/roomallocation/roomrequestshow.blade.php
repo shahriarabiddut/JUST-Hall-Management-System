@@ -7,8 +7,8 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h3 class="m-0 font-weight-bold text-primary">Room Request Details 
-                <a href="{{ route('staff.roomallocation.roomrequests') }}" class="float-right btn btn-success btn-sm  m-1" target="_self"> <i class="fa fa-arrow-left m-1 p-1"> </i>View All Room Requests</a>
-                <button class="btn btn-info btn-sm ml-1 float-right  m-1" onclick="convertDivToPDF()"><i class="m-1 p-1 fa fa-print"> Download PDF </i></button> 
+                <a href="{{ route('staff.roomallocation.roomrequests') }}" class="float-right btn btn-success btn-sm m-1" target="_self"> <i class="fa fa-arrow-left m-1 p-1"> </i>View All Room Requests</a>
+                <a href="{{ route('staff.generatepdf',$application['rollno']) }}" class="float-right btn btn-info btn-sm  m-1"><i class="fa fa-print m-1 p-1"> Download PDF </i></a>
             </h3>
             
         </div>
@@ -26,20 +26,17 @@
             @endif
             <!-- Session Messages Ends -->
             <div class="table-responsive" id="myDiv">
-                <table class="table table-bordered" width="100%" >
+                <table class="table table-bordered" width="100%">
                     <tbody>
                     <tr>
-                        <th class="text-center"><h4 class="my-5">প্রভোস্ট এর কার্যালয়</h4></th>
-                        <td colspan="2" class="text-center"><img width="75px" src="{{ asset('storage/'.$data->hall->logo) }}" alt=""></td>
-                        <th class="text-center">
-                            <h4 class="my-5">{{ $data->hall->banglatitle }}
+                        <th width="25%" class="text-center"><h4 class="my-5">প্রভোস্ট এর কার্যালয়</h4></th>
+                        <td width="50%" colspan="2" class="text-center"><img width="75px" src="{{ file_exists(asset('storage/'.$data->hall->logo)) ? asset('storage/'.$data->hall->logo) : asset('img/just.jpg')  }}" alt=""></td>
+                        <th width="25%" class="text-center">
+                            <h4 class="my-5"> {{ $data->hall->banglatitle }}
                     </h4></th>
                     </tr>
                     <tr>
-                        <th colspan="4">০১.আবেদনকারীর নাম</th>
-                    </tr>
-                    <tr>
-                        <th> বাংলায়</th>
+                        <th>০১.আবেদনকারীর নাম - বাংলায়</th>
                         <td>{{ $application['banglaname'] }}</td>
                         <th> ইংরেজীতে (বড় অক্ষরে)</th>
                         <td>{{ $application['englishname'] }}</td>
@@ -98,26 +95,44 @@
                         <td>ঠিকানা - {{ $application['ovivabokthikana'] }} </td>
                         <td>মোবাইল নং - {{ $application['ovivabokmobile'] }} </td>
                     </tr>
-                    <tr>
+<tr>
                         <th colspan="4"> ১৪. প্রয়োজনীয় তথ্যাবলী </th>
                     </tr>
                     <tr>
                         <th>ক.বিভাগের নামঃ</th>
                         <td>{{ $application['department'] }}</td>
+                        <th>ছ.GPA (সর্বশেষ) - </th>
+                        <td>@isset($application['gpa']){{ $application['gpa'] }}@endisset</td>
+                    </tr>
+                    <tr>
                         <th>খ.রোল নংঃ</th>
                         <td>{{ $application['rollno'] }}</td>
+                        <th>জ.ভর্তির মেধাক্রমঃ </th>
+                        <td>@isset($application['meritposition']){{ $application['meritposition'] }}@endisset</td>
                     </tr>
                     <tr>
                         <th>গ.রেজিস্ট্রেশন নংঃ</th>
                         <td>{{ $application['registrationno'] }}</td>
+                        <th>ঝ.HSC GPA - </th> 
+                        <td>@isset($application['hsc']){{ $application['hsc'] }}@endisset</td>
+                    </tr>
+                    <tr>
                         <th>ঘ.শিক্ষাবর্ষঃ</th> 
                         <td>{{ $application['session'] }}</td>
+                        <th>ঞ.HSC কলেজের নামঃ</th>
+                        <td>@isset($application['college']){{ $application['college'] }}@endisset</td>
                     </tr>
                     <tr>
                         <th>ঙ.বর্ষঃ</th>
                         <td>{{ $application['borsho'] }}</td>
+                        <th>ট.SSC GPA - </th>
+                        <td>@isset($application['ssc']){{ $application['ssc'] }}@endisset</td>
+                    </tr>
+                    <tr>
                         <th>চ.সেমিস্টারঃ</th>
                         <td>{{ $application['semester'] }}</td>
+                        <th>ঠ.SSC স্কুলের নামঃ</th>
+                        <td>@isset($application['school']){{ $application['school'] }}@endisset</td>
                     </tr>
                     <tr>
                         <th colspan="2">খেলাধুলা, নাটক, সংগীত ইত্যাদিতে পারদর্শিতার বিবরণ (প্রমাণ সংযুক্ত করতে হবে)</th>
@@ -148,13 +163,13 @@
                         
                     </tr>
                     <tr>
-                        <th width="25%">তারিখঃ</th>
-                        <td width="25%">{{ Carbon\Carbon::today()->format('F j , Y') }}</td>
-                        <th width="25%">আবেদনকারীর স্বাক্ষর</th>
-                        <td width="25%"><img src="{{ asset('storage/'.$application['signature']) }}" alt=""></td>
+                        <td colspan="2"><img width="150px" @if ($data->students->photo!=null) src="{{ asset('storage/'.$data->students->photo) }}" @else src="{{ asset('images/user.png') }}" @endif alt="Application Photo"> <br>
+                            <p>তারিখঃ {{ Carbon\Carbon::today()->format('F j , Y') }} </p></td>
+                        <th width="20%">আবেদনকারীর স্বাক্ষর</th>
+                        <td width="30%" ><img  width="125px" src="{{ asset('storage/'.$application['signature']) }}" alt=""></td>
                     </tr>
                     <tr>
-                        <td colspan="4"> <h5>প্রভোস্ট <br> {{ $data->hall->banglatitle }} <br> যশোর বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয়</h5>
+                        <td colspan="4"> <h3>প্রভোস্ট <br> {{ $data->hall->banglatitle }} <br> যশোর বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয়</h3>
                         </td>
                     </tr>
                     </tbody>
@@ -317,7 +332,7 @@
                    <p class="text-danger"> {{ $error }} </p>
                 @endforeach
                 @endif
-            <form method="POST" action="{{ route('staff.roomallocation.RoomRequestAllocate') }}" enctype="multipart/form-data">
+            <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('staff.roomallocation.RoomRequestAllocate') }}" enctype="multipart/form-data">
                 @csrf
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <tbody>

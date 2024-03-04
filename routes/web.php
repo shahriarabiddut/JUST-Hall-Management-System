@@ -72,7 +72,7 @@ Route::middleware(['auth'])->prefix('student')->name('student.')->group(function
     Route::put('rooms/request/update', [ProfileController::class, 'roomrequestupdate'])->name('roomrequest.update');
     Route::get('rooms/requestshow/{id}/delete', [ProfileController::class, 'roomrequestdestroy'])->name('roomrequest.destroy');
     // PDf
-    Route::get('/generate-pdf',  [ProfileController::class, 'generatePdf'])->name('generate-pdf');
+    Route::get('roomrequest/generate-pdf/{id}',  [ProfileController::class, 'generatePdf'])->name('generatepdf');
     // Payment
     Route::get('rooms/request/payment/', [ProfileController::class, 'roomrequestpayment'])->name('roomrequest.roomrequestpayment');
     Route::get('rooms/request/payments/{id}/delete', [ProfileController::class, 'roomrequestpaymentdestroy'])->name('roomrequestpayment.destroy');

@@ -16,7 +16,7 @@
             @endif
             <!-- Session Messages Ends -->
             <div class="card shadow mb-4 pl-4 py-2 bg-secondary text-white">
-                <form method="POST" class="p-1" action="{{ route('staff.history.searchByMonth') }}">
+                <form onsubmit="handleSubmit(event)"  method="POST" class="p-1" action="{{ route('staff.history.searchByMonth') }}">
                     @csrf
                     <div class="form-row">
                         <div class="col-md-3 mt-1"> <button class="form-control btn btn-dark" type="reset">Search by Month :</button> </div>
@@ -41,7 +41,7 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h3 class="m-0 font-weight-bold text-primary">History ({{ count($data) }} records found!) 
-                <form method="POST" class="d-inline" action="{{ route('staff.history.readSearch') }}">
+                <form onsubmit="handleSubmit(event)"  method="POST" class="d-inline" action="{{ route('staff.history.readSearch') }}">
                     @csrf <input required type="hidden" value="{{ $month }}"  name="month"><input required type="hidden" value="{{ $staffData->id }}" name="staff_id"><button class="float-right btn btn-success btn-sm" type="submit"><i class="fa fa-check"></i> Mark All As Read </button></form>
         </div>
         <div class="card-body">

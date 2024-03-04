@@ -44,7 +44,7 @@
                   @error('email')
                   <div class="text-bold bg-danger text-center text-white p-2">{{ $message }}</div>
                   @enderror
-                  <form method="POST" action="{{ route('password.email') }}">
+                  <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('password.email') }}" >
                     @csrf
                     <div class="form-group input-group">
                       <div class="input-group-prepend">

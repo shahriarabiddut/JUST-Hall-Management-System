@@ -51,7 +51,7 @@
                   <p class="text-muted font-weight-bold ">
                     <span>OR</span>
                   </p> --}}
-                  <form method="POST" action="{{ route('login') }}">
+                  <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('login') }}" >
                     @csrf
                     <div class="form-group input-group">
                       <div class="input-group-prepend">

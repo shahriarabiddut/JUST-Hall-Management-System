@@ -22,7 +22,7 @@
             <div class="card shadow mb-4 ">
                 <div class="card-header p-1">
                     <div class="float-left bg-subtle text-white p-1 m-1">
-                          <form method="POST" class="p-1" action="{{ route('admin.orders.searchByHistory') }}">
+                          <form onsubmit="handleSubmit(event)"  method="POST" class="p-1" action="{{ route('admin.orders.searchByHistory') }}">
                             <div class="form-row rounded">
                             @csrf
                         <div class="col-md-4 mt-1">

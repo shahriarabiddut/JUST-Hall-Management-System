@@ -82,6 +82,8 @@ Route::middleware('staff')->prefix('staff')->name('staff.')->group(function () {
     // Room ALlocaton Using CSV
     Route::get('roomallocationadd/import-bulk', [AllocatedSeatController::class, 'importAllocation'])->name('roomallocation.bulk');
     Route::post('roomallocationadd/import-bulk', [AllocatedSeatController::class, 'handleImportAllocation'])->name('roomallocation.bulkUpload');
+    // PDf
+    Route::get('roomrequest/generate-pdf/{id}',  [AllocatedSeatController::class, 'generatePdf'])->name('generatepdf');
     // Foodtime Crud
     Route::get('foodtime/{id}/active', [FoodTimeController::class, 'active']);
     Route::get('foodtime/{id}/disable', [FoodTimeController::class, 'disable']);

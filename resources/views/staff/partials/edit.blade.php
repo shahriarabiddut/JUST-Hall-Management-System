@@ -8,7 +8,7 @@
     <h1 class="border border-secondary rounded h3 mb-2 text-gray-800 p-2 bg-white"> Editing Profile </h1>
 
     <div class="table-responsive">
-        <form method="POST" action="{{ route('staff.profile.update') }}" enctype="multipart/form-data">
+        <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('staff.profile.update') }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">

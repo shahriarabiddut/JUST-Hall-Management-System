@@ -15,7 +15,7 @@
             @endif
             <!-- Session Messages Ends -->
             <div class="card shadow mb-4 pl-4 py-2 bg-secondary text-white">
-                <form method="POST" class="p-1" action="{{ route('admin.orders.searchByDate') }}">
+                <form onsubmit="handleSubmit(event)"  method="POST" class="p-1" action="{{ route('admin.orders.searchByDate') }}">
                     @csrf
                     <div class="form-row">
                         <div class="col-md-3 mt-1">

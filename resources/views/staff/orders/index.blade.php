@@ -19,7 +19,7 @@
             <!-- Session Messages Ends -->
             
             <div class="card shadow mb-4 pl-4 py-2 bg-secondary text-white">
-                <form method="POST" class="p-1" action="{{ route('staff.orders.searchByDate') }}">
+                <form onsubmit="handleSubmit(event)"  method="POST" class="p-1" action="{{ route('staff.orders.searchByDate') }}">
                     @csrf
                     <div class="form-row">
                         <div class="col-md-3 mt-1"> <button class="form-control btn btn-dark" type="reset">Search by Date :</button> </div>
@@ -47,7 +47,7 @@
         <div class="card-header py-3">
             <h3 class="m-0 font-weight-bold text-primary d-inline" >All Orders</h3>
                 <div class="float-right h6">
-                    <form method="POST" class="p-1 " action="{{ route('staff.orders.searchByHistory') }}">
+                    <form onsubmit="handleSubmit(event)"  method="POST" class="p-1 " action="{{ route('staff.orders.searchByHistory') }}">
                         @csrf
                         <div class="form-row">
                             <div class="col-md-4 mt-1">

@@ -54,8 +54,8 @@ class StaffController extends Controller
         //
         $data = new Staff;
         $request->validate([
-            'email' => 'required|email|unique:staff',
-            'type' => 'required',
+            'email' => 'required|email|regex:/(.+)@(.+)\.(.+)/i|unique:staff',
+            'type' => 'required|not_in:0',
         ]);
         $data->email = $request->email;
         $data->password = bcrypt($request->email);

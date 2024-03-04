@@ -41,7 +41,7 @@
                             {{ __('Home') }}
                         </x-dropdown-link>
                         <!-- Authentication -->
-                        <form method="POST" action="{{ route('staff.logout') }}">
+                        <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('staff.logout') }}">
                             @csrf
 
                             <x-dropdown-link :href="route('staff.logout')"
@@ -89,7 +89,7 @@
                     {{ __('Home') }}
                 </x-responsive-nav-link>
                 <!-- Authentication -->
-                <form method="POST" action="{{ route('staff.logout') }}">
+                <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('staff.logout') }}">
                     @csrf
 
                     <x-responsive-nav-link :href="route('staff.logout')"

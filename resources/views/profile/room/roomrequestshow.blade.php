@@ -1,13 +1,11 @@
 @extends('layout')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
 @section('title', 'Room Request Details')
 @section('content')
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h3 class="m-0 font-weight-bold text-primary">Room Request Details <a onclick="return confirm('Are You Sure?')" href="{{ route('student.roomrequest.destroy',$data->id) }}" class="btn btn-danger btn-sm ml-1 float-right mx-1"><i class="fa fa-trash"> Delete Request</i></a> <button class="btn btn-info btn-sm ml-1 float-right mx-1" onclick="convertDivToPDF()"><i class="fa fa-print"> Get PDF </i></button> 
-                {{-- <a href=" {{ route('student.generate-pdf') }}" class="btn btn-primary btn-sm ml-1 float-right mx-1"><i class="fa fa-print"> Download</i></a> --}}
+            <h3 class="m-0 font-weight-bold text-primary">Room Request Details <a onclick="return confirm('Are You Sure?')" href="{{ route('student.roomrequest.destroy',$data->id) }}" class="btn btn-danger btn-sm ml-1 float-right mx-1"><i class="fa fa-trash"> Delete Request</i></a> <a href="{{ route('student.generatepdf',Auth::user()->rollno) }}" class="btn btn-info btn-sm ml-1 float-right mx-1"><i class="fa fa-print"> Download PDF </i></a>
             </h3>
             
         </div>
@@ -26,18 +24,14 @@
             <!-- Session Messages Ends -->
             
             <div class="table-responsive" id="myDiv">
-                <table class="table table-bordered" width="100%" id="myDiv2">
+                <table class="table table-bordered" width="100%">
                     <tbody>
                     <tr>
-                        <th class="text-center"><h4 class="my-5">প্রভোস্ট এর কার্যালয়</h4></th>
-                        <td colspan="2" class="text-center"><img width="75px" src="{{ asset('storage/'.$data->hall->logo) }}" alt=""></td>
-                        <th class="text-center">
+                        <th width="25%" class="text-center"><h4 class="my-5">প্রভোস্ট এর কার্যালয়</h4></th>
+                        <td width="50%" colspan="2" class="text-center"><img width="75px" src="{{ file_exists(asset('storage/'.$data->hall->logo)) ? asset('storage/'.$data->hall->logo) : asset('img/just.jpg')  }}" alt=""></td>
+                        <th width="25%" class="text-center">
                             <h4 class="my-5"> {{ $data->hall->banglatitle }}
                     </h4></th>
-                    </tr>
-                    <tr>
-                        <th colspan="3"></th>
-                        <td class="text-center"><img width="150px" @if (Auth::user()->photo!=null) src="{{ asset('storage/'.Auth::user()->photo) }}" @else src="{{ asset('images/user.png') }}" @endif alt="Application Photo"></td>
                     </tr>
                     <tr>
                         <th>০১.আবেদনকারীর নাম - বাংলায়</th>
@@ -99,6 +93,7 @@
                         <td>ঠিকানা - {{ $application['ovivabokthikana'] }} </td>
                         <td>মোবাইল নং - {{ $application['ovivabokmobile'] }} </td>
                     </tr>
+                
                     <tr>
                         <th colspan="4"> ১৪. প্রয়োজনীয় তথ্যাবলী </th>
                     </tr>
@@ -106,37 +101,37 @@
                         <th>ক.বিভাগের নামঃ</th>
                         <td>{{ $application['department'] }}</td>
                         <th>ছ.GPA (সর্বশেষ) - </th>
-                        <td>{{ $application['gpa'] }}</td>
+                        <td>@isset($application['gpa']){{ $application['gpa'] }}@endisset</td>
                     </tr>
                     <tr>
                         <th>খ.রোল নংঃ</th>
                         <td>{{ $application['rollno'] }}</td>
                         <th>জ.ভর্তির মেধাক্রমঃ </th>
-                        <td>{{ $application['meritposition'] }}</td>
+                        <td>@isset($application['meritposition']){{ $application['meritposition'] }}@endisset</td>
                     </tr>
                     <tr>
                         <th>গ.রেজিস্ট্রেশন নংঃ</th>
                         <td>{{ $application['registrationno'] }}</td>
                         <th>ঝ.HSC GPA - </th> 
-                        <td>{{ $application['hsc'] }}</td>
+                        <td>@isset($application['hsc']){{ $application['hsc'] }}@endisset</td>
                     </tr>
                     <tr>
                         <th>ঘ.শিক্ষাবর্ষঃ</th> 
                         <td>{{ $application['session'] }}</td>
                         <th>ঞ.HSC কলেজের নামঃ</th>
-                        <td>{{ $application['college'] }}</td>
+                        <td>@isset($application['college']){{ $application['college'] }}@endisset</td>
                     </tr>
                     <tr>
                         <th>ঙ.বর্ষঃ</th>
                         <td>{{ $application['borsho'] }}</td>
                         <th>ট.SSC GPA - </th>
-                        <td>{{ $application['ssc'] }}</td>
+                        <td>@isset($application['ssc']){{ $application['ssc'] }}@endisset</td>
                     </tr>
                     <tr>
                         <th>চ.সেমিস্টারঃ</th>
                         <td>{{ $application['semester'] }}</td>
                         <th>ঠ.SSC স্কুলের নামঃ</th>
-                        <td>{{ $application['school'] }}</td>
+                        <td>@isset($application['school']){{ $application['school'] }}@endisset</td>
                     </tr>
                     <tr>
                         <th colspan="2">খেলাধুলা, নাটক, সংগীত ইত্যাদিতে পারদর্শিতার বিবরণ (প্রমাণ সংযুক্ত করতে হবে)</th>
@@ -167,13 +162,13 @@
                         
                     </tr>
                     <tr>
-                        <th width="25%">তারিখঃ</th>
-                        <td width="25%">{{ Carbon\Carbon::today()->format('F j , Y') }}</td>
-                        <th width="25%">আবেদনকারীর স্বাক্ষর</th>
-                        <td width="25%"><img src="{{ asset('storage/'.$application['signature']) }}" alt=""></td>
+                        <td colspan="2"><img width="150px" @if (Auth::user()->photo!=null) src="{{ asset('storage/'.Auth::user()->photo) }}" @else src="{{ asset('images/user.png') }}" @endif alt="Application Photo"> <br>
+                            <p>তারিখঃ {{ Carbon\Carbon::today()->format('F j , Y') }} </p></td>
+                        <th width="20%">আবেদনকারীর স্বাক্ষর</th>
+                        <td width="30%" ><img  width="125px" src="{{ asset('storage/'.$application['signature']) }}" alt=""></td>
                     </tr>
                     <tr>
-                        <td colspan="4"> <h5>প্রভোস্ট <br> {{ $data->hall->banglatitle }} <br> যশোর বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয়</h5>
+                        <td colspan="4"> <h3>প্রভোস্ট <br> {{ Auth::user()->roomrequest->hall->banglatitle }} <br> যশোর বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয়</h3>
                         </td>
                     </tr>
                     </tbody>
@@ -242,30 +237,5 @@
     </div>
     
     @section('scripts')
-    {{-- <script>
-        function printDiv() {
-            var divContents = document.getElementById("myDiv").innerHTML;
-            var printWindow = window.open('', '', 'height=400,width=800');
-            printWindow.document.write('<html><head><title>Print DIV</title></head><body>');
-            printWindow.document.write(divContents);
-            printWindow.document.write('</body></html>');
-            printWindow.document.close();
-            printWindow.print();
-        }
-    </script> --}}
-    <script>
-        function convertDivToPDF() {
-          let content = document.getElementById('myDiv');
-          content.style.padding = '50px';
-          const filename = '{{ Auth::user()->rollno }} Room Request';
-          html2pdf()
-            .from(content)
-            .save(filename + '.pdf')
-            .then(() => {
-            // Remove the margin after generating the PDF
-            content.style.padding = '0px';
-        });
-        }
-    </script>
     @endsection
 @endsection

@@ -31,7 +31,7 @@
                <p class="text-danger"> {{ $error }} </p>
             @endforeach
             @endif
-        <form method="POST" action="{{ route('student.roomrequest.update') }}" enctype="multipart/form-data">
+        <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('student.roomrequest.update') }}" enctype="multipart/form-data">
             @method('PUT')
             @csrf
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">

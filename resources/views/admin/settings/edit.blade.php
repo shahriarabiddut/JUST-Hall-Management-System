@@ -22,7 +22,7 @@
         <div class="card-body">
             <h3 class="bg-info text-white text-center p-2 rounded"> Website </h3>
             <div class="table-responsive">
-                <form method="POST" action="{{ route('admin.settings.update',$datas[0]->id) }}" enctype="multipart/form-data">
+                <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('admin.settings.update',$datas[0]->id) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -37,7 +37,7 @@
                 </form>
             </div>
             <div class="table-responsive">
-                <form method="POST" action="{{ route('admin.settings.update',$datas[2]->id) }}" enctype="multipart/form-data">
+                <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('admin.settings.update',$datas[2]->id) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -52,7 +52,7 @@
                 </form>
             </div>
             <div class="table-responsive">
-                <form method="POST" action="{{ route('admin.settings.update',$datas[3]->id) }}" enctype="multipart/form-data">
+                <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('admin.settings.update',$datas[3]->id) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -68,7 +68,7 @@
                 </form>
             </div>
             <div class="table-responsive">
-                <form method="POST" action="{{ route('admin.settings.update',$datas[4]->id) }}" enctype="multipart/form-data">
+                <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('admin.settings.update',$datas[4]->id) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -85,7 +85,7 @@
             </div>
             <h3 class="bg-primary text-white text-center p-2 rounded"> Fixed Charges Defaults </h3>
             <div class="table-responsive">
-                <form method="POST" action="{{ route('admin.settings.update',$datas[1]->id) }}" enctype="multipart/form-data">
+                <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('admin.settings.update',$datas[1]->id) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -100,7 +100,7 @@
                 </form>
             </div>
             <div class="table-responsive">
-                <form method="POST" action="{{ route('admin.settings.update',$datas[11]->id) }}" enctype="multipart/form-data">
+                <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('admin.settings.update',$datas[11]->id) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -116,7 +116,7 @@
             </div>
             <h3 class="bg-warning text-white text-center p-2 rounded"> Print </h3>
             <div class="table-responsive">
-                <form method="POST" action="{{ route('admin.settings.update',$datas[10]->id) }}" enctype="multipart/form-data">
+                <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('admin.settings.update',$datas[10]->id) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -144,7 +144,7 @@
                 </form>
             </div>
             <div class="table-responsive">
-                <form method="POST" action="{{ route('admin.settings.update',$datas[9]->id) }}" enctype="multipart/form-data">
+                <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('admin.settings.update',$datas[9]->id) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -162,7 +162,7 @@
         <div class="card-body">
             @foreach ($datas as $data)
             <div class="table-responsive">
-                <form method="POST" action="{{ url('admin/settings/update/'.$data->id) }}" enctype="multipart/form-data">
+                <form onsubmit="handleSubmit(event)"  method="POST" action="{{ url('admin/settings/update/'.$data->id) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">

@@ -10,7 +10,7 @@
         <div class="card-body">
             
             <div class="table-responsive">
-            <form method="POST" action="{{ route('student.ssl.pay') }}" id="myForm"  enctype="multipart/form-data">
+            <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('student.ssl.pay') }}" id="myForm"  enctype="multipart/form-data">
                 @csrf
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <tbody>

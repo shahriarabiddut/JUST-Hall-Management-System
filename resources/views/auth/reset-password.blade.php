@@ -44,7 +44,7 @@
                       <p>{{ session('status') }} </p>
                   </div>
                   @endif
-                  <form method="POST" action="{{ route('password.store') }}">
+                  <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('password.store') }}" >
                     <!-- Password Reset Token -->
                     @csrf
                     <input type="hidden" name="token" value="{{ $request->route('token') }}">

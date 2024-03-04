@@ -709,4 +709,23 @@ class AllocatedSeatController extends Controller
             return redirect()->route('staff.roomallocation.index')->with('success', 'Today ' . $importedStudents . ' Room Allocation has been imported Successfully!')->with('danger-titles', $errorTitles);
         }
     }
+    public function generatePDF(string $rollno)
+    {
+        $mpdf = new \Mpdf\Mpdf(([
+            'default_font_size' => 12,
+            'default_font' => 'nikosh'
+        ]));
+        $Student = Student::all()->where('rollno', $rollno)->first();
+        if ($Student == null) {
+            return redirect()->route('staff.dashboard')->with('danger', 'Not Found');
+        }
+        $data = RoomRequest::all()->where('user_id', $Student->id)->where('hall_id', $this->hall_id)->first();
+        if ($data == null) {
+            return redirect()->route('staff.dashboard')->with('danger', 'Not Found');
+        }
+        $datahtml = $data->toArray();
+        $html = view('staff.roomallocation.rr', $datahtml)->render();
+        $mpdf->WriteHTML($html);
+        return $mpdf->output($rollno . ' - RoomRequest.pdf', 'D');
+    }
 }

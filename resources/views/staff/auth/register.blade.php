@@ -1,5 +1,5 @@
 <x-staff-guest-layout>
-    <form method="POST" action="{{ route('staff.register') }}">
+    <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('staff.register') }}">
         @csrf
 
         <!-- Name -->

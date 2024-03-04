@@ -21,7 +21,7 @@
                         <p>{{ session('danger') }} </p>
                     </div>
                 @endif
-            <form method="POST" action="{{ route('staff.email.store') }}" enctype="multipart/form-data">
+            <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('staff.email.store') }}" enctype="multipart/form-data">
                 @csrf
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <tbody>
