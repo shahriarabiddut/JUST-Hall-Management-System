@@ -15,7 +15,7 @@
                 <tbody>
                 <tr>
                     <th>Roll No <span class="text-danger">*</span></th>
-                    <td><input required name="rollno" type="number" class="form-control" value="{{ $user->rollno }}"></td>
+                    <td><input readonly name="rollno" type="number" class="form-control" value="{{ $user->rollno }}"></td>
                 </tr>
                 <tr>
                     <th>Full Name <span class="text-danger">*</span></th>

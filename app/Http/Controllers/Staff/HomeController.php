@@ -14,6 +14,7 @@ use App\Models\HallOption;
 use App\Models\FoodTimeHall;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\RoomIssue;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
@@ -216,5 +217,65 @@ class HomeController extends Controller
         $data->save();
 
         return redirect()->route('staff.settings.index')->with('success', 'Settings has been updated Successfully!');
+    }
+    public function roomallocationissue()
+    {
+        $data = RoomIssue::all()->where('hall_id', $this->hall_id);
+        return view('staff.roomallocation.issue', ['data' => $data]);
+    }
+    public function roomallocationissueview(string $id)
+    {
+        //
+        $data = RoomIssue::find($id);
+        if ($data == null) {
+            return redirect()->route('staff.roomallocation.issue')->with('danger', 'Not Found!');
+        }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.roomallocation.issue')->with('danger', 'Not Permitted!');
+        }
+        if ($data->flag != 1) {
+            $data->flag = 1;
+            $data->save();
+        }
+
+        return view('staff.roomallocation.issueshow', ['data' => $data]);
+    }
+    public function roomallocationissueaccept(string $id)
+    {
+        //
+        $data = RoomIssue::find($id);
+        if ($data == null) {
+            return redirect()->route('staff.roomallocation.issue')->with('danger', 'Not Found!');
+        }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.roomallocation.issue')->with('danger', 'Not Permitted!');
+        }
+        if ($data->status == 0) {
+            $data->status = 1;
+            $data->staff_id = Auth::guard('staff')->user()->id;
+            $data->save();
+            return view('staff.roomallocation.issueshow', ['data' => $data]);
+        } else {
+            return redirect()->route('staff.roomallocation.issue')->with('danger', 'Not Permitted!');
+        }
+    }
+    public function roomallocationissuereject(string $id)
+    {
+        //
+        $data = RoomIssue::find($id);
+        if ($data == null) {
+            return redirect()->route('staff.roomallocation.issue')->with('danger', 'Not Found!');
+        }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.roomallocation.issue')->with('danger', 'Not Permitted!');
+        }
+        if ($data->status == 0) {
+            $data->status = 1;
+            $data->staff_id = Auth::guard('staff')->user()->id;
+            $data->save();
+            return view('staff.roomallocation.issueshow', ['data' => $data]);
+        } else {
+            return redirect()->route('staff.roomallocation.issue')->with('danger', 'Not Permitted!');
+        }
     }
 }

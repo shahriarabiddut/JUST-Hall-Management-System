@@ -1,5 +1,5 @@
 <ul class="navbar-nav bg-gradient-success sidebar sidebar-dark accordion" id="accordionSidebar">
-
+@if (Auth::guard('staff')->user()->hall!= null)
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('staff.dashboard') }}">
         <div class="sidebar-brand-icon rotate-n-15">
@@ -11,7 +11,8 @@
         </div>
         <div class="sidebar-brand-text mx-3">Staff Panel</div>
     </a>
-
+    
+@endif
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
 
@@ -21,10 +22,11 @@
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
-@if (Auth::guard('staff')->user()->hall_id!=0 && Auth::guard('staff')->user()->hall_id!=null)
-    @if (Auth::guard('staff')->user()->type == 'provost')
     <!-- Divider -->
     <hr class="sidebar-divider">
+@if (Auth::guard('staff')->user()->hall!= null)
+@if (Auth::guard('staff')->user()->hall_id!=0 && Auth::guard('staff')->user()->hall_id!=null)
+    @if (Auth::guard('staff')->user()->type == 'provost')
     <!-- Heading -->
     <div class="sidebar-heading">
         Hall Rooms
@@ -108,7 +110,8 @@
                 <a class="collapse-item" href="{{ route('staff.roomallocation.index') }}">View All</a>
                 <a class="collapse-item" href="{{ route('staff.roomallocation.create') }}">Add new </a>
                 @endif
-                <a class="collapse-item" href="{{ route('staff.roomallocation.roomrequests') }}">Allocation Requests </a>
+                <a class="collapse-item" href="{{ route('staff.roomallocation.roomrequests') }}">Allocation Requests <span class="bg-danger text-white p-1">{{ App\Models\RoomRequest::all()->where('hall_id',Auth::guard('staff')->user()->hall_id)->where('flag',0)->count() }}</span> </a>
+                <a class="collapse-item" href="{{ route('staff.roomallocation.issue') }}">Room Leave/Change <span class="bg-danger text-white p-1">{{ App\Models\RoomIssue::all()->where('hall_id',Auth::guard('staff')->user()->hall_id)->where('flag',0)->count() }}</span> </a>
             </div>
         </div>
     </li>
@@ -261,5 +264,5 @@
     <!-- End Sidebar Toggler (Sidebar - Logout - CopyRight) -->
 
     
-
+    @endif
 </ul>

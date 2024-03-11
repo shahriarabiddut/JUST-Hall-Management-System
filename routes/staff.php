@@ -85,6 +85,11 @@ Route::middleware('staff')->prefix('staff')->name('staff.')->group(function () {
     Route::post('roomallocationadd/import-bulk', [AllocatedSeatController::class, 'handleImportAllocation'])->name('roomallocation.bulkUpload');
     // PDf
     Route::get('roomrequest/generate-pdf/{id}',  [AllocatedSeatController::class, 'generatePdf'])->name('generatepdf');
+    //Room Issue
+    Route::get('/roomallocationissue', [HomeController::class, 'roomallocationissue'])->name('roomallocation.issue');
+    Route::get('/roomallocationissue/{id}', [HomeController::class, 'roomallocationissueview'])->name('roomallocation.issueview');
+    Route::get('/roomallocationissueaccept/{id}', [HomeController::class, 'roomallocationissueaccept'])->name('roomallocation.issueacc');
+    Route::get('/roomallocationissuereject/{id}', [HomeController::class, 'roomallocationissuereject'])->name('roomallocation.issuerej');
     // Foodtime Crud
     Route::get('foodtime/{id}/active', [FoodTimeController::class, 'active']);
     Route::get('foodtime/{id}/disable', [FoodTimeController::class, 'disable']);

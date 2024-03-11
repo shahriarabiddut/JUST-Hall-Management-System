@@ -24,4 +24,8 @@ class RoomIssue extends Model
     {
         return $this->belongsTo(Staff::class, 'staff_id');
     }
+    function students()
+    {
+        return $this->belongsTo(Student::class, 'user_id');
+    }
 }
