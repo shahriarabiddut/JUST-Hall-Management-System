@@ -78,6 +78,7 @@ Route::middleware('staff')->prefix('staff')->name('staff.')->group(function () {
     Route::post('roomallocation/allocate/', [AllocatedSeatController::class, 'RoomRequestAllocate'])->name('roomallocation.RoomRequestAllocate');
     //RoomAllocation CRUD
     Route::get('roomallocation/{id}/delete', [AllocatedSeatController::class, 'destroy']);
+    // Route::get('roomallocationD/delete', [AllocatedSeatController::class, 'destroyAll']);
     Route::resource('roomallocation', AllocatedSeatController::class);
     // Room ALlocaton Using CSV
     Route::get('roomallocationadd/import-bulk', [AllocatedSeatController::class, 'importAllocation'])->name('roomallocation.bulk');

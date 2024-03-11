@@ -78,7 +78,7 @@
                             
                             
                             <td class="text-center">
-                                <a href="{{ url('admin/support/'.$d->id) }}" class="btn btn-warning btn-sm mb-1"><i class="fa fa-eye"> View</i></a> <br>
+                                <a href="{{ url('admin/support/'.$d->id) }}" class="btn btn-warning btn-sm mb-1" title="View Data"><i class="fa fa-eye"> View</i></a> <br>
                                 
                             </td>
 

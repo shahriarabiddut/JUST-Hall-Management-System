@@ -11,7 +11,11 @@
             <a href="{{ url('staff/payment') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h3>
         </div>
         <div class="card-body">
-            
+            @if ($errors->any())
+                @foreach ($errors->all() as $error)
+                   <p class="text-danger"> {{ $error }} </p>
+                @endforeach
+                @endif
             <div class="table-responsive">
             <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('staff.payment.store') }}" enctype="multipart/form-data"  id="myForm">
                 @csrf
@@ -30,11 +34,11 @@
                         </tr>
                             <tr>
                                 <th>Mobile</th>
-                                <td><input required id="inputField" name="mobileno" type="text" class="form-control"></td>
+                                <td><input required id="inputField" name="mobileno" type="text" class="form-control" maxlength="11" value="{{ old('mobileno')}}" pattern="[0-9]{11}"></td>
                             </tr>
                     <tr>
                         <th>Amount</th>
-                        <td><input id="myInput" required type="number" min="1" name="amount" type="text" class="form-control"></td>
+                        <td><input id="myInput" required type="number" min="1" name="amount" type="text" class="form-control" value="{{ old('amount')}}"></td>
                     </tr>
                     <tr>
                         <th>Payment Status <span class="text-danger">*</span></th>

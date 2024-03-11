@@ -47,7 +47,7 @@
                         </td>
                     </tr><tr>
                         <th>Phone Number<span class="text-danger">*</span></th>
-                        <td><input required name="phone" type="text" class="form-control" value="{{ $data->phone }}" maxlength="11"></td>
+                        <td><input required name="phone" type="text" class="form-control" value="{{ $data->phone }}" maxlength="11" pattern="[0-9]{11}"></td>
                     </tr>
                     <tr>
                         <th>Select User Type</th>

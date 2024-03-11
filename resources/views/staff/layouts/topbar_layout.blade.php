@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
       <!-- Sidebar Toggle (Topbar) -->
-      <button id="" class="btn btn-link d-md-none rounded-circle mr-3">
+      <button id="sidebarToggleTop" onclick="toggleSidebaar()" class="btn btn-link d-md-none rounded-circle mr-3">
         <i class="fa fa-bars"></i>
         </button>
     <h6 class="sidebar-brand-text mt-2" > 
@@ -10,6 +10,8 @@
         @isset($HallOption) {{ $HallOption[2]->value }} @endisset
     @endif
     </h6>
+
+    
     <script>
         if (/Mobi/.test(navigator.userAgent)) {
             window.onload = function () {
@@ -18,8 +20,6 @@
         };
         }
     </script>
-
-    
 
     <!-- Topbar Navbar -->
     <ul class="navbar-nav ml-auto">

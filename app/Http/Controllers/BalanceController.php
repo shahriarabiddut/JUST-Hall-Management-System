@@ -32,7 +32,7 @@ class BalanceController extends Controller
         $data->student_id = $id;
         $data->hall_id = $hall_id;
         $data->balance_amount = 0;
-
+        $data->status = 1;
         $data->save();
     }
     //Admin Index

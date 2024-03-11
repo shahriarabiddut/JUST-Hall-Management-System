@@ -50,7 +50,7 @@
                             <td>{{ count($d->roomtypeimages) }}</td>
                             
                             <td class="text-center">
-                                <a href="{{ url('staff/roomtype/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a></a>
+                                <a href="{{ url('staff/roomtype/'.$d->id) }}" class="btn btn-info btn-sm" title="View Data"><i class="fa fa-eye"></i></a></a>
                             </td>
 
                         </tr>

@@ -62,8 +62,10 @@ class AllocatedSeatController extends Controller
         $unstudents = DB::select("SELECT * FROM users WHERE id NOT IN (SELECT user_id FROM allocated_seats) OR hall_id = 0 AND hall_id = $this->hall_id");
         $data = [];
         foreach ($unstudents as $student) {
-            if ($student->hall_id == $this->hall_id || $student->hall_id == 0 || $student->hall_id == null) {
-                $data[] = $student;
+            if ($student->status == 1) {
+                if ($student->hall_id == $this->hall_id || $student->hall_id == 0 || $student->hall_id == null) {
+                    $data[] = $student;
+                }
             }
         }
         $students = $data;
@@ -99,6 +101,7 @@ class AllocatedSeatController extends Controller
         $data->user_id = $request->user_id;
         $data->position = $request->position;
         $data->hall_id = $this->hall_id;
+        $data->status = 1;
         $data->save();
         // Room Vacancy - 1
         $roomid = $request->room_id;
@@ -168,6 +171,9 @@ class AllocatedSeatController extends Controller
         if ($data->hall_id != $this->hall_id) {
             return redirect()->route('staff.roomallocation.index')->with('danger', 'Not Permitted!');
         }
+        if ($data->students->status != 1) {
+            return redirect()->route('staff.roomallocation.index')->with('danger', 'User is Disabled/Removed!');
+        }
         return view('staff.roomallocation.edit', ['data' => $data, 'students' => $students, 'rooms' => $rooms]);
     }
 
@@ -207,21 +213,24 @@ class AllocatedSeatController extends Controller
             $room->positions = $jsonData;
             //
             $room->save();
-            // Room Vacancy + 1 for old room
-            $roomoldid = $request->old_room_id;
-            $roomold = Room::find($roomoldid);
-            $roomVacant = $roomold->vacancy + 1;
-            $roomold->vacancy = $roomVacant;
-            //Room Vancacy Readded
-            // Add The position back to Room Positions for old room
-            $arrayRepresentation = json_decode($roomold->positions, true);
-            array_push($arrayRepresentation, (int)$request->old_position);
-            sort($arrayRepresentation);
-            $jsonData = json_encode($arrayRepresentation);
-            $roomold->positions = $jsonData;
+            if ($data->status == 1) {
 
-            //
-            $roomold->save();
+                // Room Vacancy + 1 for old room
+                $roomoldid = $request->old_room_id;
+                $roomold = Room::find($roomoldid);
+                $roomVacant = $roomold->vacancy + 1;
+                $roomold->vacancy = $roomVacant;
+                //Room Vancacy Readded
+                // Add The position back to Room Positions for old room
+                $arrayRepresentation = json_decode($roomold->positions, true);
+                array_push($arrayRepresentation, (int)$request->old_position);
+                sort($arrayRepresentation);
+                $jsonData = json_encode($arrayRepresentation);
+                $roomold->positions = $jsonData;
+
+                //
+                $roomold->save();
+            }
         }
         //Same Room Postion change
         if ($request->room_id == $request->old_room_id) {
@@ -232,17 +241,23 @@ class AllocatedSeatController extends Controller
             $filteredArray = array_diff($arrayRepresentation, array($request->position));
             $filteredArray = array_values($filteredArray);
             $jsonData = json_encode($filteredArray);
-            // Add The position back to Room Positions for old room
-            $arrayRepresentation = json_decode($jsonData, true);
-            array_push($arrayRepresentation, (int)$request->old_position);
-            sort($arrayRepresentation);
-            $jsonData = json_encode($arrayRepresentation);
-            $room->positions = $jsonData;
 
+            if ($data->status == 0) {
+                $roomVacant = $room->vacancy - 1;
+                $room->vacancy = $roomVacant;
+            } elseif ($request->old_position != $request->position) {
+                // Add The position back to Room Positions for old room
+                $arrayRepresentation = json_decode($jsonData, true);
+                array_push($arrayRepresentation, (int)$request->old_position);
+                sort($arrayRepresentation);
+                $jsonData = json_encode($arrayRepresentation);
+            }
+            $room->positions = $jsonData;
             //
             $room->save();
         }
         //
+        $data->status = 1;
         $data->save();
         //Saving History 
         $HistoryController = new HistoryController();
@@ -290,21 +305,70 @@ class AllocatedSeatController extends Controller
         //
         $room->save();
         //Room Request Clean
-        $data2 = RoomRequest::all()->where('user_id', $data->user_id)->where('room_id', $data->room_id)->first();
+        $data2 = RoomRequest::all()->where('user_id', $data->user_id)->first();
         if ($data2 != null) {
             $data2->allocated_seat_id = 0;
             $data2->status = 2;
             $data2->save();
         }
         //
-        $data->delete();
+        $data->status = 0;
+        $data->save();
+        // $data->delete();
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistoryHall($staff_id, 'delete', 'Student (' . $data->students->rollno . ' ) - ' . $data->students->name . ' , Room Allocation has been deleted Successfully!', $this->hall_id);
+        $HistoryController->addHistoryHall($staff_id, 'delete', 'Student (' . $data->students->rollno . ' ) - ' . $data->students->name . ' , Room Allocation has been removed successfully!', $this->hall_id);
         //Saved
-        return redirect('staff/roomallocation')->with('danger', 'Data has been deleted Successfully!');
+        return redirect('staff/roomallocation')->with('danger', 'Room Allocation has been removed successfully!');
     }
+    // public function destroyAll()
+    // {
+
+    //     $dataAll = AllocatedSeats::all()->where('hall_id', $this->hall_id);
+    //     if ($dataAll == null) {
+    //         return redirect()->route('staff.roomallocation.index')->with('danger', 'Not Found!');
+    //     }
+    //     foreach($dataAll as $data){
+    //     // User Data Update
+    //     $studentData = Student::find($data->user_id);
+    //     $studentData->hall_id = 0;
+    //     $studentData->save();
+    //     //Connect Balance Account
+    //     $dataBalance = Balance::all()->where('student_id', $studentData->id)->first();
+    //     $dataBalance->hall_id = 0;
+    //     $dataBalance->save();
+    //     // Room Vacancy + 1
+    //     $roomid = $data->room_id;
+    //     $room = Room::find($roomid);
+    //     $roomVacant = $room->vacancy + 1;
+    //     $room->vacancy = $roomVacant;
+    //     //Room Vancacy Readded
+    //     // Add The position back to Room Positions
+    //     $arrayRepresentation = json_decode($room->positions, true);
+    //     array_push($arrayRepresentation, $data->position);
+    //     sort($arrayRepresentation);
+    //     $jsonData = json_encode($arrayRepresentation);
+    //     $room->positions = $jsonData;
+    //     //
+    //     $room->save();
+    //     //Room Request Clean
+    //     $data2 = RoomRequest::all()->where('user_id', $data->user_id)->first();
+    //     if ($data2 != null) {
+    //         $data2->allocated_seat_id = 0;
+    //         $data2->status = 2;
+    //         $data2->save();
+    //     }
+    //     //
+    //     $data->delete();
+    //     // //Saving History 
+    //     // $HistoryController = new HistoryController();
+    //     // $staff_id = Auth::guard('staff')->user()->id;
+    //     // $HistoryController->addHistoryHall($staff_id, 'delete', 'Student (' . $data->students->rollno . ' ) - ' . $data->students->name . ' , Room Allocation has been deleted Successfully!', $this->hall_id);
+    //     // //Saved
+    //     }
+    //     return redirect('staff/roomallocation')->with('danger', 'Data has been deleted Successfully!');
+    // }
     //Room Allocation Requests
     public function roomrequests()
     {
@@ -622,50 +686,40 @@ class AllocatedSeatController extends Controller
                 $user = User::all()->where('rollno', $rollno)->first();
 
                 // Room Vacancy - 1
-                $room = Room::all()->where('title', $room_title)->first();
+                $room = Room::all()->where('title', $room_title)->where('hall_id', $this->hall_id)->first();
                 if ($room == null) {
-                    $errorTitles[] = $room_title . ' No Such Room Found';
+                    $errorTitles[] = 'Room No ' . $room_title . '! No Such Room Found';
                     $xyz = 0;
                 } elseif ($room->vacancy == 0) {
-                    $errorTitles[] = $room_title . ' No Vacancy found on Room';
+                    $errorTitles[] = ' No Vacancy found on Room no ' . $room_title . ' , ';
                     $xyz = 0;
                 }
                 if ($xyz != 0) {
                     $roomVacant = $room->vacancy - 1;
                     $room->vacancy = $roomVacant;
                     // Room Vancacy deleted
-                    if ($room->room_type_id == 7) {
-                        if ($position) {
-                            // Remove a specific position from the Room Positions
-                            $arrayRepresentation = json_decode($room->positions, true);
-                            $filteredArray = array_diff($arrayRepresentation, array($position));
-                            $filteredArray = array_values($filteredArray);
-                            $jsonData = json_encode($filteredArray);
-                            $room->positions = $jsonData;
-                            // Removed
-                        } else {
-                            $aposition = 0;
-                            // Remove a position from the Room Positions
-                            $arrayRepresentation = json_decode($room->positions, true);
-                            foreach ($arrayRepresentation as $key => $data) {
-                                if ($key == 0) {
-                                    $aposition = $data;
-                                }
-                            }
-                            $filteredArray = array_diff($arrayRepresentation, array($aposition));
-                            $filteredArray = array_values($filteredArray);
-                            $jsonData = json_encode($filteredArray);
-                            $room->positions = $jsonData;
-                            $position = $aposition;
-                            // Removed
-                        }
-                    } else {
+                    if ($position) {
                         // Remove a specific position from the Room Positions
                         $arrayRepresentation = json_decode($room->positions, true);
                         $filteredArray = array_diff($arrayRepresentation, array($position));
                         $filteredArray = array_values($filteredArray);
                         $jsonData = json_encode($filteredArray);
                         $room->positions = $jsonData;
+                        // Removed
+                    } else {
+                        $aposition = 0;
+                        // Remove a position from the Room Positions
+                        $arrayRepresentation = json_decode($room->positions, true);
+                        foreach ($arrayRepresentation as $key => $data) {
+                            if ($key == 0) {
+                                $aposition = $data;
+                            }
+                        }
+                        $filteredArray = array_diff($arrayRepresentation, array($aposition));
+                        $filteredArray = array_values($filteredArray);
+                        $jsonData = json_encode($filteredArray);
+                        $room->positions = $jsonData;
+                        $position = $aposition;
                         // Removed
                     }
                 }

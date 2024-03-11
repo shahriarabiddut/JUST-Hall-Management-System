@@ -34,7 +34,8 @@
                         <td>{{ $data->created_at->format("F j, Y H:i:s") }} </td>
                     </tr><tr>
                         <td colspan="2">
-                            <a href="{{ url('admin/roomallocation/'.$data->id.'/edit') }}" class="float-right btn btn-info btn-sm"><i class="fa fa-edit"> Edit {{ $data->title }} </i></a> 
+                            <a onclick="return confirm('Are You Sure?')" href="{{ url('admin/roomallocation/'.$data->id.'/delete') }}" class="btn btn-danger btn-sm m-1" title="Remove Data"><i class="fa fa-trash"> Delete Room Allocation</i></a>
+                            <a href="{{ url('admin/roomallocation/'.$data->id.'/edit') }}" class="float-right btn btn-info btn-sm m-1"><i class="fa fa-edit"> Edit {{ $data->title }} </i></a> 
                         </td>
                         
                     </tr>

@@ -38,7 +38,7 @@
                                 <td class="imgcol{{$img->id}}">
                                     <img width="200px" src="{{$img->img_src ? asset('storage/'.$img->img_src) : ''}}" alt="{{$img->img_alt ? asset('storage/'.$img->img_alt) : ''}}">
 
-                                    <p><button type="button" onclick="return confirm('Are You Sure You want to delete this image?')" class="btn btn-danger btn-sm delete-image" data-image-id="{{$img->id}}"><i class="fa fa-trash"></i></button></p>
+                                    <p><button type="button" onclick="return confirm('Are You Sure You want to delete this image?')" class="btn btn-danger btn-sm delete-image" data-image-id="{{$img->id}}" title="Remove Data"><i class="fa fa-trash"></i></button></p>
                                 </td>
                                 @endforeach
                                 

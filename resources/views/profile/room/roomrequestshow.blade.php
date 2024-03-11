@@ -5,7 +5,7 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h3 class="m-0 font-weight-bold text-primary">Room Request Details <a onclick="return confirm('Are You Sure?')" href="{{ route('student.roomrequest.destroy',$data->id) }}" class="btn btn-danger btn-sm ml-1 float-right mx-1"><i class="fa fa-trash"> Delete Request</i></a> <a href="{{ route('student.generatepdf',Auth::user()->rollno) }}" class="btn btn-info btn-sm ml-1 float-right mx-1"><i class="fa fa-print"> Download PDF </i></a>
+            <h3 class="m-0 font-weight-bold text-primary">Room Request Details <a onclick="return confirm('Are You Sure?')" href="{{ route('student.roomrequest.destroy',$data->id) }}" class="btn btn-danger btn-sm ml-1 float-right mx-1" title="Remove Data"><i class="fa fa-trash"> Delete Request</i></a> <a href="{{ route('student.generatepdf',Auth::user()->rollno) }}" class="btn btn-info btn-sm ml-1 float-right mx-1"><i class="fa fa-print"> Download PDF </i></a>
             </h3>
             
         </div>
@@ -226,7 +226,7 @@
                     </tr>
                     <tr>
                     <td colspan="2">
-                        <a onclick="return confirm('Are You Sure?')" href="{{ route('student.roomrequestpayment.destroy',$dataPayment->id) }}" class="btn btn-danger btn-sm ml-1"><i class="fa fa-trash"></i></a>
+                        <a onclick="return confirm('Are You Sure?')" href="{{ route('student.roomrequestpayment.destroy',$dataPayment->id) }}" class="btn btn-danger btn-sm ml-1" title="Remove Data"><i class="fa fa-trash"></i></a>
                     </td>
                     </tr>
                     @endif

@@ -21,7 +21,7 @@
                     <td><input required name="email" type="text" class="form-control" value="{{ $user->email }}"></td>
                 </tr><tr>
                     <th>Phone Number <span class="text-danger">*</span></th>
-                    <td><input required name="mobile" type="text" class="form-control" value="{{ $user->phone }}" maxlength="11"></td>
+                    <td><input required name="mobile" type="text" class="form-control" value="{{ $user->phone }}"  maxlength="11" pattern="[0-9]{11}"></td>
                 </tr><tr>
                     <th>Photo</th>
                     <td><input name="photo" type="file">

@@ -16,7 +16,9 @@
             </h4>
         </div>
         <div class="card-body">
-            
+            @if (Auth::user()->allocatedRoom->status==0)
+                Room Allocation Removed from Hall!
+            @else
             <div class="table-responsive">
                 <table class="table table-bordered" width="100%">
                         <tr>
@@ -42,7 +44,9 @@
                                     <table>
                                         @foreach ( $rooms->allocatedseats as $key => $allocatedseats  )
                                         <tr>
+                                            @if($allocatedseats->status!=0)
                                             <td width="50%">{{ $allocatedseats->position }}.{{ $allocatedseats->students->name }} - {{ $allocatedseats->students->rollno }} </td>
+                                            @endif
                                         </tr>
                                         @endforeach
                                       </table>
@@ -52,6 +56,7 @@
                         
                 </table>
             </div>
+            @endif
         </div>
     </div>
 @else

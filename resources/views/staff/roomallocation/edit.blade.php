@@ -21,22 +21,32 @@
                         <tr>
                             <th width="30%" >Student</th>
                             <td>
-                                @foreach ($students as $st)
-                                   @if ($data->user_id==$st->id)
-                                   {{$st->name}} - {{$st->rollno}}
-                                    @endif
-                                @endforeach
+                            @if ($data->students==null)
+                                User Deleted
+                            @else
+                                {{ $data->students->name }} - {{ $data->students->rollno }} @if ($data->status==0)[Old Room no - @if  ($data->rooms==null) Room Deleted @else {{ $data->rooms->title }} @endif and Seat No - {{ $data->position }}]@endif
+                            @endif
                             </td>
                         </tr>
+
                     <tr>
                         <th>Select RoomNo</th>
                             <td>
+                                @if ($data->status==1)
                                 <select required name="room_id" class="form-control room_id" id="select_room" onchange="fetchAndPopulateData()">
                                     <option value="0">--- Select RoomNo ---</option>
                                     @foreach ($rooms as $rm)
                                     <option @if ($data->room_id==$rm->id)@selected(true) @endif value="{{$rm->id}}">{{$rm->title}}  @if ($data->room_id==$rm->id)(old room)@endif</option>
                                     @endforeach
                                 </select>
+                                @else
+                                <select required name="room_id" class="form-control room_id" id="select_room" onchange="fetchAndPopulateData2()">
+                                    <option value="0">--- Select RoomNo ---</option>
+                                    @foreach ($rooms as $rm)
+                                    <option value="{{$rm->id}}">{{$rm->title}}</option>
+                                    @endforeach
+                                </select>
+                                @endif
                             </td>
                     </tr>
                     <tr>
@@ -99,6 +109,35 @@
                     option.text = {{ $data->position }} + '(Old Position)';
                     selectField.add(option);
                 }
+                dataArray.forEach(function(value) {
+                    let option = document.createElement("option");
+                    option.value = value;
+                    option.text = value;
+                    selectField.add(option);
+                });
+                
+            })
+            .catch(error => console.error('Error:', error));
+    }
+    function fetchAndPopulateData2() {
+        let selectedValue = document.getElementById("select_room").value;
+
+        // Make Ajax request to fetch data
+        fetch('{{ url("staff/room") }}/postion/' + selectedValue)
+            .then(response => response.json())
+            .then(data => {
+                // Update the options of the second select field
+                let secondSelectField = document.getElementById("positions");
+                secondSelectField.innerHTML = ""; // Clear existing options
+                let arrayString = data;
+
+                // Parse the string into a JavaScript array
+                let dataArray = JSON.parse(arrayString);
+
+                // Get the select field element
+                let selectField = document.getElementById("positions");
+
+                // Populate the select field with options based on the array
                 dataArray.forEach(function(value) {
                     let option = document.createElement("option");
                     option.value = value;

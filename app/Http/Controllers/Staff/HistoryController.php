@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Staff;
 
+use Carbon\Carbon;
 use App\Models\Staff;
 use App\Models\History;
 use Illuminate\Http\Request;
@@ -142,8 +143,9 @@ class HistoryController extends Controller
     }
     public function chartData()
     {
+        $currentMonth = Carbon::now()->month;
         //Provost Dashboard - bar chart
-        $histories = History::all()->where('hall_id', $this->hall_id);
+        $histories = History::where('hall_id', $this->hall_id)->whereMonth('created_at', $currentMonth)->get();
         $staff = [];
         foreach ($histories as $history) {
             if (isset($staff[$history->staff_id])) {

@@ -74,9 +74,9 @@
                             
                             
                             <td class="text-center">
-                                <a href="{{ url('staff/staff/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
+                                <a href="{{ url('staff/staff/'.$d->id) }}" class="btn btn-info btn-sm" title="View Data"><i class="fa fa-eye"></i></a>
                                 <a href="{{ url('staff/staff/'.$d->id.'/edit') }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
-                                <a onclick="return confirm('Are You Sure?')" href="{{ url('staff/staff/'.$d->id.'/delete') }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                <a onclick="return confirm('Are You Sure?')" href="{{ url('staff/staff/'.$d->id.'/delete') }}" class="btn btn-danger btn-sm" title="Remove Data"><i class="fa fa-trash"></i></a>
                             </td>
 
                         </tr>

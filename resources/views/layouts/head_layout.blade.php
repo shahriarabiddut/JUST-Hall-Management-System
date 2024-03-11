@@ -19,4 +19,15 @@
         <!-- Custom styles for this template-->
     <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
     
+<script>
+  function toggleSidebar() {
+    let sidebar = document.querySelector('#accordionSidebar');
+    if (sidebar.classList.contains('toggled')) {
+      sidebar.classList.remove('toggled');
+    } else {
+      sidebar.classList.add('toggled');
+    }
+    
+  }
+</script>
 </head>

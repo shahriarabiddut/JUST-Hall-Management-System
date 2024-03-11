@@ -4,12 +4,12 @@
 
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Allocate Student From CSV File</h1>
+    <h2 class="h3 mb-2 text-gray-800">Allocate Student From CSV File</h1>
 
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary"> Upload the CSV File
+            <h3 class="m-0 font-weight-bold text-primary"> Upload the CSV File
             <a href="{{ route('staff.roomallocation.index') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h6>
         </div>
         <div class="card-body">
@@ -34,7 +34,7 @@
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" class="btn btn-primary">Upload</button>
                         </td>
                     </tr>
                     </tbody>

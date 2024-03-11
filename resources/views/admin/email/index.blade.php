@@ -67,8 +67,8 @@
                             <td>{{ $d->created_at }}</td>
                             
                             <td class="text-center">
-                                <a href="{{ url('admin/email/'.$d->id) }}" class="btn btn-info btn-sm mb-1"><i class="fa fa-eye"></i></a> <br> 
-                                <a onclick="return confirm('Are You Sure?')" href="{{ url('admin/email/'.$d->id.'/delete') }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                <a href="{{ url('admin/email/'.$d->id) }}" class="btn btn-info btn-sm mb-1" title="View Data"><i class="fa fa-eye"></i></a> <br> 
+                                <a onclick="return confirm('Are You Sure?')" href="{{ url('admin/email/'.$d->id.'/delete') }}" class="btn btn-danger btn-sm" title="Remove Data"><i class="fa fa-trash"></i></a>
                             </td>
 
                         </tr>

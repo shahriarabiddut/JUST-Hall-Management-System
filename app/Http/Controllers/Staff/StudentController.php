@@ -246,16 +246,18 @@ class StudentController extends Controller
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
         if ($AllocatedSeat != null) {
-            $HistoryController->addHistoryHall($staff_id, 'delete', 'Student (' . $data->rollno . ' ) - ' . $data->name . '  and Associated Balance Account has been deleted Successfully! Last Balance was ' . $BalanceAccount->balance_amount . ' . And Allocated Seat no was ' . $AllocatedSeat->position . ' in Room No ' . $AllocatedSeat->rooms->title . ' .', $this->hall_id);
-            $AllocatedSeatController = new AllocatedSeatController();
-            $AllocatedSeatController->destroy($AllocatedSeat->id);
+            $HistoryController->addHistoryHall($staff_id, 'delete', 'Student (' . $data->rollno . ' ) - ' . $data->name . '  and Associated Balance Account has been removed Successfully! Last Balance was ' . $BalanceAccount->balance_amount . ' . And Allocated Seat no was ' . $AllocatedSeat->position . ' in Room No ' . $AllocatedSeat->rooms->title . ' .', $this->hall_id);
+            $AllocatedSeat->status = 0;
+            $AllocatedSeat->save();
         } else {
-            $HistoryController->addHistoryHall($staff_id, 'delete', 'Student (' . $data->rollno . ' ) - ' . $data->name . '  and Associated Balance Account has been deleted Successfully! Last Balance was ' . $BalanceAccount->balance_amount . ' . And No seat was Allocated.', $this->hall_id);
+            $HistoryController->addHistoryHall($staff_id, 'delete', 'Student (' . $data->rollno . ' ) - ' . $data->name . '  and Associated Balance Account has been removed Successfully! Last Balance was ' . $BalanceAccount->balance_amount . ' . And No seat was Allocated.', $this->hall_id);
         }
         //Saved
-        $data->delete();
-        $BalanceAccount->delete();
-        return redirect()->route('staff.student.index')->with('danger', 'Student data and Associated Balance Account and Allocation data has been deleted Successfully!');
+        $data->status = 0;
+        $data->save();
+        $BalanceAccount->status = 0;
+        $BalanceAccount->save();
+        return redirect()->route('staff.student.index')->with('danger', 'Student data and Associated Balance Account and Allocation data has been removed Successfully!');
     }
 
     // Import Bilk users from csv
@@ -270,6 +272,12 @@ class StudentController extends Controller
 
     public function handleImportUser(Request $request)
     {
+        if (Auth::guard('staff')->user()->hall_id != 0) {
+            $gender = Auth::guard('staff')->user()->hall->type;
+        } else {
+            $gender = 'N/A';
+        }
+
         if (Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'staff') {
             return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
         }
@@ -284,12 +292,21 @@ class StudentController extends Controller
         $length = count($rows);
         $importedStudents = 0;
         $errorEmails = [];
+        // dd( $rows);
         foreach ($rows as $key => $row) {
             if ($key != $length - 1) {
                 $row = array_combine($header, $row);
-                // dd($row);
-                $email = $row['email'];
+                if ($request->email) {
+                    $email = $row['email'];
+                }
                 $rollno = $row['rollno'];
+                if ($request->email == 1 || $request->email == 0) {
+                    $mobile = preg_replace('/\D/', '', $row['mobile']);
+                } else {
+                    $mobile = 0;
+                }
+
+                // dd($mobile);
                 //check ms or not
                 if (preg_match('/^\d+$/', $rollno)) {
                     $ms = 0;
@@ -298,34 +315,46 @@ class StudentController extends Controller
                 }
                 //
                 $rollnoMain = str_replace(' ', '', $rollno);
-                $data = Student::where('email', $email)->first();
-                $data2 = Student::where('rollno', $rollnoMain)->first();
-                if ($data == null && $data2 == null) {
-                    $StudentData =  Student::create([
-                        'rollno' => $rollnoMain,
-                        'name' => $row['name'],
-                        'email' => $email,
-                        'dept' => $row['dept'],
-                        'session' => $row['session'],
-                        'ms' => $ms,
-                        'password' => bcrypt($row['rollno']),
-                        'hall_id' => $this->hall_id,
-                    ]);
-                    //Creating Balance account for student
-                    $BalanceController = new BalanceController();
-                    $BalanceController->store($StudentData->id, $this->hall_id);
-                    //
-                    $importedStudents++;
-                    // Add History 
-                    $HistoryController = new HistoryController();
-                    $staff_id = Auth::guard('staff')->user()->id;
-                    $HistoryController->addHistoryHall($staff_id, 'add', 'Student (' . $StudentData->rollno . ' ) - ' . $StudentData->name . ' have been added Successfully!', $this->hall_id);
-                    //Saved
+                if ($request->email) {
+                    $data = Student::where('email', $email)->first();
+                    $data2 = Student::where('rollno', $rollnoMain)->first();
                 } else {
-                    if ($data != null) {
-                        $errorEmails[] = $email;
+                    $data = Student::where('rollno', $rollnoMain)->first();
+                    $data2 = $data;
+                }
+                if ($data == null && $data2 == null) {
+                    if ($data2 == null) {
+                        $StudentData =  new Student();
+                        $StudentData->name = $row['name'];
+                        $StudentData->dept = $row['dept'];
+                        $StudentData->session = $row['session'];
+                        if ($request->email) {
+                            $StudentData->email = $email;
+                        }
+                        $StudentData->mobile = $mobile;
+                        $StudentData->rollno = $rollnoMain;
+                        $StudentData->password = bcrypt($row['rollno']);
+                        $StudentData->ms = $ms;
+                        $StudentData->gender = $gender;
+                        $StudentData->hall_id = $this->hall_id;
+                        $StudentData->status = 1;
+                        $StudentData->save();
+                        //Creating Balance account for student
+                        $BalanceController = new BalanceController();
+                        $BalanceController->store($StudentData->id, $this->hall_id);
+                        //
+                        $importedStudents++;
+                        // Add History 
+                        $HistoryController = new HistoryController();
+                        $staff_id = Auth::guard('staff')->user()->id;
+                        $HistoryController->addHistoryHall($staff_id, 'add', 'Student (' . $StudentData->rollno . ' ) - ' . $StudentData->name . ' have been added Successfully!', $this->hall_id);
+                        //Saved
                     } else {
-                        $errorEmails[] = 'rollno :' . $rollno;
+                        if ($data != null && $request->email) {
+                            $errorEmails[] = $email;
+                        } else {
+                            $errorEmails[] = 'rollno :' . $rollno;
+                        }
                     }
                 }
             }

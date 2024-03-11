@@ -76,18 +76,23 @@
                     </tfoot>
                     <tbody>
                         @if($data)
+                        @php $i=1; @endphp
                         @foreach ($data as $key=> $d)
                         <tr>
-                            <td>{{ ++$key }}</td>
+                            @if ($d->status==0)
+                            <td class="bg-danger text-white">
+                                @else
+                            <td class="bg-success text-white">
+                                @endif
+                            {{ $i++ }}</td>
                             <td><img width="100"
                                 class=""
                                 src="{{$d->photo ? asset('storage/'.$d->photo) : asset('images/user.png')}}"
                                 alt=""
                             /></td>
-                            <td>{{ $d->rollno }}
-                            
-                            </td>
-                            <td>{{ $d->name }}</td>
+                            <td>{{ $d->rollno }} </td>
+                            <td>{{ $d->name }} @if($d->mobile!=0) - ({{ $d->mobile }}) @endif
+                                </td>
                             <td>
                                 @if ($d->allocatedRoom)
                                 (Room No - {{ $d->allocatedRoom->rooms->title }})
@@ -99,10 +104,10 @@
                             
                             
                             <td class="text-center">
-                                <a href="{{ url('staff/student/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
+                                <a href="{{ url('staff/student/'.$d->id) }}" class="btn btn-info btn-sm m-1" title="View Data"><i class="fa fa-eye"></i></a>
                                 @if (Auth::guard('staff')->user()->type == 'provost' || Auth::guard('staff')->user()->type == 'aprovost')
-                                <a href="{{ url('staff/student/'.$d->id.'/edit') }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
-                                <a onclick="return confirm('Are You Sure?')" href="{{ url('staff/student/'.$d->id.'/delete') }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                <a href="{{ url('staff/student/'.$d->id.'/edit') }}" class="btn btn-primary btn-sm m-1"><i class="fa fa-edit"></i></a>
+                                <a onclick="return confirm('Are You Sure?')" href="{{ url('staff/student/'.$d->id.'/delete') }}" class="btn btn-danger btn-sm m-1" title="Remove Data"><i class="fa fa-trash"></i></a>
                                 @endif
                             </td>
 

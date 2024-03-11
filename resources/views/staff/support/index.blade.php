@@ -84,7 +84,7 @@
                             
                             
                             <td class="text-center">
-                                <a href="{{ url('staff/support/'.$d->id) }}" class="btn btn-warning btn-sm mb-1"><i class="fa fa-eye"> View</i></a> <br>
+                                <a href="{{ url('staff/support/'.$d->id) }}" class="btn btn-warning btn-sm mb-1" title="View Data"><i class="fa fa-eye"> View</i></a> <br>
                                 @if ($d->status != '1')
                                     @if ($d->repliedby)
                                     <a href="{{ url('staff/support/'.$d->id.'/reply') }}" class="btn btn-info btn-sm"><i class="fa fa-reply">Update Reply</i></a>

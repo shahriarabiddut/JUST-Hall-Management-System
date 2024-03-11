@@ -52,4 +52,8 @@ class User extends Authenticatable  implements MustVerifyEmail
     {
         return $this->hasOne(RoomRequest::class, 'user_id');
     }
+    function allocatedRoom()
+    {
+        return $this->hasOne(AllocatedSeats::class, 'user_id');
+    }
 }

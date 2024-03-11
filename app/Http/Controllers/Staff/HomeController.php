@@ -188,8 +188,8 @@ class HomeController extends Controller
         if ($data->id != $this->hall_id) {
             return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized Access!');
         }
-        $data->print = $request->print;
-        $data->payment = $request->payment;
+        $data->enable_print = $request->print;
+        $data->enable_payment = $request->payment;
         $data->secret = $request->secret;
         $data->fixed_cost = $request->fixed_cost;
         $data->fixed_cost_masters = $request->fixed_cost_masters;

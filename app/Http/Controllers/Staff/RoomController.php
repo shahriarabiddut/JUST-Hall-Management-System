@@ -6,6 +6,7 @@ use App\Models\Room;
 use App\Models\RoomType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\AllocatedSeats;
 use Illuminate\Support\Facades\Auth;
 
 class RoomController extends Controller
@@ -151,13 +152,23 @@ class RoomController extends Controller
         if ($data->hall_id != $this->hall_id) {
             return redirect()->route('staff.rooms.index')->with('danger', 'Not Permitted!');
         }
-        $data->delete();
-        //Saving History 
-        $HistoryController = new HistoryController();
-        $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistoryHall($staff_id, 'delete', 'Room ' . $data->title . ' has been deleted Successfully!', $this->hall_id);
-        //Saved
-        return redirect()->route('staff.rooms.index')->with('danger', 'Room has been deleted Successfully!');
+        $dataAllocatedSeats = AllocatedSeats::all()->where('room_id', $id);
+        if (count($dataAllocatedSeats) != 0) {
+            //Saving History 
+            $HistoryController = new HistoryController();
+            $staff_id = Auth::guard('staff')->user()->id;
+            $HistoryController->addHistoryHall($staff_id, 'delete', 'Room ' . $data->title . ' cannot be deleted!', $this->hall_id);
+            //Saved
+            return redirect()->route('staff.rooms.index')->with('danger', 'Room cannot be deleted , Room Allocation Found for Students!');
+        } else {
+            $data->delete();
+            //Saving History 
+            $HistoryController = new HistoryController();
+            $staff_id = Auth::guard('staff')->user()->id;
+            $HistoryController->addHistoryHall($staff_id, 'delete', 'Room ' . $data->title . ' has been deleted Successfully!', $this->hall_id);
+            //Saved
+            return redirect()->route('staff.rooms.index')->with('danger', 'Room has been deleted Successfully!');
+        }
     }
     // Import Bilk users from csv
     public function importRoom()
@@ -198,7 +209,7 @@ class RoomController extends Controller
                 $jsonData = json_encode($positions);
                 $positions = $jsonData;
                 //
-                $data = Room::where('title', $title)->first();
+                $data = Room::where('title', $title)->where('hall_id', $this->hall_id)->first();
 
                 $titleMain = str_replace(' ', '', $row['title']);
                 if ($data == null) {
@@ -209,7 +220,7 @@ class RoomController extends Controller
                         'totalseats' => $totalseats,
                         'vacancy' => $totalseats,
                         'positions' => $positions,
-                        'hall_id' => $this->hall_id
+                        'hall_id' => $this->hall_id,
                     ]);
                     $importedStudents++;
                 } elseif ($data->totalseats < $totalseats && $data->hall_id == $this->hall_id) {

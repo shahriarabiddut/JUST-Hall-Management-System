@@ -82,7 +82,7 @@
 
                         <td class="text-center">
 
-                            <a  title="View Request" href="{{ url('admin/roomallocation/roomrequests/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
+                            <a  title="View Request" href="{{ url('admin/roomallocation/roomrequests/'.$d->id) }}" class="btn btn-info btn-sm" title="View Data"><i class="fa fa-eye"></i></a>
                         </td>
 
                     </tr>

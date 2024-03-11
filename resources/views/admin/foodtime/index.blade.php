@@ -64,7 +64,7 @@
                             @endswitch
                             
                             <td class="text-center">
-                                <a href="{{ url('admin/foodtime/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye">View </i></a>
+                                <a href="{{ url('admin/foodtime/'.$d->id) }}" class="btn btn-info btn-sm" title="View Data"><i class="fa fa-eye">View </i></a>
                                 <a href="{{ url('admin/foodtime/'.$d->id.'/edit') }}" class="btn btn-secondary btn-sm mr-1"><i class="fa fa-edit"> Edit </i></a> 
                                 @switch($d->status)
                                 @case(1)

@@ -84,7 +84,7 @@
                             @endswitch
                             
                             <td class="text-center">
-                                <a href="{{ url('admin/food/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye">View </i></a>
+                                <a href="{{ url('admin/food/'.$d->id) }}" class="btn btn-info btn-sm" title="View Data"><i class="fa fa-eye">View </i></a>
                                 @switch($d->status)
                                 @case(1)
                                 <a onclick="return confirm('Are You Sure?')" href="{{ url('admin/food/'.$d->id.'/disable') }}" class="btn btn-danger btn-sm"><i class="fa fa-ban">Disable</i></a>

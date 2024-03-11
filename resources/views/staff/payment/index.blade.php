@@ -77,7 +77,7 @@
                             @endswitch
                             
                             <td class="text-center">
-                                <a href="{{ url('staff/payment/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
+                                <a href="{{ url('staff/payment/'.$d->id) }}" class="btn btn-info btn-sm" title="View Data"><i class="fa fa-eye"></i></a>
                                 @if($d->status == 'Accepted' || $d->status == 'Rejected')
                                 @else
                                 <a href="{{ url('staff/payment/'.$d->id.'/accept') }}" class="btn btn-success btn-sm"><i class="fa fa-check"></i></a>

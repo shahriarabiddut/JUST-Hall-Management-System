@@ -74,7 +74,7 @@
                             
                             
                             <td class="text-center">
-                                <a href="{{ url('student/order/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye">View </i></a>
+                                <a href="{{ url('student/order/'.$d->id) }}" class="btn btn-info btn-sm" title="View Data"><i class="fa fa-eye">View </i></a>
                             </td>
 
                         </tr>

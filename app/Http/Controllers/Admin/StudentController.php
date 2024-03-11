@@ -169,13 +169,16 @@ class StudentController extends Controller
     // Import Bilk users from csv
     public function importUser()
     {
-        return view('admin.student.importUser');
+        $hall = Hall::all()->where('status', 1);
+        return view('admin.student.importUser', ['halls' => $hall]);
     }
 
     public function handleImportUser(Request $request)
     {
         $validator = $request->validate([
             'file' => 'required',
+            'hall_id' => 'required|not_in:0',
+            'email' => 'required',
         ]);
         $file = $request->file('file');
         $csvData = file_get_contents($file);
@@ -184,13 +187,23 @@ class StudentController extends Controller
         $length = count($rows);
         $importedStudents = 0;
         $errorEmails = [];
+        $hall_id = $request->hall_id;
+        $hall = Hall::find($hall_id);
+        $gender = $hall->type;
         foreach ($rows as $key => $row) {
             if ($key != $length - 1) {
                 $row = array_combine($header, $row);
-                // dd($row);
-                $email = $row['email'];
+                if ($request->email) {
+                    $email = $row['email'];
+                }
                 $rollno = $row['rollno'];
-                $hall_id = $row['hall'];
+                if ($request->email == 1 || $request->email == 0) {
+                    $mobile = preg_replace('/\D/', '', $row['mobile']);
+                } else {
+                    $mobile = 0;
+                }
+
+                // dd($mobile);
                 //check ms or not
                 if (preg_match('/^\d+$/', $rollno)) {
                     $ms = 0;
@@ -199,29 +212,41 @@ class StudentController extends Controller
                 }
                 //
                 $rollnoMain = str_replace(' ', '', $rollno);
-                $data = Student::where('email', $email)->first();
-                $data2 = Student::where('rollno', $rollnoMain)->first();
-                if ($data == null && $data2 == null) {
-                    $StudentData =  Student::create([
-                        'rollno' => $rollnoMain,
-                        'name' => $row['name'],
-                        'email' => $email,
-                        'dept' => $row['dept'],
-                        'session' => $row['session'],
-                        'ms' => $ms,
-                        'password' => bcrypt($row['rollno']),
-                        'hall_id' => $hall_id,
-                    ]);
-                    //Creating Balance account for student
-                    $BalanceController = new BalanceController();
-                    $BalanceController->store($StudentData->id, $hall_id);
-                    //
-                    $importedStudents++;
+                if ($request->email) {
+                    $data = Student::where('email', $email)->first();
+                    $data2 = Student::where('rollno', $rollnoMain)->first();
                 } else {
-                    if ($data != null) {
-                        $errorEmails[] = $email;
+                    $data = Student::where('rollno', $rollnoMain)->first();
+                    $data2 = $data;
+                }
+                if ($data == null && $data2 == null) {
+                    if ($data2 == null) {
+                        $StudentData =  new Student();
+                        $StudentData->name = $row['name'];
+                        $StudentData->dept = $row['dept'];
+                        $StudentData->session = $row['session'];
+                        if ($request->email) {
+                            $StudentData->email = $email;
+                        }
+                        $StudentData->mobile = $mobile;
+                        $StudentData->rollno = $rollnoMain;
+                        $StudentData->password = bcrypt($row['rollno']);
+                        $StudentData->ms = $ms;
+                        $StudentData->gender = $gender;
+                        $StudentData->hall_id = $hall_id;
+                        $StudentData->status = 1;
+                        $StudentData->save();
+                        //Creating Balance account for student
+                        $BalanceController = new BalanceController();
+                        $BalanceController->store($StudentData->id, $hall_id);
+                        //
+                        $importedStudents++;
                     } else {
-                        $errorEmails[] = 'rollno :' . $rollno;
+                        if ($data != null && $request->email) {
+                            $errorEmails[] = $email;
+                        } else {
+                            $errorEmails[] = 'rollno :' . $rollno;
+                        }
                     }
                 }
             }

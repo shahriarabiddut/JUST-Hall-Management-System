@@ -40,7 +40,7 @@ class deductBalance extends Command
         $fixed_cost_charge = $hall->fixed_cost;
         $masters_fixed_cost_charge = $hall->fixed_cost_masters;
         //
-        $users = Student::all()->where('hall_id', $hall_id);
+        $users = Student::all()->where('hall_id', $hall_id)->where('status', '1');
         foreach ($users as $user) {
             $student_id = $user->id;
             $student_email = $user->email;

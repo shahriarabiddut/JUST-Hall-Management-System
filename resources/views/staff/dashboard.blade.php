@@ -14,7 +14,7 @@
         <p> {{ App\Models\RoomRequest::where('flag', 0)->where('hall_id', Auth::guard('staff')->user()->hall_id)->count(); }} Unread Room Allocation Request</p>
     </div>
     @endif
-@endif
+
 <!-- Content Row -->
 <div class="row">
 
@@ -27,7 +27,7 @@
                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                             Total Orders {{  $nextDate }}</div> 
                             
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ App\Models\Order::all()->where('date','=',$nextDate)->count() }}</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ App\Models\Order::all()->where('hall_id',Auth::guard('staff')->user()->hall_id)->where('date','=',$nextDate)->count() }}</div>
                     </div>
                     <div class="col-auto">
                         <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -45,7 +45,7 @@
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                             Students</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ App\Models\Student::count() }}</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ App\Models\Student::all()->where('hall_id',Auth::guard('staff')->user()->hall_id)->count() }}</div>
                     </div>
                     <div class="col-auto">
                         <i class="fas fa-users fa-2x text-gray-300"></i>
@@ -65,7 +65,7 @@
                         </div>
                         <div class="row no-gutters align-items-center">
                             <div class="col-auto">
-                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ App\Models\Room::count() }}</div>
+                                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ App\Models\Room::all()->where('hall_id',Auth::guard('staff')->user()->hall_id)->count() }}</div>
                             </div>
                             
                         </div>
@@ -86,7 +86,7 @@
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                             Staff</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ App\Models\Staff::count() }}</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ App\Models\Staff::all()->where('hall_id',Auth::guard('staff')->user()->hall_id)->count() }}</div>
                     </div>
                     <div class="col-auto">
                         <i class="fas fa-users fa-2x text-gray-300"></i>
@@ -95,7 +95,28 @@
             </div>
         </div>
     </div>
+@if(Auth::guard('staff')->user()->type != 'staff' )
+    <!-- Bookings (Monthly) Card Example -->
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                            Room Applications</div> 
+                            
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ App\Models\RoomRequest::all()->where('hall_id',Auth::guard('staff')->user()->hall_id)->count() }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-fw fa-hotel fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+@endif
+@endif
 <!-- Content Row For Order Data of Next Day -->
 @if(Auth::guard('staff')->user()->type != 'provost')
 <div class="row">

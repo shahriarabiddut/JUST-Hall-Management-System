@@ -91,7 +91,7 @@
 
                             <td class="text-center">
 
-                                <a  title="View Request" href="{{ url('staff/roomallocation/roomrequests/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
+                                <a  title="View Request" href="{{ url('staff/roomallocation/roomrequests/'.$d->id) }}" class="btn btn-info btn-sm" title="View Data"><i class="fa fa-eye"></i></a>
                                 @if (Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'staff')
                                 @else
                                 @if ($d->status!='1' || $d->status!='4')

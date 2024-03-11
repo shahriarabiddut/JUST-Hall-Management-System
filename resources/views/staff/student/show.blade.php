@@ -52,6 +52,12 @@
                             <th>Address</th>
                             <td>{{ $data->address }}</td>
                         </tr>
+                        @if ($data->status==0)
+                        <tr>
+                            <th>Data Remove Date </th>
+                            <td>{{ $data->updated_at->format("F j, Y H:i:s") }} </td>
+                        </tr>
+                        @endif
                         @if (Auth::guard('staff')->user()->type == 'provost' || Auth::guard('staff')->user()->type == 'aprovost')
                         <tr>
                             <td colspan="2">

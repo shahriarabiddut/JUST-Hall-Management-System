@@ -110,7 +110,7 @@
                             <td>{{ $d->created_at->format("F j, Y") }}</td>
                             
                             <td class="text-center">
-                                <a href="{{ route('staff.history.show',$d->id) }}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i></a>
+                                <a href="{{ route('staff.history.show',$d->id) }}" class="btn btn-primary btn-sm" title="View Data"><i class="fa fa-eye"></i></a>
                             </td>
 
                         </tr>

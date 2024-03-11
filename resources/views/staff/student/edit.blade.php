@@ -5,7 +5,7 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h3 class="m-0 font-weight-bold text-primary">Editing Student: {{ $data->name }}
-            <a href="{{ route('staff.student.show',$data->id) }}" class="float-right btn btn-info btn-sm ml-1"> <i class="fa fa-eye"></i> View Student </a> <a href="{{ route('staff.student.index') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a></h3>
+            <a href="{{ route('staff.student.show',$data->id) }}" class="float-right btn btn-info btn-sm ml-1" title="View Data"><i class="fa fa-eye"></i> View Student </a> <a href="{{ route('staff.student.index') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a></h3>
         </div>
         <div class="card-body">
             

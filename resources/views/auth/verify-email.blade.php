@@ -65,7 +65,7 @@
 
     @yield('scripts')
 
-
+@include('../layouts/validateinput')
 </body>
 
 </html>

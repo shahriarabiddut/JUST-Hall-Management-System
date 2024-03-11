@@ -64,9 +64,9 @@
                             <td>{{ $d->created_at->format("F j, Y") }} </td>
 
                             <td class="text-center">
-                                <a href="{{ url('admin/roomallocation/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
+                                <a href="{{ url('admin/roomallocation/'.$d->id) }}" class="btn btn-info btn-sm" title="View Data"><i class="fa fa-eye"></i></a>
                                 {{-- <a href="{{ url('admin/roomallocation/'.$d->id.'/edit') }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a> --}}
-                                <a onclick="return confirm('Are You Sure?')" href="{{ url('admin/roomallocation/'.$d->id.'/delete') }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                
                             </td>
 
                         </tr>
