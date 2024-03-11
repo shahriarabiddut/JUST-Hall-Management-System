@@ -62,7 +62,7 @@ class AllocatedSeatController extends Controller
         $unstudents = DB::select("SELECT * FROM users WHERE id NOT IN (SELECT user_id FROM allocated_seats) OR hall_id = 0 AND hall_id = $this->hall_id");
         $data = [];
         foreach ($unstudents as $student) {
-            if ($student->status == 1) {
+            if ($student->status == 1 && $student->gender == Auth::guard('staff')->user()->hall->type) {
                 if ($student->hall_id == $this->hall_id || $student->hall_id == 0 || $student->hall_id == null) {
                     $data[] = $student;
                 }

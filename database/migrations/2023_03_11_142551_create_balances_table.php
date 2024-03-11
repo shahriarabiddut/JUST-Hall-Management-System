@@ -17,6 +17,7 @@ return new class extends Migration
             $table->float('balance_amount');
             $table->timestamp('last_transaction_date')->nullable();
             $table->integer('hall_id')->references('id')->on('halls');
+            $table->integer('status');
             $table->timestamps();
         });
     }

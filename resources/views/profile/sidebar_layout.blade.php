@@ -44,6 +44,8 @@
             @if(isset($sorryRoomSidebar))
                 @if($sorryRoomSidebar)
                 <a class="collapse-item" href="{{ route('student.myroom') }}">My Room Details</a> 
+                <a class="collapse-item" href="{{ route('student.myroom.change') }}">Room Change</a> 
+                <a class="collapse-item" href="{{ route('student.myroom.leave') }}">Room Leave</a> 
                 @else
                 <a class="collapse-item" href="{{ route('student.roomrequest') }}">New Room Request</a>
                 <a class="collapse-item" href="{{ route('student.roomrequestshow') }}">My Room Requests</a>

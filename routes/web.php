@@ -65,6 +65,9 @@ Route::middleware(['auth'])->prefix('student')->name('student.')->group(function
 
     //Room Routes
     Route::get('rooms/myroom', [ProfileController::class, 'myroom'])->name('myroom');
+    Route::get('rooms/myroomchange', [ProfileController::class, 'roomchange'])->name('myroom.change');
+    Route::get('rooms/myroomleave', [ProfileController::class, 'roomleave'])->name('myroom.leave');
+    Route::post('rooms/roomissue', [ProfileController::class, 'roomissue'])->name('myroom.roomissue');
     Route::get('rooms/request', [ProfileController::class, 'roomrequest'])->name('roomrequest');
     Route::post('rooms/applyrequest', [ProfileController::class, 'roomrequeststore'])->name('roomrequeststore');
     Route::get('rooms/requestshow', [ProfileController::class, 'roomrequestshow'])->name('roomrequestshow');

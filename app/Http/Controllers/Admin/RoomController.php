@@ -6,6 +6,7 @@ use App\Models\Hall;
 use App\Models\Room;
 use App\Models\RoomType;
 use Illuminate\Http\Request;
+use App\Models\AllocatedSeats;
 use App\Http\Controllers\Controller;
 
 class RoomController extends Controller
@@ -112,19 +113,26 @@ class RoomController extends Controller
         if ($data == null) {
             return redirect()->route('admin.rooms.index')->with('danger', 'Not Found!');
         }
-        $data->delete();
-        return redirect('admin/rooms')->with('danger', 'Data has been deleted Successfully!');
+        $dataAllocatedSeats = AllocatedSeats::all()->where('room_id', $id);
+        if (count($dataAllocatedSeats) != 0) {
+            return redirect('admin/rooms')->with('danger', 'Data can not be deleted!');
+        } else {
+            $data->delete();
+            return redirect('admin/rooms')->with('danger', 'Data has been deleted Successfully!');
+        }
     }
     // Import Bilk users from csv
     public function importRoom()
     {
-        return view('admin.room.importRoom');
+        $hall = Hall::all()->where('status', 1);
+        return view('admin.room.importRoom', ['halls' => $hall]);
     }
 
     public function handleImportRoom(Request $request)
     {
         $validator = $request->validate([
             'file' => 'required',
+            'hall_id' => 'required|not_in:0',
         ]);
         $file = $request->file('file');
         $csvData = file_get_contents($file);
@@ -133,12 +141,12 @@ class RoomController extends Controller
         $length = count($rows);
         $importedStudents = 1;
         $errorTitles = [];
+        $hall_id = $request->hall_id;
         foreach ($rows as $key => $row) {
             if ($key != $length - 1) {
                 $row = array_combine($header, $row);
                 $title = $row['title'];
                 $room_type_id = $row['room_type_id'];
-                $hall_id = $row['hall_id'];
                 //
                 if ($room_type_id == 0) {
                     $roomType = 7;

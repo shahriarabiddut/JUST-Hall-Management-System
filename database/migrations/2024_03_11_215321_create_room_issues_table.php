@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('allocated_seats', function (Blueprint $table) {
+        Schema::create('room_issues', function (Blueprint $table) {
             $table->id();
-            $table->integer('room_id');
             $table->integer('user_id');
-            $table->integer('position');
-            $table->integer('hall_id')->references('id')->on('halls');
+            $table->integer('allocated_seat_id');
+            $table->string('issue');
+            $table->longText('application');
             $table->integer('status');
+            $table->integer('flag');
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('allocated_seats');
+        Schema::dropIfExists('room_issues');
     }
 };

@@ -16,6 +16,7 @@ use App\Models\RoomRequest;
 use App\Models\FoodTimeHall;
 use Illuminate\Http\Request;
 use App\Models\AllocatedSeats;
+use App\Models\RoomIssue;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
@@ -186,6 +187,53 @@ class ProfileController extends Controller
             return view('profile.room.myroom', ['data' => $data, 'rooms' => $rooms]);
         }
         return view('profile.room.myroom', ['data' => $data, 'rooms' => $rooms]);
+    }
+    public function roomchange()
+    {
+        $data = AllocatedSeats::all()->where('user_id', '=', Auth::user()->id)->first();
+        $roomchanges = RoomIssue::all()->where('user_id', '=', Auth::user()->id)->where('issue', 'roomchange');
+        if ($data == null) {
+            return redirect()->route('student.dashboard')->with('danger', 'No Room Alloacation Request Found!');
+        }
+        return view('profile.room.roomchange', ['roomchanges' => $roomchanges]);
+    }
+    public function roomleave()
+    {
+        $data = AllocatedSeats::all()->where('user_id', '=', Auth::user()->id)->first();
+        $roomchanges = RoomIssue::all()->where('user_id', '=', Auth::user()->id)->where('issue', 'roomleave');
+        if ($data == null) {
+            return redirect()->route('student.dashboard')->with('danger', 'No Room Alloacation Request Found!');
+        }
+        return view('profile.room.roomleave', ['roomchanges' => $roomchanges]);
+    }
+    public function roomissue(Request $request)
+    {
+        $request->validate([
+            'application' => 'required',
+        ]);
+        $data = AllocatedSeats::all()->where('user_id', '=', Auth::user()->id)->first();
+        if ($data == null) {
+            return redirect()->route('student.dashboard')->with('danger', 'No Room Alloacation Request Found!');
+        }
+        $data2 = RoomIssue::all()->where('user_id', '=', Auth::user()->id)->where('issue', $request->issue)->last();
+        if ($data2 != null) {
+            if ($data2->issue == 'roomchange' && $data2->status < 1) {
+                return redirect()->back()->with('danger', 'You have allready requested! Maximum!');
+            }
+            if ($data2->issue == 'roomleave') {
+                return redirect()->back()->with('danger', 'You have allready requested!');
+            }
+        }
+        $roomIssue = new RoomIssue();
+        $roomIssue->issue = $request->issue;
+        $roomIssue->application = $request->application;
+        $roomIssue->user_id = Auth::user()->id;
+        $roomIssue->allocated_seat_id = $data->id;
+        $roomIssue->hall_id = Auth::user()->hall_id;
+        $roomIssue->status = 0;
+        $roomIssue->flag = 0;
+        $roomIssue->save();
+        return redirect()->back()->with('success', 'Your Application is Submitted!');
     }
     //Room Request
     public function roomrequest()
