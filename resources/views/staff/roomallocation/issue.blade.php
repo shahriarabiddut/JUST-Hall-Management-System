@@ -1,5 +1,5 @@
 @extends('staff/layout')
-@section('title', 'Room Allocation Issue')
+@section('title', 'Room Allocation Issues')
 
 @section('content')
 
@@ -14,21 +14,11 @@
                 <p>{{ session('danger') }} </p>
             </div>
             @endif
-            @if(Session::has('danger-titles'))
-            <div class="p-3 mb-2 bg-danger text-white">
-                <h3>Allready Existed Allocation's</h3>
-                @foreach (session('danger-titles') as $etitles)
-                    <span class="m-1">
-                        {{ $etitles }} ,
-                    </span>
-                     @endforeach
-            </div>
-            @endif
             <!-- Session Messages Ends -->
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h3 class="m-0 font-weight-bold text-primary">Room Issue (Room Change/Leave)</h3>
+            <h3 class="m-0 font-weight-bold text-primary">Room Issue (Room Change/Leave) Requests</h3>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -37,10 +27,10 @@
                         <tr>
                             <th>#</th>
                             <th>Room No</th>
-                            <th>Student Name</th>
+                            <th>Student</th>
                             <th>Issue</th>
                             <th>Status</th>
-                            <th>Assigned Date</th>
+                            <th>Request Date</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -48,10 +38,10 @@
                         <tr>
                             <th>#</th>
                             <th>Room No</th>
-                            <th>Student Name</th>
+                            <th>Student</th>
                             <th>Issue</th>
                             <th>Status</th>
-                            <th>Assigned Date</th>
+                            <th>Request Date</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>

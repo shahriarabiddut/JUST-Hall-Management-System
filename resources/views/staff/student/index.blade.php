@@ -106,8 +106,8 @@
                             <td class="text-center">
                                 <a href="{{ url('staff/student/'.$d->id) }}" class="btn btn-info btn-sm m-1" title="View Data"><i class="fa fa-eye"></i></a>
                                 @if (Auth::guard('staff')->user()->type == 'provost' || Auth::guard('staff')->user()->type == 'aprovost')
-                                <a href="{{ url('staff/student/'.$d->id.'/edit') }}" class="btn btn-primary btn-sm m-1"><i class="fa fa-edit"></i></a>
-                                <a onclick="return confirm('Are You Sure?')" href="{{ url('staff/student/'.$d->id.'/delete') }}" class="btn btn-danger btn-sm m-1" title="Remove Data"><i class="fa fa-trash"></i></a>
+                                <a href="{{ url('staff/student/'.$d->id.'/edit') }}" class="btn btn-primary btn-sm m-1" title="Edit Data"> <i class="fa fa-edit"></i></a>
+                                
                                 @endif
                             </td>
 

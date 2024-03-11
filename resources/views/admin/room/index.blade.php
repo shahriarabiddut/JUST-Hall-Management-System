@@ -73,7 +73,7 @@
                             
                             <td class="text-center">
                                 <a href="{{ url('admin/rooms/'.$d->id) }}" class="btn btn-info btn-sm" title="View Data"><i class="fa fa-eye"></i></a>
-                                <a href="{{ url('admin/rooms/'.$d->id.'/edit') }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
+                                <a href="{{ url('admin/rooms/'.$d->id.'/edit') }}" class="btn btn-primary btn-sm" title="Edit Data"> <i class="fa fa-edit"></i></a>
                                 
                             </td>
 

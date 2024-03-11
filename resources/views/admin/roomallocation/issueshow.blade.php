@@ -1,4 +1,4 @@
-@extends('staff/layout')
+@extends('admin/layout')
 @section('title', 'Issue Details')
 @section('content')
 
@@ -10,7 +10,7 @@
             @else
                 Leave Room
             @endif issue of  {{ $data->students->name }} - {{ $data->students->rollno }}
-            <a href="{{ route('staff.roomallocation.issue') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h3>
+            <a href="{{ route('admin.roomallocation.issue') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h3>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -50,9 +50,14 @@
                         <th colspan="2" class="text-center">Student Data</th>
                     </tr>
                         <tr>
+                            <th>Hall </th>
+                                 <td>{{ $data->students->hall->title }} </td>
+                        </tr>
+                        <tr>
                             <th>Student </th>
-                                 <td>{{ $data->students->name }} - {{ $data->students->rollno }} </td>
-                            </tr>
+                            <td>{{ $data->students->name }} - {{ $data->students->rollno }} </td>
+                        </tr>
+                        <tr>
                         <tr>
                        <th>Room Allocation</th>
                             <td>{{ $data->students->allocatedRoom->rooms->title }} (Seat No. {{ $data->students->allocatedRoom->position }})</td>
@@ -60,14 +65,6 @@
                             <th>Allocation Date </th>
                             <td>{{ $data->students->allocatedRoom->created_at->format('F j,Y') }}</td>
                         </tr>
-                        @if ($data->status==0 && Auth::guard('staff')->user()->type != 'staff' && Auth::guard('staff')->user()->type != 'officer')
-                        <tr>
-                            <td colspan="2">
-                                <a href="{{ route('staff.roomallocation.issueacc',$data->id) }}" class="float-left btn btn-success btn-sm m-1"><i class="fa fa-check"> Accept </i></a> 
-                                <a href="{{ route('staff.roomallocation.issuerej',$data->id) }}" class="float-right btn btn-danger btn-sm m-1"><i class="fa fa-ban"> Reject </i></a> 
-                            </td>
-                        </tr>
-                        @endif
                         @if ($data->staff!=null)
                         <tr>
                             <th>Responsed by </th>

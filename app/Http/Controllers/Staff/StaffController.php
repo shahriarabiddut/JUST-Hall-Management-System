@@ -61,11 +61,12 @@ class StaffController extends Controller
         $data->password = bcrypt($request->email);
         $data->type = $request->type;
         $data->hall_id = $this->hall_id;
+        $data->status = 1;
         $data->save();
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistoryHall($staff_id, 'add', 'Staff (' . $data->type . ' ) - ' . $data->name . ' has been added Successfully!', $this->hall_id);
+        $HistoryController->addHistoryHall($staff_id, 'add staff', 'Staff (' . $data->type . ' ) - ' . $data->name . ' has been added Successfully!', $this->hall_id);
         //Saved
         return redirect()->route('staff.staff.index')->with('success', 'Staff has been added Successfully!');
     }
@@ -135,9 +136,9 @@ class StaffController extends Controller
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistoryHall($staff_id, 'update', 'Staff (' . $data->type . ' ) - ' . $data->name . ' has been updated Successfully!', $this->hall_id);
+        $HistoryController->addHistoryHall($staff_id, 'update staff', 'Staff (' . $data->type . ' ) - ' . $data->name . ' has been updated Successfully!', $this->hall_id);
         //Saved
-        return redirect()->route('staff.staff.index')->with('success', 'Staff (' . $data->name . ') data has been updated Successfully!');
+        return redirect()->route('staff.staff.index')->with('success staff', 'Staff (' . $data->name . ') data has been updated Successfully!');
     }
 
     /**
@@ -152,13 +153,15 @@ class StaffController extends Controller
         if ($data->hall_id != $this->hall_id) {
             return redirect()->route('staff.staff.index')->with('danger', 'Not Permitted!');
         }
-        $data->delete();
+        $data->status = 0;
+        $data->hall_id = 0;
+        $data->save();
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistoryHall($staff_id, 'delete', 'Staff (' . $data->type . ' ) - ' . $data->name . ' has been updated Successfully!', $this->hall_id);
+        $HistoryController->addHistoryHall($staff_id, 'delete staff', 'Staff (' . $data->type . ' ) - ' . $data->name . ' has been removed Successfully!', $this->hall_id);
         //Saved
-        return redirect()->route('staff.staff.index')->with('danger', 'Staff Data has been deleted Successfully!');
+        return redirect()->route('staff.staff.index')->with('danger', 'Staff Data has been removed Successfully!');
     }
 
     public function change(string $id)
@@ -191,6 +194,6 @@ class StaffController extends Controller
         $data->password = bcrypt($request->password);
         $data->save();
 
-        return redirect()->route('staff.staff.index')->with('success', 'Staff (' . $data->name . ') Email & Password has been updated Successfully!');
+        return redirect()->route('staff.staff.index')->with('success staff', 'Staff (' . $data->name . ') Email & Password has been updated Successfully!');
     }
 }

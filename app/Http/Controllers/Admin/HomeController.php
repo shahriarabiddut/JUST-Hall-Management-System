@@ -6,6 +6,7 @@ use App\Models\Admin;
 use App\Models\Staff;
 use App\Models\History;
 use App\Models\Support;
+use App\Models\RoomIssue;
 use App\Models\HallOption;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -118,5 +119,19 @@ class HomeController extends Controller
             $data2->save();
         }
         return redirect()->route('admin.history.index')->with('success', 'Marked As Read!');
+    }
+    public function roomallocationissue()
+    {
+        $data = RoomIssue::all();
+        return view('admin.roomallocation.issue', ['data' => $data]);
+    }
+    public function roomallocationissueview(string $id)
+    {
+        //
+        $data = RoomIssue::find($id);
+        if ($data == null) {
+            return redirect()->route('admin.roomallocation.issue')->with('danger', 'Not Found!');
+        }
+        return view('admin.roomallocation.issueshow', ['data' => $data]);
     }
 }

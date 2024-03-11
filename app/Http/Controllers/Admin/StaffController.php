@@ -46,7 +46,7 @@ class StaffController extends Controller
         $data->email = $request->email;
         $data->password = bcrypt($request->email);
         $data->type = $request->type;
-
+        $data->status = 1;
         $data->save();
 
         return redirect('admin/staff')->with('success', 'Staff Data has been added Successfully!');
@@ -121,7 +121,9 @@ class StaffController extends Controller
         if ($data == null) {
             return redirect()->route('admin.staff.index')->with('danger', 'Not Found!');
         }
-        $data->delete();
+        $data->status = 0;
+        $data->hall_id = 0;
+        $data->save();
         return redirect('admin/staff')->with('danger', 'Data has been deleted Successfully!');
     }
 

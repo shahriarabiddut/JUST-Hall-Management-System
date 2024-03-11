@@ -47,10 +47,11 @@
                         </tr>
                     </tfoot>
                     <tbody>
+                        @php $i=1 ;@endphp
                         @if($data)
                         @foreach ($data as $key=> $d)
                         <tr>
-                            <td>{{ ++$key }}</td>
+                            <td> {{ $i++ }}</td>
                             <td>{{ $d->rooms->title }}</td>
                             <td>{{ $d->position }}</td>
                             <td>
@@ -65,7 +66,7 @@
 
                             <td class="text-center">
                                 <a href="{{ url('admin/roomallocation/'.$d->id) }}" class="btn btn-info btn-sm" title="View Data"><i class="fa fa-eye"></i></a>
-                                {{-- <a href="{{ url('admin/roomallocation/'.$d->id.'/edit') }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a> --}}
+                                {{-- <a href="{{ url('admin/roomallocation/'.$d->id.'/edit') }}" class="btn btn-primary btn-sm" title="Edit Data"> <i class="fa fa-edit"></i></a> --}}
                                 
                             </td>
 

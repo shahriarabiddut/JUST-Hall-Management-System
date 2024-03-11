@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Hall;
+use App\Models\Room;
 use App\Models\Balance;
 use App\Models\Student;
+use App\Models\RoomRequest;
 use Illuminate\Http\Request;
+use App\Models\AllocatedSeats;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\BalanceController;
 
@@ -54,6 +57,7 @@ class StudentController extends Controller
         $data->rollno = $request->rollno;
         $data->ms = $request->ms;
         $data->hall_id = $request->hall_id;
+        $data->status = 1;
         //If user Given address
         if ($request->has('address')) {
             $data->address = $request->address;
@@ -159,11 +163,42 @@ class StudentController extends Controller
         if ($data == null) {
             return redirect()->route('admin.student.index')->with('danger', 'Not Found!');
         }
-        $data->delete();
         //Delete Balance Account
         $BalanceAccount = Balance::all()->where('student_id', '=', $id)->first();
-        $BalanceAccount->delete();
-        return redirect('admin/student')->with('danger', 'Student data and Associated Balance Account has been deleted Successfully!');
+        $data->status = 0;
+        $data->save();
+        $BalanceAccount->status = 0;
+        $BalanceAccount->save();
+        // Iff Allocated Seat
+        $AllocatedSeat = AllocatedSeats::all()->where('user_id', '=', $id)->first();
+        // Iff Room Request Found
+        $RoomRequest = RoomRequest::all()->where('user_id', '=', $id)->first();
+        if ($RoomRequest != null) {
+            $RoomRequest->delete();
+        }
+        if ($AllocatedSeat != null) {
+            $AllocatedSeat->status = 0;
+            $AllocatedSeat->save();
+
+            // Room Vacancy + 1
+            $roomid = $AllocatedSeat->room_id;
+            $room = Room::find($roomid);
+            $roomVacant = $room->vacancy + 1;
+            $room->vacancy = $roomVacant;
+            //Room Vancacy Readded
+            // Add The position back to Room Positions
+            $arrayRepresentation = json_decode($room->positions, true);
+            array_push($arrayRepresentation, $AllocatedSeat->position);
+            sort($arrayRepresentation);
+            $jsonData = json_encode($arrayRepresentation);
+            $room->positions = $jsonData;
+            //
+            $room->save();
+
+            // $data->hall_id = 0;
+            // $BalanceAccount->hall_id = 0;
+        }
+        return redirect('admin/student')->with('danger', 'Student data and Associated Balance Account has been removed Successfully!');
     }
 
     // Import Bilk users from csv

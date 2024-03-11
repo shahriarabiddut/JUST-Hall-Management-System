@@ -58,6 +58,7 @@ class RegisteredUserController extends Controller
         $user->email = $request->email;
         $user->rollno = $rollno;
         $user->gender = $request->gender;
+        $user->status = 1;
         $user->password = Hash::make($request->password);
         if ($request->has('hall_id')) {
             $user->hall_id = $request->hall_id;

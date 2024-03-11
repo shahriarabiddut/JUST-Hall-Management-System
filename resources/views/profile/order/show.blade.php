@@ -59,7 +59,7 @@
                             @else
                             <a  href="{{ url('student/mealtoken/generate/'.$data->id) }}" class="float-right btn btn-success btn-sm "><i class="fas fa-ticket-alt"> Generate Meal Token </i></a>
                             @endif
-                            <a href="{{ route('student.order.edit',$data->id) }}" class="float-left btn btn-info btn-sm mr-1"><i class="fa fa-edit"> Edit {{ $data->title }}  </i></a> 
+                            <a href="{{ route('student.order.edit',$data->id) }}" class="float-left btn btn-info btn-sm mr-1" title="Edit Data"> <i class="fa fa-edit"> Edit {{ $data->title }}  </i></a> 
                             
                         </td>
                         

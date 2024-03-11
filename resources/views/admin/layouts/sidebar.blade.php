@@ -143,6 +143,7 @@
                 <a class="collapse-item" href="{{ route('admin.roomallocation.index') }}">View All</a>
                 <a class="collapse-item" href="{{ route('admin.roomallocation.create') }}">Add new </a>
                 <a class="collapse-item" href="{{ route('admin.roomallocation.roomrequests') }}">Allocation Requests </a>
+                <a class="collapse-item" href="{{ route('admin.roomallocation.issue') }}">Room Leave/Change  </a>
             </div>
         </div>
     </li>

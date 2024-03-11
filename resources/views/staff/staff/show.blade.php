@@ -51,7 +51,13 @@
                             <td>{{ $data->phone }}</td>
                         </tr><tr>
                             <td colspan="2">
-                                <a href="{{ url('staff/staff/'.$data->id.'/edit') }}" class="float-right btn btn-info btn-sm"><i class="fa fa-edit"> Edit {{ $data->title }} </i></a> <a href="{{ url('staff/staff/'.$data->id.'/change') }}" class="float-right btn btn-info btn-sm mr-2"><i class="fa fa-edit"> Change Email & Password {{ $data->title }} </i></a>
+                                
+                                @if ($data->status!=0)
+                                <a onclick="return confirm('Are You Sure?')" href="{{ url('staff/staff/'.$data->id.'/delete') }}" class="btn btn-danger btn-sm" title="Remove Data"><i class="fa fa-ban"> Disable </i></a>
+                                @else 
+                                {{-- <a onclick="return confirm('Are You Sure?')" href="{{ url('staff/staff/'.$data->id.'/delete') }}" class="btn btn-success btn-sm m-1" title="Active Data"><i class="fa fa-check"> Active </i></a>  --}}
+                                @endif
+                                <a href="{{ url('staff/staff/'.$data->id.'/edit') }}" class="float-right btn btn-info btn-sm" title="Edit Data"> <i class="fa fa-edit"> Edit {{ $data->title }} </i></a> <a href="{{ url('staff/staff/'.$data->id.'/change') }}" class="float-right btn btn-info btn-sm mr-2" title="Edit Data"> <i class="fa fa-edit"> Change Email & Password {{ $data->title }} </i></a>
                             </td>
                             
                         </tr>

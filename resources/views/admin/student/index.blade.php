@@ -60,10 +60,16 @@
                         </tr>
                     </tfoot>
                     <tbody>
+                        @php $i=1 ;@endphp
                         @if($data)
                         @foreach ($data as $key=> $d)
                         <tr>
-                            <td>{{ ++$key }}</td>
+                            @if ($d->status==0)
+                                <td class="bg-danger text-white">
+                                    @else
+                                <td class="bg-success text-white">
+                                    @endif
+                                    {{ $i++ }}</td>
                             <td><img width="100"
                                 class=""
                                 src="{{$d->photo ? asset('storage/'.$d->photo) : asset('images/user.png')}}"
@@ -83,7 +89,7 @@
                             
                             <td class="text-center">
                                 <a href="{{ url('admin/student/'.$d->id) }}" class="btn btn-info btn-sm m-1" title="View Data"><i class="fa fa-eye"></i></a>
-                                <a href="{{ url('admin/student/'.$d->id.'/edit') }}" class="btn btn-primary btn-sm m-1"><i class="fa fa-edit"></i></a>
+                                <a href="{{ url('admin/student/'.$d->id.'/edit') }}" class="btn btn-primary btn-sm m-1" title="Edit Data"> <i class="fa fa-edit"></i></a>
                             </td>
 
                         </tr>

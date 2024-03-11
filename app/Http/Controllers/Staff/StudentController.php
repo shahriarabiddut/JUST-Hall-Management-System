@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Staff;
 
 use Carbon\Carbon;
+use App\Models\Room;
 use App\Models\Balance;
 use App\Models\Student;
 use App\Models\RoomRequest;
@@ -109,6 +110,7 @@ class StudentController extends Controller
         $data->ms = $request->ms;
         $data->gender = $request->gender;
         $data->hall_id = $this->hall_id;
+        $data->status = 1;
         //If user Given address
         if ($request->has('address')) {
             $data->address = $request->address;
@@ -249,6 +251,24 @@ class StudentController extends Controller
             $HistoryController->addHistoryHall($staff_id, 'delete', 'Student (' . $data->rollno . ' ) - ' . $data->name . '  and Associated Balance Account has been removed Successfully! Last Balance was ' . $BalanceAccount->balance_amount . ' . And Allocated Seat no was ' . $AllocatedSeat->position . ' in Room No ' . $AllocatedSeat->rooms->title . ' .', $this->hall_id);
             $AllocatedSeat->status = 0;
             $AllocatedSeat->save();
+
+            // Room Vacancy + 1
+            $roomid = $AllocatedSeat->room_id;
+            $room = Room::find($roomid);
+            $roomVacant = $room->vacancy + 1;
+            $room->vacancy = $roomVacant;
+            //Room Vancacy Readded
+            // Add The position back to Room Positions
+            $arrayRepresentation = json_decode($room->positions, true);
+            array_push($arrayRepresentation, $AllocatedSeat->position);
+            sort($arrayRepresentation);
+            $jsonData = json_encode($arrayRepresentation);
+            $room->positions = $jsonData;
+            //
+            $room->save();
+
+            // $data->hall_id = 0;
+            // $BalanceAccount->hall_id = 0;
         } else {
             $HistoryController->addHistoryHall($staff_id, 'delete', 'Student (' . $data->rollno . ' ) - ' . $data->name . '  and Associated Balance Account has been removed Successfully! Last Balance was ' . $BalanceAccount->balance_amount . ' . And No seat was Allocated.', $this->hall_id);
         }

@@ -51,9 +51,9 @@
                             <td colspan="2">
                                 @if ($data->status==1)
                                 <a onclick="return confirm('Are You Sure?')" href="{{ url('staff/roomallocation/'.$data->id.'/delete') }}" class="btn btn-danger btn-sm" title="Remove Data"><i class="fa fa-trash"> Remove Room Allocation </i></a>
-                                <a href="{{ url('staff/roomallocation/'.$data->id.'/edit') }}" class="float-right btn btn-info btn-sm"><i class="fa fa-edit"> Edit </i></a> 
+                                <a href="{{ url('staff/roomallocation/'.$data->id.'/edit') }}" class="float-right btn btn-info btn-sm" title="Edit Data"> <i class="fa fa-edit"> Edit </i></a> 
                                 @else
-                                <a href="{{ url('staff/roomallocation/'.$data->id.'/edit') }}" class="float-right btn btn-info btn-sm"><i class="fa fa-edit"> Reallocate Room </i></a> 
+                                <a href="{{ url('staff/roomallocation/'.$data->id.'/edit') }}" class="float-right btn btn-info btn-sm" title="Edit Data"> <i class="fa fa-edit"> Reallocate Room </i></a> 
                                 @endif
                             </td>
                             

@@ -188,7 +188,7 @@
                     @if ($dataPayment == null)
                     <tr>
                         <td colspan="2">
-                            <a href="{{ route('student.roomrequest.roomrequestpayment') }}" class="float-right btn btn-info btn-block"><i class="fa fa-edit"> Add Payment Slip </i></a>
+                            <a href="{{ route('student.roomrequest.roomrequestpayment') }}" class="float-right btn btn-info btn-block" title="Edit Data"> <i class="fa fa-edit"> Add Payment Slip </i></a>
                         </td>
                     </tr>
                     @else

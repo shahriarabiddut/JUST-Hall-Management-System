@@ -84,6 +84,7 @@ class AllocatedSeatController extends Controller
         $data->user_id = $request->user_id;
         $data->position = $request->position;
         $data->hall_id = $request->hall_id;
+        $data->status = 1;
         $data->save();
         // Room Vacancy - 1
         $roomid = $request->room_id;
@@ -244,8 +245,17 @@ class AllocatedSeatController extends Controller
         $room->positions = $jsonData;
         //
         $room->save();
-        // 
-        $data->delete();
+        //
+        //Room Request Clean
+        $data2 = RoomRequest::all()->where('user_id', $data->user_id)->first();
+        if ($data2 != null) {
+            $data2->allocated_seat_id = 0;
+            $data2->status = 2;
+            $data2->save();
+        }
+        //
+        $data->status = 0;
+        $data->save();
         return redirect('admin/roomallocation')->with('danger', 'Data has been deleted Successfully!');
     }
     //Room Allocation Requests

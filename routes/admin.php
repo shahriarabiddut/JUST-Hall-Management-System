@@ -78,6 +78,9 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
     Route::get('roomrequest/generate-pdf/{id}',  [AllocatedSeatController::class, 'generatePdf'])->name('generatepdf');
     //Available Positions
     Route::get('room/postion/{selectedValue}', [AllocatedSeatController::class, 'getPositions']);
+    //Room Issue
+    Route::get('/roomallocationissue', [HomeController::class, 'roomallocationissue'])->name('roomallocation.issue');
+    Route::get('/roomallocationissue/{id}', [HomeController::class, 'roomallocationissueview'])->name('roomallocation.issueview');
     // Order Crud
     Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('orders/status/{id}', [OrderController::class, 'show'])->name('orders.show');

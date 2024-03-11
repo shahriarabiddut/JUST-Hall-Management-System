@@ -108,6 +108,29 @@
                         <div class="h5 mb-0 font-weight-bold text-gray-800">{{ App\Models\RoomRequest::all()->where('hall_id',Auth::guard('staff')->user()->hall_id)->count() }}</div>
                     </div>
                     <div class="col-auto">
+                        @if (App\Models\RoomRequest::all()->where('hall_id',Auth::guard('staff')->user()->hall_id)->where('flag',0)->count()!=0)
+                        <a href="{{ route('staff.roomallocation.issue') }}"><span class=" text-xs bg-danger text-white p-1 rounded m-1">{{ App\Models\RoomRequest::all()->where('hall_id',Auth::guard('staff')->user()->hall_id)->where('flag',0)->count() }} Unread </span></a>
+                        @endif
+                        <i class="fas fa-fw fa-hotel fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-danger shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
+                            Room Change / Leave Requests </div> 
+                            
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ App\Models\RoomIssue::all()->where('hall_id',Auth::guard('staff')->user()->hall_id)->count() }}</div> 
+                    </div>
+                    <div class="col-auto">
+                        @if (App\Models\RoomIssue::all()->where('hall_id',Auth::guard('staff')->user()->hall_id)->where('flag',0)->count()!=0)
+                        <a href="{{ route('staff.roomallocation.issue') }}"><span class=" text-xs bg-danger text-white p-1 rounded m-1">{{ App\Models\RoomIssue::all()->where('hall_id',Auth::guard('staff')->user()->hall_id)->where('flag',0)->count() }} Unread </span></a>
+                        @endif
                         <i class="fas fa-fw fa-hotel fa-2x text-gray-300"></i>
                     </div>
                 </div>

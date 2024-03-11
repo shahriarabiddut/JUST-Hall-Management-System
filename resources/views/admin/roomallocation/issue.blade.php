@@ -1,5 +1,5 @@
-@extends('staff/layout')
-@section('title', 'Room Allocation')
+@extends('admin/layout')
+@section('title', 'Room Allocation Issues')
 
 @section('content')
 
@@ -14,22 +14,11 @@
                 <p>{{ session('danger') }} </p>
             </div>
             @endif
-            @if(Session::has('danger-titles'))
-            <div class="p-3 mb-2 bg-danger text-white">
-                <h3>Allready Existed Allocation's</h3>
-                @foreach (session('danger-titles') as $etitles)
-                    <span class="m-1">
-                        {{ $etitles }} ,
-                    </span>
-                     @endforeach
-            </div>
-            @endif
             <!-- Session Messages Ends -->
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h3 class="m-0 font-weight-bold text-primary">Room Allocation
-            <a href="{{ route('staff.roomallocation.create') }}" class="float-right btn btn-success btn-sm" target="_blank">Add New Room Allocation</a> <a href="{{ route('staff.roomallocation.bulk') }}" class="float-right btn btn-info btn-sm mx-2" target="_blank">Add From CSV </a> </h3>
+            <h3 class="m-0 font-weight-bold text-primary">Room Issue (Room Change/Leave) Requests</h3>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -37,22 +26,24 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Room No</th>
-                            <th>Seat No</th>
-                            <th>Student Name</th>
+                            <th>Room</th>
+                            <th>Student</th>
+                            <th>Hall</th>
+                            <th>Issue</th>
                             <th>Status</th>
-                            <th>Assigned Date</th>
+                            <th>Request Date</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
                             <th>#</th>
-                            <th>Room No</th>
-                            <th>Seat No</th>
-                            <th>Student Name</th>
+                            <th>Room</th>
+                            <th>Student</th>
+                            <th>Hall</th>
+                            <th>Issue</th>
                             <th>Status</th>
-                            <th>Assigned Date</th>
+                            <th>Request Date</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
@@ -61,15 +52,14 @@
                         @php $i=1; @endphp
                         @foreach ($data as $key=> $d)
                         <tr>
-                            <td>{{ $i++ }} </td>
+                            <td>{{ $i++ }} @if ($d->flag==0)<span class="bg-danger text-white p-1 rounded"> New </span>@endif</td>
                             <td>
-                                @if ($d->rooms==null)
+                                @if ($d->students->allocatedRoom->rooms==null)
                                     Room Deleted
                                 @else
-                                    {{ $d->rooms->title }}
+                                    {{ $d->students->allocatedRoom->rooms->title }} (Seat No. {{ $d->students->allocatedRoom->position }})
                                 @endif
-                                </td>
-                            <td>{{ $d->position }}</td>
+                            </td>
                             <td>
                                 @if ($d->students==null)
                                     User Deleted
@@ -80,20 +70,37 @@
                                 <!--@endif-->
                                 @endif
                             </td>
-                            @if ($d->status==0)
-                            <td class="bg-danger text-white">
-                                    Removed
+                            <td>
+                                @if ($d->students==null)
+                                    User Deleted
                                 @else
-                            <td class="bg-success text-white">
-                                    Active
+                                {{ $d->students->hall->title }}
                                 @endif
                             </td>
+                            <td>
+                                @if ($d->issue=='roomchange')
+                                    Room Change
+                                @else
+                                    Leave Room
+                                @endif
+                            </td>
+                            <td   @switch($d->status)
+                                @case(1)
+                                 class="bg-success text-white"> Accepted
+                                    @break
+                                @case(1)
+                                class="bg-danger text-white"> Rjected
+                                    @break
+                                @default
+                                class="bg-info text-white">
+                                    No Reply
+                            @endswitch
+                            </td>
+                            
                             <td>{{ $d->created_at->format("F j, Y") }} </td>
 
                             <td class="text-center">
-                                <a href="{{ url('staff/roomallocation/'.$d->id) }}" class="btn btn-info btn-sm" title="View Data"><i class="fa fa-eye"></i></a>
-                                {{-- <a href="{{ url('staff/roomallocation/'.$d->id.'/edit') }}" class="btn btn-primary btn-sm" title="Edit Data"> <i class="fa fa-edit"></i></a> --}}
-                                <a onclick="return confirm('Are You Sure?')" href="{{ url('staff/roomallocation/'.$d->id.'/delete') }}" class="btn btn-danger btn-sm" title="Remove Data"><i class="fa fa-trash"></i></a>
+                                <a href="{{ route('admin.roomallocation.issueview',$d->id) }}" class="btn btn-info btn-sm" title="View Data"><i class="fa fa-eye"></i></a>
                             </td>
 
                         </tr>

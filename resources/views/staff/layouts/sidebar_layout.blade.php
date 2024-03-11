@@ -23,10 +23,10 @@
             <span>Dashboard</span></a>
     </li>
     <!-- Divider -->
+    @if (Auth::guard('staff')->user()->hall!= null)
+    @if (Auth::guard('staff')->user()->hall_id!=0 && Auth::guard('staff')->user()->hall_id!=null)
+        @if (Auth::guard('staff')->user()->type == 'provost')
     <hr class="sidebar-divider">
-@if (Auth::guard('staff')->user()->hall!= null)
-@if (Auth::guard('staff')->user()->hall_id!=0 && Auth::guard('staff')->user()->hall_id!=null)
-    @if (Auth::guard('staff')->user()->type == 'provost')
     <!-- Heading -->
     <div class="sidebar-heading">
         Hall Rooms
@@ -70,7 +70,7 @@
         </div>
     </li>
     @endif
-    @if (Auth::guard('staff')->user()->type == 'provost' || Auth::guard('staff')->user()->type == 'aprovost' || Auth::guard('staff')->user()->type == 'officer')
+@if (Auth::guard('staff')->user()->type == 'provost' || Auth::guard('staff')->user()->type == 'aprovost' || Auth::guard('staff')->user()->type == 'officer')
     <!-- Divider -->
     <hr class="sidebar-divider">
     <!-- Heading -->
@@ -110,8 +110,8 @@
                 <a class="collapse-item" href="{{ route('staff.roomallocation.index') }}">View All</a>
                 <a class="collapse-item" href="{{ route('staff.roomallocation.create') }}">Add new </a>
                 @endif
-                <a class="collapse-item" href="{{ route('staff.roomallocation.roomrequests') }}">Allocation Requests <span class="bg-danger text-white p-1">{{ App\Models\RoomRequest::all()->where('hall_id',Auth::guard('staff')->user()->hall_id)->where('flag',0)->count() }}</span> </a>
-                <a class="collapse-item" href="{{ route('staff.roomallocation.issue') }}">Room Leave/Change <span class="bg-danger text-white p-1">{{ App\Models\RoomIssue::all()->where('hall_id',Auth::guard('staff')->user()->hall_id)->where('flag',0)->count() }}</span> </a>
+                <a class="collapse-item" href="{{ route('staff.roomallocation.roomrequests') }}">Allocation Requests <span class="bg-danger text-white p-1 rounded">{{ App\Models\RoomRequest::all()->where('hall_id',Auth::guard('staff')->user()->hall_id)->where('flag',0)->count() }}</span> </a>
+                <a class="collapse-item" href="{{ route('staff.roomallocation.issue') }}">Room Leave/Change <span class="bg-danger text-white p-1 rounded">{{ App\Models\RoomIssue::all()->where('hall_id',Auth::guard('staff')->user()->hall_id)->where('flag',0)->count() }}</span> </a>
             </div>
         </div>
     </li>

@@ -124,8 +124,11 @@ class ProfileController extends Controller
             'user' => $request->user(),
         ]);
     }
-    public function edit(Request $request): View
+    public function edit(Request $request)
     {
+        if (Auth::user()->status == 0) {
+            return redirect()->route('student.profile.view')->with('danger', 'You dont have enough permissions!');
+        }
         return view('profile.partials.edit', [
             'user' => $request->user(),
         ]);
@@ -136,6 +139,9 @@ class ProfileController extends Controller
      */
     public function update(Request $request)
     {
+        if (Auth::user()->status == 0) {
+            return redirect()->route('student.profile.view')->with('danger', 'You dont have enough permissions!');
+        }
         $data = Student::find($request->userid);
         $formFields = $request->validate([
             'name' => 'required',

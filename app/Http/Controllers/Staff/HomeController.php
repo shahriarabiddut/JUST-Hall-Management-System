@@ -89,12 +89,16 @@ class HomeController extends Controller
             'user' => $user,
         ]);
     }
-    public function edit(): View
+    public function edit()
     {
         $user = Auth::guard('staff')->user();
-        return view('staff.partials.edit', [
-            'user' => $user,
-        ]);
+        if ($user->status == 0) {
+            return redirect()->route('staff.profile.view')->with('danger', 'You dont have enough permissions!');
+        } else {
+            return view('staff.partials.edit', [
+                'user' => $user,
+            ]);
+        }
     }
 
     /**
@@ -102,6 +106,7 @@ class HomeController extends Controller
      */
     public function update(Request $request)
     {
+
         $formFields = $request->validate([
             'name' => 'required',
             'mobile' => 'required',
@@ -109,6 +114,9 @@ class HomeController extends Controller
             'userid' => 'required',
         ]);
         $data = Staff::find($request->userid);
+        if ($data->status == 0) {
+            return redirect()->route('staff.profile.view')->with('danger', 'You dont have enough permissions!');
+        }
         //If user Gieven address
         if ($request->has('address')) {
             $formFields['address'] = $request->address;
@@ -133,9 +141,13 @@ class HomeController extends Controller
     /**
      * Update the user's password information.
      */
-    public function editPassword(Request $request): View
+    public function editPassword(Request $request)
     {
+
         $user = Auth::guard('staff')->user();
+        if ($user->status == 0) {
+            return redirect()->route('staff.profile.view')->with('danger', 'You dont have enough permissions!');
+        }
         return view('staff.partials.changePassword', [
             'user' => $user,
         ]);
@@ -167,6 +179,9 @@ class HomeController extends Controller
         $data = Hall::find($this->hall_id);
         if ($data == null) {
             return redirect()->route('staff.dashboard')->with('danger', 'Not Found!');
+        }
+        if ($data->id != $this->hall_id) {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized Access!');
         }
         if ($data->id != $this->hall_id) {
             return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized Access!');
@@ -220,11 +235,17 @@ class HomeController extends Controller
     }
     public function roomallocationissue()
     {
+        if (Auth::guard('staff')->user()->type == 'staff') {
+            return redirect()->route('staff.dashboard')->with('danger', 'Not Permitted!');
+        }
         $data = RoomIssue::all()->where('hall_id', $this->hall_id);
         return view('staff.roomallocation.issue', ['data' => $data]);
     }
     public function roomallocationissueview(string $id)
     {
+        if (Auth::guard('staff')->user()->type == 'staff') {
+            return redirect()->route('staff.dashboard')->with('danger', 'Not Permitted!');
+        }
         //
         $data = RoomIssue::find($id);
         if ($data == null) {
@@ -242,6 +263,9 @@ class HomeController extends Controller
     }
     public function roomallocationissueaccept(string $id)
     {
+        if (Auth::guard('staff')->user()->type == 'staff') {
+            return redirect()->route('staff.dashboard')->with('danger', 'Not Permitted!');
+        }
         //
         $data = RoomIssue::find($id);
         if ($data == null) {
@@ -254,6 +278,12 @@ class HomeController extends Controller
             $data->status = 1;
             $data->staff_id = Auth::guard('staff')->user()->id;
             $data->save();
+            $issue = ($data->issue == 'roomchange' ? 'Room Change' : 'Room Leave');
+            //Saving History 
+            $HistoryController = new HistoryController();
+            $staff_id = Auth::guard('staff')->user()->id;
+            $HistoryController->addHistoryHall($staff_id, 'roomissue accept', 'Room Issue - ' . $issue . ' of '  . $data->students->rollno . ' has been accepted!', $this->hall_id);
+            //Saved
             return view('staff.roomallocation.issueshow', ['data' => $data]);
         } else {
             return redirect()->route('staff.roomallocation.issue')->with('danger', 'Not Permitted!');
@@ -261,6 +291,9 @@ class HomeController extends Controller
     }
     public function roomallocationissuereject(string $id)
     {
+        if (Auth::guard('staff')->user()->type == 'staff') {
+            return redirect()->route('staff.dashboard')->with('danger', 'Not Permitted!');
+        }
         //
         $data = RoomIssue::find($id);
         if ($data == null) {
@@ -273,6 +306,12 @@ class HomeController extends Controller
             $data->status = 1;
             $data->staff_id = Auth::guard('staff')->user()->id;
             $data->save();
+            $issue = ($data->issue == 'roomchange' ? 'Room Change' : 'Room Leave');
+            //Saving History 
+            $HistoryController = new HistoryController();
+            $staff_id = Auth::guard('staff')->user()->id;
+            $HistoryController->addHistoryHall($staff_id, 'roomissue reject', 'Room Issue - ' . $issue . ' of ' . $data->students->rollno . ' has been rejected!', $this->hall_id);
+            //Saved
             return view('staff.roomallocation.issueshow', ['data' => $data]);
         } else {
             return redirect()->route('staff.roomallocation.issue')->with('danger', 'Not Permitted!');
