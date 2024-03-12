@@ -85,7 +85,6 @@ class AllocatedSeatController extends Controller
         $data->position = $request->position;
         $data->hall_id = $request->hall_id;
         $data->status = 1;
-        $data->save();
         // Room Vacancy - 1
         $roomid = $request->room_id;
         $room = Room::find($roomid);
@@ -109,7 +108,16 @@ class AllocatedSeatController extends Controller
         $dataBalance->hall_id = $data->hall_id;
         $dataBalance->save();
         //
-
+        // Add The report to report array
+        $data->report = "[]";
+        $arrayReport = json_decode($data->report, true);
+        array_push($arrayReport, 'Room Allocated - Room No ' . $room->title . ' and Seat No ' . $request->position . ' on ' . $room->updated_at->format('F j,Y'));
+        sort($arrayReport);
+        $jsonData = json_encode($arrayReport);
+        $data->report = $jsonData;
+        //
+        $data->save();
+        //
         return redirect('admin/roomallocation')->with('success', 'AllocatedSeats Data has been added Successfully!');
     }
 
@@ -207,6 +215,12 @@ class AllocatedSeatController extends Controller
             //
             $room->save();
         }
+        // Add The report to report array
+        $arrayReport = json_decode($data->report, true);
+        array_push($arrayReport, 'Room Allocation Updated - Room No ' . $room->title . ' and Seat No ' . $request->position . ' on ' . $room->updated_at->format('F j,Y'));
+        sort($arrayReport);
+        $jsonData = json_encode($arrayReport);
+        $data->report = $jsonData;
         //
         $data->save();
 
@@ -255,6 +269,15 @@ class AllocatedSeatController extends Controller
         }
         //
         $data->status = 0;
+        $data->objective = 1;
+        // Add The report to report array
+        $report = 'Room and Seat Canceled - Room No ' . $room->title . ' and Seat No ' . $data->position . ' has been cleared on ' . $room->updated_at->format('F j,Y') . ' by System Admin.';
+        $arrayReport = json_decode($data->report, true);
+        array_push($arrayReport, $report);
+        sort($arrayReport);
+        $jsonData = json_encode($arrayReport);
+        $data->report = $jsonData;
+        //
         $data->save();
         return redirect('admin/roomallocation')->with('danger', 'Data has been deleted Successfully!');
     }

@@ -23,7 +23,7 @@
             <span>Dashboard</span></a>
     </li>
     <!-- Divider -->
-    @if (Auth::guard('staff')->user()->hall!= null)
+@if (Auth::guard('staff')->user()->hall!= null && Auth::guard('staff')->user()->status != 0)
     @if (Auth::guard('staff')->user()->hall_id!=0 && Auth::guard('staff')->user()->hall_id!=null)
         @if (Auth::guard('staff')->user()->type == 'provost')
     <hr class="sidebar-divider">

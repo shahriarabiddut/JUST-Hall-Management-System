@@ -23,7 +23,7 @@ class AllocatedSeatController extends Controller
     {
         $this->middleware(function ($request, $next) {
             $this->hall_id = Auth::guard('staff')->user()->hall_id;
-            if ($this->hall_id == 0 || $this->hall_id == null) {
+            if ($this->hall_id == 0 || $this->hall_id == null || Auth::guard('staff')->user()->status == 0) {
                 return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
             }
             if (Auth::guard('staff')->user()->hall->status == 0) {
@@ -102,7 +102,7 @@ class AllocatedSeatController extends Controller
         $data->position = $request->position;
         $data->hall_id = $this->hall_id;
         $data->status = 1;
-        $data->save();
+
         // Room Vacancy - 1
         $roomid = $request->room_id;
         $room = Room::find($roomid);
@@ -130,6 +130,16 @@ class AllocatedSeatController extends Controller
         $dataBalance = Balance::all()->where('student_id', $data->user_id)->first();
         $dataBalance->hall_id = $this->hall_id;
         $dataBalance->save();
+
+        // Add The report to report array
+        $data->report = "[]";
+        $arrayReport = json_decode($data->report, true);
+        array_push($arrayReport, 'Room Allocated - Room No ' . $room->title . ' and Seat No ' . $request->position . ' on ' . $room->updated_at->format('F j,Y'));
+        sort($arrayReport);
+        $jsonData = json_encode($arrayReport);
+        $data->report = $jsonData;
+        //
+        $data->save();
         //
         return redirect()->route('staff.roomallocation.index')->with('success', 'Room Allocation Data has been added Successfully!');
     }
@@ -258,6 +268,13 @@ class AllocatedSeatController extends Controller
         }
         //
         $data->status = 1;
+        // Add The report to report array
+        $arrayReport = json_decode($data->report, true);
+        array_push($arrayReport, 'Room Allocation Updated - Room No ' . $room->title . ' and Seat No ' . $request->position . ' on ' . $room->updated_at->format('F j,Y'));
+        sort($arrayReport);
+        $jsonData = json_encode($arrayReport);
+        $data->report = $jsonData;
+        //
         $data->save();
         //Saving History 
         $HistoryController = new HistoryController();
@@ -280,6 +297,32 @@ class AllocatedSeatController extends Controller
             return redirect()->route('staff.roomallocation.index')->with('danger', 'Not Found!');
         }
         if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.roomallocation.index')->with('danger', 'Not Permitted!');
+        }
+        if ($data->status != 1) {
+            return redirect()->route('staff.roomallocation.index')->with('danger', 'Not Permitted!');
+        }
+        return view('staff.roomallocation.cancel', ['data' => $data]);
+    }
+    public function delete(Request $request)
+    {
+        if (Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'staff') {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+        }
+        $request->validate([
+            'objective' => 'required|not_in:0',
+            'report' => 'required',
+            'id' => 'required',
+        ]);
+        $id = $request->id;
+        $data = AllocatedSeats::find($id);
+        if ($data == null) {
+            return redirect()->route('staff.roomallocation.index')->with('danger', 'Not Found!');
+        }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.roomallocation.index')->with('danger', 'Not Permitted!');
+        }
+        if ($data->status != 1) {
             return redirect()->route('staff.roomallocation.index')->with('danger', 'Not Permitted!');
         }
         // User Data Update
@@ -313,6 +356,19 @@ class AllocatedSeatController extends Controller
         }
         //
         $data->status = 0;
+        $data->objective = $request->objective;
+        // Add The report to report array
+        if ($request->objective == 1) {
+            $report = 'Room and Seat Canceled - Room No ' . $room->title . ' and Seat No ' . $data->position . ' has been cleared on ' . $room->updated_at->format('F j,Y') . '. Additional report - ' . $request->report;
+        } elseif ($request->objective == 2) {
+            $report = 'Rusticated on ' . $room->updated_at->format('F j,Y') . ' . Report or Reason - ' . $request->report;
+        }
+        $arrayReport = json_decode($data->report, true);
+        array_push($arrayReport, $report);
+        sort($arrayReport);
+        $jsonData = json_encode($arrayReport);
+        $data->report = $jsonData;
+        //
         $data->save();
         // $data->delete();
         //Saving History 

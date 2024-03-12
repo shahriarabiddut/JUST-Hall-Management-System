@@ -16,7 +16,7 @@ class HistoryController extends Controller
     {
         $this->middleware(function ($request, $next) {
             $this->hall_id = Auth::guard('staff')->user()->hall_id;
-            if ($this->hall_id == 0 || $this->hall_id == null) {
+            if ($this->hall_id == 0 || $this->hall_id == null || Auth::guard('staff')->user()->status == 0) {
                 return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
             }
             if (Auth::guard('staff')->user()->hall_id != 0) {

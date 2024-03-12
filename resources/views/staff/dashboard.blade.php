@@ -7,7 +7,7 @@
                 <p>{{ session('danger') }} </p>
             </div>
             @endif
-@if(Auth::guard('staff')->user()->hall_id != 0 || Auth::guard('staff')->user()->hall_id != null)
+@if(Auth::guard('staff')->user()->hall_id != 0 || Auth::guard('staff')->user()->hall_id != null || Auth::guard('staff')->user()->status != 0)
     @if(App\Models\RoomRequest::where('flag', 0)->where('hall_id', Auth::guard('staff')->user()->hall_id)->count()!=0)
     <!-- Content Row Notificaton -->
     <div class="row mt-1 p-2 mx-2 bg-warning text-white mb-2">
@@ -95,7 +95,7 @@
             </div>
         </div>
     </div>
-@if(Auth::guard('staff')->user()->type != 'staff' )
+@if(Auth::guard('staff')->user()->type != 'staff' && Auth::guard('staff')->user()->status != 0)
     <!-- Bookings (Monthly) Card Example -->
     <div class="col-xl-3 col-md-6 mb-4">
         <div class="card border-left-danger shadow h-100 py-2">
@@ -137,11 +137,11 @@
             </div>
         </div>
     </div>
+    @endif
 </div>
 @endif
-@endif
 <!-- Content Row For Order Data of Next Day -->
-@if(Auth::guard('staff')->user()->type != 'provost')
+@if(Auth::guard('staff')->user()->type != 'provost' && Auth::guard('staff')->user()->status != 0)
 <div class="row">
 
     @foreach ($results as $key=> $result)
@@ -226,9 +226,10 @@
 
     @endforeach
 
+    
 </div>
-@else
-
+@endif
+@if(Auth::guard('staff')->user()->type == 'provost' && Auth::guard('staff')->user()->status != 0)
 <script src="{{ asset('vendor/chart.js/Chart.min.js') }}"></script>
 <div class="row">
 

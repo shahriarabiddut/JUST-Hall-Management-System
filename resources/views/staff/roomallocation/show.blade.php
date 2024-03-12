@@ -50,7 +50,7 @@
                         <tr>
                             <td colspan="2">
                                 @if ($data->status==1)
-                                <a onclick="return confirm('Are You Sure?')" href="{{ url('staff/roomallocation/'.$data->id.'/delete') }}" class="btn btn-danger btn-sm" title="Remove Data"><i class="fa fa-trash"> Remove Room Allocation </i></a>
+                                <a onclick="return confirm('Are You Sure?')" href="{{ url('staff/roomallocation/'.$data->id.'/delete') }}" class="btn btn-danger btn-sm" title="Remove Data"><i class="fa fa-ban"> Remove Room Allocation </i></a>
                                 <a href="{{ url('staff/roomallocation/'.$data->id.'/edit') }}" class="float-right btn btn-info btn-sm" title="Edit Data"> <i class="fa fa-edit"> Edit </i></a> 
                                 @else
                                 <a href="{{ url('staff/roomallocation/'.$data->id.'/edit') }}" class="float-right btn btn-info btn-sm" title="Edit Data"> <i class="fa fa-edit"> Reallocate Room </i></a> 
@@ -60,6 +60,13 @@
                         </tr>
                         
                 </table>
+                @php $report = json_decode($data->report, true); $j=1;@endphp
+                <table class="table table-bordered" width="100%">
+                    <tr>
+                        <th class="text-center h-4 bg-secondary text-white"> Report </th>
+                    <tr>
+                    @foreach ($report as $r) <tr><td> {{ $j++ }} . {{ $r }}</td> </tr> @endforeach
+            </table>
             </div>
         </div>
     </div>
