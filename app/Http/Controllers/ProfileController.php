@@ -148,7 +148,7 @@ class ProfileController extends Controller
             'mobile' => 'required',
             'dept' => 'required',
             'session' => 'required',
-            'email' => 'required',
+            // 'email' => 'required',
         ]);
         //If user Given any PHOTO
         if ($request->hasFile('photo')) {
@@ -166,10 +166,10 @@ class ProfileController extends Controller
         }
 
         $data->name = $request->name;
-        if ($data->email != $request->email) {
-            $data->email_verified_at = null;
-        }
-        $data->email = $request->email;
+        // if ($data->email != $request->email) {
+        //     $data->email_verified_at = null;
+        // }
+        // $data->email = $request->email;
         $data->dept = $request->dept;
         $data->session = $request->session;
         $data->mobile = $request->mobile;

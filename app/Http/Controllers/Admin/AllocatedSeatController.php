@@ -48,10 +48,13 @@ class AllocatedSeatController extends Controller
     {
         //Student Data segregation
         $unstudents = DB::select("SELECT * FROM users WHERE id NOT IN (SELECT user_id FROM allocated_seats) OR hall_id = 0 AND hall_id = $hall_id");
+        $halls = Hall::find($hall_id);
         $data = [];
         foreach ($unstudents as $student) {
-            if ($student->hall_id == $hall_id || $student->hall_id == 0 || $student->hall_id == null) {
-                $data[] = $student;
+            if ($student->status == 1 && $student->gender == $halls->type) {
+                if ($student->hall_id == $hall_id || $student->hall_id == 0 || $student->hall_id == null) {
+                    $data[] = $student;
+                }
             }
         }
         $students = $data;

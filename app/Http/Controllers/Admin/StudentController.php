@@ -42,7 +42,7 @@ class StudentController extends Controller
         $data = new Student;
         $request->validate([
             'name' => 'required',
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email|regex:/(.+)@(.+)\.(.+)/i|unique:users',
             'password' => 'required | min:6',
             'mobile' => 'required',
             'rollno' => 'required|unique:users',
@@ -125,7 +125,7 @@ class StudentController extends Controller
         }
         $formFields = $request->validate([
             'name' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|regex:/(.+)@(.+)\.(.+)/i',
             'mobile' => 'required',
             'rollno' => 'required',
             'dept' => 'required',
@@ -163,6 +163,9 @@ class StudentController extends Controller
         if ($data == null) {
             return redirect()->route('admin.student.index')->with('danger', 'Not Found!');
         }
+        if ($data->status == 0) {
+            return redirect()->route('admin.student.index')->with('danger', 'No Action Needed!');
+        }
         //Delete Balance Account
         $BalanceAccount = Balance::all()->where('student_id', '=', $id)->first();
         $data->status = 0;
@@ -198,9 +201,25 @@ class StudentController extends Controller
             // $data->hall_id = 0;
             // $BalanceAccount->hall_id = 0;
         }
-        return redirect('admin/student')->with('danger', 'Student data and Associated Balance Account has been removed Successfully!');
+        return redirect('admin/student')->with('danger', 'Student data and Associated Balance Account has been disabled Successfully!');
     }
-
+    public function activate($id)
+    {
+        $data = Student::find($id);
+        if ($data == null) {
+            return redirect()->route('admin.student.index')->with('danger', 'Not Found!');
+        }
+        if ($data->status == 1) {
+            return redirect()->route('admin.student.index')->with('danger', 'No Action Needed!');
+        }
+        //Delete Balance Account
+        $BalanceAccount = Balance::all()->where('student_id', '=', $id)->first();
+        $data->status = 1;
+        $data->save();
+        $BalanceAccount->status = 1;
+        $BalanceAccount->save();
+        return redirect()->route('admin.student.index')->with('success', 'Student data and Associated Balance Account has been activated Successfully!');
+    }
     // Import Bilk users from csv
     public function importUser()
     {

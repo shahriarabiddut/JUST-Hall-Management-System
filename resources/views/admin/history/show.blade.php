@@ -14,15 +14,11 @@
                 <table class="table table-bordered" width="100%">
                     <tr>
                         <th>Hall</th>
-                        <th>{{ $data->hall->title }}</th>
+                        <th>@if ($data->hall!=null) {{ $data->hall->title }} @else Hall Deleted @endif </th>
                     </tr>
                     <tr>
                         <th>Staff</th>
-                        <td>{{ $data->staff->name }}</td>
-                    </tr>
-                    <tr>
-                        <th>Staff Email</th>
-                        <td>{{ $data->staff->email }}</td>
+                        <td>@if ($data->staff!=null) {{ $data->staff->name }} - {{ $data->staff->email }} @else Staff Deleted @endif</td>
                     </tr>
                     <tr>
                         <th>Details</th>

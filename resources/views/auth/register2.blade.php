@@ -32,6 +32,11 @@
                 <div class="row">
                     <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
                     <div class="col-lg-7">
+                        @if ($errors->any())
+                        @foreach ($errors->all() as $error)
+                        <p class="text-danger"> {{ $error }} </p>
+                        @endforeach
+                        @endif
                         <div class="p-5">
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
@@ -77,8 +82,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
                                     </div>
-                                    <input type="email" required class="form-control form-control-user" id="exampleInputEmail"
-                                        placeholder="Email Address" value="{{ old('email') }}">
+                                    <input type="email" name="email" required class="form-control form-control-user" id="exampleInputEmail" placeholder="Email Address" value="{{ old('email') }}">
                                 </div>
                                 <div class="form-group row ">
                                     <div class="col-sm-6 mb-3 mb-sm-0 input-group">

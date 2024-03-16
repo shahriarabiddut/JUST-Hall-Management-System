@@ -792,6 +792,8 @@ class AllocatedSeatController extends Controller
                             'room_id' => $room->id,
                             'user_id' => $user->id,
                             'position' => $position,
+                            'status' => '1',
+                            'report' => "[]",
                             'hall_id' => $this->hall_id
                         ]);
                         $room->save();

@@ -44,6 +44,7 @@
                                 <option value="payment">Payment Issue</option>
                                 <option value="subscription">Subscription Message</option>
                               </select>
+                              {{-- <input class="form-control" type="text" name="objective" placeholder="Objective" required value="{{ old('objective') }}"> --}}
                             </td>
                     </tr>
                     <tr>

@@ -57,10 +57,10 @@
                             <td>{{ $d->subject }}</td>
                             <td>{{ $d->objective }}</td>
                             <td>
-                                @if ($d->staff_id==0)
+                                @if ($d->staff==null)
                                     Admin
                                 @else
-                                {{ $d->staff->name }}
+                                    {{ $d->staff->name }}
                                 @endif
                                 
                             </td>

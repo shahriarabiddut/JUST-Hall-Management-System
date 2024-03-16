@@ -51,8 +51,8 @@ class HallController extends Controller
         $request->validate([
             'title' => 'required',
             'banglatitle' => 'required',
-            'type' => 'required',
-            'status' => 'required|not_in:0',
+            'type' => 'required|not_in:3',
+            'status' => 'required',
             'fixed_cost' => 'required',
             'fixed_cost_masters' => 'required',
         ]);

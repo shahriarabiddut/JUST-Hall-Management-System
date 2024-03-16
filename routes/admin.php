@@ -60,10 +60,12 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
     Route::get('student/import-bulk', [StudentController::class, 'importUser'])->name('student.bulk');
     Route::post('student/import-bulk', [StudentController::class, 'handleImportUser'])->name('student.bulkUpload');
     Route::get('student/{id}/delete', [StudentController::class, 'destroy']);
+    Route::get('studentActive/{id}/', [StudentController::class, 'activate'])->name('student.active');
     Route::resource('student', StudentController::class);
 
 
     // Staff Crud
+    Route::get('staffActive/{id}/', [StaffController::class, 'activate'])->name('staff.active');
     Route::get('staff/{id}/delete', [StaffController::class, 'destroy']);
     Route::get('staff/{id}/change', [StaffController::class, 'change']);
     Route::put('staff/{id}/changeUpdate', [StaffController::class, 'changeUpdate'])->name('staff.changeUpdate');

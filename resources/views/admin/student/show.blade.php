@@ -62,7 +62,7 @@
                                 @if ($data->status!=0)
                                 <a onclick="return confirm('Are You Sure?')" href="{{ url('admin/student/'.$data->id.'/delete') }}" class="btn btn-danger btn-sm m-1" title="Disable Data"><i class="fa fa-ban"> Disable </i></a>
                                 @else 
-                                {{-- <a onclick="return confirm('Are You Sure?')" href="{{ url('admin/student/'.$data->id.'/delete') }}" class="btn btn-success btn-sm m-1" title="Active Data"><i class="fa fa-check"> Active </i></a>  --}}
+                                <a onclick="return confirm('Are You Sure, Activate the Account?')" href="{{ route('admin.student.active',$data->id) }}" class="btn btn-success btn-sm m-1" title="Active Data"><i class="fa fa-check"> Active </i></a> 
                                 @endif
                                 <a href="{{ url('admin/student/'.$data->id.'/edit') }}" class="float-right btn btn-info btn-sm" title="Edit Data"> <i class="fa fa-edit"> Edit {{ $data->title }}  </i></a>
                             </td>

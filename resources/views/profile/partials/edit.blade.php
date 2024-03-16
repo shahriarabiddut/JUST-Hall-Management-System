@@ -23,7 +23,7 @@
                 </tr>
                 <tr>
                     <th>Email <span class="text-danger">*</span></th>
-                    <td><input required name="email" type="email" class="form-control" value="{{ $user->email }}"></td>
+                    <td><input readonly name="email" type="email" class="form-control" value="{{ $user->email }}"></td>
                 </tr>
                 <tr>
                     <th>Department <span class="text-danger">*</span></th>

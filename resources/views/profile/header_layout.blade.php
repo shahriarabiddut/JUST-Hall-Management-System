@@ -47,8 +47,7 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-envelope fa-fw"></i>
                                 <!-- Counter - Messages -->
-                                <span class="badge badge-danger badge-counter">@if($dataMessage) {{ count($dataMessage) }}
-                                    @endif</span>
+                                @if(Auth::user()->roomrequest->where('flag',0)->count())<span class="badge badge-danger badge-counter"> {{ Auth::user()->roomrequest->where('flag',0)->count() }} </span> @endif
                             </a>
                             <!-- Dropdown - Messages -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -57,8 +56,7 @@
                                     Message Center
                                 </h6>
                                 
-                                @if($dataMessage)
-                                @foreach ($dataMessage as $data)
+                                @if(Auth::user()->roomrequest->count())
                                 <a class="dropdown-item d-flex align-items-center" href="{{ route('student.roomrequestshow')  }}">
                                     <div class="dropdown-list-image mr-3">
                                         <img class="rounded-circle" src="{{ asset('images/room.png') }}"
@@ -67,10 +65,9 @@
                                     </div>
                                     <div class="font-weight-bold">
                                         <div class="text-truncate">Room Application Submitted.</div>
-                                        <div class="small text-gray-500">{{ $data->created_at }}</div>
+                                        <div class="small text-gray-500">{{ Auth::user()->roomrequest->created_at->format('F j , Y') }}</div>
                                     </div>
                                 </a>
-                                @endforeach
                                 @endif
 
                                 <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>

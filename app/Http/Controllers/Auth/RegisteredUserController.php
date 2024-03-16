@@ -36,22 +36,13 @@ class RegisteredUserController extends Controller
             'gender' => ['required', 'string', 'not_in:3', 'max:255'],
             'dept' => ['required', 'string', 'max:255'],
             'session' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'regex:/(.+)@(.+)\.(.+)/i', 'max:255', 'unique:' . User::class],
+            'email' => 'required|email|regex:/(.+)@(.+)\.(.+)/i|unique:users',
             'rollno' => ['required', 'string', 'unique:' . User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()]
         ]);
-        // $user = User::create([
-        //     'name' => $request->name,
-        //     'email' => $request->email,
-        //     'rollno' => $request->rollno,
-        //     'password' => Hash::make($request->password),
-        // ]);
-        if ($request->gender == '3') {
-            return redirect()->back()->with('danger', 'Please Select Gender!');
-        }
+        dd($request);
         $rollno = str_replace(' ', '', $request->rollno);
         $user = new User;
-
         $user->name = $request->name;
         $user->dept = $request->dept;
         $user->session = $request->session;

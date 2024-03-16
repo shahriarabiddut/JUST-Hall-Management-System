@@ -41,16 +41,17 @@
         <div id="collapseTwo" class="collapse @if(request()->is('student/room*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Room </h6>
-            @if(isset($sorryRoomSidebar))
-                @if($sorryRoomSidebar)
+                @if(Auth::user()->allocatedRoom != null)
                 <a class="collapse-item" href="{{ route('student.myroom') }}">My Room Details</a> 
                 <a class="collapse-item" href="{{ route('student.myroom.change') }}">Room Change</a> 
                 <a class="collapse-item" href="{{ route('student.myroom.leave') }}">Room Leave</a> 
                 @else
-                <a class="collapse-item" href="{{ route('student.roomrequest') }}">New Room Request</a>
-                <a class="collapse-item" href="{{ route('student.roomrequestshow') }}">My Room Requests</a>
+                    @if(Auth::user()->roomrequest->count()==0 )
+                    <a class="collapse-item" href="{{ route('student.roomrequest') }}">New Room Request</a>
+                    @else
+                    <a class="collapse-item" href="{{ route('student.roomrequestshow') }}">My Room Requests</a>
+                    @endif
                 @endif
-            @endif 
                 
             </div>
         </div>

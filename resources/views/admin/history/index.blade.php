@@ -49,7 +49,8 @@
                             @else
                         @endif >
                             <td>{{ ++$key }}</td>
-                            <td>{{ $d->staff->name }} (@if ($d->hall!=null) {{ $d->hall->title }} @endif)</td>
+                            <td>@if ($d->staff!=null) {{ $d->staff->name }} (@if ($d->hall!=null) {{ $d->hall->title }} @endif) @else Staff Deleted @endif
+                                </td>
                             <td>{{ $d->data }}
                             <span
                             @switch($d->flag)

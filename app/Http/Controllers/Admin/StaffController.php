@@ -38,7 +38,7 @@ class StaffController extends Controller
         //
         $data = new Staff;
         $request->validate([
-            'email' => 'required|email|unique:staff',
+            'email' => 'required|email|regex:/(.+)@(.+)\.(.+)/i|unique:staff',
             'type' => 'required',
             'hall_id' => 'required',
         ]);
@@ -121,10 +121,26 @@ class StaffController extends Controller
         if ($data == null) {
             return redirect()->route('admin.staff.index')->with('danger', 'Not Found!');
         }
+        if ($data->status == 0) {
+            return redirect()->route('admin.staff.index')->with('danger', 'No Action Needed!');
+        }
         $data->status = 0;
         $data->hall_id = 0;
         $data->save();
-        return redirect('admin/staff')->with('danger', 'Data has been deleted Successfully!');
+        return redirect('admin/staff')->with('danger', 'Staff data has been disabled Successfully!');
+    }
+    public function activate($id)
+    {
+        $data = Staff::find($id);
+        if ($data == null) {
+            return redirect()->route('admin.staff.index')->with('danger', 'Not Found!');
+        }
+        if ($data->status == 1) {
+            return redirect()->route('admin.staff.index')->with('danger', 'No Action Needed!');
+        }
+        $data->status = 1;
+        $data->save();
+        return redirect()->route('admin.staff.index')->with('success', 'Staff Data has been Activated Successfully and Please! Assign Hall to this User!');
     }
 
     public function change(string $id)
@@ -142,7 +158,7 @@ class StaffController extends Controller
         //
         $data = Staff::find($id);
         $request->validate([
-            'email' => 'required',
+            'email' => 'required|regex:/(.+)@(.+)\.(.+)/i',
             'password' => 'required',
 
         ]);
