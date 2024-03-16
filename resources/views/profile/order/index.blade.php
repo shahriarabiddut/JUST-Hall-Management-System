@@ -3,10 +3,10 @@
 
 @section('content')
 
-<div class="card-header p-1 my-1 bg-info">
+{{-- <div class="card-header p-1 my-1 bg-info">
     <h3 class="m-0 p-2 font-weight-bold text-white bg-info">
         Order </h3>
-</div>
+</div> --}}
     <!-- Page Heading -->
             <!-- Session Messages Starts -->
             @if(Session::has('success'))
@@ -25,7 +25,7 @@
         <div class="card-header py-3">
             <div class="row">
                 <div class="col-sm">
-                    <h6 class="m-0 font-weight-bold text-primary">Order History </h6>
+                    <h3 class="m-0 font-weight-bold text-primary">Order History </h3>
                 </div>
                 <div class="col-sm float-right">
                     <select id="mySelect" class="m-1" class="float-left form-control">

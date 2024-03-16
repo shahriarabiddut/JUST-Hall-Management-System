@@ -20,16 +20,24 @@
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <tbody>
                     <tr>
+                        <th>Sample CSV</th>
+                        <td>
+                            <a href="{{ route('root').'/files/users-NoEmail.csv' }}" class="btn btn-block btn-info">CSV Sample of Data Contains Mobile but No Email</a>
+                            <a href="{{ route('root').'/files/users-EmailAndMobile.csv' }}" class="btn btn-block btn-info">CSV Sample of Data Contains Email & Mobile</a>
+                            <a href="{{ route('root').'/files/users-NoMobile.csv' }}" class="btn btn-block btn-info">CSV Sample of Data Contains Email but No Mobile</a>
+                        </td>
+                    </tr>
+                    <tr>
                         <th> Select Method </th>
                         <td><select id="dropdown" name="email" class="form-control" onchange="updateText()">
-                            <option selected value="0">Data Contains No Email</option>
+                            <option selected value="0">Data Contains Mobile but No Email</option>
                             <option value="1">Data Contains Email & Mobile</option>
-                            <option value="2">Data Contains No Mobile</option>
+                            <option value="2">Data Contains Email but No Mobile</option>
                         </select></td>
                     </tr>
                     <tr>
                         <th>Format (Excel)</th>
-                        <td>Column name should be in serial - <div id="result" class="d-inline">rollno,name,dept,session,mobile or Error May Occur!</div>!</td>
+                        <td>Column name should be in serial - <div id="result" class="d-inline">rollno,name,dept,session,mobile or Error May Occur! </div>!</td>
                     </tr>
                 <tr>
                     <th style="width: 50%">File</th>
@@ -59,7 +67,7 @@
     var newText;
     switch (selectedOption) {
         case "0":
-            newText = "rollno,name,dept,session,mobile or Error May Occur";
+            newText = "rollno,name,dept,session,mobile or Error May Occur.";
             break;
         case "1":
             newText = "rollno,name,email,dept,session,mobile or Error May Occur";

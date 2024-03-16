@@ -15,11 +15,10 @@
                     
                     <tr>
                         <th>Staff</th>
-                        <td>{{ $data->staff->name }}</td>
-                    </tr>
-                    <tr>
-                        <th>Staff Email</th>
-                        <td>{{ $data->staff->email }}</td>
+                        <td>
+                            @if ($data->staff!=null)
+                            {{ $data->staff->name }} - {{ $data->staff->email }}
+                            @endif</td>
                     </tr>
                     <tr>
                         <th>Details</th>

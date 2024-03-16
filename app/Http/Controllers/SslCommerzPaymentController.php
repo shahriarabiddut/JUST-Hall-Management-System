@@ -29,7 +29,7 @@ class SslCommerzPaymentController extends Controller
 
         //Get Hall Id
         $student = Student::find($request->student_id);
-        if ($student->hall->payment == 0) {
+        if ($student->hall->enable_payment == 0) {
             return redirect()->route('student.dashboard')->with('danger', 'New Payments are Disabled by Hall Administrator!');
         }
         #Before  going to initiate the payment order status need to insert or update as Pending.

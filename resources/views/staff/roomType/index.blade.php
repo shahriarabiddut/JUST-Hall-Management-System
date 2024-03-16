@@ -27,7 +27,6 @@
                         <tr>
                             <th>#</th>
                             <th>Title</th>
-                            <th>Images</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -35,7 +34,6 @@
                         <tr>
                             <th>#</th>
                             <th>Title</th>
-                            <th>Images</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
@@ -47,8 +45,6 @@
                         <tr>
                             <td>{{ ++$key }}</td>
                             <td>{{ $d->title }}</td>
-                            <td>{{ count($d->roomtypeimages) }}</td>
-                            
                             <td class="text-center">
                                 <a href="{{ url('staff/roomtype/'.$d->id) }}" class="btn btn-info btn-sm" title="View Data"><i class="fa fa-eye"></i></a></a>
                             </td>

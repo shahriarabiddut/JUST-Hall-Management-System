@@ -1,10 +1,6 @@
 @extends('staff/layout')
 @section('title', 'Edit Settings')
 @section('content')
-
-
-    <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Hall Settings</h1>
     <!-- Session Messages Starts -->
     @if(Session::has('success'))
     <div class="p-3 mb-2 bg-success text-white">

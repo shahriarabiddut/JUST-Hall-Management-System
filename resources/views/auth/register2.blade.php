@@ -63,13 +63,53 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"> <i class="fa fa-pen"></i> </span>
                                     </div>
-                                    <input required name="dept" class="form-control form-control-user" placeholder="Department - CSE , EEE" type="text" value="{{ old('dept') }}">
+                                    <select required name="dept" class="form-control">
+                                        <option selected value="0">Select Department</option>
+                                        <option selected value="Computer Science and Engineering(CSE)">Computer Science and Engineering(CSE)</option>
+                                        <option value="Electrical and Electronic Engineering(EEE)">Electrical and Electronic Engineering(EEE)
+                                        </option>
+                                        <option value="Industrial and Production Engineering(IPE)">Industrial and Production Engineering(IPE)
+                                        </option>
+                                        <option value="Petroleum and Mining Engineering(PME)">Petroleum and Mining Engineering(PME)</option>
+                                        <option value="Chemical Engineering(ChE)">Chemical Engineering(ChE)</option>
+                                        <option value="Biomedical Engineering(BE)">Biomedical Engineering(BE)</option>
+                                        <option value="Textile Engineering(TE)">Textile Engineering(TE)</option>
+                                        <option value="Agro Product Processing Technology">Agro Product Processing Technology</option>
+                                        <option value="Climate and Disaster Management">Climate and Disaster Management</option>
+                                        <option value="Environmental Science and Technology">Environmental Science and Technology</option>
+                                        <option value="Nutrition and Food Technology">Nutrition and Food Technology</option>
+                                        <option value="Fisheries and Marine Bioscience">Fisheries and Marine Bioscience</option>
+                                        <option value="Genetic Engineering and Biotechnology">Genetic Engineering and Biotechnology</option>
+                                        <option value="Microbiology">Microbiology</option>
+                                        <option value="Pharmacy">Pharmacy</option>
+                                        <option value="Nursing and Health Science">Nursing and Health Science</option>
+                                        <option value="Physical Education and Sports Science">Physical Education and Sports Science</option>
+                                        <option value="Physiotherapy and Rehabilitation">Physiotherapy and Rehabilitation</option>
+                                        <option value="English">English</option>
+                                        <option value="Chemistry">Chemistry</option>
+                                        <option value="Mathematics">Mathematics</option>
+                                        <option value="Physics">Physics</option>
+                                        <option value="Accounting and Information Systems">Accounting and Information Systems</option>
+                                        <option value="Finance and Banking">Finance and Banking</option>
+                                        <option value="Management">Management</option>
+                                        <option value="Marketing">Marketing</option>
+                                        <!-- Add more departments here -->
+                                    </select>
                                 </div>
                                 <div class="form-group input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"> <i class="fa fa-clock"></i> </span>
                                       </div>
-                                      <input required name="session" class="form-control form-control-user" placeholder="Session - 2017-18,2018-19" type="text" value="{{ old('session') }}">
+                                      <select required name="session" class="form-control">
+                                        <option selected value="0"> -- Select Session -- </option>
+                                        <option value="2017-18">2017-18</option>
+                                        <option value="2018-19">2018-19</option>
+                                        <option value="2019-20">2019-20</option>
+                                        <option value="2020-21">2020-21</option>
+                                        <option value="2021-22">2021-22</option>
+                                        <option value="2022-23">2022-23</option>
+                                        <option value="2023-24">2023-24</option>
+                                    </select>
                                 </div>
                                 <div class="form-group input-group">
                                     <div class="input-group-prepend">

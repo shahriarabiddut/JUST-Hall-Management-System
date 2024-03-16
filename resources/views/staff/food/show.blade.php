@@ -22,7 +22,7 @@
                     <tr>
                         <th>Food Time</th>
                         @switch($data->foodtime->title)
-                            @case('Launch')
+                            @case('Lunch')
                                 <td class="bg-warning text-white"> {{ $data->foodtime->title }} <i class="fas fa-sun"></i></td>
                                     @break
                             @case('Dinner')

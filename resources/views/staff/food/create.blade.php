@@ -40,7 +40,7 @@
                     <tr>
                         <th> Status <span class="text-danger">*</span></th>
                             <td><select required name="status" class="form-control room-list">
-                                <option value="0">--- Select Status ---</option>
+                                <option value="3">--- Select Status ---</option>
                                 <option value="1">Active</option>
                                 <option value="0">Disable</option>
                             </select></td>

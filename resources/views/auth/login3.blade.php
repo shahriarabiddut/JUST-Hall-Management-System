@@ -10,7 +10,7 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico')}}" />
     <meta name="author" content="">
 
-    <title> Login Rollno | @isset($HallOption)
+    <title> Login | @isset($HallOption)
         {{ $HallOption[2]->value }}
     @endisset </title>
     <!-- Custom fonts for this template-->
@@ -26,15 +26,14 @@
 
 <body>
 
-    {{-- <section class="pt-5 pb-5 mt-0 align-items-center d-flex bg-dark" style="min-height: 100vh; background-size: cover; background-image: url('{{ asset($HallOption[5]->value) }}')"> --}}
-      <section class="pt-3 pb-3 mt-0 align-items-center d-flex bg-dark" style="min-height: 100vh;">
+    <section class="pt-3 pb-3 mt-0 align-items-center d-flex bg-dark" style="min-height: 100vh;">
         <div class="container-fluid">
             
           <div class="row  justify-content-center align-items-center d-flex-row text-center h-100">
             <div class="col-12 col-md-4 col-lg-4 h-50 ">
               <div class="card shadow">
                 <div class="card-body mx-2">
-                  @error('rollno')
+                    @error('email')
                   <div class="text-bold bg-danger text-center text-white p-2">{{ $message }}</div>
                   @enderror
                   @error('password')
@@ -42,14 +41,23 @@
                   @enderror
                   <img src="{{ asset($HallOption[3]->value) }}" class="rounded mx-auto d-block mb-1" alt="Logo" style="height: 100px;">
                   <h4 class="card-title text-center bg-secondary p-2 text-white my-3 rounded"> Student Login </h4>
-                  <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('login3') }}" >
+                  {{-- <p class="text-center">Get started with your free account</p>
+                  <p>
+                    <a href="" class="btn btn-block btn-info">
+                      <i class="fab fa-twitter mr-2"></i>Login via Twitter</a>
+                    <a href="" class="btn btn-block btn-primary">
+                      <i class="fab fa-facebook-f mr-2"></i>Login via facebook</a>
+                  </p>
+                  <p class="text-muted font-weight-bold ">
+                    <span>OR</span>
+                  </p> --}}
+                  <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('login') }}" >
                     @csrf
                     <div class="form-group input-group">
                       <div class="input-group-prepend">
-                        <span class="input-group-text"> <i class="fa fa-address-card"></i> </span>
+                        <span class="input-group-text"> <i class="fa fa-envelope"></i> </span>
                       </div> 
-                      <input required id="i1" onchange="fillOtherField()" name="rollno" class="form-control" placeholder="Enter Email / Roll No" type="text" value="{{ old('rollno') }}">
-                      <input readonly id="i2" name="email2" class="form-control" type="hidden">
+                      <input required name="email" class="form-control" placeholder="Enter Email address" type="email" value="{{ old('email') }}">
                     </div>
                     <div class="form-group input-group">
                       <div class="input-group-prepend">
@@ -66,6 +74,8 @@
                     @if (Route::has('password.request'))
                     <p class="text-center">Forgot Your Password?
                       <a href="{{ route('password.request') }}">Request New Password</a>
+                      <hr>
+                      <a href="{{ route('login2') }}" class="btn btn-block btn-info"><i class="fa fa-signup m-2"></i>Login Using Roll No</a>
                     </p>
                     @endif
                     <hr>
@@ -103,11 +113,8 @@
           showBtn.style.color = "#222";
         }
       });
-  function fillOtherField() {
-    let input1Value = document.getElementById('i1').value;
-    document.getElementById('i2').value = input1Value;
-  }
-</script>
+    </script>
+
     @yield('scripts')
 @include('../layouts/validateinput')
 

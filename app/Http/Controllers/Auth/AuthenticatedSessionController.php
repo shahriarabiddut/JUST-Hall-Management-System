@@ -42,7 +42,22 @@ class AuthenticatedSessionController extends Controller
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }
+    public function store3(LoginRequest $request): RedirectResponse
+    {
+        if (filter_var($request->email2, FILTER_VALIDATE_EMAIL)) {
+            $credentials = [
+                'email' => $request->email2, // Assuming email2 is the field name in the form
+                'password' => $request->password,
+            ];
+            $request->authenticate3($credentials);
+        } else {
+            $request->authenticate2();
+        }
 
+        $request->session()->regenerate();
+
+        return redirect()->intended(RouteServiceProvider::HOME);
+    }
     /**
      * Destroy an authenticated session.
      */

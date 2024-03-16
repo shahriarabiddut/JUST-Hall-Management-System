@@ -28,7 +28,7 @@ class LoginRequest extends FormRequest
     {
         return [
             'email' => ['string', 'email'],
-            'mobile' => ['integer'],
+            'rollno' => ['string'],
             'password' => ['required', 'string'],
         ];
     }
@@ -54,9 +54,23 @@ class LoginRequest extends FormRequest
     }
     public function authenticate2(): void
     {
-        $this->ensureIsNotRateLimited();
+        $this->ensureIsNotRateLimited2();
 
         if (!Auth::attempt($this->only('rollno', 'password'), $this->boolean('remember'))) {
+            RateLimiter::hit($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                'rollno' => trans('auth.failed'),
+            ]);
+        }
+
+        RateLimiter::clear($this->throttleKey());
+    }
+    public function authenticate3(array $credentials): void
+    {
+        $this->ensureIsNotRateLimited();
+
+        if (!Auth::attempt($credentials, $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
             throw ValidationException::withMessages([
@@ -88,7 +102,23 @@ class LoginRequest extends FormRequest
             ]),
         ]);
     }
+    public function ensureIsNotRateLimited2(): void
+    {
+        if (!RateLimiter::tooManyAttempts($this->throttleKey(), 5)) {
+            return;
+        }
 
+        event(new Lockout($this));
+
+        $seconds = RateLimiter::availableIn($this->throttleKey());
+
+        throw ValidationException::withMessages([
+            'rollno' => trans('auth.throttle', [
+                'seconds' => $seconds,
+                'minutes' => ceil($seconds / 60),
+            ]),
+        ]);
+    }
     /**
      * Get the rate limiting throttle key for the request.
      */

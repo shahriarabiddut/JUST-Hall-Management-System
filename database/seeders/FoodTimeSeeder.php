@@ -16,8 +16,8 @@ class FoodTimeSeeder extends Seeder
         //
         $food_times = [
             [
-                'title' => 'Launch',
-                'detail' => 'Launch Meal',
+                'title' => 'Lunch',
+                'detail' => 'Lunch Meal',
                 'status' => 0,
                 'price' => 0,
                 'createdby' => 'Automated',

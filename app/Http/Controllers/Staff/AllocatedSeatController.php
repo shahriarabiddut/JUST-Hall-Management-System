@@ -173,7 +173,7 @@ class AllocatedSeatController extends Controller
         }
         //
         $students = Student::all()->where('hall_id', $this->hall_id);
-        $rooms = Room::all()->where('hall_id', $this->hall_id);
+        $rooms = Room::all()->where('hall_id', $this->hall_id)->where('vacancy', '!=', 0);
         $data = AllocatedSeats::find($id);
         if ($data == null) {
             return redirect()->route('staff.roomallocation.index')->with('danger', 'Not Found!');
@@ -267,7 +267,18 @@ class AllocatedSeatController extends Controller
             $room->save();
         }
         //
-        $data->status = 1;
+        if ($data->status == 0) {
+            // User Data Update
+            $studentData = Student::find($data->user_id);
+            $studentData->hall_id = $this->hall_id;
+            $studentData->save();
+            //Connect Balance Account
+            $dataBalance = Balance::all()->where('student_id', $studentData->id)->first();
+            $dataBalance->hall_id = $this->hall_id;
+            $dataBalance->save();
+            //
+            $data->status = 1;
+        }
         // Add The report to report array
         $arrayReport = json_decode($data->report, true);
         array_push($arrayReport, 'Room Allocation Updated - Room No ' . $room->title . ' and Seat No ' . $request->position . ' on ' . $room->updated_at->format('F j,Y'));
@@ -276,6 +287,9 @@ class AllocatedSeatController extends Controller
         $data->report = $jsonData;
         //
         $data->save();
+        //
+
+
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
@@ -364,6 +378,9 @@ class AllocatedSeatController extends Controller
             $report = 'Rusticated on ' . $room->updated_at->format('F j,Y') . ' . Report or Reason - ' . $request->report;
         }
         $arrayReport = json_decode($data->report, true);
+        if ($data->report == null) {
+            $data->report = [];
+        }
         array_push($arrayReport, $report);
         sort($arrayReport);
         $jsonData = json_encode($arrayReport);
@@ -527,6 +544,15 @@ class AllocatedSeatController extends Controller
             $data3->user_id = $student_id;
             $data3->position = $request->position;
             $data3->hall_id =  $this->hall_id;
+            $data3->status =  1;
+            // Add The report to report array
+            $data3->report = "[]";
+            $arrayReport = json_decode($data3->report, true);
+            array_push($arrayReport, 'Room Allocated - Room No ' . $room->title . ' and Seat No ' . $request->position . ' on ' . $room->updated_at->format('F j,Y'));
+            sort($arrayReport);
+            $jsonData = json_encode($arrayReport);
+            $data3->report = $jsonData;
+            //
             $data3->save();
 
             //Room Allocation Requests Accepted

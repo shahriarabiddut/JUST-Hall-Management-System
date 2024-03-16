@@ -47,6 +47,7 @@ class RoomController extends Controller
         $data->totalseats = $request->totalseats;
         $data->vacancy = $request->totalseats;
         $data->hall_id = $request->hall_id;
+        $data->status = 1;
         //
         $positions = [];
         for ($i = 1; $i <= $request->totalseats; $i++) {
@@ -174,7 +175,8 @@ class RoomController extends Controller
                         'totalseats' => $totalseats,
                         'vacancy' => $totalseats,
                         'positions' => $positions,
-                        'hall_id' => $hall_id
+                        'hall_id' => $hall_id,
+                        'status' => 1
                     ]);
                     $importedStudents++;
                 } elseif ($data->totalseats < $totalseats) {

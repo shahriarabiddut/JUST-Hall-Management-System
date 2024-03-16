@@ -146,7 +146,7 @@ class EmailController extends Controller
         $dataEmail->hall_id = Auth::guard('staff')->user()->hall_id;
         $dataEmail->save();
         // The email sending is done using the to method on the Mail facade
-        Mail::to($RecieverEmail)->send(new PaymentEmail($emailBody, $emailObjective, $emailSubject, $dataEmail->title));
+        Mail::to($RecieverEmail)->send(new PaymentEmail($emailBody, $emailObjective, $emailSubject, $dataEmail->hall->title));
     }
     public function RoomAllocationEmail(string $id, string $roomtitle, string $status)
     {

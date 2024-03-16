@@ -11,6 +11,5 @@
 	<p>Thank You.</p>
 	<h4>{{ $title }} ,</h4>
 	<h4>Hall Automation Just</h4>
-
 </body>
 </html>

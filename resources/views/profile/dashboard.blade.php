@@ -39,7 +39,7 @@
             <div class="card shadow mb-4">
                 <div class="card-header py-3 
                 @switch($resulttitle[$key]->title)
-                    @case('Launch')
+                    @case('Lunch')
                         bg-warning
                         @break
                     @case('Dinner')
@@ -58,7 +58,7 @@
                     <h6 class="m-0 font-weight-bold text-white ">
                         {{ $resulttitle[$key]->title }} Orders <i class="fas 
                         @switch($resulttitle[$key]->title)
-                    @case('Launch')
+                    @case('Lunch')
                         fa-sun
                         @break
                     @case('Dinner')
@@ -140,7 +140,7 @@
             <div class="card shadow mb-4">
                 <div class="card-header py-3 
                 @switch($resulttitle[$key]->title)
-                    @case('Launch')
+                    @case('Lunch')
                         bg-warning
                         @break
                     @case('Dinner')
@@ -159,7 +159,7 @@
                     <h6 class="m-0 font-weight-bold text-white ">
                         {{ $resulttitle[$key]->title }} Orders <i class="fas 
                         @switch($resulttitle[$key]->title)
-                    @case('Launch')
+                    @case('Lunch')
                         fa-sun
                         @break
                     @case('Dinner')

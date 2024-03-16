@@ -49,7 +49,11 @@
                         @foreach ($data as $key => $d)
                         <tr>
                             <td>{{ ++$key }}</td>
-                            <td>{{ $d->students->name }} - {{ $d->students->rollno }}</td>
+                            <td>@if ($d->students!=null)
+                                
+                                {{ $d->students->name }} - {{ $d->students->rollno }}
+                            @endif
+                            </td>
                             <td>{{ $d->amount }}</td>
                             <td>
                                 @if ($d->created_at==null)

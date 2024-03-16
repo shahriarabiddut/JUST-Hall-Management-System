@@ -107,7 +107,7 @@ class EspController extends Controller
         }
         //
 
-        if ($data->meal_type == 'Launch') {
+        if ($data->meal_type == 'Lunch') {
             //If today time is greater than remaining time , Token Invalid
             $today = Carbon::now(); // get current date and time
             $remainingTime = $data->date . ' 16:00:00'; // Token Time

@@ -1,4 +1,4 @@
-<p align="center"><a href="https://justehall.com" target="_blank"><img src="https://residenthalls.just.edu.bd/img/just.jpg" width="400" alt="JustHallAutomation Logo"></a></p>
+<p align="center"><a href="https://residenthalls.just.edu.bd" target="_blank"><img src="https://residenthalls.just.edu.bd/img/just.jpg" width="400" alt="JustHallAutomation Logo"></a></p>
 
 <p align="center">
 <a href="https://github.com/JustHallAutomation/framework/actions"><img src="https://github.com/JustHallAutomation/framework/workflows/tests/badge.svg" alt="Build Status"></a>
@@ -29,7 +29,7 @@ The traditional manual processes in halls can be time-consuming, prone to errors
 
 ## Project phase Just Hall Automation
 
-1.  Multi Auth Complete
+    1.  Multi Auth Complete
     Admin , Staff & User
     Larvel Breeze
     Email Verification Enabled for user

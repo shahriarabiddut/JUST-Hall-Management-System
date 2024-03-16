@@ -47,7 +47,8 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-envelope fa-fw"></i>
                                 <!-- Counter - Messages -->
-                                @if(Auth::user()->roomrequest->where('flag',0)->count())<span class="badge badge-danger badge-counter"> {{ Auth::user()->roomrequest->where('flag',0)->count() }} </span> @endif
+                                @if (Auth::user()->roomrequest!=null)
+                                @if(Auth::user()->roomrequest->where('flag',0)->count())<span class="badge badge-danger badge-counter"> {{ Auth::user()->roomrequest->where('flag',0)->count() }} </span> @endif @endif
                             </a>
                             <!-- Dropdown - Messages -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -56,6 +57,7 @@
                                     Message Center
                                 </h6>
                                 
+                                @if(Auth::user()->roomrequest!=null)
                                 @if(Auth::user()->roomrequest->count())
                                 <a class="dropdown-item d-flex align-items-center" href="{{ route('student.roomrequestshow')  }}">
                                     <div class="dropdown-list-image mr-3">
@@ -68,6 +70,7 @@
                                         <div class="small text-gray-500">{{ Auth::user()->roomrequest->created_at->format('F j , Y') }}</div>
                                     </div>
                                 </a>
+                                @endif
                                 @endif
 
                                 <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>

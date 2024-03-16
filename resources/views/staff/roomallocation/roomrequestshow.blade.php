@@ -8,7 +8,7 @@
         <div class="card-header py-3">
             <h3 class="m-0 font-weight-bold text-primary">Room Request Details 
                 <a href="{{ route('staff.roomallocation.roomrequests') }}" class="float-right btn btn-success btn-sm m-1" target="_self"> <i class="fa fa-arrow-left m-1 p-1"> </i>View All Room Requests</a>
-                <a href="{{ route('staff.generatepdf',$application['rollno']) }}" class="float-right btn btn-info btn-sm  m-1"><i class="fa fa-print m-1 p-1"> Download PDF </i></a>
+                {{-- <a href="{{ route('staff.generatepdf',$application['rollno']) }}" class="float-right btn btn-info btn-sm  m-1"><i class="fa fa-print m-1 p-1"> Download PDF </i></a> --}}
             </h3>
             
         </div>
@@ -236,7 +236,7 @@
                             <a href="{{ url('staff/roomallocation/accept/'.$data->id) }}" class="btn btn-success btn-sm m-1"><i class="fa fa-check"> Accept </i></a>
                             @endif
                             @if ($data->status!='1' && $data->status!='2')
-                            <a onclick="return confirm('Are You Sure?')" href="{{ url('staff/roomallocation/list/'.$data->id) }}" class="btn btn-warning btn-sm m-1"><i class="fa fa-list" aria-hidden="true"> List </i></a>
+                            <a onclick="return confirm('Are You Sure?')" href="{{ url('staff/roomallocation/list/'.$data->id) }}" class="btn btn-warning btn-sm m-1"><i class="fa fa-list" aria-hidden="true"> Waiting List </i></a>
                             <a onclick="return confirm('Are You Sure?')" href="{{ url('staff/roomallocation/ban/'.$data->id) }}" class="btn btn-danger btn-sm m-1"><i class="fa fa-ban" aria-hidden="true"> Reject </i></a>
                             @endif
                             @else

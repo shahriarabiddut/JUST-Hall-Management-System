@@ -316,11 +316,11 @@ class StudentController extends Controller
         foreach ($rows as $key => $row) {
             if ($key != $length - 1) {
                 $row = array_combine($header, $row);
-                if ($request->email) {
+                if (isset($row['email'])) {
                     $email = $row['email'];
                 }
                 $rollno = $row['rollno'];
-                if ($request->email == 1 || $request->email == 0) {
+                if ($request->email != 2 && isset($row['mobile'])) {
                     $mobile = preg_replace('/\D/', '', $row['mobile']);
                 } else {
                     $mobile = 0;
@@ -335,7 +335,7 @@ class StudentController extends Controller
                 }
                 //
                 $rollnoMain = str_replace(' ', '', $rollno);
-                if ($request->email) {
+                if (isset($row['email'])) {
                     $data = Student::where('email', $email)->first();
                     $data2 = Student::where('rollno', $rollnoMain)->first();
                 } else {
@@ -348,7 +348,7 @@ class StudentController extends Controller
                         $StudentData->name = $row['name'];
                         $StudentData->dept = $row['dept'];
                         $StudentData->session = $row['session'];
-                        if ($request->email) {
+                        if ($request->email >= 1) {
                             $StudentData->email = $email;
                         }
                         $StudentData->mobile = $mobile;
@@ -369,12 +369,13 @@ class StudentController extends Controller
                         $staff_id = Auth::guard('staff')->user()->id;
                         $HistoryController->addHistoryHall($staff_id, 'add', 'Student (' . $StudentData->rollno . ' ) - ' . $StudentData->name . ' have been added Successfully!', $this->hall_id);
                         //Saved
+                    }
+                } else {
+
+                    if (isset($row['email'])) {
+                        $errorEmails[] = $email;
                     } else {
-                        if ($data != null && $request->email) {
-                            $errorEmails[] = $email;
-                        } else {
-                            $errorEmails[] = 'rollno :' . $rollno;
-                        }
+                        $errorEmails[] = 'rollno :' . $rollno;
                     }
                 }
             }

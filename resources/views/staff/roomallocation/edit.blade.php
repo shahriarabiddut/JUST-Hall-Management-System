@@ -7,7 +7,7 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h3 class="m-0 font-weight-bold text-primary">Editing Room Allocation: {{ $data->name }}
+            <h3 class="m-0 font-weight-bold text-primary">Editing Room Allocation of @if($data->students==null) User Deleted @else {{ $data->students->name }} - {{ $data->students->rollno }} @endif
             <a href="{{ url('staff/roomallocation/'.$data->id) }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h3>
         </div>
         <div class="card-body">
@@ -24,7 +24,7 @@
                             @if ($data->students==null)
                                 User Deleted
                             @else
-                                {{ $data->students->name }} - {{ $data->students->rollno }} @if ($data->status==0)[Old Room no - @if  ($data->rooms==null) Room Deleted @else {{ $data->rooms->title }} @endif and Seat No - {{ $data->position }}]@endif
+                                {{ $data->students->name }} - {{ $data->students->rollno }} @if ($data->status==0)[Old Room no - @if  ($data->rooms==null) Room Deleted @else {{ $data->rooms->title }} @endif and Seat No - {{ $data->position }}] @else [Current Room no - @if  ($data->rooms==null) Room Deleted @else {{ $data->rooms->title }} @endif and Seat No - {{ $data->position }}] @endif
                             @endif
                             </td>
                         </tr>

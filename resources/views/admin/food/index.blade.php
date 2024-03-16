@@ -63,7 +63,7 @@
                             <td>{{ $d->food_name }}</td>
                             <td>{{ $d->food_time_hall->price }}</td>
                             @switch($d->foodtime->title)
-                            @case('Launch')
+                            @case('Lunch')
                                 <td class="bg-warning text-white text-center"> {{ $d->foodtime->title }} <i class="fas fa-sun"></i></td>
                                     @break
                             @case('Dinner')

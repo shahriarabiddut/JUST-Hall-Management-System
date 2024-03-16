@@ -66,7 +66,7 @@ class FoodController extends Controller
         $request->validate([
             'food_name' => 'required',
             'food_time_id' => 'required|not_in:0',
-            'status' => 'required|not_in:0',
+            'status' => 'required|not_in:3',
         ]);
         $data->food_time_id = $request->food_time_id;
         $data->food_name = $request->food_name;

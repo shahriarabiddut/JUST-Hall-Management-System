@@ -76,7 +76,11 @@
                             @else
                         @endif >
                             <td>{{ ++$key }}</td>
-                            <td>{{ $d->staff->name }}</td>
+                            <td>
+                                @if ($d->staff!=null)
+                                    {{ $d->staff->name }}
+                                @endif
+                            </td>
                             <td>{{ $d->data }}
                             <span
                             @switch($d->flag)

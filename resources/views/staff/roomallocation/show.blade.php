@@ -61,12 +61,14 @@
                         
                 </table>
                 @php $report = json_decode($data->report, true); $j=1;@endphp
+                @if ($report !=null)
                 <table class="table table-bordered" width="100%">
                     <tr>
                         <th class="text-center h-4 bg-secondary text-white"> Report </th>
                     <tr>
                     @foreach ($report as $r) <tr><td> {{ $j++ }} . {{ $r }}</td> </tr> @endforeach
-            </table>
+                </table>
+            @endif
             </div>
         </div>
     </div>

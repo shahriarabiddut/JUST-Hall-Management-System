@@ -109,7 +109,7 @@
                     </div>
                     <div class="col-auto">
                         @if (App\Models\RoomRequest::all()->where('hall_id',Auth::guard('staff')->user()->hall_id)->where('flag',0)->count()!=0)
-                        <a href="{{ route('staff.roomallocation.issue') }}"><span class=" text-xs bg-danger text-white p-1 rounded m-1">{{ App\Models\RoomRequest::all()->where('hall_id',Auth::guard('staff')->user()->hall_id)->where('flag',0)->count() }} Unread </span></a>
+                        <a href="{{ route('staff.roomallocation.roomrequests') }}"><span class=" text-xs bg-danger text-white p-1 rounded m-1">{{ App\Models\RoomRequest::all()->where('hall_id',Auth::guard('staff')->user()->hall_id)->where('flag',0)->count() }} Unread </span></a>
                         @endif
                         <i class="fas fa-fw fa-hotel fa-2x text-gray-300"></i>
                     </div>
@@ -150,7 +150,7 @@
             <div class="card shadow mb-4">
                 <div class="card-header py-3 
                 @switch($resulttitle[$key]->title)
-                    @case('Launch')
+                    @case('Lunch')
                         bg-warning
                         @break
                     @case('Dinner')
@@ -169,7 +169,7 @@
                     <h6 class="m-0 font-weight-bold text-white ">
                         {{ $resulttitle[$key]->title }} Orders <i class="fas 
                         @switch($resulttitle[$key]->title)
-                    @case('Launch')
+                    @case('Lunch')
                         fa-sun
                         @break
                     @case('Dinner')

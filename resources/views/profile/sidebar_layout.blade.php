@@ -46,7 +46,7 @@
                 <a class="collapse-item" href="{{ route('student.myroom.change') }}">Room Change</a> 
                 <a class="collapse-item" href="{{ route('student.myroom.leave') }}">Room Leave</a> 
                 @else
-                    @if(Auth::user()->roomrequest->count()==0 )
+                    @if(Auth::user()->roomrequest==null)
                     <a class="collapse-item" href="{{ route('student.roomrequest') }}">New Room Request</a>
                     @else
                     <a class="collapse-item" href="{{ route('student.roomrequestshow') }}">My Room Requests</a>

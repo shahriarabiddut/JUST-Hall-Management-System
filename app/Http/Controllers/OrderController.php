@@ -92,7 +92,7 @@ class OrderController extends Controller
             $nextDate2 = $currentDate->addDay(); // add one day to current date
             $nextDate = $nextDate2->addDay(); // add one day to current date
         } else {
-            // Launch and Dinner 1 Day
+            // Lunch and Dinner 1 Day
             $nextDate = $currentDate->addDay(); // add one day to current date
         }
         //

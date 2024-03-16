@@ -66,6 +66,7 @@ class RoomController extends Controller
         $data->title = $request->title;
         $data->totalseats = $request->totalseats;
         $data->vacancy = $request->totalseats;
+        $data->status = 1;
         //
         $positions = [];
         for ($i = 1; $i <= $request->totalseats; $i++) {
@@ -186,7 +187,7 @@ class RoomController extends Controller
         $rows = array_map("str_getcsv", explode("\n", $csvData));
         $header = array_shift($rows);
         $length = count($rows);
-        $importedStudents = 1;
+        $importedStudents = 0;
         $errorTitles = [];
         foreach ($rows as $key => $row) {
             if ($key != $length - 1) {
@@ -221,6 +222,7 @@ class RoomController extends Controller
                         'vacancy' => $totalseats,
                         'positions' => $positions,
                         'hall_id' => $this->hall_id,
+                        'status' => 1
                     ]);
                     $importedStudents++;
                 } elseif ($data->totalseats < $totalseats && $data->hall_id == $this->hall_id) {
@@ -236,12 +238,12 @@ class RoomController extends Controller
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistoryHall($staff_id, 'add', 'Today ' . $importedStudents++ . ' Rooms has been imported Successfully!', $this->hall_id);
+        $HistoryController->addHistoryHall($staff_id, 'add', 'Today ' . $importedStudents . ' Rooms has been imported Successfully!', $this->hall_id);
         //Saved
         if ($errorTitles == null) {
-            return redirect()->route('staff.rooms.index')->with('success', 'Today ' . $importedStudents++ . ' Rooms has been imported Successfully!');
+            return redirect()->route('staff.rooms.index')->with('success', 'Today ' . $importedStudents . ' Rooms has been imported Successfully!');
         } else {
-            return redirect()->route('staff.rooms.index')->with('success', 'Today ' . $importedStudents++ . ' Rooms has been imported Successfully!')->with('danger-titles', $errorTitles);
+            return redirect()->route('staff.rooms.index')->with('success', 'Today ' . $importedStudents . ' Rooms has been imported Successfully!')->with('danger-titles', $errorTitles);
         }
     }
 }
