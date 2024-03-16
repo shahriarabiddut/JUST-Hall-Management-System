@@ -1,4 +1,4 @@
-<p align="center"><a href="https://justehall.com" target="_blank"><img src="https://raw.githubusercontent.com/JustHallAutomation/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/JustHallAutomation-logolockup-cmyk-red.svg" width="400" alt="JustHallAutomation Logo"></a></p>
+<p align="center"><a href="https://justehall.com" target="_blank"><img src="https://residenthalls.just.edu.bd/img/just.jpg" width="400" alt="JustHallAutomation Logo"></a></p>
 
 <p align="center">
 <a href="https://github.com/JustHallAutomation/framework/actions"><img src="https://github.com/JustHallAutomation/framework/workflows/tests/badge.svg" alt="Build Status"></a>
