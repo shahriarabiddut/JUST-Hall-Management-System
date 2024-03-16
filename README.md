@@ -19,9 +19,9 @@ php artisan storage:link
 
 php artisan send:sms
 
-## Extension Enable
+## Larvel and PHP version
 
-sockets
+Laravel 10.x and PHP 8.2^
 
 ## About Just Hall Automation
 
@@ -75,6 +75,7 @@ CSE,Jashore University of Science And Technology
 
 -   [Dr. Syed Md. Galib - Professor](https://just.edu.bd/t/smg) - ** Supervisor **
 -   [Mostafijur Rahman Akhond - Assistant Professor](https://just.edu.bd/t/mra) - ** Co-Supervisor **
+-   [Abu Rafe Md Jamil - Lecturer](https://just.edu.bd/t/armj) - ** Co-Supervisor **
 
 ## License
 
