@@ -13,7 +13,6 @@
             <a href="{{ route('staff.roomallocation.index') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h6>
         </div>
         <div class="card-body">
-            
             <div class="table-responsive">
                 @if ($errors->any())
                 @foreach ($errors->all() as $error)
@@ -24,6 +23,12 @@
                 @csrf
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <tbody>
+                        <tr>
+                            <th>Sample CSV</th>
+                            <td>
+                                <a href="{{ route('root').'/files/allocateSample.csv' }}" class="btn btn-block btn-info">CSV Sample of Room Allocation</a>
+                            </td>
+                        </tr>
                         <tr>
                             <th>Format (Excel)</th>
                             <td>Column name should be in serial - roomtitle, rollno, position or Error May Occur! </td>

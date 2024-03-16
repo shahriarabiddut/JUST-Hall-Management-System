@@ -753,7 +753,7 @@ class AllocatedSeatController extends Controller
         $rows = array_map("str_getcsv", explode("\n", $csvData));
         $header = array_shift($rows);
         $length = count($rows);
-        $importedStudents = 1;
+        $importedStudents = 0;
         $errorTitles = [];
         $xyz = 1;
         foreach ($rows as $key => $row) {
@@ -814,19 +814,19 @@ class AllocatedSeatController extends Controller
                 //
                 if ($xyz != 0) {
                     if ($data == null) {
-                        $AllocatedSeatsData =  AllocatedSeats::create([
-                            'room_id' => $room->id,
-                            'user_id' => $user->id,
-                            'position' => $position,
-                            'status' => '1',
-                            'report' => "[]",
-                            'hall_id' => $this->hall_id
-                        ]);
+                        $AllocatedSeatsData =  new AllocatedSeats();
+                        $AllocatedSeatsData->room_id = $room->id;
+                        $AllocatedSeatsData->user_id = $user->id;
+                        $AllocatedSeatsData->position = $position;
+                        $AllocatedSeatsData->status = 1;
+                        $AllocatedSeatsData->report = "[]";
+                        $AllocatedSeatsData->hall_id = $this->hall_id;
+                        $AllocatedSeatsData->save();
                         $room->save();
                         $importedStudents++;
                     } else {
                         if ($xyz != 0) {
-                            $errorTitles[] = $user->rollno . ' Room Allocation Found for this user!';
+                            $errorTitles[] = ' Room Allocation Found for this user roll no' . $user->rollno . '! ';
                         }
                     }
                 }
