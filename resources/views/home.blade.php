@@ -10,8 +10,18 @@
     <title>Home - @isset($HallOption)
         {{ $HallOption[0]->value }}
     @endisset </title>
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico')}}" />
-
+    <link rel="icon" type="image/x-icon" href="{{ asset('img/fav.png')}}" />
+    {{-- Auth Chech Starts--}}
+    @auth
+    <script>window.location.href = '{{ route("root") }}/student';</script>
+    @endauth
+    @auth('staff') 
+    <script>window.location.href = '{{ route("root") }}/staff';</script>
+    @endauth
+	@auth('admin')
+    <script>window.location.href = '{{ route("root") }}/admin';;</script>
+    @endauth
+    {{-- Auth Chech Ends--}}
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -71,7 +81,7 @@
                         </div>
                     </div>
                     @auth
-                    <a href="{{ route('login') }}" class="btn rounded-pill py-1 px-4 ms-3 d-none d-lg-block">Login</a>
+                    <a href="{{ route('student.dashboard') }}" class="btn rounded-pill py-1 px-4 ms-3 d-none d-lg-block">Dashboard</a>
                     @else
                     <a href="{{ route('login') }}" class="btn rounded-pill py-1 px-4 ms-3 d-none d-lg-block">Login</a>
                     @endauth

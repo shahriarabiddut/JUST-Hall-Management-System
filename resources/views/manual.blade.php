@@ -10,7 +10,7 @@
     <title>User Manual for JustEHall System - @isset($HallOption)
         {{ $HallOption[0]->value }}
     @endisset </title>
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico')}}" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('img/fav.png')}}" />
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -120,7 +120,7 @@
             <div class="container py-2 px-lg-2">
                 <div class="row g-2 align-items-end">
                     <div class="col-lg-6 text-center float-left">
-                        <img src="{{ asset('img/login.webp') }}" style="max-height: 50vh" alt="Lab" class="img-fluid">
+                        <img src="{{ asset('img/login.png') }}" style="max-height: 50vh" alt="Lab" class="img-fluid">
                     </div>
                     <div class="col-lg-6 text-center text-lg-start">
                         <h1 class="mb-2 animated slideInDown">2.Login</h1>
@@ -159,7 +159,7 @@
             <div class="container py-2 px-lg-2">
                 <div class="row g-2 align-items-end">
                     <div class="col-lg-6 text-center float-left">
-                        <img src="{{ asset('img/payment.webp') }}" style="max-height: 50vh" alt="Lab" class="img-fluid">
+                        <img src="{{ asset('img/payment.png') }}" style="max-height: 50vh" alt="Lab" class="img-fluid">
                     </div>
                     <div class="col-lg-6 text-center text-lg-start">
                         <h1 class="mb-2 animated slideInDown">4.Payment</h1>

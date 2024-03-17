@@ -17,7 +17,6 @@
             </div>
             @endif
             <!-- Session Messages Ends -->
-
 @if ($token==null)
 <div class="card shadow mb-2">
     <div class="card-header py-3">
@@ -125,6 +124,22 @@
                     
                 </table>
             </table>
+        </div>
+    </div>
+</div>
+<div class="card shadow mb-2">
+    <div class="card-header py-3">
+        <h3 class="m-0 font-weight-bold text-primary d-inline" >Scan QR Code</h3>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <div class="section">
+                <div id="my-qr-reader">
+                </div>
+            </div>
+    
+        <script src="{{ asset('js/html5qrcode.min.js') }}"></script>
+        <script src="{{ asset('js/qrcode.js') }}"></script>
         </div>
     </div>
 </div>

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico')}}" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('img/fav.png')}}" />
     {{-- <link rel="icon" type="image/x-icon" href="{{ asset('img/fav.png')}}" /> --}}
     <title> @isset($HallOption)
         {{ $HallOption[0]->value }}

@@ -16,6 +16,7 @@ class EspController extends Controller
     public function TokenPrintQueue2(string $hall_id, string $value)
     {
         $hall = Hall::find($hall_id);
+        dd($hall);
         if ($hall->enable_print == 0) {
             return 0;
         }
