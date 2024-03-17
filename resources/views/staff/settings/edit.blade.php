@@ -29,7 +29,7 @@
                     <tbody>
                         <tr>
                             <th>Logo</th>
-                            <td><input name="logo" type="file" accept="image/*" ></td>
+                            <td><input name="logo" class="form-control" type="file" accept="image/*" ></td>
                         </tr>
                     <tr>
                         <th>Print</th>

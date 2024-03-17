@@ -67,6 +67,25 @@ The traditional manual processes in halls can be time-consuming, prone to errors
     3.2 QR code added on Meal Tokens
     3.2 Live QR code scanner added for Meal Tokens to validate
 
+## dotEnv
+
+SSLCommerz
+SSLCZ_STORE_ID=
+SSLCZ_STORE_PASSWORD=
+SSLCZ_TESTMODE=true # set false when using live store id
+IS_LOCALHOST=true
+
+## SMTP
+
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=test@gmail.com
+MAIL_PASSWORD=AppPassword
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS="test@gmail.com"
+MAIL_FROM_NAME="${APP_NAME}"
+
 ## JustHallAutomation Sponsors
 
 CSE,Jashore University of Science And Technology

@@ -24,12 +24,12 @@ use App\Http\Controllers\SslCommerzPaymentController;
 */
 
 
-Route::get('/testroute', function () {
-    $name = "Biddut";
+// Route::get('/testroute', function () {
+//     $name = "Biddut";
 
-    // The email sending is done using the to method on the Mail facade
-    Mail::to('shahriarabiddut@gmail.com')->send(new MyTestEmail($name));
-});
+//     // The email sending is done using the to method on the Mail facade
+//     Mail::to('shahriarabiddut@gmail.com')->send(new MyTestEmail($name));
+// });
 
 Route::get('/', function () {
     return view('home');

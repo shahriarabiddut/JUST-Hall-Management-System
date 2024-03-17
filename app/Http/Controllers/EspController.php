@@ -16,7 +16,7 @@ class EspController extends Controller
     public function TokenPrintQueue2(string $hall_id, string $value)
     {
         $hall = Hall::find($hall_id);
-        if ($hall->print == 0) {
+        if ($hall->enable_print == 0) {
             return 0;
         }
         if ($value != $hall->secret) {
@@ -39,7 +39,7 @@ class EspController extends Controller
     public function TokenPrintQueueDelete2(string $hall_id, string $value, string $id, string $order_id, string $rollno)
     {
         $hall = Hall::find($hall_id);
-        if ($hall->print == 0) {
+        if ($hall->enable_print == 0) {
             return response()->json(0);
         }
         if ($value != $hall->secret) {
