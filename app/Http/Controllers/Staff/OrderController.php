@@ -77,18 +77,41 @@ class OrderController extends Controller
         if ($request->type != '') {
             $data = $data->where('meal_type', '=', $type);
         }
-        $data = $data->map(function ($item) {
-            unset($item['id']);
-            unset($item['print']);
-            unset($item['token_number']);
-            unset($item['updated_at']);
-            unset($item['created_at']);
+        // Count occurrences of each food name
+        $foodNameCounts = [];
+        foreach ($data as $item) {
+            $foodName = $item['food_name'];
+            if (!isset($foodNameCounts[$foodName])) {
+                $foodNameCounts[$foodName] = 0;
+            }
+            $foodNameCounts[$foodName]++;
+        }
+        $serialNumber = 1;
+        $data = $data->map(function ($item) use (&$serialNumber) {
+            $excludeKeys = ['id', 'order_id', 'print', 'token_number', 'updated_at', 'created_at', 'hall_id'];
+            $itemData = collect($item)->except($excludeKeys)->toArray();
 
-            return $item;
-        })->toArray();
+            // Check and replace 'status' value if it's empty or '0'
+            if (!isset($itemData['status']) || $itemData['status'] == 0) {
+                $itemData['status'] = 'Valid';
+            }
 
+            // Add serial number at the beginning
+            $itemData = array_values($itemData);
+            array_unshift($itemData, $serialNumber);
+            $serialNumber++;
+            return $itemData;
+        })->values()->toArray();
+        // Calculate total number of orders
+        $totalOrders = count($data);
+
+        // Add total number as 'Total Orders' at the end of the data array
+        $data[] = ['Total Orders = ' . $totalOrders];
+        foreach ($foodNameCounts as $key => $item) {
+            $data[] = ['Total Orders of ' . $key . ' = ' . $item];
+        }
         // Define headers for the Excel sheet
-        $headers = ['Order Id', 'Food Name', 'Date', 'Roll No', 'Meal Type', 'Quantity', 'Status']; // Add your headers here
+        $headers = ['#SN', 'Food Name', 'Date', 'Roll No', 'Meal Type', 'Quantity', 'Status']; // Add your headers here
 
         // Create a new Spreadsheet object
         $spreadsheet = new Spreadsheet();

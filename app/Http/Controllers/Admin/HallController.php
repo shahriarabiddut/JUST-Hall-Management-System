@@ -62,7 +62,20 @@ class HallController extends Controller
         $data->type = $request->type;
         $data->status = $request->status;
         $data->enable_print = 0;
-        $data->secret = 'value';
+        // Print Secret Set
+        function takeFirstLetters($titleHall)
+        {
+            $words = explode(" ", $titleHall);
+            $firstLetters = "";
+            foreach ($words as $word) {
+                $firstLetters .= substr($word, 0, 1);
+            }
+            return $firstLetters;
+        }
+        $titleHall = $data->title;
+        $firstLetters = takeFirstLetters($titleHall);
+        //
+        $data->secret = $firstLetters;
         $data->fixed_cost = $request->fixed_cost;
         $data->fixed_cost_masters = $request->fixed_cost_masters;
         $data->enable_payment = 0;

@@ -204,9 +204,28 @@ class HomeController extends Controller
         if ($data->id != $this->hall_id) {
             return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized Access!');
         }
+        // Print Secret Set
+        function takeFirstLetters($titleHall)
+        {
+            $words = explode(" ", $titleHall);
+            $firstLetters = "";
+            foreach ($words as $word) {
+                $firstLetters .= substr($word, 0, 1);
+            }
+            return $firstLetters;
+        }
+        $titleHall = $data->title;
+        $firstLetters = takeFirstLetters($titleHall);
+        $requestSecret = str_replace(' ', '', $request->secret);
+        if ($request->old_secret != $request->secret) {
+            $secret = $firstLetters . $data->id . $requestSecret;
+        } else {
+            $secret = $request->old_secret;
+        }
+        //
         $data->enable_print = $request->print;
         $data->enable_payment = $request->payment;
-        $data->secret = $request->secret;
+        $data->secret = $secret;
         $data->fixed_cost = $request->fixed_cost;
         $data->fixed_cost_masters = $request->fixed_cost_masters;
         //If user Given any PHOTO
@@ -214,20 +233,6 @@ class HomeController extends Controller
             $data->logo = 'app/public/' . $request->file('logo')->store('Website', 'public');
         } else {
             $data->logo = $request->prev_logo;
-        }
-
-        if ($request->staff_id != $request->staff_id_old && $request->staff_id != 0) {
-            //Staff
-            $dataStaff = Staff::find($request->staff_id);
-            if ($dataStaff->hall_id != null) {
-                return redirect()->back()->with('danger', 'User is allready a Provost!');
-            }
-            $dataStaff->hall_id = $data->id;
-            $dataStaff->save();
-            //Update Previous Provost
-            $dataStaff2 = Staff::find($request->staff_id_old);
-            $dataStaff2->hall_id = 0;
-            $dataStaff2->save();
         }
         $data->save();
 

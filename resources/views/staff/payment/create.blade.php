@@ -32,10 +32,10 @@
                                 </select>
                             </td>
                         </tr>
-                            <tr>
+                            {{-- <tr>
                                 <th>Mobile</th>
                                 <td><input required id="inputField" name="mobileno" type="text" class="form-control" maxlength="11" value="{{ old('mobileno')}}" pattern="[0-9]{11}"></td>
-                            </tr>
+                            </tr> --}}
                     <tr>
                         <th>Amount</th>
                         <td><input id="myInput" required type="number" min="1" name="amount" type="text" class="form-control" value="{{ old('amount')}}"></td>

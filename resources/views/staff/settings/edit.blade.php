@@ -80,7 +80,7 @@
                     <tr>
                         <td colspan="2">
                             <input type="hidden" name="prev_logo" value="{{ $data->logo }}">
-                            <input type="hidden" name="staff_id_old" value="{{ $data->staff_id }}">
+                            <input type="hidden" name="old_secret" value="{{ $data->secret }}">
                             <button type="submit" class="btn btn-primary">Update</button>
                         </td>
                     </tr>

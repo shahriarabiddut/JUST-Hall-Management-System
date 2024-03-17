@@ -826,7 +826,7 @@ class AllocatedSeatController extends Controller
                         $importedStudents++;
                     } else {
                         if ($xyz != 0) {
-                            $errorTitles[] = ' Room Allocation Found for this user roll no' . $user->rollno . '! ';
+                            $errorTitles[] = ' Room Allocation Found for this user roll no ' . $user->rollno . '! ';
                         }
                     }
                 }

@@ -44,7 +44,7 @@ class PaymentController extends Controller
     public function create()
     {
         //
-        $studentdata = Student::all()->where('hall_id', $this->hall_id);
+        $studentdata = Student::all()->where('hall_id', $this->hall_id)->where('status', 1);
         return view('staff.payment.create', ['studentdata' => $studentdata]);
     }
 
@@ -58,14 +58,26 @@ class PaymentController extends Controller
         $request->validate([
             'student_id' => 'required|not_in:0',
             'staff_id' => 'required',
-            'mobileno' => 'required|regex:/^[0-9]+$/',
             'amount' => 'required',
             'status' => 'required|not_in:0',
         ]);
+        $findStudent = Student::find($request->student_id);
+        if ($findStudent != null) {
+            if ($findStudent->status == 0) {
+                return redirect()->route('staff.payment.index')->with('danger', 'User Account is not Active!');
+            }
+            if ($findStudent->mobile == null) {
+                $userMobile = 0;
+            } else {
+                $userMobile = $findStudent->mobile;
+            }
+        } else {
+            return redirect()->route('staff.payment.index')->with('danger', 'User Not Found!');
+        }
         $data->student_id = $request->student_id;
-        $data->staff_id = $request->staff_id;
+        $data->staff_id = Auth::guard('staff')->user()->id;
         $data->transaction_id = 0;
-        $data->phone = $request->mobileno;
+        $data->phone = $userMobile;
         $data->amount = $request->amount;
         $data->status = $request->status;
         $data->name = 'Staff - ' . Auth::guard('staff')->user()->name;
@@ -91,13 +103,13 @@ class PaymentController extends Controller
             $staff_id = $data->staff_id;
             $EmailController->paymentEmail($student_id, $newBalance, $staff_id, $status);
 
-            return redirect('staff/payment')->with('success', 'Payment Data has been accepted and added balance to Student!');
+            return redirect()->route('staff.payment.index')->with('success', 'Payment Data has been accepted and added balance to Student!');
             //Saving History 
             $HistoryController = new HistoryController();
             $HistoryController->addHistoryHall(Auth::guard('staff')->user()->id, 'Payment', 'New Payment of ' . $data->students->name . ' ( ' . $data->students->rollno . ' ) has been added by ' . $data->staff->name . ' !', $this->hall_id);
             //Saved
         } else {
-            return redirect('staff/payment')->with('success', 'Payment Data has been added Successfully!');
+            return redirect()->route('staff.payment.index')->with('success', 'Payment Data has been added Successfully!');
         }
     }
 
