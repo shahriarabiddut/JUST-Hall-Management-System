@@ -191,6 +191,23 @@ class HomeController extends Controller
         }
         return view('staff.settings.edit', ['data' => $data]);
     }
+    public function settingsecret()
+    {
+        $data = Hall::find($this->hall_id);
+        if ($data == null) {
+            return redirect()->route('staff.dashboard')->with('danger', 'Not Found!');
+        }
+        if ($data->id != $this->hall_id) {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized Access!');
+        }
+        if ($data->id != $this->hall_id) {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized Access!');
+        }
+        if ($data->status == 0) {
+            return redirect()->route('staff.dashboard')->with('danger', 'This Hall has been Disabled by System Administrator!');
+        }
+        return view('staff.settings.secret', ['data' => $data]);
+    }
     public function settingsUpdate(Request $request, $id)
     {
         //

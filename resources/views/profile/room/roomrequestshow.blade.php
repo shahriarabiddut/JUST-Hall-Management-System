@@ -175,7 +175,45 @@
                     </tbody>
                 </table>
             </div>
-            
+            <div class="table-responsive">
+
+                <table class="table table-bordered" width="100%">  
+                    <tr>
+                        <th style="width: 30%;">Status</th>
+                        
+                        @if ($data->status=='1')
+                        <td class="bg-success text-white"> Accepted </td>
+                        @elseif($data->status=='0')
+                        <td class="bg-warning text-white"> On Waiting List </td>
+                        @elseif($data->status=='2')
+                        <td class="bg-danger text-white"> Rejected </td>
+                        @else
+                        <td> Requested </td>
+                        @endif
+                        
+                    </tr>
+                    <tr>    
+                        @if ($data->status=='1')
+                        <th> Accepted Date </th>
+                        @elseif($data->status=='0')
+                        <th> Listed Date </th>
+                        @elseif($data->status=='2')
+                        <th> Rejected Date</th>
+                        @else
+                        <th> Last Checked Date </th>
+                        @endif
+                        @if ($data->status=='1')
+                        <td> {{ $data->updated_at->format('F j, Y - H:i:s') }} </td>
+                        @elseif($data->status=='0')
+                        <td> {{ $data->updated_at->format('F j, Y - H:i:s') }} </td>
+                        @elseif($data->status=='2')
+                        <td> {{ $data->updated_at->format('F j, Y - H:i:s') }}</td>
+                        @else
+                        <td> {{ $data->updated_at->format('F j, Y - H:i:s') }} </td>
+                        @endif
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
     <div class="card shadow mb-4">

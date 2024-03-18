@@ -24,7 +24,7 @@
                         @endif</td>
                     </tr>
                     <tr>
-                        <th>Application</th>
+                        <th>Reason</th>
                         <td>{{ $data->application }}</td>
                     </tr>
                     <tr>

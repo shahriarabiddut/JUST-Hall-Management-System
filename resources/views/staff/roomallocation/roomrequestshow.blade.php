@@ -184,11 +184,11 @@
                         <th style="width: 30%;">Status</th>
                         
                         @if ($data->status=='1')
-                        <td class="bg-success"> Accepted </td>
+                        <td class="bg-success text-white"> Accepted </td>
                         @elseif($data->status=='0')
-                        <td class="bg-warning"> On Queue </td>
+                        <td class="bg-warning text-white"> On Waiting List </td>
                         @elseif($data->status=='2')
-                        <td class="bg-danger"> Rejected </td>
+                        <td class="bg-danger text-white"> Rejected </td>
                         @else
                         <td> Requested </td>
                         @endif
@@ -209,20 +209,20 @@
                     </tr>
                     <tr>    
                         @if ($data->status=='1')
-                        <th class="bg-success"> Accepted Date </th>
+                        <th class="bg-success text-white"> Accepted Date </th>
                         @elseif($data->status=='0')
-                        <th class="bg-warning"> Listed Date </th>
+                        <th class="bg-warning text-white"> Listed Date </th>
                         @elseif($data->status=='2')
-                        <th class="bg-danger"> Rejected Date</th>
+                        <th class="bg-danger text-white"> Rejected Date</th>
                         @else
                         <th> Last Checked Date </th>
                         @endif
                         @if ($data->status=='1')
-                        <td class="bg-success"> {{ $data->updated_at->format('F j, Y - H:i:s') }} </td>
+                        <td class="bg-success text-white"> {{ $data->updated_at->format('F j, Y - H:i:s') }} </td>
                         @elseif($data->status=='0')
-                        <td class="bg-warning"> {{ $data->updated_at->format('F j, Y - H:i:s') }} </td>
+                        <td class="bg-warning text-white"> {{ $data->updated_at->format('F j, Y - H:i:s') }} </td>
                         @elseif($data->status=='2')
-                        <td class="bg-danger"> {{ $data->updated_at->format('F j, Y - H:i:s') }}</td>
+                        <td class="bg-danger text-white"> {{ $data->updated_at->format('F j, Y - H:i:s') }}</td>
                         @else
                         <td> {{ $data->updated_at->format('F j, Y - H:i:s') }} </td>
                         @endif

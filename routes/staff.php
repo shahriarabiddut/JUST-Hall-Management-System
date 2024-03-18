@@ -144,6 +144,7 @@ Route::middleware('userType:provost')->prefix('staff')->name('staff.')->group(fu
 
     // Settings Crud
     Route::get('settings/', [HomeController::class, 'settings'])->name('settings.index');
+    Route::get('settings/secret', [HomeController::class, 'settingsecret'])->name('settings.secret');
     Route::put('settings/update/{id}', [HomeController::class, 'settingsUpdate'])->name('settings.update');
 });
 Route::middleware('userType:staff')->prefix('staff')->name('staff.')->group(function () {

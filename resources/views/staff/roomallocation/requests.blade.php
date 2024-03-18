@@ -80,7 +80,7 @@
                             @if ($d->status=='1')
                             <td class="bg-success text-white"> Accepted </td>
                             @elseif($d->status=='0')
-                            <td class="bg-warning text-white"> On Queue </td>
+                            <td class="bg-warning text-white"> On Waiting List </td>
                             @elseif($d->status=='2')
                             <td class="bg-danger text-white"> Rejected </td>
                             @elseif($d->status=='4')

@@ -26,7 +26,7 @@
             <div class="table-responsive">
                 <table class="table table-bordered" width="100%">
                     <tr>
-                        <th>Application</th>
+                        <th>Reason</th>
                         <td>{{ $roomchange->application }}</td>
                     </tr>
                     <tr>
@@ -67,7 +67,7 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <tbody>
                     <tr>
-                        <th>Application</th>
+                        <th>Reason</th>
                         <td>
                         <textarea name="application" id="" cols="10" rows="4" class="form-control"></textarea>
                         </td>

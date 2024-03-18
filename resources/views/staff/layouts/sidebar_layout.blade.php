@@ -252,6 +252,7 @@
                 <h6 class="collapse-header">Site Management</h6>
                 <a class="collapse-item" href="{{ route('staff.settings.index') }}">View Settings</a>
                 <a class="collapse-item" href="{{ route('staff.history.index') }}">View History</a>
+                <a class="collapse-item" href="{{ route('staff.settings.secret') }}">Secret QR</a>
             </div>
         </div>
     </li>
