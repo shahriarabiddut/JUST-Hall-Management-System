@@ -248,7 +248,7 @@ class StudentController extends Controller
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
         if ($AllocatedSeat != null) {
-            $HistoryController->addHistoryHall($staff_id, 'delete', 'Student (' . $data->rollno . ' ) - ' . $data->name . '  and Associated Balance Account has been removed Successfully! Last Balance was ' . $BalanceAccount->balance_amount . ' . And Allocated Seat no was ' . $AllocatedSeat->position . ' in Room No ' . $AllocatedSeat->rooms->title . ' .', $this->hall_id);
+            $HistoryController->addHistoryHall($staff_id, 'delete', 'Student (' . $data->rollno . ' ) - ' . $data->name . '  and Associated Balance Account has been disabled Successfully! Last Balance was ' . $BalanceAccount->balance_amount . ' . And Allocated Seat no was ' . $AllocatedSeat->position . ' in Room No ' . $AllocatedSeat->rooms->title . ' .', $this->hall_id);
             $AllocatedSeat->status = 0;
             $AllocatedSeat->save();
 
@@ -270,14 +270,14 @@ class StudentController extends Controller
             // $data->hall_id = 0;
             // $BalanceAccount->hall_id = 0;
         } else {
-            $HistoryController->addHistoryHall($staff_id, 'delete', 'Student (' . $data->rollno . ' ) - ' . $data->name . '  and Associated Balance Account has been removed Successfully! Last Balance was ' . $BalanceAccount->balance_amount . ' . And No seat was Allocated.', $this->hall_id);
+            $HistoryController->addHistoryHall($staff_id, 'delete', 'Student (' . $data->rollno . ' ) - ' . $data->name . '  and Associated Balance Account has been disabled Successfully! Last Balance was ' . $BalanceAccount->balance_amount . ' . And No seat was Allocated.', $this->hall_id);
         }
         //Saved
         $data->status = 0;
         $data->save();
         $BalanceAccount->status = 0;
         $BalanceAccount->save();
-        return redirect()->route('staff.student.index')->with('danger', 'Student data and Associated Balance Account and Allocation data has been removed Successfully!');
+        return redirect()->route('staff.student.index')->with('danger', 'Student data and Associated Balance Account and Allocation data has been disabled Successfully!');
     }
 
     // Import Bilk users from csv

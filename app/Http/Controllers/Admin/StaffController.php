@@ -121,6 +121,9 @@ class StaffController extends Controller
         if ($data == null) {
             return redirect()->route('admin.staff.index')->with('danger', 'Not Found!');
         }
+        if ($data->hall->enable_delete != 1) {
+            return redirect()->route('admin.staff.index')->with('danger', 'Not Permitted!');
+        }
         if ($data->status == 0) {
             return redirect()->route('admin.staff.index')->with('danger', 'No Action Needed!');
         }

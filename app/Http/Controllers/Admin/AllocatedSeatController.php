@@ -240,6 +240,9 @@ class AllocatedSeatController extends Controller
         if ($data == null) {
             return redirect()->route('admin.roomallocation.index')->with('danger', 'Not Found!');
         }
+        if ($data->hall->enable_delete != 1) {
+            return redirect()->route('admin.roomallocation.index')->with('danger', 'Not Permitted!');
+        }
         // User Data Update
         $studentData = Student::find($data->user_id);
         $studentData->hall_id = 0;

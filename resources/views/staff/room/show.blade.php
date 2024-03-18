@@ -45,7 +45,6 @@
                     @endif
                     <tr>
                         <td colspan="2">
-                            <a onclick="return confirm('Are You Sure?')" href="{{ url('staff/rooms/'.$data->id.'/delete') }}" class="btn btn-danger btn-sm m-1" title="Remove Data"><i class="fa fa-trash"> Delete </i></a>
                             <a href="{{ url('staff/rooms/'.$data->id.'/edit') }}" class="float-right btn btn-info btn-sm m-1" title="Edit Data"> <i class="fa fa-edit"> Edit {{ $data->title }}  </i></a>
                         </td>
                         

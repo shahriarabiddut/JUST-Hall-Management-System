@@ -11,16 +11,6 @@
     @endif
     </h6>
 
-    
-    <script>
-        if (/Mobi/.test(navigator.userAgent)) {
-            window.onload = function () {
-            let myDiv = document.getElementById('sidebarToggleTop');
-            myDiv.click();
-        };
-        }
-    </script>
-
     <!-- Topbar Navbar -->
     <ul class="navbar-nav ml-auto">
 

@@ -114,6 +114,9 @@ class RoomController extends Controller
         if ($data == null) {
             return redirect()->route('admin.rooms.index')->with('danger', 'Not Found!');
         }
+        if ($data->hall->enable_delete != 1) {
+            return redirect()->route('admin.rooms.index')->with('danger', 'Not Permitted!');
+        }
         $dataAllocatedSeats = AllocatedSeats::all()->where('room_id', $id);
         if (count($dataAllocatedSeats) != 0) {
             return redirect('admin/rooms')->with('danger', 'Data can not be deleted!');

@@ -146,30 +146,7 @@ class RoomController extends Controller
      */
     public function destroy($id)
     {
-        $data = Room::find($id);
-        if ($data == null) {
-            return redirect()->route('staff.rooms.index')->with('danger', 'Not Found!');
-        }
-        if ($data->hall_id != $this->hall_id) {
-            return redirect()->route('staff.rooms.index')->with('danger', 'Not Permitted!');
-        }
-        $dataAllocatedSeats = AllocatedSeats::all()->where('room_id', $id);
-        if (count($dataAllocatedSeats) != 0) {
-            //Saving History 
-            $HistoryController = new HistoryController();
-            $staff_id = Auth::guard('staff')->user()->id;
-            $HistoryController->addHistoryHall($staff_id, 'delete', 'Room ' . $data->title . ' cannot be deleted!', $this->hall_id);
-            //Saved
-            return redirect()->route('staff.rooms.index')->with('danger', 'Room cannot be deleted , Room Allocation Found for Students!');
-        } else {
-            $data->delete();
-            //Saving History 
-            $HistoryController = new HistoryController();
-            $staff_id = Auth::guard('staff')->user()->id;
-            $HistoryController->addHistoryHall($staff_id, 'delete', 'Room ' . $data->title . ' has been deleted Successfully!', $this->hall_id);
-            //Saved
-            return redirect()->route('staff.rooms.index')->with('danger', 'Room has been deleted Successfully!');
-        }
+        return redirect()->route('staff.rooms.index');
     }
     // Import Bilk users from csv
     public function importRoom()

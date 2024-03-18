@@ -212,6 +212,7 @@ class HomeController extends Controller
     {
         //
         $request->validate([
+            'enable_delete' => 'required',
             'print' => 'required',
             'secret' => 'required',
             'fixed_cost' => 'required',
@@ -240,6 +241,7 @@ class HomeController extends Controller
             $secret = $request->old_secret;
         }
         //
+        $data->enable_delete = $request->enable_delete;
         $data->enable_print = $request->print;
         $data->enable_payment = $request->payment;
         $data->secret = $secret;

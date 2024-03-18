@@ -104,14 +104,19 @@ class FoodController extends Controller
     public function destroy($id)
     {
 
-        return redirect()->route('admin.food.index')->with('danger', 'Not Permitted!');
-
-        // $data = Food::find($id);
-        // if ($data == null) {
-        //     return redirect()->route('admin.food.index')->with('danger', 'Not Found!');
-        // }
-        // $data->delete();
-        // return redirect('admin/food')->with('danger', 'Data has been deleted Successfully!');
+        // return redirect()->route('admin.food.index')->with('danger', 'Not Permitted!');
+        $data = Food::find($id);
+        if ($data == null) {
+            return redirect()->route('admin.food.index')->with('danger', 'Not Found!');
+        }
+        if ($data->hall->enable_delete != 1) {
+            return redirect()->route('admin.food.index')->with('danger', 'Not Permitted!');
+        }
+        if ($data->status == 1) {
+            return redirect()->route('admin.food.index')->with('danger', 'Not Permitted!');
+        }
+        $data->delete();
+        return redirect()->route('admin.food.index')->with('danger', 'Data has been deleted Successfully!');
     }
     public function active($id)
     {

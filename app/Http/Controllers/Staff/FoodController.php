@@ -146,22 +146,22 @@ class FoodController extends Controller
     public function destroy($id)
     {
 
-        // return redirect()->route('staff.food.index')->with('danger', 'Not Permitted!');
-        $data = Food::find($id);
-        if ($data == null) {
-            return redirect()->route('staff.food.index')->with('danger', 'Not Found!');
-        }
-        if ($data->hall_id != $this->hall_id) {
-            return redirect()->route('staff.food.index')->with('danger', 'Not Permitted!');
-        }
-        //Saving History 
-        $HistoryController = new HistoryController();
-        $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistoryHall($staff_id, 'delete', 'Food ( ' . $data->food_name . ' ) - of Foodtime - ' . $data->foodtime->title . ' has been deleted Successfully!', $this->hall_id);
-        //Saved
-        $data->delete();
+        return redirect()->route('staff.food.index')->with('danger', 'Not Permitted!');
+        // $data = Food::find($id);
+        // if ($data == null) {
+        //     return redirect()->route('staff.food.index')->with('danger', 'Not Found!');
+        // }
+        // if ($data->hall_id != $this->hall_id) {
+        //     return redirect()->route('staff.food.index')->with('danger', 'Not Permitted!');
+        // }
+        // //Saving History 
+        // $HistoryController = new HistoryController();
+        // $staff_id = Auth::guard('staff')->user()->id;
+        // $HistoryController->addHistoryHall($staff_id, 'delete', 'Food ( ' . $data->food_name . ' ) - of Foodtime - ' . $data->foodtime->title . ' has been deleted Successfully!', $this->hall_id);
+        // //Saved
+        // $data->delete();
 
-        return  redirect()->route('staff.food.index')->with('danger', 'Food data has been deleted Successfully!');
+        // return  redirect()->route('staff.food.index')->with('danger', 'Food data has been deleted Successfully!');
     }
     public function active($id)
     {

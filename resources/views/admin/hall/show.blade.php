@@ -92,54 +92,32 @@
                         @endswitch
                     </tr>
                     <tr>
+                        <th>Edit/Delete</th>
+                        @switch($data->enable_delete)
+                            @case(0)
+                                <td class="bg-danger text-white"> Disabled</td>
+                                    @break
+                            @case(1)
+                            <td class="bg-success text-white"> Active</td>
+                                @break
+                        @endswitch
+                    </tr>
+                    {{-- <tr>
                         <th>Created By</th>
                         <td>{{ $data->admin->name }}</td>
-                    </tr>
-                    <tr>
+                    </tr> --}}
+                    {{-- <tr>
                         <td colspan="2">
                             <a onclick="return confirm('Are You Sure? Related all things will be deleted also!')" href="{{ url('admin/hall/'.$data->id.'/delete') }}" class="btn btn-danger btn-sm" title="Remove Data"><i class="fa fa-trash"> DELETE</i></a>
                         </td>
                         
-                    </tr>
+                    </tr> --}}
                    
                     
                 </table>
             </div>
         </div>
     </div>
-    {{-- <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h3 class="m-0 font-weight-bold text-primary"> {{ $data->staff->name }} - Provost ({{ $data->title }})</h3>
-        </div>
-        <div class="card-body">
-            
-            <div class="table-responsive">
-                <table class="table table-bordered" width="100%">
-                        <tr>
-                            <th>Photo</th>
-                            <td><img width="100" src="{{$data->staff->photo ? asset('storage/'.$data->staff->photo) : url('images/user.png')}}" alt="User Photo"></td>
-                        </tr><tr>
-                            <th>Email </th>
-                                 <td>{{ $data->staff->email }}</td>
-                             </tr>
-                        <tr>
-                       <th>Full Name </th>
-                            <td>{{ $data->staff->name }}</td>
-                        </tr><tr>
-                            <th>Bio </th>
-                            <td>{{ $data->staff->bio }}</td>
-                        </tr><tr>
-                            <th>Address </th>
-                            <td>{{ $data->staff->address }}</td>
-                        </tr><tr>
-                            <th>Phone </th>
-                            <td>{{ $data->staff->phone }}</td>
-                        </tr>
-                        
-                </table>
-            </div>
-        </div>
-    </div> --}}
     @section('scripts')
     @endsection
 @endsection

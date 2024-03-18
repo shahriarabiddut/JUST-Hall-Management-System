@@ -115,22 +115,23 @@ class RoomTypeController extends Controller
      */
     public function destroy($id)
     {
-        $data = RoomType::find($id);
-        if ($data == null) {
-            return redirect()->route('admin.roomtype.index')->with('danger', 'Not Found!');
-        }
-        //Delete It's Images
-        foreach ($data->roomtypeimages as $img) {
-            $dataDelete = RoomTypeImage::find($img->id);
-            $path = 'storage/' . $dataDelete->img_src;
-            if (File::exists($path)) {
-                File::delete($path);
-            }
-            //Delete Image
-            $dataDelete->delete();
-        }
-        $data->delete();
-        return redirect('admin/roomtype')->with('danger', 'Data has been deleted Successfully!');
+        return redirect()->route('admin.roomtype.index')->with('danger', 'Not Permitted!');
+        // $data = RoomType::find($id);
+        // if ($data == null) {
+        //     return redirect()->route('admin.roomtype.index')->with('danger', 'Not Found!');
+        // }
+        // //Delete It's Images
+        // foreach ($data->roomtypeimages as $img) {
+        //     $dataDelete = RoomTypeImage::find($img->id);
+        //     $path = 'storage/' . $dataDelete->img_src;
+        //     if (File::exists($path)) {
+        //         File::delete($path);
+        //     }
+        //     //Delete Image
+        //     $dataDelete->delete();
+        // }
+        // $data->delete();
+        // return redirect('admin/roomtype')->with('danger', 'Data has been deleted Successfully!');
     }
     public function destroy_image($id)
     {

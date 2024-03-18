@@ -115,6 +115,7 @@ class StudentController extends Controller
      */
     public function update(Request $request, $id)
     {
+
         //
         $data = Student::find($id);
         if ($data->hall_id != $request->hall_id) {
@@ -162,6 +163,9 @@ class StudentController extends Controller
         $data = Student::find($id);
         if ($data == null) {
             return redirect()->route('admin.student.index')->with('danger', 'Not Found!');
+        }
+        if ($data->hall->enable_delete != 1) {
+            return redirect()->route('admin.student.index')->with('danger', 'Not Permitted!');
         }
         if ($data->status == 0) {
             return redirect()->route('admin.student.index')->with('danger', 'No Action Needed!');

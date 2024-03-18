@@ -68,17 +68,16 @@
     @section('scripts')
 <script>
      function showJSON() {
-      let form = document.getElementById('myForm');
-      let formData = new FormData(form);
-      let jsonObject = {"SSID": formData.get("ssid"),
-        "Password": formData.get("password"),
-        "SecretCode": formData.get("secretCode"),
-        "HallId": formData.get("hallId")};
-      let jsonString = JSON.stringify(jsonObject, null, 2);
+      let ssid = document.getElementById('ssid').value;
+      let password = document.getElementById('password').value;
+      let secretCode = document.getElementById('secretCode').value;
+      let hallId = document.getElementById('hallId').value;
+      let jsonString = '{"SSID":"' + ssid + '", "Password":"' + password + '", "SecretCode":"' + secretCode + '", "HallId":"' + hallId + '"}';
       document.getElementById('jsonData').innerText = jsonString;
-    // Get the div element where the QR code will be displayed
-    
-    let qrcodeDiv = document.getElementById("qrcode");
+      // Get the div element where the QR code will be displayed
+      
+      let qrcodeDiv = document.getElementById("qrcode");
+      qrcode.innerText = '';
 
         // Generate QR code with the desired text
         let qr = new QRCode(qrcodeDiv, {

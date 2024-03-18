@@ -161,7 +161,7 @@ class StaffController extends Controller
         $staff_id = Auth::guard('staff')->user()->id;
         $HistoryController->addHistoryHall($staff_id, 'delete staff', 'Staff (' . $data->type . ' ) - ' . $data->name . ' has been removed Successfully!', $this->hall_id);
         //Saved
-        return redirect()->route('staff.staff.index')->with('danger', 'Staff Data has been removed Successfully!');
+        return redirect()->route('staff.staff.index')->with('danger', 'Staff Data has been removed from hall Successfully!');
     }
 
     public function change(string $id)
