@@ -605,13 +605,6 @@ class OrderController extends Controller
         $userid = Auth::user()->id;
         $request->validate([
             'status' => 'required',
-            'saturday' => 'required',
-            'sunday' => 'required',
-            'monday' => 'required',
-            'tuesday' => 'required',
-            'wednesday' => 'required',
-            'thursday' => 'required',
-            'friday' => 'required',
         ]);
         $data = AutoFoodOrder::find($id);
         $data->status = $request->status;
@@ -624,6 +617,6 @@ class OrderController extends Controller
         $arrayData['7'] = $request->friday;
         $data->orders = json_encode($arrayData);
         $data->save();
-        return redirect()->route('student.order.autoorder')->with('success', 'Auto Order Feature Turne on!');
+        return redirect()->route('student.order.autoorder')->with('success', 'Auto Order Data Updated!');
     }
 }

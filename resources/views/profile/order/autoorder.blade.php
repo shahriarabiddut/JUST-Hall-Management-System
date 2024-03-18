@@ -14,7 +14,7 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h3 class="m-0 font-weight-bold text-primary">Auto Order Data 
+            <h3 class="m-0 font-weight-bold text-primary">Auto Order Daily 
             <a href="{{ route('student.order.foodmenu') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View Food Menu </a> </h3>
         </div> 
         <div class="card-body">
@@ -47,14 +47,14 @@
                             <td>
                                 <select required name="status" class="form-control">
                                             <option @if (Auth::user()->autoOrder->status=='1') selected @endif value="1">Active</option>
-                                            <option @if (Auth::user()->autoOrder->status=='2') selected @endif value="2">Disabled</option>
+                                            <option @if (Auth::user()->autoOrder->status=='0') selected @endif value="0">Disabled</option>
                                         </select>   
                             </td>
                         </tr>
                         @if (Auth::user()->autoOrder->status=='1')
                         <tr>
                             <th>Saturday</th>
-                            <td><select required name="saturday" class="form-control">
+                            <td><select name="saturday" class="form-control">
                                             <option value="0">--- Select Food ---</option>
                                             @foreach ($foods as $ft)
                                             <option @if ($orders['1']==$ft->id) selected @endif value="{{$ft->id}}">{{$ft->food_name}}</option>
@@ -65,7 +65,7 @@
                         </tr>
                         <tr>
                             <th>Sunday</th>
-                            <td><select required name="sunday" class="form-control">
+                            <td><select name="sunday" class="form-control">
                                             <option value="0">--- Select Food ---</option>
                                             @foreach ($foods as $ft)
                                             <option @if ($orders['2']==$ft->id) selected @endif value="{{$ft->id}}">{{$ft->food_name}}</option>
@@ -76,7 +76,7 @@
                         </tr>
                         <tr>
                             <th>Monday</th>
-                            <td><select required name="monday" class="form-control">
+                            <td><select name="monday" class="form-control">
                                             <option value="0">--- Select Food ---</option>
                                             @foreach ($foods as $ft)
                                             <option @if ($orders['3']==$ft->id) selected @endif value="{{$ft->id}}">{{$ft->food_name}}</option>
@@ -87,7 +87,7 @@
                         </tr>
                         <tr>
                             <th>Tuesday</th>
-                            <td><select required name="tuesday" class="form-control">
+                            <td><select name="tuesday" class="form-control">
                                             <option value="0">--- Select Food ---</option>
                                             @foreach ($foods as $ft)
                                             <option @if ($orders['4']==$ft->id) selected @endif value="{{$ft->id}}">{{$ft->food_name}}</option>
@@ -98,7 +98,7 @@
                         </tr>
                         <tr>
                             <th>Wednesday</th>
-                            <td><select required name="wednesday" class="form-control">
+                            <td><select name="wednesday" class="form-control">
                                             <option value="0">--- Select Food ---</option>
                                             @foreach ($foods as $ft)
                                             <option @if ($orders['5']==$ft->id) selected @endif value="{{$ft->id}}">{{$ft->food_name}}</option>
@@ -109,7 +109,7 @@
                         </tr>
                         <tr>
                             <th>Thursday</th>
-                            <td><select required name="thursday" class="form-control">
+                            <td><select name="thursday" class="form-control">
                                             <option value="0">--- Select Food ---</option>
                                             @foreach ($foods as $ft)
                                             <option @if ($orders['6']==$ft->id) selected @endif value="{{$ft->id}}">{{$ft->food_name}}</option>
@@ -120,7 +120,7 @@
                         </tr>
                         <tr>
                             <th>Friday</th>
-                            <td><select required name="friday" class="form-control">
+                            <td><select name="friday" class="form-control">
                                             <option value="0">--- Select Food ---</option>
                                             @foreach ($foods as $ft)
                                             <option @if ($orders['7']==$ft->id) selected @endif value="{{$ft->id}}">{{$ft->food_name}}</option>
