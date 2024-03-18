@@ -52,7 +52,8 @@
                         @foreach ($data as $key=> $d)
                         <tr>
                             <td> {{ $i++ }}</td>
-                            <td>{{ $d->rooms->title }}</td>
+                            <td>@if ($d->rooms==null) Room Deleted @else {{ $d->rooms->title }} @endif
+                            </td>
                             <td>{{ $d->position }}</td>
                             <td>
                             @if ($d->students==null)

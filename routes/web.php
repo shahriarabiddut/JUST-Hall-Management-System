@@ -103,7 +103,10 @@ Route::middleware(['auth'])->prefix('student')->name('student.')->group(function
     Route::post('order/foodmenu/advance', [OrderController::class, 'storeOrderAdvance'])->name('order.storeAdvance');
     Route::get('order/{id}/delete', [OrderController::class, 'destroy'])->name('order.delete');
 
-
+    //Auto Order
+    Route::get('orders/autoorder', [OrderController::class, 'autoOrder'])->name('order.autoorder');
+    Route::post('orders/autoorder/on', [OrderController::class, 'autoOrderOn'])->name('order.autoorderon');
+    Route::put('orders/autoorder/update/{id}', [OrderController::class, 'autoOrderUpdate'])->name('order.autoorderupdate');
     //mealtoken Routes
     Route::get('mealtoken/generate/{id}', [MealTokenController::class, 'generate'])->name('mealtoken.generate');
     Route::get('mealtoken/{id}/show', [MealTokenController::class, 'showbyorder'])->name('mealtoken.showbyorder');

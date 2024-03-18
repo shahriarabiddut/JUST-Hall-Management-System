@@ -8,7 +8,7 @@
         <div class="card-header py-3">
             <h3 class="m-0 font-weight-bold text-primary">Room Request Details 
                 <a href="{{ route('staff.roomallocation.roomrequests') }}" class="float-right btn btn-success btn-sm m-1" target="_self"> <i class="fa fa-arrow-left m-1 p-1"> </i>View All Room Requests</a>
-                {{-- <a href="{{ route('staff.generatepdf',$application['rollno']) }}" class="float-right btn btn-info btn-sm  m-1"><i class="fa fa-print m-1 p-1"> Download PDF </i></a> --}}
+                <a href="{{ route('staff.generatepdf',$application['rollno']) }}" class="float-right btn btn-info btn-sm  m-1"><i class="fa fa-print m-1 p-1"> Download PDF </i></a>
             </h3>
             
         </div>

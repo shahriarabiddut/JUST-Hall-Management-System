@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AutoFoodOrder;
 use Carbon\Carbon;
 use App\Models\Food;
 use App\Models\Order;
@@ -567,5 +568,62 @@ class OrderController extends Controller
                 return redirect()->route('student.order.foodmenu')->with('danger', 'You have allready ordered maximum  ' . $advanceDate . ' for ' . $food_time->title);
             }
         }
+    }
+    public function autoOrder()
+    {
+        //
+        $userid = Auth::user()->id;
+        $foods = Food::all()->where('hall_id', '=', $this->hall_id);
+        return view('profile.order.autoorder', ['foods' => $foods]);
+    }
+    public function autoOrderOn(Request $request)
+    {
+        //
+        $userid = Auth::user()->id;
+        $data = new AutoFoodOrder();
+        $request->validate([
+            'user_id' => 'required',
+            'hall_id' => 'required',
+        ]);
+        $data->user_id = $request->user_id;
+        $data->hall_id = $request->hall_id;
+        $data->status = 1;
+        $arrayData['1'] = 0;
+        $arrayData['2'] = 0;
+        $arrayData['3'] = 0;
+        $arrayData['4'] = 0;
+        $arrayData['5'] = 0;
+        $arrayData['6'] = 0;
+        $arrayData['7'] = 0;
+        $data->orders = json_encode($arrayData);
+        $data->save();
+        return redirect()->route('student.order.autoorder')->with('success', 'Auto Order Feature Turne on!');
+    }
+    public function autoOrderUpdate(Request $request, $id)
+    {
+        //
+        $userid = Auth::user()->id;
+        $request->validate([
+            'status' => 'required',
+            'saturday' => 'required',
+            'sunday' => 'required',
+            'monday' => 'required',
+            'tuesday' => 'required',
+            'wednesday' => 'required',
+            'thursday' => 'required',
+            'friday' => 'required',
+        ]);
+        $data = AutoFoodOrder::find($id);
+        $data->status = $request->status;
+        $arrayData['1'] = $request->saturday;
+        $arrayData['2'] = $request->sunday;
+        $arrayData['3'] = $request->monday;
+        $arrayData['4'] = $request->tuesday;
+        $arrayData['5'] = $request->wednesday;
+        $arrayData['6'] = $request->thursday;
+        $arrayData['7'] = $request->friday;
+        $data->orders = json_encode($arrayData);
+        $data->save();
+        return redirect()->route('student.order.autoorder')->with('success', 'Auto Order Feature Turne on!');
     }
 }

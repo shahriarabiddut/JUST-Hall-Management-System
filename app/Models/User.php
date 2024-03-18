@@ -56,4 +56,8 @@ class User extends Authenticatable  implements MustVerifyEmail
     {
         return $this->hasOne(AllocatedSeats::class, 'user_id');
     }
+    function autoOrder()
+    {
+        return $this->hasOne(AutoFoodOrder::class, 'user_id');
+    }
 }

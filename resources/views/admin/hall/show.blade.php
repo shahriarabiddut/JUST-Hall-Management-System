@@ -92,7 +92,7 @@
                         @endswitch
                     </tr>
                     <tr>
-                        <th>Edit/Delete</th>
+                        <th>Delete</th>
                         @switch($data->enable_delete)
                             @case(0)
                                 <td class="bg-danger text-white"> Disabled</td>

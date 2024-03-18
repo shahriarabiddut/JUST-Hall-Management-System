@@ -73,7 +73,8 @@
         </a>
         <div id="collapseThree" class="collapse @if(request()->is('student/order*') || request()->is('student/mealtoken*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Oeder Food</h6>
+                <h6 class="collapse-header">Foods and Orders</h6>
+                <a class="collapse-item" href="{{ route('student.order.autoorder') }}">Auto Order Daily</a>
                 <a class="collapse-item" href="{{ route('student.order.foodmenu') }}">View Food Menu</a>
                 <a class="collapse-item" href="{{ route('student.order.index') }}">Order History</a>
                 <a class="collapse-item" href="{{ route('student.mealtoken.index') }}">Meal Token History</a>

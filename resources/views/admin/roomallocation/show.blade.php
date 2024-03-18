@@ -18,17 +18,18 @@
                     </tr>    
                     <tr>
                             <th> Room No </th>
-                            <td>{{ $data->rooms->title }}</td>
+                            <td>
+                                @if ($data->rooms==null) Room Deleted @else {{ $data->rooms->title }} @endif
+                            </td>
                     </tr><tr>
                         <th>Seat No </th>
                         <td>{{ $data->position }}</td>
                     </tr>
                     <tr>
-                        <th>Student Name </th>
-                        <td>{{ $data->students->name }}</td>
-                    </tr><tr>
-                        <th>Student Roll</th>
-                        <td>{{ $data->students->rollno }}</td>
+                        <th>Student </th>
+                        <td>
+                            @if ($data->students==null) Student Deleted @else {{ $data->students->name }}- {{ $data->students->rollno }} @endif 
+                        </td>
                     </tr><tr>
                         <th>Allocation Date </th>
                         <td>{{ $data->created_at->format("F j, Y H:i:s") }} </td>
