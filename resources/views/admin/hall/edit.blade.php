@@ -55,11 +55,11 @@
                     </tr>
                     <tr>
                         <th>Fixed Cost Honours</th>
-                        <td><input required name="fixed_cost" type="number" value="{{ $data->fixed_cost }}" class="form-control"></td>
+                        <td><input required name="fixed_cost" min="1"  type="number" value="{{ $data->fixed_cost }}" class="form-control"></td>
                     </tr>
                     <tr>
                         <th>Fixed Cost Masters</th>
-                        <td><input required name="fixed_cost_masters" type="number" value="{{ $data->fixed_cost_masters }}" class="form-control"></td>
+                        <td><input required name="fixed_cost_masters" min="1"  type="number" value="{{ $data->fixed_cost_masters }}" class="form-control"></td>
                     </tr>
                     <tr>
                         <th>Online Payment</th>

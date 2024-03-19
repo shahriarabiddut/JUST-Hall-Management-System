@@ -25,7 +25,7 @@
                         <div class="col-md-3 mt-1"> <button class="form-control btn btn-dark" type="reset">Search by Date :</button> </div>
                     <div class="col-md-3 mt-1">
                     <select class="form-control" name="type" id="">
-                        <option value="x">-- Select Meal Type--</option>
+                        <option value="x">-- All Meal Type--</option>
                         @foreach ($dataFoodTime as $ft)
                         <option value="{{$ft->title}}">{{$ft->title}}</option>
                         @endforeach

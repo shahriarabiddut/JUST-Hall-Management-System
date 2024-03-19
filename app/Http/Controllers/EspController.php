@@ -82,14 +82,14 @@ class EspController extends Controller
             }
             return $result;
         }
-        $result2 = capitalizeAndLowercase($tokenid);
+        // $result2 = capitalizeAndLowercase($tokenid);
 
         $hall = Hall::find($hall_id);
         if ($value != $hall->secret) {
             return 0;
         }
         //
-        $data = MealToken::all()->where('token_number', $result2)->first();
+        $data = MealToken::all()->where('token_number', $tokenid)->first();
         if ($data == null) {
             return 0;
         }

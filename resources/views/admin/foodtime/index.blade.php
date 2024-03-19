@@ -21,7 +21,8 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h3 class="m-0 font-weight-bold text-primary">FoodTime 
-            <a href="{{ route('admin.foodtime.create') }}" class="float-right btn btn-success btn-sm" target="_blank">Add New</a> </h3>
+            {{-- <a href="{{ route('admin.foodtime.create') }}" class="float-right btn btn-success btn-sm" target="_blank">Add New</a>  --}}
+        </h3>
         </div>
         <div class="card-body">
             <div class="table-responsive">

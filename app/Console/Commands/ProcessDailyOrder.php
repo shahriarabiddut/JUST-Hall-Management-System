@@ -49,7 +49,7 @@ class ProcessDailyOrder extends Command
                 if ($dataBalance->balance_amount >= 50) {
                     $oFood = $nextDay;
                     $food_item = Food::find($orders[$oFood]);
-                    if ($food_item->status != 0) {
+                    if ($food_item->status != 0 && $food_item->food_time_hall->status != 0) {
                         $currentDate = Carbon::now();
                         $nextDate = $currentDate->addDay();
                         $nextDate = $nextDate->setTimezone('GMT+6')->format('Y-m-d'); // 2023-03-17
@@ -81,7 +81,7 @@ class ProcessDailyOrder extends Command
                 if ($dataBalance->balance_amount >= 50) {
                     $oFood = $nextDay + 7;
                     $food_item = Food::find($orders[$oFood]);
-                    if ($food_item->status != 0) {
+                    if ($food_item->status != 0 && $food_item->food_time_hall->status != 0) {
                         $currentDate = Carbon::now();
                         $nextDate = $currentDate->addDay();
                         $nextDate = $nextDate->setTimezone('GMT+6')->format('Y-m-d'); // 2023-03-17

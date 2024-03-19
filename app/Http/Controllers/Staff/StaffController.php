@@ -154,12 +154,11 @@ class StaffController extends Controller
             return redirect()->route('staff.staff.index')->with('danger', 'Not Permitted!');
         }
         $data->status = 0;
-        $data->hall_id = 0;
         $data->save();
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistoryHall($staff_id, 'delete staff', 'Staff (' . $data->type . ' ) - ' . $data->name . ' has been removed Successfully!', $this->hall_id);
+        $HistoryController->addHistoryHall($staff_id, 'remove staff', 'Staff (' . $data->type . ' ) - ' . $data->name . ' has been removed Successfully!', $this->hall_id);
         //Saved
         return redirect()->route('staff.staff.index')->with('danger', 'Staff Data has been removed from hall Successfully!');
     }

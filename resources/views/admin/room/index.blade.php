@@ -62,7 +62,14 @@
                         <tr>
                             <td>{{ ++$key }}</td>
                             <td>{{ $d->title }} ({{ $d->hall->title }})</td>
-                            <td>{{ $d->roomtype->title }}</td>
+                            <td>
+                                @if ($d->roomtype==null)
+                                    Room Type N/A
+                                @else
+                                {{ $d->roomtype->title }}
+                                @endif
+                            
+                            </td>
                             <td>{{ $d->totalseats }}</td>
                             <td>{{ count($d->allocatedseats) }}</td>
                             @if ($d->vacancy==0)
@@ -72,8 +79,8 @@
                             @endif
                             
                             <td class="text-center">
-                                <a href="{{ url('admin/rooms/'.$d->id) }}" class="btn btn-info btn-sm" title="View Data"><i class="fa fa-eye"></i></a>
-                                <a href="{{ url('admin/rooms/'.$d->id.'/edit') }}" class="btn btn-primary btn-sm" title="Edit Data"> <i class="fa fa-edit"></i></a>
+                                <a href="{{ url('admin/rooms/'.$d->id) }}" class="btn btn-info btn-sm m-1" title="View Data"><i class="fa fa-eye"></i></a>
+                                <a href="{{ url('admin/rooms/'.$d->id.'/edit') }}" class="btn btn-primary btn-sm m-1" title="Edit Data"> <i class="fa fa-edit"></i></a>
                                 
                             </td>
 

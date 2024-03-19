@@ -30,7 +30,7 @@
                     <div class="form-row">
                     <div class="col-md-3 mt-1">
                         <select class="form-control"  name="type" id="">
-                            <option @if($type == 'x') selected @endif value="x">-- Select Meal Type --</option>
+                            <option @if($type == 'x') selected @endif value="x">-- All Meal Type --</option>
                             @foreach ($dataFoodTime as $ft)
                             <option @if($type == $ft->title) selected @endif value="{{$ft->title}}">{{$ft->title}}</option>
                             @endforeach

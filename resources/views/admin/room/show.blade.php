@@ -27,7 +27,12 @@
                     </tr>
                     <tr>
                         <th>Room Type</th>
-                        <td>{{ $data->roomtype->title }}</td>
+                        <td>
+                            @if ($data->roomtype==null)
+                                    Room Type N/A
+                                @else
+                                {{ $data->roomtype->title }}
+                                @endif</td>
                     </tr>
                     <tr>
                         <th>Total Seats</th>

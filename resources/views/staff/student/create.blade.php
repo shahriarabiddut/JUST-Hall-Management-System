@@ -51,14 +51,14 @@
                             <option value="0"> No </option>
                         </select></td>
                     </tr>
-                    <tr>
+                    {{-- <tr>
                         <th>Gender <span class="text-danger">*</span></th>
                         <td><select required name="gender" class="form-control room-list">
                         <option value="3">--- Select Gender ---</option>
                         <option value="1"> Male </option>
                         <option value="0"> Female </option>
                     </select></td>
-                    </tr>
+                    </tr> --}}
                     <tr>
                         <th>Photo</th>
                         <td><input name="photo" type="file" accept="image/*" ></td>

@@ -29,6 +29,7 @@
                             <th>#</th>
                             <th>Student</th>
                             <th>Amount</th>
+                            <th>Method</th>
                             <th>Date</th>
                             <th>Status</th>
                             <th>Action</th>
@@ -39,6 +40,7 @@
                             <th>#</th>
                             <th>Student</th>
                             <th>Amount</th>
+                            <th>Method</th>
                             <th>Date</th>
                             <th>Status</th>
                             <th>Action</th>
@@ -55,6 +57,13 @@
                             @endif
                             </td>
                             <td>{{ $d->amount }}</td>
+                            <td>@switch($d->transaction_id)
+                                @case(0)
+                                    Cash / Bank
+                                        @break
+                                @default
+                                SSLCOMMERZ
+                            @endswitch</td>
                             <td>
                                 @if ($d->created_at==null)
                                      N/A

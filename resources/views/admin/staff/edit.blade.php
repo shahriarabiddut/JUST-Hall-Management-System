@@ -9,9 +9,13 @@
             <a href="{{ url('admin/staff/'.$data->id) }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h3>
         </div>
         <div class="card-body">
-            
+            @if ($errors->any())
+                @foreach ($errors->all() as $error)
+                   <p class="text-danger"> {{ $error }} </p>
+                @endforeach
+                @endif
             <div class="table-responsive">
-            <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('admin.staff.update',$data->id) }}" enctype="multipart/form-data">
+            <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('admin.staff.update',$data->id) }}" enctype="multipart/form-data" id="myForm">
                 @csrf
                 @method('PUT')
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -20,7 +24,7 @@
                         <th>Select Hall</th>
                         <td>
                             <select required name="hall_id" class="form-control">
-                                <option>--- Select Hall ---</option>
+                                <option value="101">--- Select Hall ---</option>
                                 <option value="0">--- N/A ---</option>
                                 @foreach ($halls as $hall)
                                 <option @if ($data->hall_id == $hall->id) selected @endif value="{{ $hall->id }}">{{ $hall->title }}</option>
@@ -45,7 +49,7 @@
                         <td><input required name="name" type="text" class="form-control" value="{{ $data->name }}"></td>
                     </tr><tr>
                         <th>Bio</th>
-                        <td><textarea name="bio" class="form-control">{{ $data->bio }}</textarea></td>
+                        <td><textarea required name="bio" class="form-control">{{ $data->bio }}</textarea></td>
                     </tr><tr>
                         <th>Address <span class="text-danger">*</span></th>
                         <td>
@@ -53,7 +57,7 @@
                         </td>
                     </tr><tr>
                         <th>Phone Number<span class="text-danger">*</span></th>
-                        <td><input required name="phone" type="text" class="form-control" value="{{ $data->phone }}" maxlength="11"></td>
+                        <td><input required name="phone" type="text" class="form-control" id="inputField" value="{{ $data->phone }}" maxlength="11"></td>
                     </tr>
                     <tr>
                         <th>Select User Type</th>
@@ -93,6 +97,20 @@
     </div>
 
     @section('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('myForm').addEventListener('submit', function(event) {
+                let input2 = document.getElementById('inputField').value;
+                let pattern = /^[0-9]+$/;
+            
+                if (!pattern.test(input2)) {
+                    alert('Use Valid Mobile Number!');
+                    event.preventDefault(); // Prevent form submission if input is invalid
+                    window.location.reload();
+                }
+            });
+        });
+    </script>
     @endsection
 @endsection
 

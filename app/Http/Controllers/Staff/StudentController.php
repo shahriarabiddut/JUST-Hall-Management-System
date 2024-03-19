@@ -99,7 +99,6 @@ class StudentController extends Controller
             'rollno' => 'required|unique:users',
             'dept' => 'required',
             'session' => 'required',
-            'gender' => 'required|not_in:3',
         ]);
         $data->name = $request->name;
         $data->dept = $request->dept;
@@ -108,7 +107,7 @@ class StudentController extends Controller
         $data->mobile = $request->mobile;
         $data->rollno = $request->rollno;
         $data->ms = $request->ms;
-        $data->gender = $request->gender;
+        $data->gender = Auth::guard('staff')->user()->hall->type;
         $data->hall_id = $this->hall_id;
         $data->status = 1;
         //If user Given address
@@ -198,7 +197,6 @@ class StudentController extends Controller
         $data->email = $request->email;
         $data->mobile = $request->mobile;
         $data->rollno = $request->rollno;
-        $data->gender = $request->gender;
         $data->ms = $request->ms;
         //If user Given address
         if ($request->has('address')) {

@@ -46,7 +46,7 @@
                     </tr>
                     <tr>
                         <th>Total Seats</th>
-                        <td><input required name="totalseats" id="numberInput" type="number" class="form-control"></td>
+                        <td><input required name="totalseats" id="numberInput" min="1" type="number" class="form-control"></td>
                     </tr>
                     <tr>
                         <td colspan="2">

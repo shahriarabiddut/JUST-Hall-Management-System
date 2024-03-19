@@ -15,7 +15,7 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <tbody>
                     <tr>
-                        <th>Mobile <span class="text-danger">(Only if used mobile banking)</span></th>
+                        <th>Mobile <span class="text-danger">*</span></th>
                         <td><input required name="mobile" type="text" class="form-control" id="inputField" ></td>
                     </tr>
                     <tr>

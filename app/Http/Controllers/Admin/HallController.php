@@ -264,8 +264,9 @@ class HallController extends Controller
             return redirect()->route('admin.hall.index')->with('danger', 'Not Found!');
         }
         $data->status = 0;
-        $data->payment = 0;
-        $data->print = 0;
+        $data->enable_print = 0;
+        $data->enable_payment = 0;
+        $data->enable_delete = 0;
         $data->save();
         return redirect('admin/hall')->with('danger', 'Hall Disabled Successfully!');
     }

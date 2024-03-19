@@ -67,7 +67,7 @@
                     </table>
                 </form>
             </div>
-            <div class="table-responsive">
+            {{-- <div class="table-responsive">
                 <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('admin.settings.update',$datas[4]->id) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
@@ -82,7 +82,7 @@
                         </tbody>
                     </table>
                 </form>
-            </div>
+            </div> --}}
             <h3 class="bg-primary text-white text-center p-2 rounded"> Fixed Charges Defaults </h3>
             <div class="table-responsive">
                 <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('admin.settings.update',$datas[1]->id) }}" enctype="multipart/form-data">
@@ -143,7 +143,7 @@
                     </table>
                 </form>
             </div>
-            <div class="table-responsive">
+            {{-- <div class="table-responsive">
                 <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('admin.settings.update',$datas[9]->id) }}" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
@@ -157,7 +157,7 @@
                         </tbody>
                     </table>
                 </form>
-            </div>
+            </div> --}}
     {{-- <div class="card shadow mb-4">
         <div class="card-body">
             @foreach ($datas as $data)

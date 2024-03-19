@@ -17,11 +17,6 @@
                 @endforeach
             @endif
             <div class="table-responsive">
-                @if ($errors->any())
-                @foreach ($errors->all() as $error)
-                   <p class="text-danger"> {{ $error }} </p>
-                @endforeach
-                @endif
             <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('admin.roomallocation.store') }}" enctype="multipart/form-data">
                 @csrf
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">

@@ -39,8 +39,8 @@ class StaffController extends Controller
         $data = new Staff;
         $request->validate([
             'email' => 'required|email|regex:/(.+)@(.+)\.(.+)/i|unique:staff',
-            'type' => 'required',
-            'hall_id' => 'required',
+            'type' => 'required|not_in:0',
+            'hall_id' => 'required|not_in:101',
         ]);
         $data->hall_id = $request->hall_id;
         $data->email = $request->email;
@@ -91,8 +91,8 @@ class StaffController extends Controller
             'bio' => 'required',
             'address' => 'required',
             'phone' => 'required',
-            'type' => 'required',
-            'hall_id' => 'required',
+            'type' => 'required|not_in:0',
+            'hall_id' => 'required|not_in:101',
         ]);
         $data->hall_id = $request->hall_id;
         $data->name = $request->name;

@@ -20,6 +20,7 @@ class FoodTimeController extends Controller
      */
     public function create()
     {
+        return redirect()->route('admin.foodtime.index')->with('danger', 'Not Permitted!');
         return view('admin.foodtime.create');
     }
 
@@ -28,6 +29,7 @@ class FoodTimeController extends Controller
      */
     public function store(Request $request)
     {
+        return redirect()->route('admin.foodtime.index')->with('danger', 'Not Permitted!');
         //
         $data = new FoodTime;
         $request->validate([

@@ -33,13 +33,13 @@
                             <option @if($data->ms==0) selected @endif   value="0"> No </option>
                         </select></td>
                     </tr>
-                    <tr>
+                    {{-- <tr>
                         <th>Gender <span class="text-danger">*</span></th>
                         <td><select required name="gender" class="form-control room-list">
                         <option @if($data->gender==1) selected @endif  value="1"> Male </option>
                         <option @if($data->gender==0) selected @endif  value="0"> Female </option>
                     </select></td>
-                    </tr>
+                    </tr> --}}
                     <tr>
                         <th>Full Name <span class="text-danger">*</span></th>
                         <td><input required name="name" type="text" class="form-control" value="{{ $data->name }}"></td>

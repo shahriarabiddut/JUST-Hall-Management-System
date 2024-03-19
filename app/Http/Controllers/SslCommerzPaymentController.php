@@ -6,6 +6,7 @@ use DB;
 use Illuminate\Http\Request;
 use App\Library\SslCommerz\SslCommerzNotification;
 use App\Models\Student;
+use Carbon\Carbon;
 
 class SslCommerzPaymentController extends Controller
 {
@@ -45,7 +46,9 @@ class SslCommerzPaymentController extends Controller
                 'transaction_id' => $post_data['tran_id'],
                 'currency' => $post_data['currency'],
                 'student_id' => $post_data['cus_student_id'],
-                'hall_id' => $student->hall_id
+                'hall_id' => $student->hall_id,
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
             ]);
 
         $sslc = new SslCommerzNotification();

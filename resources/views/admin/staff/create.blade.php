@@ -23,7 +23,7 @@
                             <th>Select Hall</th>
                             <td>
                                 <select required name="hall_id" class="form-control">
-                                    <option>--- Select Hall ---</option>
+                                    <option value="101">--- Select Hall ---</option>
                                     <option value="0">--- N/A ---</option>
                                     @foreach ($halls as $hall)
                                     <option value="{{ $hall->id }}">{{ $hall->title }}</option>
@@ -36,7 +36,6 @@
                             <td>
                                 <select required name="type" class="form-control">
                                     <option value="0">--- Select User Type ---</option>
-                                    
                                     <option value="staff">Staff</option>
                                      <option value="provost">Provost</option>
                                      <option value="aprovost">Assistant Provost</option>

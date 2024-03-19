@@ -40,7 +40,6 @@ class RegisteredUserController extends Controller
             'rollno' => ['required', 'string', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()]
         ]);
-        dd($request);
         $rollno = str_replace(' ', '', $request->rollno);
         $user = new User;
         $user->name = $request->name;

@@ -65,15 +65,18 @@
                             <td><select name="saturday" class="form-control">
                                             <option value="0">--- Select Food ---</option>
                                             @foreach ($foods as $ft)
+                                            @if ($ft->food_time_id==1)
                                             <option @if ($orders['1']==$ft->id) selected @endif value="{{$ft->id}}">{{$ft->food_name}}</option>
+                                            @endif
                                             @endforeach
                                         </select>
-                                    
                             </td>
                             <td><select name="saturdayn" class="form-control">
                                 <option value="0">--- Select Food ---</option>
                                 @foreach ($foods as $ft)
+                                @if ($ft->food_time_id==2)
                                 <option @if ($orders['8']==$ft->id) selected @endif value="{{$ft->id}}">{{$ft->food_name}}</option>
+                                @endif
                                 @endforeach
                             </select>
                         
@@ -84,7 +87,9 @@
                             <td><select name="sunday" class="form-control">
                                             <option value="0">--- Select Food ---</option>
                                             @foreach ($foods as $ft)
+                                            @if ($ft->food_time_id==1)
                                             <option @if ($orders['2']==$ft->id) selected @endif value="{{$ft->id}}">{{$ft->food_name}}</option>
+                                            @endif
                                             @endforeach
                                         </select>
                                     
@@ -92,7 +97,9 @@
                             <td><select name="sundayn" class="form-control">
                                 <option value="0">--- Select Food ---</option>
                                 @foreach ($foods as $ft)
+                                @if ($ft->food_time_id==2)
                                 <option @if ($orders['9']==$ft->id) selected @endif value="{{$ft->id}}">{{$ft->food_name}}</option>
+                                @endif
                                 @endforeach
                             </select>
                         
@@ -103,7 +110,9 @@
                             <td><select name="monday" class="form-control">
                                             <option value="0">--- Select Food ---</option>
                                             @foreach ($foods as $ft)
+                                            @if ($ft->food_time_id==1)
                                             <option @if ($orders['3']==$ft->id) selected @endif value="{{$ft->id}}">{{$ft->food_name}}</option>
+                                            @endif
                                             @endforeach
                                         </select>
                                     
@@ -111,7 +120,9 @@
                             <td><select name="mondayn" class="form-control">
                                 <option value="0">--- Select Food ---</option>
                                 @foreach ($foods as $ft)
+                                @if ($ft->food_time_id==2)
                                 <option @if ($orders['10']==$ft->id) selected @endif value="{{$ft->id}}">{{$ft->food_name}}</option>
+                                @endif
                                 @endforeach
                             </select>
                         
@@ -122,7 +133,9 @@
                             <td><select name="tuesday" class="form-control">
                                             <option value="0">--- Select Food ---</option>
                                             @foreach ($foods as $ft)
+                                            @if ($ft->food_time_id==1)
                                             <option @if ($orders['4']==$ft->id) selected @endif value="{{$ft->id}}">{{$ft->food_name}}</option>
+                                            @endif
                                             @endforeach
                                         </select>
                                     
@@ -130,7 +143,9 @@
                             <td><select name="tuesdayn" class="form-control">
                                 <option value="0">--- Select Food ---</option>
                                 @foreach ($foods as $ft)
+                                @if ($ft->food_time_id==2)
                                 <option @if ($orders['11']==$ft->id) selected @endif value="{{$ft->id}}">{{$ft->food_name}}</option>
+                                @endif
                                 @endforeach
                             </select>
                         
@@ -141,7 +156,9 @@
                             <td><select name="wednesday" class="form-control">
                                             <option value="0">--- Select Food ---</option>
                                             @foreach ($foods as $ft)
+                                            @if ($ft->food_time_id==1)
                                             <option @if ($orders['5']==$ft->id) selected @endif value="{{$ft->id}}">{{$ft->food_name}}</option>
+                                            @endif
                                             @endforeach
                                         </select>
                                     
@@ -149,7 +166,9 @@
                             <td><select name="wednesdayn" class="form-control">
                                 <option value="0">--- Select Food ---</option>
                                 @foreach ($foods as $ft)
+                                @if ($ft->food_time_id==2)
                                 <option @if ($orders['12']==$ft->id) selected @endif value="{{$ft->id}}">{{$ft->food_name}}</option>
+                                @endif
                                 @endforeach
                             </select>
                         
@@ -160,7 +179,9 @@
                             <td><select name="thursday" class="form-control">
                                             <option value="0">--- Select Food ---</option>
                                             @foreach ($foods as $ft)
+                                            @if ($ft->food_time_id==1)
                                             <option @if ($orders['6']==$ft->id) selected @endif value="{{$ft->id}}">{{$ft->food_name}}</option>
+                                            @endif
                                             @endforeach
                                         </select>
                                     
@@ -168,7 +189,9 @@
                             <td><select name="thursdayn" class="form-control">
                                 <option value="0">--- Select Food ---</option>
                                 @foreach ($foods as $ft)
+                                @if ($ft->food_time_id==2)
                                 <option @if ($orders['13']==$ft->id) selected @endif value="{{$ft->id}}">{{$ft->food_name}}</option>
+                                @endif
                                 @endforeach
                             </select>
                         
@@ -179,7 +202,9 @@
                             <td><select name="friday" class="form-control">
                                             <option value="0">--- Select Food ---</option>
                                             @foreach ($foods as $ft)
+                                            @if ($ft->food_time_id==1)
                                             <option @if ($orders['7']==$ft->id) selected @endif value="{{$ft->id}}">{{$ft->food_name}}</option>
+                                            @endif
                                             @endforeach
                                         </select>
                                     
@@ -187,7 +212,9 @@
                             <td><select name="fridayn" class="form-control">
                                 <option value="0">--- Select Food ---</option>
                                 @foreach ($foods as $ft)
+                                @if ($ft->food_time_id==2)
                                 <option @if ($orders['14']==$ft->id) selected @endif value="{{$ft->id}}">{{$ft->food_name}}</option>
+                                @endif
                                 @endforeach
                             </select>
                         

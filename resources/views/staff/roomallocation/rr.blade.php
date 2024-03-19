@@ -33,8 +33,8 @@ body {
         <tbody>
         <tr>
             <th width="25%" class="text-center"><h4 class="my-5">প্রভোস্ট এর কার্যালয়</h4></th>
-            {{-- <td width="50%" colspan="2" class="text-center"><img width="75px" src="{{ asset('img/just.jpg') }}" alt=""></td> --}}
-            <td width="50%" colspan="2" class="text-center"><img width="75px" src="{{ file_exists(asset('storage/'.$data->hall->logo)) ? asset('storage/'.$data->hall->logo) : asset('img/just.jpg')  }}" alt=""></td>
+            {{-- <td width="50%" colspan="2" class="text-center"><img width="75px" src="{{ 'img/just.jpg' }}" alt=""></td> --}}
+            <td width="50%" colspan="2" class="text-center"><img width="75px" src="{{ file_exists('storage/'.$data->hall->logo) ? 'storage/'.$data->hall->logo : 'img/just.jpg'  }}" alt=""></td>
             <th width="25%" class="text-center">
                 <h3 class="my-5"> {{ $data->hall->banglatitle }}
         </h3></th>
@@ -152,25 +152,25 @@ body {
         </tr>
         <tr>
             <th>ক) নাগরিক সনদের/জন্ম নিবদ্ধন এর অনুলিপি (ছবি)</th>
-            <td colspan="3"><img src="{{ asset('storage/'.$application['dobsonod']) }}" alt=""></td>
+            <td colspan="3"><img src="{{ 'storage/'.$application['dobsonod'] }}" alt=""></td>
 
             
         </tr>
         <tr>
             <th>খ) সর্বশেষ পরীক্ষার নম্বর পত্রের অনুলিপি/প্রথম বর্ষের ভর্তির কাগজপত্রের অনুলিপি। (ছবি)</th>
-            <td colspan="3"><img src="{{ asset('storage/'.$application['academic']) }}" alt=""></td>
+            <td colspan="3"><img src="{{ 'storage/'.$application['academic'] }}" alt=""></td>
             
         </tr>
         <tr>
             <th>গ) অভিভাবকের মাসিক আয়ের প্রমাণ পত্র। (ছবি)</th>
-            <td colspan="3"><img src="{{ asset('storage/'.$application['earningproof']) }}" alt=""></td>
+            <td colspan="3"><img src="{{ 'storage/'.$application['earningproof'] }}" alt=""></td>
             
         </tr>
         <tr>
-            <td colspan="2"><img width="150px" @if ($data->students->photo!=null) src="{{ asset('storage/'.$data->students->photo) }}" @else src="{{ asset('images/user.png') }}" @endif alt="Application Photo"> <br>
+            <td colspan="2"><img width="150px" @if ($data->students->photo!=null) src="{{ 'storage/'.$data->students->photo }}" @else src="{{ 'images/user.png' }}" @endif alt="Application Photo"> <br>
                 <p>তারিখঃ {{ Carbon\Carbon::today()->format('F j , Y') }} </p></td>
             <th width="20%">আবেদনকারীর স্বাক্ষর</th>
-            <td width="30%" ><img  width="125px" src="{{ asset('storage/'.$application['signature']) }}" alt=""></td>
+            <td width="30%" ><img  width="125px" src="{{ 'storage/'.$application['signature'] }}" alt=""></td>
         </tr>
         <tr>
             <td colspan="4"> <h3>প্রভোস্ট <br> {{ $data->hall->banglatitle }} <br> যশোর বিজ্ঞান ও প্রযুক্তি বিশ্ববিদ্যালয়</h3>
