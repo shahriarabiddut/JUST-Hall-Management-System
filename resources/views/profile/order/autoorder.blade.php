@@ -44,7 +44,7 @@
                         <tbody>
                         <tr>
                             <th>Auto Order Status</th>
-                            <td>
+                            <td colspan="2">
                                 <select required name="status" class="form-control">
                                             <option @if (Auth::user()->autoOrder->status=='1') selected @endif value="1">Active</option>
                                             <option @if (Auth::user()->autoOrder->status=='0') selected @endif value="0">Disabled</option>
@@ -52,6 +52,14 @@
                             </td>
                         </tr>
                         @if (Auth::user()->autoOrder->status=='1')
+                        <tr>
+                            <td colspan="3"> If any food is disabled on a day no order will be placed for that time!</td>
+                        </tr>
+                        <tr>
+                            <th>Day</th>
+                            <th>Lunch</th>
+                            <th>Dinner</th>
+                        </tr>
                         <tr>
                             <th>Saturday</th>
                             <td><select name="saturday" class="form-control">
@@ -62,6 +70,14 @@
                                         </select>
                                     
                             </td>
+                            <td><select name="saturdayn" class="form-control">
+                                <option value="0">--- Select Food ---</option>
+                                @foreach ($foods as $ft)
+                                <option @if ($orders['8']==$ft->id) selected @endif value="{{$ft->id}}">{{$ft->food_name}}</option>
+                                @endforeach
+                            </select>
+                        
+                </td>
                         </tr>
                         <tr>
                             <th>Sunday</th>
@@ -73,6 +89,14 @@
                                         </select>
                                     
                             </td>
+                            <td><select name="sundayn" class="form-control">
+                                <option value="0">--- Select Food ---</option>
+                                @foreach ($foods as $ft)
+                                <option @if ($orders['9']==$ft->id) selected @endif value="{{$ft->id}}">{{$ft->food_name}}</option>
+                                @endforeach
+                            </select>
+                        
+                        </td>
                         </tr>
                         <tr>
                             <th>Monday</th>
@@ -84,6 +108,14 @@
                                         </select>
                                     
                             </td>
+                            <td><select name="mondayn" class="form-control">
+                                <option value="0">--- Select Food ---</option>
+                                @foreach ($foods as $ft)
+                                <option @if ($orders['10']==$ft->id) selected @endif value="{{$ft->id}}">{{$ft->food_name}}</option>
+                                @endforeach
+                            </select>
+                        
+                        </td>
                         </tr>
                         <tr>
                             <th>Tuesday</th>
@@ -95,6 +127,14 @@
                                         </select>
                                     
                             </td>
+                            <td><select name="tuesdayn" class="form-control">
+                                <option value="0">--- Select Food ---</option>
+                                @foreach ($foods as $ft)
+                                <option @if ($orders['11']==$ft->id) selected @endif value="{{$ft->id}}">{{$ft->food_name}}</option>
+                                @endforeach
+                            </select>
+                        
+                        </td>
                         </tr>
                         <tr>
                             <th>Wednesday</th>
@@ -106,6 +146,14 @@
                                         </select>
                                     
                             </td>
+                            <td><select name="wednesdayn" class="form-control">
+                                <option value="0">--- Select Food ---</option>
+                                @foreach ($foods as $ft)
+                                <option @if ($orders['12']==$ft->id) selected @endif value="{{$ft->id}}">{{$ft->food_name}}</option>
+                                @endforeach
+                            </select>
+                        
+                        </td>
                         </tr>
                         <tr>
                             <th>Thursday</th>
@@ -117,6 +165,14 @@
                                         </select>
                                     
                             </td>
+                            <td><select name="thursdayn" class="form-control">
+                                <option value="0">--- Select Food ---</option>
+                                @foreach ($foods as $ft)
+                                <option @if ($orders['13']==$ft->id) selected @endif value="{{$ft->id}}">{{$ft->food_name}}</option>
+                                @endforeach
+                            </select>
+                        
+                        </td>
                         </tr>
                         <tr>
                             <th>Friday</th>
@@ -128,12 +184,20 @@
                                         </select>
                                     
                             </td>
+                            <td><select name="fridayn" class="form-control">
+                                <option value="0">--- Select Food ---</option>
+                                @foreach ($foods as $ft)
+                                <option @if ($orders['14']==$ft->id) selected @endif value="{{$ft->id}}">{{$ft->food_name}}</option>
+                                @endforeach
+                            </select>
+                        
+                            </td>
                         </tr>
                         @endif
                         <tr>
-                            <td colspan="2">
+                            <td colspan="3">
                                 <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
-                                <button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="submit" class="btn btn-primary btn-block">Update</button>
                             </td>
                         </tr>
                         </tbody>

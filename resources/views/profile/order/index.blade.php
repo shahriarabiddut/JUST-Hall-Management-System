@@ -27,15 +27,15 @@
                 <div class="col-sm">
                     <h3 class="m-0 font-weight-bold text-primary">Order History </h3>
                 </div>
-                <div class="col-sm float-right">
-                    <select id="mySelect" class="m-1" class="float-left form-control">
-                        <option value="option"> Search By Date/ Month </option>
+                <div class="col-sm float-right m-1">
+                    <select id="mySelect" class="form-control">
+                        <option value="option"> Select Search By Date/ Month </option>
                         <option value="option2"> Search By Month </option>
                         <option value="option1"> Search By Date </option>
                       </select>
                 </div>
-                <div class="col-6 float-right">
-                    <div id="myDiv" style="display: none;" >
+                <div class="col-6 float-right m-1">
+                    <div id="myDiv" class="form-control" style="display: none;" >
                         <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('student.order.searchByDate') }}">
                             @csrf
                             <label for="search-date">Search by Date:</label>
@@ -43,7 +43,7 @@
                             <button type="submit">Search</button>
                           </form>
                       </div>
-                      <div id="myDiv2" style="display: none;">
+                      <div id="myDiv2" class="form-control" style="display: none;">
                         <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('student.order.searchByMonth') }}">
                             @csrf
                             <label for="search-month">Search by Month:</label>

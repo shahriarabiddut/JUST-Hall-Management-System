@@ -23,4 +23,8 @@ class Student extends Model
     {
         return $this->belongsTo(Hall::class, 'hall_id');
     }
+    function autoOrder()
+    {
+        return $this->hasOne(AutoFoodOrder::class, 'user_id');
+    }
 }

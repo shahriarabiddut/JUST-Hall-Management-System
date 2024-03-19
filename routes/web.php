@@ -38,7 +38,6 @@ Route::get('/manual', function () {
     return view('manual');
 })->name('manual');
 
-
 //
 $printingOption = HallOption::all()->where('name', 'print')->first();
 if ($printingOption->value != 0) {

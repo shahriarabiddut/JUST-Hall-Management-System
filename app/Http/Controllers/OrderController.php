@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AutoFoodOrder;
 use Carbon\Carbon;
 use App\Models\Food;
+use App\Models\User;
 use App\Models\Order;
 use App\Models\Balance;
+use App\Models\Student;
 use App\Models\FoodTime;
-use App\Models\FoodTimeHall;
 use App\Models\MealToken;
-// use Illuminate\Support\Carbon;
+use App\Models\FoodTimeHall;
 use Illuminate\Http\Request;
+use App\Models\AutoFoodOrder;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
@@ -153,7 +154,7 @@ class OrderController extends Controller
     {
         $userid = Auth::user()->id;
         // Checks Balance
-        $dataBalance = Balance::Find($userid);
+        $dataBalance = Balance::all()->where('student_id', $userid)->first();
         if ($dataBalance->balance_amount <= 50) {
             return redirect()->route('student.balance.index')->with('danger', 'Please! Add Balance First.');
         }
@@ -243,13 +244,14 @@ class OrderController extends Controller
     public function deductBalance(string $userid, string $dataPrice)
     {
         // Deduct From Balance
-        $dataBalance = Balance::Find($userid);
+        $dataBalance = Balance::find($userid);
         if ($dataBalance != null) {
             $dataBalanceAmount = $dataBalance->balance_amount;
             $dataBalanceAmount = $dataBalanceAmount - $dataPrice;
 
             //Deducing Balance
             $dataBalance->balance_amount = $dataBalanceAmount;
+            $dataBalance->last_transaction_date = Carbon::now();
             $dataBalance->save();
         } else {
             return redirect('student/order')->with('danger', 'Please! Add Balance First');
@@ -435,7 +437,9 @@ class OrderController extends Controller
                 $this->AddBalance($userid, $dataPrice);
                 //Meal Token Delete
                 $MealToken = MealToken::all()->where('order_id', '=', $id)->first();
-                $MealToken->delete();
+                if ($MealToken != null) {
+                    $MealToken->delete();
+                }
                 //Order Delete
                 $data->delete();
                 return redirect()->route('student.order.index')->with('success', 'Order Deleted!');
@@ -472,7 +476,7 @@ class OrderController extends Controller
         //
         $userid = Auth::user()->id;
         // Checks Balance
-        $dataBalance = Balance::Find($userid);
+        $dataBalance = Balance::all()->where('student_id', $userid)->first();
         if ($dataBalance->balance_amount <= 50) {
             return redirect()->route('student.balance.index')->with('danger', 'Please! Add Balance First.');
         }
@@ -573,7 +577,7 @@ class OrderController extends Controller
     {
         //
         $userid = Auth::user()->id;
-        $foods = Food::all()->where('hall_id', '=', $this->hall_id);
+        $foods = Food::all()->where('hall_id', $this->hall_id)->where('status', 1);
         return view('profile.order.autoorder', ['foods' => $foods]);
     }
     public function autoOrderOn(Request $request)
@@ -595,9 +599,16 @@ class OrderController extends Controller
         $arrayData['5'] = 0;
         $arrayData['6'] = 0;
         $arrayData['7'] = 0;
+        $arrayData['8'] = 0;
+        $arrayData['9'] = 0;
+        $arrayData['10'] = 0;
+        $arrayData['11'] = 0;
+        $arrayData['12'] = 0;
+        $arrayData['13'] = 0;
+        $arrayData['14'] = 0;
         $data->orders = json_encode($arrayData);
         $data->save();
-        return redirect()->route('student.order.autoorder')->with('success', 'Auto Order Feature Turne on!');
+        return redirect()->route('student.order.autoorder')->with('success', 'Auto Order Feature Turned on!');
     }
     public function autoOrderUpdate(Request $request, $id)
     {
@@ -615,6 +626,13 @@ class OrderController extends Controller
         $arrayData['5'] = $request->wednesday;
         $arrayData['6'] = $request->thursday;
         $arrayData['7'] = $request->friday;
+        $arrayData['8'] = $request->saturdayn;
+        $arrayData['9'] = $request->sundayn;
+        $arrayData['10'] = $request->mondayn;
+        $arrayData['11'] = $request->tuesdayn;
+        $arrayData['12'] = $request->wednesdayn;
+        $arrayData['13'] = $request->thursdayn;
+        $arrayData['14'] = $request->fridayn;
         $data->orders = json_encode($arrayData);
         $data->save();
         return redirect()->route('student.order.autoorder')->with('success', 'Auto Order Data Updated!');

@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Food;
 use App\Models\Order;
+use App\Models\Student;
 use App\Models\MealToken;
+use App\Models\HallOption;
+use Illuminate\Http\Request;
 use App\Models\TokenPrintQueue;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use App\Models\HallOption;
 
 class MealTokenController extends Controller
 {
@@ -65,12 +66,12 @@ class MealTokenController extends Controller
         //
         $data = Order::find($id);
         $foodname = Food::all()->where('id', '=', $data->food_item_id)->first();
-
+        $user = Student::find($data->student_id);
         $newdata = new MealToken;
         $newdata->food_name = $foodname->food_name;
         $newdata->date = $data->date;
         $newdata->token_number = bcrypt($id);
-        $newdata->rollno = Auth::user()->rollno;
+        $newdata->rollno = $user->rollno;
         $newdata->status = 0;
         $newdata->quantity = $data->quantity;
         $newdata->order_id = $id;
