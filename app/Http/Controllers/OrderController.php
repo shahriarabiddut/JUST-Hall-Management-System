@@ -619,21 +619,23 @@ class OrderController extends Controller
         ]);
         $data = AutoFoodOrder::find($id);
         $data->status = $request->status;
-        $arrayData['1'] = $request->saturday;
-        $arrayData['2'] = $request->sunday;
-        $arrayData['3'] = $request->monday;
-        $arrayData['4'] = $request->tuesday;
-        $arrayData['5'] = $request->wednesday;
-        $arrayData['6'] = $request->thursday;
-        $arrayData['7'] = $request->friday;
-        $arrayData['8'] = $request->saturdayn;
-        $arrayData['9'] = $request->sundayn;
-        $arrayData['10'] = $request->mondayn;
-        $arrayData['11'] = $request->tuesdayn;
-        $arrayData['12'] = $request->wednesdayn;
-        $arrayData['13'] = $request->thursdayn;
-        $arrayData['14'] = $request->fridayn;
-        $data->orders = json_encode($arrayData);
+        if ($request->status != 0 && $request->old_status == $request->status) {
+            $arrayData['1'] = $request->saturday;
+            $arrayData['2'] = $request->sunday;
+            $arrayData['3'] = $request->monday;
+            $arrayData['4'] = $request->tuesday;
+            $arrayData['5'] = $request->wednesday;
+            $arrayData['6'] = $request->thursday;
+            $arrayData['7'] = $request->friday;
+            $arrayData['8'] = $request->saturdayn;
+            $arrayData['9'] = $request->sundayn;
+            $arrayData['10'] = $request->mondayn;
+            $arrayData['11'] = $request->tuesdayn;
+            $arrayData['12'] = $request->wednesdayn;
+            $arrayData['13'] = $request->thursdayn;
+            $arrayData['14'] = $request->fridayn;
+            $data->orders = json_encode($arrayData);
+        }
         $data->save();
         return redirect()->route('student.order.autoorder')->with('success', 'Auto Order Data Updated!');
     }

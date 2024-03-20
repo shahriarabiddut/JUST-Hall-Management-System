@@ -223,6 +223,7 @@
                         @endif
                         <tr>
                             <td colspan="3">
+                                <input type="hidden" name="old_status" value="{{ Auth::user()->autoOrder->status }}">
                                 <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
                                 <button type="submit" class="btn btn-primary btn-block">Update</button>
                             </td>

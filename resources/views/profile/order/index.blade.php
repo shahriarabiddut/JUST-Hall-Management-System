@@ -85,7 +85,13 @@
                         @foreach ($data as $key => $d)
                         <tr>
                             <td>{{ ++$key }}</td>
-                            <td>{{ $d->food->food_name }}</td>
+                            <td>
+                                @if ($d->food==null)
+                                    N/A
+                                @else
+                                {{ $d->food->food_name }}
+                                @endif
+                            </td>
                             <td>{{ $d->date }}</td>
                             <td>{{ $d->order_type }}</td>
                             <td>{{ $d->quantity }}</td>

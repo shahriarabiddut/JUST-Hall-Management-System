@@ -266,6 +266,7 @@ class OrderController extends Controller
         $data = MealToken::all()->where('order_id', '=', $id)->first();
         //Check Date is Valid To Print
         $result = $this->isDateValid($data->date);
+
         if ($result != 'true') {
             return redirect()->route('staff.orders.index')->with('danger', 'Token Expired!');
         }
@@ -276,7 +277,7 @@ class OrderController extends Controller
             return redirect()->route('staff.orders.index')->with('danger', 'Not Permitted!');
         }
         // Done
-        if ($data->status == 0) {
+        if ($data->status == 0 || $data->status == 4) {
             // Token Status Update
             $data->status = 3;
             $data->save();
@@ -286,6 +287,7 @@ class OrderController extends Controller
                 // Add On Print Queue
                 $newdata = new TokenPrintQueue();
                 $newdata->token_id = $data->id;
+                $newdata->hall_id = $this->hall_id;
                 $newdata->order_id = $data->order_id;
                 $newdata->rollno = $data->rollno;
                 $newdata->data = $data;
@@ -324,7 +326,7 @@ class OrderController extends Controller
         //checking if its tommorow
         $currentDate = Carbon::now(); // get current date and time
         $currentDate = $currentDate->setTimezone('GMT+6')->format('Y-m-d'); // 2023-03-17
-
+        // dd($date >= $currentDate, $date, $currentDate);
         $processedData = ($date >= $currentDate);
         return $processedData;
     }

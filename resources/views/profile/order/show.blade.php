@@ -25,7 +25,13 @@
                     </tr>
                     <tr>
                         <th>Meal</th>
-                        <td>{{ $data->food->food_name }}</td>
+                        <td>
+                            @if ($data->food==null)
+                            N/A
+                            @else
+                                {{ $data->food->food_name }}
+                            @endif
+                        </td>
                     </tr>
                     <tr>
                         <th>Meal Ordered Date</th>
