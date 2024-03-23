@@ -33,6 +33,10 @@
                             <th>Food Name<span class="text-danger">*</span></th>
                             <td><input required value="{{ $data->food_name }}" name="food_name" type="text" class="form-control"></td>
                         </tr>
+                        <tr>
+                            <th>Food Price<span class="text-danger">*</span></th>
+                            <td><input required min="1" name="price" type="number" value="{{ $data->price }}" class="form-control"></td>
+                        </tr>
                     <tr>
                         <td colspan="2">
                             <button type="submit" class="btn btn-primary">Update</button>

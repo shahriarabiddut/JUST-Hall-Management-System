@@ -43,15 +43,7 @@
                     <tr>
                         <th>Food Name<span class="text-danger">*</span></th>
                         <td><input required name="food_name" type="text" class="form-control"></td>
-                    </tr>
-                    <tr>
-                        <th> Status <span class="text-danger">*</span></th>
-                            <td><select required name="status" class="form-control room-list">
-                                <option value="0">--- Select Status ---</option>
-                                <option value="1">Active</option>
-                                <option value="0">Disable</option>
-                            </select></td>
-                        </tr> 
+                    </tr> 
                     <tr>
                         <td colspan="2">
                             <button type="submit" class="btn btn-primary">Submit</button>

@@ -14,7 +14,7 @@ class Food extends Model
     }
     function food_time_hall()
     {
-        return $this->belongsTo(FoodTimeHall::class, 'food_time_id', 'food_time_id');
+        return $this->belongsTo(FoodTimeHall::class, 'foodtimehall');
     }
     function hall()
     {

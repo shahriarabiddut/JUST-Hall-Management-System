@@ -107,6 +107,11 @@ class StudentController extends Controller
         if ($data == null) {
             return redirect()->route('admin.student.index')->with('danger', 'Not Found!');
         }
+        if ($data->hall != null) {
+            if ($data->hall->enable_delete == 0) {
+                return redirect()->route('admin.student.index')->with('danger', 'Not Permitted!');
+            }
+        }
         return view('admin.student.edit', ['data' => $data, 'halls' => $halls]);
     }
 
@@ -164,8 +169,10 @@ class StudentController extends Controller
         if ($data == null) {
             return redirect()->route('admin.student.index')->with('danger', 'Not Found!');
         }
-        if ($data->hall->enable_delete != 1) {
-            return redirect()->route('admin.student.index')->with('danger', 'Not Permitted!');
+        if ($data->hall != null) {
+            if ($data->hall->enable_delete == 0) {
+                return redirect()->route('admin.student.index')->with('danger', 'Not Permitted!');
+            }
         }
         if ($data->status == 0) {
             return redirect()->route('admin.student.index')->with('danger', 'No Action Needed!');
@@ -215,6 +222,11 @@ class StudentController extends Controller
         }
         if ($data->status == 1) {
             return redirect()->route('admin.student.index')->with('danger', 'No Action Needed!');
+        }
+        if ($data->hall != null) {
+            if ($data->hall->enable_delete == 0) {
+                return redirect()->route('admin.student.index')->with('danger', 'Not Permitted!');
+            }
         }
         //Delete Balance Account
         $BalanceAccount = Balance::all()->where('student_id', '=', $id)->first();

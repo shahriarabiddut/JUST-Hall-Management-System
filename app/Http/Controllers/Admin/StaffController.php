@@ -76,6 +76,11 @@ class StaffController extends Controller
         if ($data == null) {
             return redirect()->route('admin.staff.index')->with('danger', 'Not Found!');
         }
+        if ($data->hall != null) {
+            if ($data->hall->enable_delete == 0) {
+                return redirect()->route('admin.staff.index')->with('danger', 'Not Permitted!');
+            }
+        }
         return view('admin.staff.edit', ['data' => $data, 'halls' => $halls]);
     }
 
@@ -121,8 +126,10 @@ class StaffController extends Controller
         if ($data == null) {
             return redirect()->route('admin.staff.index')->with('danger', 'Not Found!');
         }
-        if ($data->hall->enable_delete != 1) {
-            return redirect()->route('admin.staff.index')->with('danger', 'Not Permitted!');
+        if ($data->hall != null) {
+            if ($data->hall->enable_delete == 0) {
+                return redirect()->route('admin.staff.index')->with('danger', 'Not Permitted!');
+            }
         }
         if ($data->status == 0) {
             return redirect()->route('admin.staff.index')->with('danger', 'No Action Needed!');
@@ -141,6 +148,11 @@ class StaffController extends Controller
         if ($data->status == 1) {
             return redirect()->route('admin.staff.index')->with('danger', 'No Action Needed!');
         }
+        if ($data->hall != null) {
+            if ($data->hall->enable_delete == 0) {
+                return redirect()->route('admin.staff.index')->with('danger', 'Not Permitted!');
+            }
+        }
         $data->status = 1;
         $data->save();
         return redirect()->route('admin.staff.index')->with('success', 'Staff Data has been Activated Successfully and Please! Assign Hall to this User!');
@@ -150,6 +162,11 @@ class StaffController extends Controller
     {
         //
         $data = Staff::find($id);
+        if ($data->hall != null) {
+            if ($data->hall->enable_delete == 0) {
+                return redirect()->route('admin.staff.index')->with('danger', 'Not Permitted!');
+            }
+        }
         return view('admin.staff.change', ['data' => $data]);
     }
 

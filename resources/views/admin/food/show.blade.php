@@ -43,7 +43,7 @@
                     </tr>
                     <tr>
                         <th>Food Price</th>
-                        <td>{{ $data->food_time_hall->price }} /= Taka </td>
+                        <td>{{ $data->price }} /= Taka </td>
                     </tr>
                     <tr>
                         <th>Status</th>

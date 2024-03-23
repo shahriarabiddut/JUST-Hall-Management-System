@@ -86,6 +86,11 @@ class RoomController extends Controller
         if ($data == null) {
             return redirect()->route('admin.rooms.index')->with('danger', 'Not Found!');
         }
+        if ($data->hall != null) {
+            if ($data->hall->enable_delete == 0) {
+                return redirect()->route('admin.rooms.index')->with('danger', 'Not Permitted!');
+            }
+        }
         return view('admin.room.edit', ['data' => $data, 'roomtypes' => $roomtypes]);
     }
 
@@ -114,8 +119,10 @@ class RoomController extends Controller
         if ($data == null) {
             return redirect()->route('admin.rooms.index')->with('danger', 'Not Found!');
         }
-        if ($data->hall->enable_delete != 1) {
-            return redirect()->route('admin.rooms.index')->with('danger', 'Not Permitted!');
+        if ($data->hall != null) {
+            if ($data->hall->enable_delete == 0) {
+                return redirect()->route('admin.rooms.index')->with('danger', 'Not Permitted!');
+            }
         }
         $dataAllocatedSeats = AllocatedSeats::all()->where('room_id', $id);
         if (count($dataAllocatedSeats) != 0) {
@@ -128,7 +135,7 @@ class RoomController extends Controller
     // Import Bilk users from csv
     public function importRoom()
     {
-        $hall = Hall::all()->where('status', 1);
+        $hall = Hall::all()->where('status', 1)->where('enable_delete', 1);
         return view('admin.room.importRoom', ['halls' => $hall]);
     }
 

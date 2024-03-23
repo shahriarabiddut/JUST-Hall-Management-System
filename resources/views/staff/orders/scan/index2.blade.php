@@ -1,6 +1,6 @@
 @extends('staff/layout')
 @section('title', 'Orders ')
-
+<script>let scanningEnabled = 1;</script>
 @section('content')
 
 
@@ -49,7 +49,6 @@ function domReady(fn) {
 }
 
 domReady(function () {
-
 	// If found you qr code
 	function onScanSuccess(decodeText, decodeResult) {
 	    // Assuming the variable is part of the current URL
@@ -59,8 +58,12 @@ domReady(function () {
         // Concatenate the variable to the current URL
         let newURL = currentURL + myVariable;
         // Redirect to the new URL
-        window.location.href = newURL;
-		alert("Scanned Successfully : " + decodeText, decodeResult);
+        if (scanningEnabled) {
+            window.location.href = newURL;
+            alert("Scanned Successfully : " + decodeText, decodeResult);
+        scanningEnabled = 0;
+        }
+		
 	}
 
 	let htmlscanner = new Html5QrcodeScanner(

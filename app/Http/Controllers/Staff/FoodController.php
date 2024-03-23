@@ -72,6 +72,11 @@ class FoodController extends Controller
         $data->food_name = $request->food_name;
         $data->status = $request->status;
         $data->hall_id = $this->hall_id;
+        //For food_time_hall
+        $FoodTimeHall = FoodTimeHall::all()->where('food_time_id', $request->food_time_id)->where('hall_id', $this->hall_id)->first();
+        $data->foodtimehall = $FoodTimeHall->id;
+        //For food_time_hall
+        $data->price = $FoodTimeHall->price;
         $data->save();
         //Saving History 
         $HistoryController = new HistoryController();
@@ -123,6 +128,7 @@ class FoodController extends Controller
         //
         $request->validate([
             'food_name' => 'required',
+            'price' => 'required',
             'food_time_id' => 'required|not_in:0',
         ]);
         $data = Food::find($id);
@@ -131,11 +137,12 @@ class FoodController extends Controller
         }
         $data->food_time_id = $request->food_time_id;
         $data->food_name = $request->food_name;
+        $data->price = $request->price;
         $data->save();
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistoryHall($staff_id, 'update', 'Food ( ' . $data->food_name . ' ) - of Foodtime - ' . $data->foodtime->title . ' has been added Successfully!', $this->hall_id);
+        $HistoryController->addHistoryHall($staff_id, 'update', 'Food ( ' . $data->food_name . ' ) - of Foodtime - ' . $data->foodtime->title . ' has been updated Successfully!', $this->hall_id);
         //Saved
         return redirect()->route('staff.food.index')->with('success', 'Food Item Data has been updated Successfully!');
     }

@@ -67,6 +67,14 @@ The traditional manual processes in halls can be time-consuming, prone to errors
     3.2 QR code added on Meal Tokens
     3.2 Live QR code scanner added for Meal Tokens to validate
 
+## Time Scheduler using dot Bat File
+
+1.  cd /d "directroy"
+    php artisan app:deduct-balance-hall
+
+2.  cd /d "directroy"
+    php artisan app:process-daily-order
+
 ## dotEnv
 
 SSLCommerz

@@ -61,10 +61,10 @@ class ProcessDailyOrder extends Command
                                 ->where('order_type', '=', 'Lunch')
                                 ->where('student_id', '=', $user->id)
                                 ->count();
-                            $foodprice = FoodTimeHall::all()->where('food_time_id', '=', $food_item->food_time_id)->where('hall_id', $user->hall_id)->first();
-                            $dataPrice = $foodprice->price;
+                            $FoodTimeHallData = FoodTimeHall::all()->where('food_time_id', '=', $food_item->food_time_id)->where('hall_id', $user->hall_id)->first();
+                            $dataPrice = $food_item->price;
                             //check on that day student order quantity
-                            if ($data == 0 && $foodprice->status != 0 && $dataPrice < $dataBalance->balance_amount) {
+                            if ($data == 0 && $food_item->status != 0 && $FoodTimeHallData->status != 0 && $dataPrice < $dataBalance->balance_amount) {
                                 $data = new Order;
                                 $data->student_id = $user->id;
                                 $data->order_type = 'Lunch';
@@ -83,8 +83,8 @@ class ProcessDailyOrder extends Command
                     }
                     //Dinner
                     if ($dataBalance->balance_amount >= 50 && $orders[$oDinner] != 0) {
-                        $food_item = Food::find($orders[$oDinner]);
-                        if ($food_item->status != 0 && $food_item->food_time_hall->status != 0) {
+                        $food_item2 = Food::find($orders[$oDinner]);
+                        if ($food_item2->status != 0 && $food_item2->food_time_hall->status != 0) {
                             $currentDate = Carbon::now();
                             $nextDate = $currentDate->addDay();
                             $nextDate = $nextDate->setTimezone('GMT+6')->format('Y-m-d'); // 2023-03-17
@@ -93,14 +93,14 @@ class ProcessDailyOrder extends Command
                                 ->where('order_type', '=', 'Dinner')
                                 ->where('student_id', '=', $user->id)
                                 ->count();
-                            $foodprice2 = FoodTimeHall::all()->where('food_time_id', '=', $food_item->food_time_id)->where('hall_id', $user->hall_id)->first();
-                            $dataPrice = $foodprice2->price;
+                            $FoodTimeHallData2 = FoodTimeHall::all()->where('food_time_id', '=', $food_item2->food_time_id)->where('hall_id', $user->hall_id)->first();
+                            $dataPrice = $food_item2->price;
                             //check on that day student order quantity
-                            if ($data == 0 && $foodprice2->status != 0 && $dataPrice < $dataBalance->balance_amount) {
+                            if ($data == 0 && $food_item2->status != 0 && $FoodTimeHallData2->status != 0 && $dataPrice < $dataBalance->balance_amount) {
                                 $data = new Order;
                                 $data->student_id = $user->id;
                                 $data->order_type = 'Dinner';
-                                $data->food_item_id = $food_item->id;
+                                $data->food_item_id = $food_item2->id;
                                 $data->quantity = 1;
                                 $data->price = $dataPrice;
                                 $data->date = $nextDate;

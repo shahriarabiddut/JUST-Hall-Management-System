@@ -125,6 +125,12 @@ class HallController extends Controller
         if ($data == null) {
             return redirect()->route('admin.hall.index')->with('danger', 'Not Found!');
         }
+        if (count($data->provost) != 0) {
+            if ($data->enable_delete == 0) {
+                return redirect()->route('admin.hall.index')->with('danger', 'Not Permitted!');
+            }
+        }
+
         return view('admin.hall.edit', ['data' => $data, 'provost' => $provost]);
     }
 

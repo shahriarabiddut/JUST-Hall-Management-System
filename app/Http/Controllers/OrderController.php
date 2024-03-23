@@ -165,7 +165,8 @@ class OrderController extends Controller
             return redirect()->back()->with('danger', 'Please! Select Quantity!');
         } else {
             $food_time_id = $request->food_time_id;
-            $foodprice = FoodTimeHall::all()->where('food_time_id', '=', $food_time_id)->where('hall_id', $this->hall_id)->first();
+            $food_item = $request->food_item_id;
+            $food_item_data = Food::find($food_item);
             $request->validate([
                 'order_type' => 'required',
                 'food_item_id' => 'required',
@@ -176,7 +177,7 @@ class OrderController extends Controller
             $data->order_type = $request->order_type;
             $data->food_item_id = $request->food_item_id;
             $data->quantity = $request->quantity;
-            $data->price = $foodprice->price * $data->quantity;
+            $data->price = $food_item_data->price * $data->quantity;
             $data->date = $request->date;
             $data->hall_id = $this->hall_id;
             $givendate = $data->date;
@@ -514,6 +515,9 @@ class OrderController extends Controller
         $advanceDate = $request->date;
         $food_time_id = $request->food_time_id;
         $food_time = FoodTime::all()->where('status', '=', '1')->where('id', '=', $food_time_id)->first();
+
+        $food_item = $request->food_item_id;
+        $food_item_data = Food::find($food_item);
         if ($request->food_item_id == 0) {
             return redirect()->back()->with('danger', 'Please!Select A Food !');
         } elseif ($request->quantity == 0) {
@@ -541,7 +545,7 @@ class OrderController extends Controller
             if ($dataquantity < 2) {
 
                 $food_time_id = $request->food_time_id;
-                $foodprice = FoodTimeHall::all()->where('food_time_id', '=', $food_time_id)->where('hall_id', $this->hall_id)->first();
+                // $foodprice = FoodTimeHall::all()->where('food_time_id', '=', $food_time_id)->where('hall_id', $this->hall_id)->first();
                 $data = new Order;
                 $userid = Auth::user()->id;
                 $data->student_id = $userid;
@@ -555,7 +559,7 @@ class OrderController extends Controller
                 }
                 $data->quantity = $order_quantity;
                 // Quantity
-                $data->price = $foodprice->price * $data->quantity;
+                $data->price = $food_item_data->price * $data->quantity;
                 $data->date = $request->date;
                 $data->save();
 

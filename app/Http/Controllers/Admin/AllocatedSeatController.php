@@ -49,6 +49,11 @@ class AllocatedSeatController extends Controller
         //Student Data segregation
         $unstudents = DB::select("SELECT * FROM users WHERE id NOT IN (SELECT user_id FROM allocated_seats) OR hall_id = 0 AND hall_id = $hall_id");
         $halls = Hall::find($hall_id);
+        if ($halls != null) {
+            if ($halls->enable_delete == 0) {
+                return redirect()->route('admin.student.index')->with('danger', 'Not Permitted!');
+            }
+        }
         $data = [];
         foreach ($unstudents as $student) {
             if ($student->status == 1 && $student->gender == $halls->type) {
@@ -147,6 +152,11 @@ class AllocatedSeatController extends Controller
         if ($data == null) {
             return redirect()->route('admin.roomallocation.index')->with('danger', 'Not Found!');
         }
+        if ($data->hall != null) {
+            if ($data->hall->enable_delete == 0) {
+                return redirect()->route('admin.student.index')->with('danger', 'Not Permitted!');
+            }
+        }
         $students = Student::all()->where('hall_id', $data->hall_id);
         $rooms = Room::all()->where('hall_id', $data->hall_id);
         return view('admin.roomallocation.edit', ['data' => $data, 'students' => $students, 'rooms' => $rooms]);
@@ -240,8 +250,10 @@ class AllocatedSeatController extends Controller
         if ($data == null) {
             return redirect()->route('admin.roomallocation.index')->with('danger', 'Not Found!');
         }
-        if ($data->hall->enable_delete != 1) {
-            return redirect()->route('admin.roomallocation.index')->with('danger', 'Not Permitted!');
+        if ($data->hall != null) {
+            if ($data->hall->enable_delete == 0) {
+                return redirect()->route('admin.student.index')->with('danger', 'Not Permitted!');
+            }
         }
         // User Data Update
         $studentData = Student::find($data->user_id);
@@ -318,8 +330,14 @@ class AllocatedSeatController extends Controller
     {
         //
         $data = RoomRequest::find($id);
+
         if ($data == null) {
             return redirect()->route('admin.roomallocation.index')->with('danger', 'Not Found!');
+        }
+        if ($data->hall != null) {
+            if ($data->hall->enable_delete == 0) {
+                return redirect()->route('admin.student.index')->with('danger', 'Not Permitted!');
+            }
         }
         $student_id = $data->user_id;
         $room_id = $data->room_id;
@@ -358,6 +376,11 @@ class AllocatedSeatController extends Controller
         if ($data == null) {
             return redirect()->route('admin.roomallocation.index')->with('danger', 'Not Found!');
         }
+        if ($data->hall != null) {
+            if ($data->hall->enable_delete == 0) {
+                return redirect()->route('admin.student.index')->with('danger', 'Not Permitted!');
+            }
+        }
         $data->status = '1';
         $data->allocated_seat_id = $allocated_seat_id;
         $data->save();
@@ -369,6 +392,11 @@ class AllocatedSeatController extends Controller
         $data = RoomRequest::find($id);
         if ($data == null) {
             return redirect()->route('admin.roomallocation.index')->with('danger', 'Not Found!');
+        }
+        if ($data->hall != null) {
+            if ($data->hall->enable_delete == 0) {
+                return redirect()->route('admin.student.index')->with('danger', 'Not Permitted!');
+            }
         }
         $data->status = '1';
         $data->save();
@@ -386,6 +414,11 @@ class AllocatedSeatController extends Controller
         $data = RoomRequest::find($id);
         if ($data == null) {
             return redirect()->route('admin.roomallocation.index')->with('danger', 'Not Found!');
+        }
+        if ($data->hall != null) {
+            if ($data->hall->enable_delete == 0) {
+                return redirect()->route('admin.student.index')->with('danger', 'Not Permitted!');
+            }
         }
         $allocated_seat_id = $data->allocated_seat_id;
         $data->status = '2';
@@ -411,6 +444,11 @@ class AllocatedSeatController extends Controller
         $data = RoomRequest::find($id);
         if ($data == null) {
             return redirect()->route('admin.roomallocation.index')->with('danger', 'Not Found!');
+        }
+        if ($data->hall != null) {
+            if ($data->hall->enable_delete == 0) {
+                return redirect()->route('admin.student.index')->with('danger', 'Not Permitted!');
+            }
         }
         $data->status = '0';
         $data->save();

@@ -16,7 +16,9 @@ return new class extends Migration
             $table->integer('food_time_id')->references('id')->on('food_times');
             $table->string('food_name');
             $table->integer('status');
+            $table->integer('price');
             $table->integer('hall_id')->references('id')->on('halls');
+            $table->integer('foodtimehall')->references('id')->on('food_time_halls');
             $table->timestamps();
         });
     }
