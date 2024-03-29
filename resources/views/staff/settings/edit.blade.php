@@ -78,7 +78,7 @@
                         <td><input required name="fixed_cost_masters" min="1" type="number" value="{{ $data->fixed_cost_masters }}" class="form-control"></td>
                     </tr> 
                     <tr>
-                        <th>Enable Delete</th>
+                        <th>Enable Update and Delete Room</th>
                         <td>
                             <div class="form-check form-check-inline bg-danger py-2 px-3 text-white rounded-pill">
                                 <input class="form-check-input" type="radio" name="enable_delete" id="exampleRadios1" value="0" @if($data->enable_delete==0) @checked(true) @endif>

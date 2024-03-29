@@ -46,8 +46,8 @@ class StudentController extends Controller
             'password' => 'required | min:6',
             'mobile' => 'required',
             'rollno' => 'required|unique:users',
-            'dept' => 'required',
-            'session' => 'required',
+            'dept' => 'required|not_in:0',
+            'session' => 'required|not_in:0',
         ]);
         $data->name = $request->name;
         $data->dept = $request->dept;

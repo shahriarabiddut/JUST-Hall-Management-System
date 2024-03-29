@@ -92,11 +92,11 @@
                         </tr>
                     </tfoot>
                     <tbody>
+                        @php $i=1; @endphp
                         @if($data)
                         @foreach ($data as $key => $d)
                         <tr>
-                            @php $i=$key; @endphp
-                            <td>{{ ++$key }}</td>
+                            <td>{{ $i++ }}</td>
                             <td>
                                 @if ($d->student==null)
                                     User Deleted

@@ -40,7 +40,7 @@ class EmailController extends Controller
         //
         $request->validate([
             'name' => 'required',
-            'email' => 'required|regex:/(.+)@(.+)\.(.+)/i',
+            'email' => 'required',
             'subject' => 'required',
             'message' => 'required',
             'objective' => 'required',

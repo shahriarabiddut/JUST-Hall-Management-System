@@ -16,7 +16,6 @@ class EspController extends Controller
     public function TokenPrintQueue2(string $hall_id, string $value)
     {
         $hall = Hall::find($hall_id);
-        dd($hall);
         if ($hall->enable_print == 0) {
             return 0;
         }
@@ -82,14 +81,17 @@ class EspController extends Controller
             }
             return $result;
         }
-        // $result2 = capitalizeAndLowercase($tokenid);
+        //$result2 = capitalizeAndLowercase($tokenid);
+		
+		$result2 = $tokenid;
 
         $hall = Hall::find($hall_id);
         if ($value != $hall->secret) {
             return 0;
         }
         //
-        $data = MealToken::all()->where('token_number', $tokenid)->first();
+        $data = MealToken::all()->where('token_number', $result2)->first();
+		
         if ($data == null) {
             return 0;
         }
@@ -98,6 +100,7 @@ class EspController extends Controller
         }
         //Check Date is Valid To Print
         $result = $this->isDateValid($data->date);
+		
         if ($result == false) {
             return 0;
         }
@@ -106,6 +109,7 @@ class EspController extends Controller
         if ($result2 == false) {
             return 0;
         }
+		
         //
 
         if ($data->meal_type == 'Lunch') {
@@ -154,7 +158,6 @@ class EspController extends Controller
             $remainingTime = $data->date . ' 23:59:00'; // Token Time
             $startofTime = $data->date . ' 18:59:00'; // Token Time
             $todayTime = $today->setTimezone('GMT+6')->format('Y-m-d H:i:s'); //Today Time
-
             if ($todayTime > $remainingTime) {
                 return 0;
             }

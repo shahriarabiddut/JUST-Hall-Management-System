@@ -33,7 +33,7 @@ class deductBalanceHall extends Command
     public function handle(): void
     {
         //Get Hall
-        $halls = Hall::all();
+        $halls = Hall::all()->where('status', '1');
         foreach ($halls as $hall) {
             //Getting Fixed Cost From Options
             $fixed_cost_charge = $hall->fixed_cost;

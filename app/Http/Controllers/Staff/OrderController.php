@@ -74,8 +74,8 @@ class OrderController extends Controller
         if ($request->date != null) {
             $data = $data->where('date', '=', $date);
         }
-        if ($request->type != '') {
-            $data = $data->where('meal_type', '=', $type);
+        if ($request->type != 'x') {
+            $data = $data->where('meal_type', $type);
         }
         // Count occurrences of each food name
         $foodNameCounts = [];
@@ -241,9 +241,11 @@ class OrderController extends Controller
             return view('staff.orders.show', ['data' => $data, 'messageExtra' => $messageExtra, 'bg' => $bg]);
         }
     }
-    public function update(string $id)
+    public function update(Request $request, string $id)
     {
-        //
+        $HistoryController = new HistoryController();
+        $staff_id = Auth::guard('staff')->user()->id;
+        // Token Validity Check
         $data = MealToken::find($id);
         if ($data == null) {
             return redirect()->route('staff.orders.index')->with('danger', 'Not Found');
@@ -251,12 +253,119 @@ class OrderController extends Controller
         if ($data->hall_id != $this->hall_id) {
             return redirect()->route('staff.orders.index')->with('danger', 'Not Permitted!');
         }
-        if ($data->status >= 1) {
-            return redirect()->back()->with('danger', 'Warning!');
+        $tokenData = $this->valid($id);
+        // Search Page
+        if ($request->page == 'search') {
+            $date = $request->date;
+            $type = $request->type;
+            $dataFoodTimeHall = FoodTimeHall::all()->where('status', '1')->where('hall_id', $this->hall_id);
+            $dataFoodTime = [];
+            foreach ($dataFoodTimeHall as $dFT) {
+                $dataFoodTime[] = FoodTime::find($dFT->food_time_id);
+            }
+            if ($type != '' && $type != 'x') {
+                $dataAll = MealToken::all()->where('date', '=', $date)->where('meal_type', '=', $type);
+            } else {
+                $dataAll = MealToken::all()->where('date', '=', $date);
+            }
+            if ($tokenData == 0) {
+                return view('staff.orders.search', ['data' => $dataAll, 'type' => $type, 'date' => $date, 'dataFoodTime' => $dataFoodTime, 'danger' => 'Invalid Token!']);
+            } else {
+                //Saving History 
+                $HistoryController->addHistoryHall($staff_id, 'token', 'Order no ( ' . $data->order_id . ' ) is marked as used! Time - ( ' . $data->updated_at->format('H:i:s') . ' )', $this->hall_id);
+                //Saved
+                return view('staff.orders.search', ['data' => $dataAll, 'type' => $type, 'date' => $date, 'dataFoodTime' => $dataFoodTime, 'success' => 'Order no ( ' . $data->order_id . ' ) ! Token is Marked as Used Successfully!']);
+            }
         } else {
-            $data->status = 1;
-            $data->save();
-            return redirect()->back()->with('success', 'Token is Marked as Used Successfully!');
+            if ($tokenData == 0) {
+                return redirect()->back()->with('danger', 'Invalid Token!');
+            } else {
+                //Saving History 
+                $HistoryController->addHistoryHall($staff_id, 'token', 'Order no ( ' . $data->order_id . ' ) is marked as used! Time - ( ' . $data->updated_at->format('H:i:s') . ' )', $this->hall_id);
+                //Saved
+                return redirect()->back()->with('success', 'Order no ( ' . $data->order_id . ' ) ! Token is Marked as Used Successfully!');
+            }
+        }
+    }
+    // Mark as Used
+    public function valid(string $tokenid)
+    {
+        //
+        $data = MealToken::all()->where('id', $tokenid)->first();
+        //Check Date is Valid To Print
+        $result = $this->isDateValid($data->date);
+        if ($result == false) {
+            return 0;
+        }
+        // Check Is Date Today
+        $result2 = $this->isDateValid2($data->date);
+        if ($result2 == false) {
+            return 0;
+        }
+        //
+
+        if ($data->meal_type == 'Lunch') {
+            //If today time is greater than remaining time , Token Invalid
+            $today = Carbon::now(); // get current date and time
+            $remainingTime = $data->date . ' 16:00:00'; // Token Time
+            $todayTime = $today->setTimezone('GMT+6')->format('Y-m-d H:i:s'); //Today Time
+
+            if ($todayTime > $remainingTime) {
+                return 0;
+            }
+            //
+            //If Token invalid then falsecheck = 1 or update status as used
+            if ($data->status == 1) {
+                return 0;
+            } else {
+                $data->status = 1;
+                $data->save();
+            }
+
+            // Updated
+            return 1;
+        } elseif ($data->meal_type == 'Suhr') {
+            //If today time is greater than remaining time , Token Invalid
+            $today = Carbon::now(); // get current date and time
+            $remainingTime = $data->date . ' 4:00:00'; // Token Time
+            $todayTime = $today->setTimezone('GMT+6')->format('Y-m-d H:i:s'); //Today Time
+
+            if ($todayTime > $remainingTime) {
+                return 0;
+            }
+            //
+            //If Token invalid then falsecheck = 1 or update status as used
+            if ($data->status == 1) {
+                return 0;
+            } else {
+                $data->status = 1;
+                $data->save();
+            }
+
+            // Updated
+            return 1;
+        } elseif ($data->meal_type == 'Dinner') {
+            //If today time is greater than remaining time , Token Invalid
+            $today = Carbon::now(); // get current date and time
+            $remainingTime = $data->date . ' 23:59:00'; // Token Time
+            $startofTime = $data->date . ' 18:59:00'; // Token Time
+            $todayTime = $today->setTimezone('GMT+6')->format('Y-m-d H:i:s'); //Today Time
+
+            if ($todayTime > $remainingTime) {
+                return 0;
+            }
+            if ($todayTime < $startofTime) {
+                return 0;
+            }
+            //If Token invalid then falsecheck = 1 or update status as used
+            if ($data->status == 1) {
+                return 0;
+            } else {
+                $data->status = 1;
+                $data->save();
+            }
+            // Updated
+            return 1;
         }
     }
     //ESP 32

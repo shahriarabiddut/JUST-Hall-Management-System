@@ -536,6 +536,7 @@ class ProfileController extends Controller
             'default_font_size' => 12,
             'default_font' => 'nikosh'
         ]));
+		$mpdf->showImageErrors = true;
         $html = view('profile.room.rr')->render();
         $mpdf->WriteHTML($html);
         return $mpdf->output($rollno . ' - RoomRequest.pdf', 'D');
