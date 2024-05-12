@@ -70,6 +70,7 @@ Route::middleware('staff')->prefix('staff')->name('staff.')->group(function () {
     Route::get("/deductBalance", [StudentController::class, 'deductBalanceStaff'])->name('student.deductBalance');
     //RoomAllocation Requests
     Route::get('roomallocation/roomrequests', [AllocatedSeatController::class, 'roomrequests'])->name('roomallocation.roomrequests');
+    Route::get('roomallocation/roomrequestslist/{id}', [AllocatedSeatController::class, 'roomrequestslistdata'])->name('roomallocation.roomrequestslistdata');
     Route::get('roomallocation/accept/{id}', [AllocatedSeatController::class, 'roomrequestaccept'])->name('roomallocation.accept');
     Route::get('roomallocation/ban/{id}', [AllocatedSeatController::class, 'roomrequestban'])->name('roomallocation.ban');
     Route::get('roomallocation/list/{id}', [AllocatedSeatController::class, 'roomrequestlist'])->name('roomallocation.list');

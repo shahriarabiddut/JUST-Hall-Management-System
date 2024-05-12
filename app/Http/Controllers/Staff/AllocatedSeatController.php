@@ -448,6 +448,11 @@ class AllocatedSeatController extends Controller
         $data = RoomRequest::orderBy('created_at', 'desc')->where('hall_id', $this->hall_id)->get();
         return view('staff.roomallocation.requests', ['data' => $data]);
     }
+    public function roomrequestslistdata(string $id)
+    {
+        $data = RoomRequest::orderBy('created_at', 'desc')->where('hall_id', $this->hall_id)->where('status', $id)->get();
+        return view('staff.roomallocation.requests', ['data' => $data]);
+    }
     //Room Allocation Requests Details
     public function showRoomRequest(string $id)
     {

@@ -163,6 +163,14 @@
                         
                     </tr>
                     <tr>
+                        <th>Recommendation</th>
+                        <td colspan="3">
+                            @if ($application['recommendation']!=0)
+                            <img src="{{ asset('storage/'.$application['recommendation']) }}" alt="">
+                            @else Not Found @endif
+                        </td>
+                    </tr>
+                    <tr>
                         <td colspan="2"><img width="150px" @if ($data->students->photo!=null) src="{{ asset('storage/'.$data->students->photo) }}" @else src="{{ asset('images/user.png') }}" @endif alt="Application Photo"> <br>
                             <p>তারিখঃ {{ Carbon\Carbon::today()->format('F j , Y') }} </p></td>
                         <th width="20%">আবেদনকারীর স্বাক্ষর</th>

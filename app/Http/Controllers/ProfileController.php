@@ -360,6 +360,7 @@ class ProfileController extends Controller
         $data->application = json_encode($arrayData);
         //
         $data->status = 3;
+        $data->recommendation = 0;
         $data->flag = 0;
         $data->save();
 
@@ -495,6 +496,7 @@ class ProfileController extends Controller
         $application['recommendation'] = 'app/public/' . $request->file('recommendation')->store('Recommendation', 'public');
         $jsonData = json_encode($application);
         $data->application = $jsonData;
+        $data->recommendation = 1;
         $data->save();
         return redirect()->route('student.roomrequestshow')->with('success', ' Recommendation Uploaded!');
     }
@@ -509,6 +511,7 @@ class ProfileController extends Controller
         $application['recommendation'] = 0;
         $jsonData = json_encode($application);
         $data->application = $jsonData;
+        $data->recommendation = 0;
         $data->save();
         return redirect()->route('student.roomrequestshow')->with('success', ' Recommendation Cleared!');
     }

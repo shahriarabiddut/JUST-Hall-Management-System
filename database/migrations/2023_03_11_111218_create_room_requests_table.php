@@ -22,7 +22,7 @@ return new class extends Migration
             $table->integer('hall_id')->references('id')->on('halls');
             $table->dateTime('visited_at')->nullable();
             $table->integer('visitor')->nullable();
-            // $table->string('recommendation');
+            $table->integer('recommendation');
             $table->timestamps();
         });
     }
