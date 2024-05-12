@@ -176,7 +176,7 @@
                 </table>
             </div>
             <div class="table-responsive">
-
+                
                 <table class="table table-bordered" width="100%">  
                     <tr>
                         <th style="width: 30%;">Status</th>
@@ -211,6 +211,19 @@
                         @else
                         <td> {{ $data->updated_at->format('F j, Y - H:i:s') }} </td>
                         @endif
+                    </tr>
+                    <tr>
+                        <th>Recommendation</th>
+                        <td>
+                        @if ($application['recommendation']==0)
+                            Download The Application , Print it and get recommendation of your department Chairman! <br>
+                            <a href="{{ route('student.roomrequest.recommendation') }}" class="float-right btn btn-info btn-block" title="Edit Data"> <i class="fa fa-edit"> Upload Recommendation </i></a>
+                        @else
+                        <a onclick="return confirm('Are You Sure?')" href="{{ route('student.roomrequestrecommendation.destroy') }}" class="btn btn-danger btn-sm ml-1 p-1 float-right" title="Remove Data"><i class="fa fa-trash">Remove Recommendation</i></a>
+                        <br>
+                            <img src="{{ asset('storage/'.$application['recommendation']) }}" alt="">
+                        @endif
+                    </td>
                     </tr>
                 </table>
             </div>

@@ -11,15 +11,16 @@ use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Student;
 use App\Models\FoodTime;
+use App\Models\RoomIssue;
 use Illuminate\View\View;
 use App\Models\RoomRequest;
 use App\Models\FoodTimeHall;
 use Illuminate\Http\Request;
 use App\Models\AllocatedSeats;
-use App\Models\RoomIssue;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 
 class ProfileController extends Controller
@@ -342,6 +343,7 @@ class ProfileController extends Controller
         $arrayData['hsc'] = $request->hsc;
         $arrayData['school'] = $request->school;
         $arrayData['college'] = $request->college;
+        $arrayData['recommendation'] = 0;
         //If user Given any PHOTO dobsonod , academic , earningproof , signature
         if ($request->hasFile('dobsonod')) {
             $arrayData['dobsonod'] = 'app/public/' . $request->file('dobsonod')->store('HallRequest', 'public');
@@ -400,6 +402,9 @@ class ProfileController extends Controller
             }
             $dataPayment = Payment::all()->where('type', 'roomrequest')->where('student_id', $userid)->where('service_id', $data->id)->first();
             if ($dataPayment != null) {
+                if (File::exists('storage/' . $dataPayment->proof)) {
+                    File::delete('storage/' . $dataPayment->proof);
+                }
                 $dataPayment->delete();
             }
             $data->delete();
@@ -426,6 +431,9 @@ class ProfileController extends Controller
         }
         if ($data->status == 'Accepted') {
             return redirect()->route('student.roomrequestshow')->with('danger', 'Access Denied! Payment Allready Accepted!');
+        }
+        if (File::exists('storage/' . $data->proof)) {
+            File::delete('storage/' . $data->proof);
         }
         $data->delete();
         return Redirect::to('student/rooms/requestshow')->with('danger', 'Room Alloacation Request Payment has been Deleted!');
@@ -459,6 +467,50 @@ class ProfileController extends Controller
         $data->save();
 
         return redirect()->route('student.roomrequestshow')->with('success', 'Room Alloacation Request has been added Successfully!');
+    }
+    //Recommendation
+    public function roomrequestrecommendation()
+    {
+        $userid = Auth::user()->id;
+        $data = RoomRequest::all()->where('user_id', '=', $userid)->first();
+        if ($data == null) {
+            return redirect()->route('student.dashboard')->with('danger', 'Not Found!');
+        }
+        $application = json_decode(Auth::user()->roomrequest->application, true);
+        $dataPayment = $application['recommendation'];
+        // IF User has Room Allocation
+        if ($dataPayment != 0) {
+            return redirect()->route('student.roomrequestshow')->with('danger', 'Existing Recommendation Found!');
+        }
+        return view('profile.room.roomrequestrecom', ['dataPayment' => $dataPayment, 'data' => $data]);
+    }
+    public function roomrequestrecommendationstore(Request $request)
+    {
+        $request->validate([
+            'recommendation' => 'required',
+        ]);
+        $userid = Auth::user()->id;
+        $data = RoomRequest::all()->where('user_id', '=', $userid)->first();
+        $application = json_decode(Auth::user()->roomrequest->application, true);
+        $application['recommendation'] = 'app/public/' . $request->file('recommendation')->store('Recommendation', 'public');
+        $jsonData = json_encode($application);
+        $data->application = $jsonData;
+        $data->save();
+        return redirect()->route('student.roomrequestshow')->with('success', ' Recommendation Uploaded!');
+    }
+    public function roomrequestrecommendationdestroy()
+    {
+        $userid = Auth::user()->id;
+        $data = RoomRequest::all()->where('user_id', '=', $userid)->first();
+        $application = json_decode(Auth::user()->roomrequest->application, true);
+        if (File::exists('storage/' . $application['recommendation'])) {
+            File::delete('storage/' . $application['recommendation']);
+        }
+        $application['recommendation'] = 0;
+        $jsonData = json_encode($application);
+        $data->application = $jsonData;
+        $data->save();
+        return redirect()->route('student.roomrequestshow')->with('success', ' Recommendation Cleared!');
     }
     // Add Payment
     public function roomrequestpayment()
@@ -536,7 +588,7 @@ class ProfileController extends Controller
             'default_font_size' => 12,
             'default_font' => 'nikosh'
         ]));
-		$mpdf->showImageErrors = true;
+        $mpdf->showImageErrors = true;
         $html = view('profile.room.rr')->render();
         $mpdf->WriteHTML($html);
         return $mpdf->output($rollno . ' - RoomRequest.pdf', 'D');
