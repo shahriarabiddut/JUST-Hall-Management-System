@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\SupportController;
+use App\Http\Controllers\Staff\SupportController;
 use App\Http\Controllers\Staff\FoodController;
 use App\Http\Controllers\Staff\HomeController;
 use App\Http\Controllers\Staff\RoomController;
@@ -43,13 +43,12 @@ Route::middleware('staff')->prefix('staff')->name('staff.')->group(function () {
     Route::resource('email', EmailController::class);
 
     //Suport Ticekts View And Reply
-    Route::get('support', [SupportController::class, 'staffIndex'])->name('support.index');
-    Route::get('support/{id}', [SupportController::class, 'staffAdmin'])->name('support.show');
-    Route::get('support/{id}/reply', [SupportController::class, 'staffReply'])->name('support.reply');
-    Route::put('support/{id}', [SupportController::class, 'staffReplyUpdate'])->name('support.replyUpdate');
+    Route::get('support', [SupportController::class, 'index'])->name('support.index');
+    Route::get('support/{id}', [SupportController::class, 'show'])->name('support.show');
+    Route::get('support/{id}/reply', [SupportController::class, 'reply'])->name('support.reply');
+    Route::put('support/{id}', [SupportController::class, 'update'])->name('support.replyUpdate');
 
     // Balance Crud
-    Route::get('balance/{id}/delete', [BalanceController::class, 'destroy']);
     Route::resource('balance', BalanceController::class);
 
     // Payment Crud
@@ -71,6 +70,7 @@ Route::middleware('staff')->prefix('staff')->name('staff.')->group(function () {
     Route::get("/deductBalance", [StudentController::class, 'deductBalanceStaff'])->name('student.deductBalance');
     //RoomAllocation Requests
     Route::get('roomallocation/roomrequests', [AllocatedSeatController::class, 'roomrequests'])->name('roomallocation.roomrequests');
+    Route::get('roomallocation/roomrequestslist/{id}', [AllocatedSeatController::class, 'roomrequestslistdata'])->name('roomallocation.roomrequestslistdata');
     Route::get('roomallocation/accept/{id}', [AllocatedSeatController::class, 'roomrequestaccept'])->name('roomallocation.accept');
     Route::get('roomallocation/ban/{id}', [AllocatedSeatController::class, 'roomrequestban'])->name('roomallocation.ban');
     Route::get('roomallocation/list/{id}', [AllocatedSeatController::class, 'roomrequestlist'])->name('roomallocation.list');
@@ -79,10 +79,19 @@ Route::middleware('staff')->prefix('staff')->name('staff.')->group(function () {
     Route::post('roomallocation/allocate/', [AllocatedSeatController::class, 'RoomRequestAllocate'])->name('roomallocation.RoomRequestAllocate');
     //RoomAllocation CRUD
     Route::get('roomallocation/{id}/delete', [AllocatedSeatController::class, 'destroy']);
+    Route::put('roomallocationdelete/', [AllocatedSeatController::class, 'delete'])->name('roomallocation.remove');
+    // Route::get('roomallocationD/delete', [AllocatedSeatController::class, 'destroyAll']);
     Route::resource('roomallocation', AllocatedSeatController::class);
     // Room ALlocaton Using CSV
     Route::get('roomallocationadd/import-bulk', [AllocatedSeatController::class, 'importAllocation'])->name('roomallocation.bulk');
     Route::post('roomallocationadd/import-bulk', [AllocatedSeatController::class, 'handleImportAllocation'])->name('roomallocation.bulkUpload');
+    // PDf
+    Route::get('roomrequest/generate-pdf/{id}',  [AllocatedSeatController::class, 'generatePdf'])->name('generatepdf');
+    //Room Issue
+    Route::get('/roomallocationissue', [HomeController::class, 'roomallocationissue'])->name('roomallocation.issue');
+    Route::get('/roomallocationissue/{id}', [HomeController::class, 'roomallocationissueview'])->name('roomallocation.issueview');
+    Route::get('/roomallocationissueaccept/{id}', [HomeController::class, 'roomallocationissueaccept'])->name('roomallocation.issueacc');
+    Route::get('/roomallocationissuereject/{id}', [HomeController::class, 'roomallocationissuereject'])->name('roomallocation.issuerej');
     // Foodtime Crud
     Route::get('foodtime/{id}/active', [FoodTimeController::class, 'active']);
     Route::get('foodtime/{id}/disable', [FoodTimeController::class, 'disable']);
@@ -90,11 +99,12 @@ Route::middleware('staff')->prefix('staff')->name('staff.')->group(function () {
     // Food Crud
     Route::get('food/{id}/active', [FoodController::class, 'active']);
     Route::get('food/{id}/disable', [FoodController::class, 'disable']);
+    Route::get('food/{id}/delete', [FoodController::class, 'destroy']);
     Route::resource('food', FoodController::class);
     // Order Crud
     Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('orders/status/{id}', [OrderController::class, 'show'])->name('orders.show');
-    Route::get('orders/valid/{id}', [OrderController::class, 'update'])->name('orders.valid');
+    Route::put('orders/valid/{id}', [OrderController::class, 'update'])->name('orders.valid');
     Route::get('orders/printToken/{id}', [OrderController::class, 'printNet'])->name('orders.printToken');
     Route::post('orders/searchall/', [OrderController::class, 'searchByDate'])->name('orders.searchByDate');
     Route::post('orders/search/', [OrderController::class, 'searchByHistory'])->name('orders.searchByHistory');
@@ -110,10 +120,8 @@ Route::middleware('userType:aprovost')->prefix('staff')->name('staff.')->group(f
 // Provost Extra
 Route::middleware('userType:provost')->prefix('staff')->name('staff.')->group(function () {
     // RoomTypes Routes
-    Route::get('roomtype/{id}/delete', [RoomTypeController::class, 'destroy']);
-    Route::resource('roomtype', RoomTypeController::class);
-    // Delete RoomType Images
-    Route::get('roomtypeImage/delete/{id}', [RoomTypeController::class, 'destroy_image'])->name('deleteImage');
+    Route::get('roomtype', [RoomTypeController::class, 'index'])->name('roomtype.index');
+    Route::get('roomtype/{id}', [RoomTypeController::class, 'show'])->name('roomtype.show');
 
     // Room Routes
     Route::get('rooms/{id}/delete', [RoomController::class, 'destroy']);
@@ -131,8 +139,13 @@ Route::middleware('userType:provost')->prefix('staff')->name('staff.')->group(fu
     Route::get('settings/history/{id}', [HistoryController::class, 'show'])->name('history.show');
     Route::get('settings/historyRead', [HistoryController::class, 'read'])->name('history.read');
 
+    Route::post('settings/historyD/searchMonth/', [HistoryController::class, 'searchByMonth'])->name('history.searchByMonth');
+    Route::post('settings/historyD/readSearch', [HistoryController::class, 'readSearch'])->name('history.readSearch');
+    Route::get('settings/historyD/chart-data', [HistoryController::class, 'chartData'])->name('chartData');;
+
     // Settings Crud
     Route::get('settings/', [HomeController::class, 'settings'])->name('settings.index');
+    Route::get('settings/secret', [HomeController::class, 'settingsecret'])->name('settings.secret');
     Route::put('settings/update/{id}', [HomeController::class, 'settingsUpdate'])->name('settings.update');
 });
 Route::middleware('userType:staff')->prefix('staff')->name('staff.')->group(function () {

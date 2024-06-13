@@ -1,6 +1,6 @@
 @extends('staff/layout')
 @section('title', 'Orders ')
-
+<script>let scanningEnabled = 1;</script>
 @section('content')
 
 
@@ -19,31 +19,7 @@
             <!-- Session Messages Ends -->
 
 @if ($token==null)
-<div class="card shadow mb-2">
-    <div class="card-header py-3">
-        <h3 class="m-0 font-weight-bold text-primary d-inline" >Enter Meal Token No</h3>
-    </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <form method="POST" action="{{ route('staff.orders.qrcodescan') }}" enctype="multipart/form-data">
-                @csrf
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <tbody>
-                    <tr>
-                        <th>Token Number<span class="text-danger">*</span></th>
-                        <td><input required name="token_number" type="text" class="form-control"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </form>
-        </div>
-    </div>
-</div>
+
 <div class="card shadow mb-2">
     <div class="card-header py-3">
         <h3 class="m-0 font-weight-bold text-primary d-inline" >Scan QR Code</h3>
@@ -73,7 +49,6 @@ function domReady(fn) {
 }
 
 domReady(function () {
-
 	// If found you qr code
 	function onScanSuccess(decodeText, decodeResult) {
 	    // Assuming the variable is part of the current URL
@@ -83,8 +58,12 @@ domReady(function () {
         // Concatenate the variable to the current URL
         let newURL = currentURL + myVariable;
         // Redirect to the new URL
-        window.location.href = newURL;
-		alert("Scanned Successfully : " + decodeText, decodeResult);
+        if (scanningEnabled) {
+            window.location.href = newURL;
+            alert("Scanned Successfully : " + decodeText, decodeResult);
+        scanningEnabled = 0;
+        }
+		
 	}
 
 	let htmlscanner = new Html5QrcodeScanner(

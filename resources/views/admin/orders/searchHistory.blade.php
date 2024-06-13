@@ -3,9 +3,10 @@
 
 @section('content')
 
-
+<div class="card-header p-1 my-1 bg-info">
+    <h3 class="m-0 p-2 font-weight-bold text-white bg-info">Total Orders Search by date </h3>
+</div>
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Orders Search by date</h1>
             <!-- Session Messages Starts -->
             @if(Session::has('success'))
             <div class="p-3 mb-2 bg-success text-white">
@@ -20,12 +21,25 @@
             <!-- Session Messages Ends -->
             <div class="card shadow mb-4 ">
                 <div class="card-header p-1">
-                    <div class="float-left bg-secondary text-white p-1">
-                        <form method="POST" action="{{ route('admin.orders.searchByHistory') }}">
+                    <div class="float-left bg-subtle text-white p-1 m-1">
+                          <form onsubmit="handleSubmit(event)"  method="POST" class="p-1" action="{{ route('admin.orders.searchByHistory') }}">
+                            <div class="form-row rounded">
                             @csrf
-                            <label for="search-date">Search by Date with Details :</label>
-                            <input type="date" id="search-date" name="date" value="{{ $date }}">
-                            <button type="submit">Search</button>
+                        <div class="col-md-4 mt-1">
+                            <select class="form-control" required name="hall_id" id="">
+                                <option value="0">-- Select Hall --</option>
+                                @foreach ($halls as $ft)
+                                <option @if($hall_id == $ft->id) selected @endif value="{{$ft->id}}">{{$ft->title}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-4 mt-1">
+                            <input  class="form-control" required type="date" value="{{ $date }}" id="search-date" name="date">
+                        </div>
+                        <div class="col-md-4 mt-1">
+                            <button class="form-control btn btn-info" type="submit">Search</button>
+                        </div>
+                        </div>
                           </form>
                     </div>
                 <h6 class="m-0 font-weight-bold text-primary p-1"><a href="{{ route('admin.orders.index') }}" class="float-right btn btn-success btn-sm  p-1"> <i class="fa fa-arrow-left"></i> All Orders</a> </h6>
@@ -42,7 +56,7 @@
             <div class="card shadow mb-4">
                 <div class="card-header py-3 
                 @switch($resulttitle[$key]->title)
-                    @case('Launch')
+                    @case('Lunch')
                         bg-warning
                         @break
                     @case('Dinner')
@@ -61,7 +75,7 @@
                     <h6 class="m-0 font-weight-bold text-white ">
                         {{ $resulttitle[$key]->title }} Orders <i class="fas 
                         @switch($resulttitle[$key]->title)
-                    @case('Launch')
+                    @case('Lunch')
                         fa-sun
                         @break
                     @case('Dinner')

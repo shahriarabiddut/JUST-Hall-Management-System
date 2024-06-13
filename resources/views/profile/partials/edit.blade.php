@@ -8,14 +8,14 @@
     <h1 class="border border-secondary rounded h3 mb-2 text-gray-800 p-2 bg-white"> Editing Profile </h1>
 
     <div class="table-responsive">
-        <form method="POST" action="{{ route('student.profile.update') }}" enctype="multipart/form-data">
+        <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('student.profile.update') }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <tbody>
                 <tr>
                     <th>Roll No <span class="text-danger">*</span></th>
-                    <td><input required name="rollno" type="number" class="form-control" value="{{ $user->rollno }}"></td>
+                    <td><input readonly name="rollno" type="number" class="form-control" value="{{ $user->rollno }}"></td>
                 </tr>
                 <tr>
                     <th>Full Name <span class="text-danger">*</span></th>
@@ -23,7 +23,7 @@
                 </tr>
                 <tr>
                     <th>Email <span class="text-danger">*</span></th>
-                    <td><input required name="email" type="email" class="form-control" value="{{ $user->email }}"></td>
+                    <td><input readonly name="email" type="email" class="form-control" value="{{ $user->email }}"></td>
                 </tr>
                 <tr>
                     <th>Department <span class="text-danger">*</span></th>

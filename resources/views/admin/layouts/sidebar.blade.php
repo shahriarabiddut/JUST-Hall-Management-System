@@ -1,7 +1,7 @@
 <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/admin">
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('admin.dashboard') }}">
         <div class="sidebar-brand-icon rotate-n-15">
             <img src="{{ asset($HallOption[3]->value) }}" class="rounded mx-auto d-block sidebar-card-illustration" alt="Logo" style="width:50%;">
         </div>
@@ -13,15 +13,15 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
-        <a class="nav-link" href="/admin">
+        <a class="nav-link" href="{{ route('admin.dashboard') }}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
-    </li>
+    </li> 
     <hr class="sidebar-divider">
 
     <!-- Heading -->
     <div class="sidebar-heading">
-        Hall Room System
+        Hall System
     </div>
 
     <!-- Nav Item Room Type - Pages Collapse Menu -->
@@ -39,6 +39,32 @@
             </div>
         </div>
     </li>
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Hall User System
+    </div>
+    
+    <!-- Nav Item Staff - Utilities Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link @if (!request()->is('admin/staff*'))
+            collapsed
+        @endif" href="#" data-toggle="collapse" data-target="#collapseSix"
+            aria-expanded="true" aria-controls="collapseSix">
+            <i class="fas fa-fw fa-users"></i>
+            <span>Staff</span>
+        </a>
+        <div id="collapseSix" class="collapse @if(request()->is('admin/staff*')) show @endif" aria-labelledby="headingUtilities"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Staff Management</h6>
+                <a class="collapse-item" href="{{ route('admin.staff.index') }}">View All</a>
+                <a class="collapse-item" href="{{ route('admin.staff.create') }}">Add new</a>
+            </div>
+        </div>
+    </li>
+   
     <!-- Divider -->
     <hr class="sidebar-divider">
 
@@ -117,32 +143,7 @@
                 <a class="collapse-item" href="{{ route('admin.roomallocation.index') }}">View All</a>
                 <a class="collapse-item" href="{{ route('admin.roomallocation.create') }}">Add new </a>
                 <a class="collapse-item" href="{{ route('admin.roomallocation.roomrequests') }}">Allocation Requests </a>
-            </div>
-        </div>
-    </li>
-
-    <!-- Divider -->
-    <hr class="sidebar-divider">
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        Hall User System
-    </div>
-    
-    <!-- Nav Item Staff - Utilities Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link @if (!request()->is('admin/staff*'))
-            collapsed
-        @endif" href="#" data-toggle="collapse" data-target="#collapseSix"
-            aria-expanded="true" aria-controls="collapseSix">
-            <i class="fas fa-fw fa-users"></i>
-            <span>Staff</span>
-        </a>
-        <div id="collapseSix" class="collapse @if(request()->is('admin/staff*')) show @endif" aria-labelledby="headingUtilities"
-            data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Staff Management</h6>
-                <a class="collapse-item" href="{{ route('admin.staff.index') }}">View All</a>
-                <a class="collapse-item" href="{{ route('admin.staff.create') }}">Add new</a>
+                <a class="collapse-item" href="{{ route('admin.roomallocation.issue') }}">Room Leave/Change  </a>
             </div>
         </div>
     </li>
@@ -174,7 +175,7 @@
         Hall Food System
     </div>
     <!-- Nav FoodTime Services - Utilities Collapse Menu -->
-    <li class="nav-item">
+    {{-- <li class="nav-item">
         <a class="nav-link @if (!request()->is('admin/foodtime*'))
             collapsed
         @endif" href="#" data-toggle="collapse" data-target="#collapseFoodTime"
@@ -190,7 +191,7 @@
                 <a class="collapse-item" href="{{ route('admin.foodtime.create') }}">Add new</a>
             </div>
         </div>
-    </li>
+    </li> --}}
     <!-- Nav FoodTime Services - Utilities Collapse Menu -->
     <li class="nav-item">
         <a class="nav-link @if (!request()->is('admin/food*'))
@@ -198,12 +199,14 @@
         @endif" href="#" data-toggle="collapse" data-target="#collapseFood"
             aria-expanded="true" aria-controls="collapseFood">
             <i class="fas fa-table"></i>
-            <span>Food Items </span>
+            <span>Food Data </span>
+            {{-- <span>Food Items </span> --}}
         </a>
-        <div id="collapseFood" class="collapse @if(request()->is('admin/food/*')) show @endif" aria-labelledby="headingUtilities"
+        <div id="collapseFood" class="collapse @if(request()->is('admin/food*')) show @endif" aria-labelledby="headingUtilities"
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Food Item Management</h6>
+                <a class="collapse-item" href="{{ route('admin.foodtime.index') }}">All Food Times</a>
                 <a class="collapse-item" href="{{ route('admin.food.index') }}">View All</a>
                 <a class="collapse-item" href="{{ route('admin.food.create') }}">Add new</a>
             </div>
@@ -254,6 +257,28 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Support Ticket Management</h6>
                 <a class="collapse-item" href="{{ route('admin.support.index') }}">View Support Tickets</a>
+            </div>
+        </div>
+    </li>
+    <hr class="sidebar-divider d-none d-md-block">
+    <div class="sidebar-heading">
+        Settings System
+    </div>
+    <!-- Nav Item Settings - Utilities Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link @if (!request()->is('admin/settings*'))
+            collapsed
+        @endif" href="#" data-toggle="collapse" data-target="#collapseSettings"
+            aria-expanded="true" aria-controls="collapseSettings">
+            <i class="fas fa-ticket-alt"></i>
+            <span>Settings</span>
+        </a>
+        <div id="collapseSettings" class="collapse @if(request()->is('admin/settings*')) show @endif" aria-labelledby="headingUtilities"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Site Management</h6>
+                <a class="collapse-item" href="{{ route('admin.settings.index') }}">View Settings</a>
+                <a class="collapse-item" href="{{ route('admin.history.index') }}">View History</a>
             </div>
         </div>
     </li>

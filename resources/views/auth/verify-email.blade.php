@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
-    <link rel="icon" type="image/x-icon" href="{{ asset($HallOption[4]->value) }}" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('img/fav.png')}}" />
     <meta name="author" content="">
 
     <title> Verify Your EMail  | @isset($HallOption)
@@ -44,7 +44,7 @@
                   @error('email')
                   <div class="text-bold bg-danger text-center text-white p-2">{{ $message }}</div>
                   @enderror
-                  <form method="POST" action="{{ route('verification.send') }}">
+                  <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('verification.send') }}" >
                     @csrf
                     <div class="form-group">
                       <button type="submit" class="btn btn-primary btn-block"> Resend Verification Email </button>
@@ -65,7 +65,7 @@
 
     @yield('scripts')
 
-
+@include('../layouts/validateinput')
 </body>
 
 </html>

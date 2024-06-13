@@ -16,7 +16,7 @@
                    <p class="text-danger"> {{ $error }} </p>
                 @endforeach
                 @endif
-            <form method="POST" action="{{ route('staff.staff.update',$data->id) }}" enctype="multipart/form-data">
+            <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('staff.staff.update',$data->id) }}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -47,7 +47,7 @@
                         </td>
                     </tr><tr>
                         <th>Phone Number<span class="text-danger">*</span></th>
-                        <td><input required name="phone" type="text" class="form-control" value="{{ $data->phone }}" maxlength="11"></td>
+                        <td><input required name="phone" type="text" class="form-control" value="{{ $data->phone }}" maxlength="11" pattern="[0-9]{11}"></td>
                     </tr>
                     <tr>
                         <th>Select User Type</th>
@@ -57,6 +57,8 @@
                                 <option @if ($data->type=='staff') @selected(true) @endif value="staff">Staff</option>
                                 <option @if ($data->type=='provost') @selected(true) @endif value="provost">Provost</option>
                                 <option @if ($data->type=='aprovost') @selected(true) @endif value="aprovost">Assistant Provost</option>
+                                <option @if ($data->type=='officer') @selected(true) @endif
+                                 value="officer">Officer</option>
                             </select>
                         </td>
                     </tr>

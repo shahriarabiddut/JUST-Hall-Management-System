@@ -7,7 +7,7 @@
                 <p>{{ session('danger') }} </p>
             </div>
 @endif
-@if (!Auth::user()->allocated_seat)
+@if (Auth::user()->hall_id!=0 && Auth::user()->hall_id!=null)
 <!-- Content Row For Order Spent of Current Month -->
 <div class="card-header p-1 bg-success my-1">
     <h6 class="p-3 font-weight-bold text-white bg-success m-1">
@@ -39,7 +39,7 @@
             <div class="card shadow mb-4">
                 <div class="card-header py-3 
                 @switch($resulttitle[$key]->title)
-                    @case('Launch')
+                    @case('Lunch')
                         bg-warning
                         @break
                     @case('Dinner')
@@ -58,7 +58,7 @@
                     <h6 class="m-0 font-weight-bold text-white ">
                         {{ $resulttitle[$key]->title }} Orders <i class="fas 
                         @switch($resulttitle[$key]->title)
-                    @case('Launch')
+                    @case('Lunch')
                         fa-sun
                         @break
                     @case('Dinner')
@@ -140,7 +140,7 @@
             <div class="card shadow mb-4">
                 <div class="card-header py-3 
                 @switch($resulttitle[$key]->title)
-                    @case('Launch')
+                    @case('Lunch')
                         bg-warning
                         @break
                     @case('Dinner')
@@ -159,7 +159,7 @@
                     <h6 class="m-0 font-weight-bold text-white ">
                         {{ $resulttitle[$key]->title }} Orders <i class="fas 
                         @switch($resulttitle[$key]->title)
-                    @case('Launch')
+                    @case('Lunch')
                         fa-sun
                         @break
                     @case('Dinner')
@@ -222,6 +222,7 @@
 <div class="card-header p-1 bg-success my-1">
     <h6 class="p-3 font-weight-bold text-white bg-success m-1">
         Welcome to System ! {{ Auth::user()->name }}.</h6>
+        <!--<p>Email Verification to access system is currently off due to testing purpose!</p>-->
         
 </div>
 @endif

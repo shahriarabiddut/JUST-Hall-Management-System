@@ -20,10 +20,6 @@
                         <td>{{ $data->roomtype->title }}</td>
                     </tr>
                     <tr>
-                        <th>Room Price</th>
-                        <td>{{ $data->roomtype->price }}</td>
-                    </tr>
-                    <tr>
                         <th>Total Seats</th>
                         <td>{{ $data->totalseats }}</td>
                     </tr>
@@ -38,7 +34,9 @@
                             <table>
                                 @foreach ( $data->allocatedseats as $key => $allocatedseats  )
                                 <tr>
+                                    @if($allocatedseats->status!=0)
                                     <td width="50%">{{ $allocatedseats->position }}.{{ $allocatedseats->students->name }} - {{ $allocatedseats->students->rollno }} </td>
+                                    @endif
                                 </tr>
                                 @endforeach
                               </table>
@@ -47,7 +45,7 @@
                     @endif
                     <tr>
                         <td colspan="2">
-                            <a href="{{ url('staff/rooms/'.$data->id.'/edit') }}" class="float-right btn btn-info btn-sm"><i class="fa fa-edit"> Edit {{ $data->title }}  </i></a>
+                            <a href="{{ url('staff/rooms/'.$data->id.'/edit') }}" class="float-right btn btn-info btn-sm m-1" title="Edit Data"> <i class="fa fa-edit"> Edit {{ $data->title }}  </i></a>
                         </td>
                         
                     </tr>

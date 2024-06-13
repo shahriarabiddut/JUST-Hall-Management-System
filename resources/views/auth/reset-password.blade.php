@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
-    <link rel="icon" type="image/x-icon" href="{{ asset($HallOption[4]->value) }}" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('img/fav.png')}}" />
     <meta name="author" content="">
 
     <title> Reset Password | @isset($HallOption)
@@ -44,7 +44,7 @@
                       <p>{{ session('status') }} </p>
                   </div>
                   @endif
-                  <form method="POST" action="{{ route('password.store') }}">
+                  <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('password.store') }}" >
                     <!-- Password Reset Token -->
                     @csrf
                     <input type="hidden" name="token" value="{{ $request->route('token') }}">
@@ -85,7 +85,7 @@
     <script src="{{ asset('vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 
     @yield('scripts')
-
+@include('../layouts/validateinput')
 
 </body>
 

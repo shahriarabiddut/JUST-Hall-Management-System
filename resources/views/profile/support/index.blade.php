@@ -65,9 +65,9 @@
                             
                             
                             <td class="text-center">
-                                <a href="{{ url('student/support/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
+                                <a href="{{ url('student/support/'.$d->id) }}" class="btn btn-info btn-sm" title="View Data"><i class="fa fa-eye"></i></a>
                                 @if ($d->status==null || $d->status==0)
-                                <a onclick="return confirm('Are You Sure?')" href="{{ url('student/support/'.$d->id.'/delete') }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>@endif
+                                <a onclick="return confirm('Are You Sure?')" href="{{ url('student/support/'.$d->id.'/delete') }}" class="btn btn-danger btn-sm" title="Remove Data"><i class="fa fa-trash"></i></a>@endif
                             </td>
 
                         </tr>

@@ -78,16 +78,18 @@
                         <th>Token No</th>
                         <td>{{ $data->id }}</td>
                     </tr>
-                    <tr>
-                        <th>Token QR</th>
-                        <td>{!! QrCode::size(300)->generate($data->id) !!}</td>
-                    </tr>
                     
                     <tr>
                         <td colspan="2" class="m-1">
                             <a href="{{ route('staff.orders.printToken',$data->order_id) }}" class="float-right btn btn-success btn-sm btn-block p-2"><i class="fas fa-ticket-alt"> Print </i></a>           
                             @if($data->status!=1)
-                            <a href="{{ route('staff.orders.valid',$data->id) }}" class="float-right btn btn-info btn-sm btn-block p-2"><i class="fas fa-ticket-alt"> Mark as Used </i></a> 
+                            <br>
+                            <form onsubmit="handleSubmit(event)"  method="POST"class="d-inline" action="{{ route('staff.orders.valid',$data->id) }}">
+                                @method('PUT')
+                                @csrf
+                                <input type="hidden" name="page" value="no">
+                                <button type="submit" class="float-right btn btn-block btn-info btn-large my-1"> <i class="fa fa-check"></i> Mark as Used </button> 
+                              </form> 
                             @endif
                         </td>                            
                     </tr>

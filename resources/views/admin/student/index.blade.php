@@ -43,8 +43,8 @@
                             <th>Photo</th>
                             <th>RollNo</th>
                             <th>Name</th>
+                            <th>Hall</th>
                             <th>Email</th>
-                            <th>Mobile</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -54,16 +54,22 @@
                             <th>Photo</th>
                             <th>RollNo</th>
                             <th>Name</th>
+                            <th>Hall</th>
                             <th>Email</th>
-                            <th>Mobile</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
                     <tbody>
+                        @php $i=1 ;@endphp
                         @if($data)
                         @foreach ($data as $key=> $d)
                         <tr>
-                            <td>{{ ++$key }}</td>
+                            @if ($d->status==0)
+                                <td class="bg-danger text-white">
+                                    @else
+                                <td class="bg-success text-white">
+                                    @endif
+                                    {{ $i++ }}</td>
                             <td><img width="100"
                                 class=""
                                 src="{{$d->photo ? asset('storage/'.$d->photo) : asset('images/user.png')}}"
@@ -71,14 +77,19 @@
                             /></td>
                             <td>{{ $d->rollno }}</td>
                             <td>{{ $d->name }}</td>
+                            <td>@if($d->hall==null)
+                                Not Allocated
+                                @else
+                                {{ $d->hall->title }}
+                                @endif
+                                
+                            </td>
                             <td>{{ $d->email }}</td>
-                            <td>{{ $d->mobile }}</td>
                             
                             
                             <td class="text-center">
-                                <a href="{{ url('admin/student/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
-                                <a href="{{ url('admin/student/'.$d->id.'/edit') }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
-                                <a onclick="return confirm('Are You Sure?')" href="{{ url('admin/student/'.$d->id.'/delete') }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                <a href="{{ url('admin/student/'.$d->id) }}" class="btn btn-info btn-sm m-1" title="View Data"><i class="fa fa-eye"></i></a>
+                                <a href="{{ url('admin/student/'.$d->id.'/edit') }}" class="btn btn-primary btn-sm m-1" title="Edit Data"> <i class="fa fa-edit"></i></a>
                             </td>
 
                         </tr>

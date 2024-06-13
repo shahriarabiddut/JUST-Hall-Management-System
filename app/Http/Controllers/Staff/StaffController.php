@@ -2,24 +2,38 @@
 
 namespace App\Http\Controllers\Staff;
 
-use Carbon\Carbon;
 use App\Models\Staff;
-use App\Models\Department;
-use App\Models\StaffPayment;
 use Illuminate\Http\Request;
-
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class StaffController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    //
+    protected $hall_id;
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->hall_id = Auth::guard('staff')->user()->hall_id;
+            if ($this->hall_id == 0 || $this->hall_id == null || Auth::guard('staff')->user()->status == 0) {
+                return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+            }
+            if (Auth::guard('staff')->user()->hall_id != 0) {
+                if (Auth::guard('staff')->user()->hall->status == 0) {
+                    return redirect()->route('staff.dashboard')->with('danger', 'This Hall has been Disabled by System Administrator!');
+                }
+            }
+            if (Auth::guard('staff')->user()->type == 'provost') {
+                return $next($request);
+                // return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+            } else {
+                return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+                return $next($request);
+            }
+        });
+    }
     public function index()
     {
-        $data = Staff::all();
+        $data = Staff::all()->where('hall_id', $this->hall_id);
         return view('staff.staff.index', ['data' => $data]);
     }
 
@@ -40,17 +54,19 @@ class StaffController extends Controller
         //
         $data = new Staff;
         $request->validate([
-            'email' => 'required|email|unique:staff',
-            'type' => 'required',
+            'email' => 'required|email|regex:/(.+)@(.+)\.(.+)/i|unique:staff',
+            'type' => 'required|not_in:0',
         ]);
         $data->email = $request->email;
         $data->password = bcrypt($request->email);
         $data->type = $request->type;
+        $data->hall_id = $this->hall_id;
+        $data->status = 1;
         $data->save();
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistory($staff_id, 'add', 'Staff (' . $data->type . ' ) - ' . $data->name . ' has been added Successfully!');
+        $HistoryController->addHistoryHall($staff_id, 'add staff', 'Staff (' . $data->type . ' ) - ' . $data->name . ' has been added Successfully!', $this->hall_id);
         //Saved
         return redirect()->route('staff.staff.index')->with('success', 'Staff has been added Successfully!');
     }
@@ -65,6 +81,9 @@ class StaffController extends Controller
         if ($data == null) {
             return redirect()->route('staff.staff.index')->with('danger', 'Not Found!');
         }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.staff.index')->with('danger', 'Not Permitted!');
+        }
         return view('staff.staff.show', ['data' => $data]);
     }
 
@@ -78,6 +97,9 @@ class StaffController extends Controller
         if ($data == null) {
             return redirect()->route('staff.staff.index')->with('danger', 'Not Found!');
         }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.staff.index')->with('danger', 'Not Permitted!');
+        }
         return view('staff.staff.edit', ['data' => $data]);
     }
 
@@ -88,6 +110,9 @@ class StaffController extends Controller
     {
         //
         $data = Staff::find($id);
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.staff.index')->with('danger', 'Not Permitted!');
+        }
         $request->validate([
             'name' => 'required',
             'bio' => 'required',
@@ -111,9 +136,9 @@ class StaffController extends Controller
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistory($staff_id, 'update', 'Staff (' . $data->type . ' ) - ' . $data->name . ' has been updated Successfully!');
+        $HistoryController->addHistoryHall($staff_id, 'update staff', 'Staff (' . $data->type . ' ) - ' . $data->name . ' has been updated Successfully!', $this->hall_id);
         //Saved
-        return redirect()->route('staff.staff.index')->with('success', 'Staff has been updated Successfully!');
+        return redirect()->route('staff.staff.index')->with('success staff', 'Staff (' . $data->name . ') data has been updated Successfully!');
     }
 
     /**
@@ -125,19 +150,29 @@ class StaffController extends Controller
         if ($data == null) {
             return redirect()->route('staff.staff.index')->with('danger', 'Not Found!');
         }
-        $data->delete();
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.staff.index')->with('danger', 'Not Permitted!');
+        }
+        $data->status = 0;
+        $data->save();
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistory($staff_id, 'delete', 'Staff (' . $data->type . ' ) - ' . $data->name . ' has been updated Successfully!');
+        $HistoryController->addHistoryHall($staff_id, 'remove staff', 'Staff (' . $data->type . ' ) - ' . $data->name . ' has been removed Successfully!', $this->hall_id);
         //Saved
-        return redirect()->route('staff.staff.index')->with('danger', 'Data has been deleted Successfully!');
+        return redirect()->route('staff.staff.index')->with('danger', 'Staff Data has been removed from hall Successfully!');
     }
 
     public function change(string $id)
     {
         //
         $data = Staff::find($id);
+        if ($data == null) {
+            return redirect()->route('staff.staff.index')->with('danger', 'Not Found!');
+        }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.staff.index')->with('danger', 'Not Permitted!');
+        }
         return view('staff.staff.change', ['data' => $data]);
     }
 
@@ -158,6 +193,6 @@ class StaffController extends Controller
         $data->password = bcrypt($request->password);
         $data->save();
 
-        return redirect('staff/staff')->with('success', 'Staff Email & Password has been updated Successfully!');
+        return redirect()->route('staff.staff.index')->with('success staff', 'Staff (' . $data->name . ') Email & Password has been updated Successfully!');
     }
 }

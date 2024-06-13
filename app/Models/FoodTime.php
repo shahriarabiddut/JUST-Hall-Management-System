@@ -8,7 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class FoodTime extends Model
 {
     use HasFactory;
-    function food(){
-        return $this->hasMany(Food::class,'food_time_id');
+    function food()
+    {
+        return $this->hasMany(Food::class, 'food_time_id');
+    }
+    function hall()
+    {
+        return $this->hasMany(FoodTimeHall::class, 'hall_id');
     }
 }

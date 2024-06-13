@@ -30,7 +30,6 @@
                         <tr>
                             <th>#</th>
                             <th>Title</th>
-                            <th>Provost</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -39,7 +38,6 @@
                         <tr>
                             <th>#</th>
                             <th>Title</th>
-                            <th>Provost</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -49,8 +47,7 @@
                         @foreach ($data as $key => $d)
                         <tr>
                             <td>{{ ++$key }}</td>
-                            <td>{{ $d->title }}</td>
-                            <td>{{ $d->staff->name }}</td>
+                            <td>{{ $d->title }} - {{ $d->banglatitle }}</td>
                             @switch($d->status)
                             @case(0)
                                 <td class="bg-danger text-white"> Disable</td>
@@ -61,8 +58,8 @@
                             @endswitch
                             
                             <td class="text-center">
-                                <a href="{{ url('admin/hall/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye">View </i></a>
-                                <a href="{{ url('admin/hall/'.$d->id.'/edit') }}" class="btn btn-secondary btn-sm mr-1"><i class="fa fa-edit"> Edit </i></a> 
+                                <a href="{{ url('admin/hall/'.$d->id) }}" class="btn btn-info btn-sm" title="View Data"><i class="fa fa-eye">View </i></a>
+                                <a href="{{ url('admin/hall/'.$d->id.'/edit') }}" class="btn btn-secondary btn-sm mr-1" title="Edit Data"> <i class="fa fa-edit"> Edit </i></a> 
                                 @switch($d->status)
                                 @case(1)
                                 <a onclick="return confirm('Are You Sure?')" href="{{ url('admin/hall/'.$d->id.'/disable') }}" class="btn btn-danger btn-sm"><i class="fa fa-ban">Disable</i></a>

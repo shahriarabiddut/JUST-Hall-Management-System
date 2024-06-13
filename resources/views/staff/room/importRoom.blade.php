@@ -15,10 +15,16 @@
                    <p class="text-danger"> {{ $error }} </p>
                 @endforeach
                 @endif
-            <form method="POST" action="{{ route('staff.rooms.bulkUpload') }}" enctype="multipart/form-data">
+            <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('staff.rooms.bulkUpload') }}" enctype="multipart/form-data">
                 @csrf
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <tbody>
+                        <tr>
+                            <th>Sample CSV</th>
+                            <td>
+                                <a href="{{ route('root').'/files/roomSample.csv' }}" class="btn btn-block btn-info">CSV Sample of Room</a>
+                            </td>
+                        </tr>
                     <tr>
                         <th>Format (Excel)</th>
                         <td>Column name should be in serial - title,room_type_id,totalseats or Error May Occur!</td>

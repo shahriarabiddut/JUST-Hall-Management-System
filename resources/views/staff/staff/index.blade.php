@@ -45,10 +45,16 @@
                         </tr>
                     </tfoot>
                     <tbody>
+                        @php $i=1 ;@endphp
                         @if($data)
                         @foreach ($data as $key=> $d)
                         <tr>
-                            <td>{{ ++$key }}</td>
+                            @if ($d->status==0)
+                            <td class="bg-danger text-white">
+                                @else
+                            <td class="bg-success text-white">
+                                @endif
+                                {{ $i++ }}</td></td>
                             <td><img width="100"
                                 class=""
                                 src="{{$d->photo ? asset('storage/'.$d->photo) : url('images/user.png')}}"
@@ -64,6 +70,9 @@
                                     @case('aprovost')
                                         Assistant Provost
                                         @break
+                                    @case('officer')
+                                        Officer
+                                        @break
                                     @default
                                         Staff
                                 @endswitch
@@ -71,9 +80,9 @@
                             
                             
                             <td class="text-center">
-                                <a href="{{ url('staff/staff/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
-                                <a href="{{ url('staff/staff/'.$d->id.'/edit') }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
-                                <a onclick="return confirm('Are You Sure?')" href="{{ url('staff/staff/'.$d->id.'/delete') }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                <a href="{{ url('staff/staff/'.$d->id) }}" class="btn btn-info btn-sm" title="View Data"><i class="fa fa-eye"></i></a>
+                                <a href="{{ url('staff/staff/'.$d->id.'/edit') }}" class="btn btn-primary btn-sm" title="Edit Data"> <i class="fa fa-edit"></i></a>
+                                
                             </td>
 
                         </tr>

@@ -61,8 +61,15 @@
                         @foreach ($data as $key => $d)
                         <tr>
                             <td>{{ ++$key }}</td>
-                            <td>{{ $d->title }}</td>
-                            <td>{{ $d->roomtype->title }}</td>
+                            <td>{{ $d->title }} ({{ $d->hall->title }})</td>
+                            <td>
+                                @if ($d->roomtype==null)
+                                    Room Type N/A
+                                @else
+                                {{ $d->roomtype->title }}
+                                @endif
+                            
+                            </td>
                             <td>{{ $d->totalseats }}</td>
                             <td>{{ count($d->allocatedseats) }}</td>
                             @if ($d->vacancy==0)
@@ -72,9 +79,9 @@
                             @endif
                             
                             <td class="text-center">
-                                <a href="{{ url('admin/rooms/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
-                                <a href="{{ url('admin/rooms/'.$d->id.'/edit') }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
-                                <a onclick="return confirm('Are You Sure?')" href="{{ url('admin/rooms/'.$d->id.'/delete') }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                <a href="{{ url('admin/rooms/'.$d->id) }}" class="btn btn-info btn-sm m-1" title="View Data"><i class="fa fa-eye"></i></a>
+                                <a href="{{ url('admin/rooms/'.$d->id.'/edit') }}" class="btn btn-primary btn-sm m-1" title="Edit Data"> <i class="fa fa-edit"></i></a>
+                                
                             </td>
 
                         </tr>

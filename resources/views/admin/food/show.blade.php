@@ -16,13 +16,21 @@
             <div class="table-responsive">
                 <table class="table table-bordered" width="100%">
                     <tr>
+                        <th>Hall</th>
+                        <th>@if ($data->hall==null)
+                            N/A
+                            @else
+                            {{ $data->hall->title }}
+                        @endif</th>
+                    </tr>
+                    <tr>
                         <th>Name</th>
                         <td>{{ $data->food_name }}</td>
                     </tr>
                     <tr>
                         <th>Food Time</th>
                         @switch($data->foodtime->title)
-                            @case('Launch')
+                            @case('Lunch')
                                 <td class="bg-warning text-white"> {{ $data->foodtime->title }} <i class="fas fa-sun"></i></td>
                                     @break
                             @case('Dinner')
@@ -35,7 +43,7 @@
                     </tr>
                     <tr>
                         <th>Food Price</th>
-                        <td>{{ $food_time->price }}</td>
+                        <td>{{ $data->price }} /= Taka </td>
                     </tr>
                     <tr>
                         <th>Status</th>
@@ -43,16 +51,19 @@
                     </tr>
                     <tr>
                         <th>Created Date</th>
-                        <td>{{ $data->created_at }}</td>
+                        @if ($data->created_at!=null)
+                        <td>{{ $data->created_at->format('F j , Y')}}</td>
+                        @else
+                        <td>{{ $data->updated_at->format('F j , Y') }}</td>
+                        @endif
                     </tr>
                     <tr>
                         <th>Updated Date</th>
-                        <td>{{ $data->updated_at }}</td>
+                        <td>{{ $data->updated_at->format('F j , Y') }}</td>
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <a onclick="return confirm('Are You Sure?')" href="{{ url('admin/food/'.$data->id.'/delete') }}" class="float-right btn btn-danger btn-sm "><i class="fa fa-trash"> Delete </i></a>
-                            <a href="{{ url('admin/food/'.$data->id.'/edit') }}" class="float-left btn btn-info btn-sm mr-1"><i class="fa fa-edit"> Edit {{ $data->title }}  </i></a> 
+                            <a href="{{ url('admin/food/'.$data->id.'/edit') }}" class="float-left btn btn-info btn-sm mr-1" title="Edit Data"> <i class="fa fa-edit"> Edit {{ $data->title }}  </i></a> 
                             
                         </td>
                         

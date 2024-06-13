@@ -21,7 +21,7 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        return view('auth.register');
+        return view('auth.register2');
     }
 
     /**
@@ -33,27 +33,33 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email','regex:/(.+)@(.+)\.(.+)/i', 'max:255', 'unique:'.User::class],
-            'rollno' => ['required', 'integer', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'gender' => ['required', 'string', 'not_in:3', 'max:255'],
+            'dept' => ['required', 'string', 'max:255', 'not_in:0'],
+            'session' => ['required', 'string', 'max:255', 'not_in:0'],
+            'email' => 'required|email|regex:/(.+)@(.+)\.(.+)/i|unique:users',
+            'rollno' => ['required', 'string', 'unique:' . User::class],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()]
         ]);
-        // $user = User::create([
-        //     'name' => $request->name,
-        //     'email' => $request->email,
-        //     'rollno' => $request->rollno,
-        //     'password' => Hash::make($request->password),
-        // ]);
+        $rollno = str_replace(' ', '', $request->rollno);
         $user = new User;
-
         $user->name = $request->name;
+        $user->dept = $request->dept;
+        $user->session = $request->session;
         $user->email = $request->email;
-        $user->rollno = $request->rollno;
+        $user->rollno = $rollno;
+        $user->gender = $request->gender;
+        $user->status = 1;
         $user->password = Hash::make($request->password);
+        if ($request->has('hall_id')) {
+            $user->hall_id = $request->hall_id;
+        } else {
+            $user->hall_id = 0;
+        }
         $user->save();
-        
+
         //Creating Balance account for student
         $BalanceController = new BalanceController();
-        $BalanceController->store($user->id);
+        $BalanceController->store($user->id, $user->hall_id);
 
         event(new Registered($user));
 

@@ -13,6 +13,10 @@
             <div class="table-responsive">
                 <table class="table table-bordered" width="100%">
                     <tr>
+                        <th>Hall</th>
+                        <td>{{ $data->hall->title }}</td>  
+                    </tr>
+                    <tr>
                         <th>Ticket No</th>
                         <td>{{ $data->id }}</td>
                     </tr>
@@ -28,7 +32,7 @@
                         <td>{{ $data->message }}</td>
                     </tr>
                     <tr>
-                        <th>Reply</th>
+                        <th>Reply</th> 
                         <td>
                             @if($data->reply)
                             {{ $data->reply }}
@@ -49,11 +53,11 @@
                     </tr>
                     <tr>
                         <th>Ticket Creation Date</th>
-                        <td>{{ $data->created_at }}</td>
+                        <td>{{ $data->created_at->format('F j,Y H:i:s') }}</td>
                     </tr>
                     <tr>
                         <th>Ticket Replied Date</th>
-                        <td>{{ $data->updated_at }}</td>
+                        <td>{{ $data->updated_at->format('F j,Y H:i:s')  }}</td>
                     </tr>
                    
                     

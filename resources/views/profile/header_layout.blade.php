@@ -4,9 +4,11 @@
       <i class="fa fa-bars"></i>
       </button>
   <h6 class="sidebar-brand-text mt-2" > 
-  @isset($HallOption)
-      {{ $HallOption[2]->value }}
-  @endisset 
+    @if (Auth::user()->hall_id!=0 && Auth::user()->hall_id!=null)
+    {{ Auth::user()->hall->title }}
+    @else
+        @isset($HallOption) {{ $HallOption[2]->value }} @endisset
+    @endif
   </h6>
   <script>
     if (/Mobi/.test(navigator.userAgent)) {
@@ -45,8 +47,8 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-envelope fa-fw"></i>
                                 <!-- Counter - Messages -->
-                                <span class="badge badge-danger badge-counter">@if($dataMessage) {{ count($dataMessage) }}
-                                    @endif</span>
+                                @if (Auth::user()->roomrequest!=null)
+                                @if(Auth::user()->roomrequest->where('flag',0)->count())<span class="badge badge-danger badge-counter"> {{ Auth::user()->roomrequest->where('flag',0)->count() }} </span> @endif @endif
                             </a>
                             <!-- Dropdown - Messages -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -55,8 +57,8 @@
                                     Message Center
                                 </h6>
                                 
-                                @if($dataMessage)
-                                @foreach ($dataMessage as $data)
+                                @if(Auth::user()->roomrequest!=null)
+                                @if(Auth::user()->roomrequest->count())
                                 <a class="dropdown-item d-flex align-items-center" href="{{ route('student.roomrequestshow')  }}">
                                     <div class="dropdown-list-image mr-3">
                                         <img class="rounded-circle" src="{{ asset('images/room.png') }}"
@@ -65,10 +67,10 @@
                                     </div>
                                     <div class="font-weight-bold">
                                         <div class="text-truncate">Room Application Submitted.</div>
-                                        <div class="small text-gray-500">{{ $data->created_at }}</div>
+                                        <div class="small text-gray-500">{{ Auth::user()->roomrequest->created_at->format('F j , Y') }}</div>
                                     </div>
                                 </a>
-                                @endforeach
+                                @endif
                                 @endif
 
                                 <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
@@ -88,7 +90,12 @@
                                 
                                 </span>
                                 <img class="img-profile rounded-circle"
-                                    src="{{ asset('storage/'.Auth::user()->photo) }}">
+                                @if (Auth::user()->photo!=null)
+                                src="{{ asset('storage/'.Auth::user()->photo) }}"
+                                @else
+                                src="{{ asset('images/user.png') }}"
+                                @endif
+                                >
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"

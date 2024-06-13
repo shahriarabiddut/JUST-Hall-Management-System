@@ -5,7 +5,9 @@
 
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Orders Search by date</h1>
+    <div class="card-header p-1 my-1">
+        <h3 class="m-0 p-2 font-weight-bold text-white bg-dark rounded">Total Orders Search by date <a href="{{ route('staff.orders.index') }}" class="float-right btn btn-success btn-md p-1"> <i class="fa fa-arrow-left"></i> All Orders</a></h3>
+    </div>
             <!-- Session Messages Starts -->
             @if(Session::has('success'))
             <div class="p-3 mb-2 bg-success text-white">
@@ -19,11 +21,20 @@
             @endif
             <!-- Session Messages Ends -->
             <div class="card shadow mb-4 pl-4 py-2 bg-secondary text-white">
-                <form method="POST" action="{{ route('staff.orders.searchByHistory') }}">
+                <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('staff.orders.searchByHistory') }}">
                     @csrf
-                    <label for="search-date">Search by Date with Details :</label>
-                    <input type="date" id="search-date" name="date" value="{{ $date }}">
-                    <button type="submit">Search</button>
+                    <div class="form-row rounded">
+                        @csrf
+                    <div class="col-md-4 mt-1">
+                        <button class="form-control btn btn-dark p-1" type="reset"> Order History </button>
+                    </div>
+                    <div class="col-md-4 mt-1">
+                        <input  class="form-control" required type="date" value="{{ $date }}" id="search-date" name="date">
+                    </div>
+                    <div class="col-md-4 mt-1">
+                        <button class="form-control btn btn-info" type="submit">Search</button>
+                    </div>
+                    </div>
                   </form>
             </div>
 
@@ -36,7 +47,7 @@
             <div class="card shadow mb-4">
                 <div class="card-header py-3 
                 @switch($resulttitle[$key]->title)
-                    @case('Launch')
+                    @case('Lunch')
                         bg-warning
                         @break
                     @case('Dinner')
@@ -55,7 +66,7 @@
                     <h6 class="m-0 font-weight-bold text-white ">
                         {{ $resulttitle[$key]->title }} Orders <i class="fas 
                         @switch($resulttitle[$key]->title)
-                    @case('Launch')
+                    @case('Lunch')
                         fa-sun
                         @break
                     @case('Dinner')

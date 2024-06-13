@@ -1,7 +1,7 @@
 @extends('staff/layout')
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha384-vk5WoKIaW/vJyUAd9n/wmopsmNhiy+L2Z+SBxGYnUkunIxVxAv/UtMOhba/xskxh" crossorigin="anonymous"></script>
 <script src="{{ asset('js/jquery-searchbox.js') }}"></script>
-@section('title', 'Create Payment')
+@section('title', 'Add New Payment')
 @section('content')
 
     <!-- DataTales Example -->
@@ -11,9 +11,13 @@
             <a href="{{ url('staff/payment') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h3>
         </div>
         <div class="card-body">
-            
+            @if ($errors->any())
+                @foreach ($errors->all() as $error)
+                   <p class="text-danger"> {{ $error }} </p>
+                @endforeach
+                @endif
             <div class="table-responsive">
-            <form method="POST" action="{{ route('staff.payment.store') }}" enctype="multipart/form-data">
+            <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('staff.payment.store') }}" enctype="multipart/form-data"  id="myForm">
                 @csrf
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <tbody>
@@ -28,13 +32,13 @@
                                 </select>
                             </td>
                         </tr>
-                            <tr>
+                            {{-- <tr>
                                 <th>Mobile</th>
-                                <td><input required name="mobileno" type="text" class="form-control"></td>
-                            </tr>
+                                <td><input required id="inputField" name="mobileno" type="text" class="form-control" maxlength="11" value="{{ old('mobileno')}}" pattern="[0-9]{11}"></td>
+                            </tr> --}}
                     <tr>
                         <th>Amount</th>
-                        <td><input required name="amount" type="text" class="form-control"></td>
+                        <td><input id="myInput" required type="number" min="1" name="amount" type="text" class="form-control" value="{{ old('amount')}}"></td>
                     </tr>
                     <tr>
                         <th>Payment Status <span class="text-danger">*</span></th>
@@ -70,7 +74,46 @@
         $('.js-searchBox').searchBox({ elementWidth: '100%'});
         $('.user_id').searchBox({ elementWidth: '100%'});
         $('.room_id').searchBox({ elementWidth: '100%'});
-       </script>
+       
+            // Get the form, input field, and warning message elements
+            const form = document.getElementById('myForm');
+            const input = document.getElementById('myInput');
+            const warningMessage = document.getElementById('warningMessage');
+        
+            // Function to check if the input is negative
+            function checkInput() {
+                const value = parseFloat(input.value);
+                if (value < 0 || isNaN(value)) { // Show warning if input is negative or not a number
+                    warningMessage.style.display = 'inline';
+                    return false; // Prevent form submission
+                } else {
+                    warningMessage.style.display = 'none';
+                    return true; // Allow form submission
+                }
+            }
+        
+            // Listen for input event on the input field
+            input.addEventListener('input', checkInput);
+        
+            // Listen for form submission
+            form.addEventListener('submit', function(event) {
+                if (!checkInput()) {
+                    event.preventDefault(); // Prevent form submission if input is negative
+                }
+            });
+            document.addEventListener('DOMContentLoaded', function() {
+                    document.getElementById('myForm').addEventListener('submit', function(event) {
+                        let input2 = document.getElementById('inputField').value;
+                        let pattern = /^[0-9]+$/;
+                    
+                        if (!pattern.test(input2)) {
+                            alert('Use Valid Mobile Number!');
+                            event.preventDefault(); // Prevent form submission if input is invalid
+                            window.location.reload();
+                        }
+                    });
+                });
+    </script>
     @endsection
 @endsection
 

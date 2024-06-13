@@ -1,10 +1,6 @@
 @extends('staff/layout')
 @section('title', 'Edit Settings')
 @section('content')
-
-
-    <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Editing Settings</h1>
     <!-- Session Messages Starts -->
     @if(Session::has('success'))
     <div class="p-3 mb-2 bg-success text-white">
@@ -18,223 +14,98 @@
     @endif
     <!-- Session Messages Ends -->
     <!-- DataTales Example -->
+    <!-- DataTales Example -->
     <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h3 class="m-0 font-weight-bold text-primary">Editing Settings</h3>
+        </div>
         <div class="card-body">
-            <h3 class="bg-info text-white text-center p-2 rounded"> Website </h3>
-            <div class="table-responsive">
-                <form method="POST" action="{{ route('staff.settings.update',$datas[0]->id) }}" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                        <tbody>
-                        <tr>
-                            <th width="30%">Website Title</th>
-                            <td width="50%"><input required name="value" type="text" class="form-control" value="{{ $datas[0]->value }}"></td>
-                            <td width="20%"><button type="submit" class="btn btn-primary">Update</button></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </form>
-            </div>
-            <div class="table-responsive">
-                <form method="POST" action="{{ route('staff.settings.update',$datas[2]->id) }}" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                        <tbody>
-                        <tr>
-                            <th width="30%">Panel Header Title</th>
-                            <td width="50%"><input required name="value" type="text" class="form-control" value="{{ $datas[2]->value }}"></td>
-                            <td width="20%"><button type="submit" class="btn btn-primary">Update</button></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </form>
-            </div>
-            <div class="table-responsive">
-                <form method="POST" action="{{ route('staff.settings.update',$datas[8]->id) }}" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                        <tbody>
-                        <tr>
-                            <th width="30%">Hall Title</th>
-                            <td width="50%"><input required name="value" type="text" class="form-control" value="{{ $datas[8]->value }}"></td>
-                            <td width="20%"><button type="submit" class="btn btn-primary">Update</button></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </form>
-            </div>
-            <div class="table-responsive">
-                <form method="POST" action="{{ route('staff.settings.update',$datas[3]->id) }}" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                        <tbody>
-                        <tr>
-                            <th width="30%">Hall Logo </th>
-                            <td width="50%"><input required name="value" type="file" class="form-control" accept="image/*" id="fileInput" onchange="previewImage(event,'imagePreview')" > <br> <img width="100" id="imagePreview" src="{{asset($datas[3]->value)}}" >
-                            </td>
-                            <td width="20%"><button type="submit" class="btn btn-primary">Update</button></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </form>
-            </div>
-            <div class="table-responsive">
-                <form method="POST" action="{{ route('staff.settings.update',$datas[4]->id) }}" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                        <tbody>
-                        <tr> 
-                            <th width="30%">Website Favicon</th>
-                            <td width="50%"><input required name="value" type="file" class="form-control" accept="image/*" id="fileInput" onchange="previewImage(event,'imagePreview2')" > <br> <img width="100" id="imagePreview2" src="{{asset($datas[4]->value)}}" >
-                            </td>
-                            <td width="20%"><button type="submit" class="btn btn-primary">Update</button></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </form>
-            </div>
-            <h3 class="bg-primary text-white text-center p-2 rounded"> Fixed Charges </h3>
-            <div class="table-responsive">
-                <form method="POST" action="{{ route('staff.settings.update',$datas[1]->id) }}" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                        <tbody>
-                        <tr>
-                            <th width="30%">Fixed Charges For Hounors Students</th>
-                            <td width="50%"><input required name="value" type="text" class="form-control" value="{{ $datas[1]->value }}"></td>
-                            <td width="20%"><button type="submit" class="btn btn-primary">Update</button></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </form>
-            </div>
-            <div class="table-responsive">
-                <form method="POST" action="{{ route('staff.settings.update',$datas[11]->id) }}" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                        <tbody>
-                        <tr>
-                            <th width="30%">Fixed Charges For Masters Students</th>
-                            <td width="50%"><input required name="value" type="text" class="form-control" value="{{ $datas[11]->value }}"></td>
-                            <td width="20%"><button type="submit" class="btn btn-primary">Update</button></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </form>
-            </div>
-            <h3 class="bg-warning text-white text-center p-2 rounded"> Print </h3>
-            <div class="table-responsive">
-                <form method="POST" action="{{ route('staff.settings.update',$datas[10]->id) }}" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                        <tbody>
-                        <tr>
-                            <th width="30%">Print Option</th>
-                            <td width="50%">
-                                <div class="form-check form-check-inline bg-danger py-2 px-3 text-white rounded-pill">
-                                    <input class="form-check-input" type="radio" name="value" id="exampleRadios1" value="0" @if($datas[10]->value==0) @checked(true) @endif>
-                                    <label class="form-check-label" for="exampleRadios1">
-                                      Off
-                                    </label>
-                                  </div>
-                                  <div class="form-check form-check-inline bg-success py-2 px-3 text-white rounded-pill">
-                                    <input class="form-check-input" type="radio" name="value" id="exampleRadios2" value="1" @if($datas[10]->value==1) @checked(true) @endif>
-                                    <label class="form-check-label" for="exampleRadios2">
-                                     On
-                                    </label>
-                                  </div>
-                                </td>
-                            <td width="20%"><button type="submit" class="btn btn-primary">Update</button></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </form>
-            </div>
-            <div class="table-responsive">
-                <form method="POST" action="{{ route('staff.settings.update',$datas[9]->id) }}" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                        <tbody>
-                        <tr>
-                            <th width="30%">Printing Secret</th>
-                            <td width="50%"><input required name="value" type="password" class="form-control" value="" placeholder="Enter Secret Value"></td>
-                            <td width="20%"><button type="submit" class="btn btn-primary">Update</button></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </form>
-            </div>
             
-            {{-- @foreach ($datas as $data)
             <div class="table-responsive">
-                <form method="POST" action="{{ route('staff.settings.update',$data->id) }}" enctype="multipart/form-data">
-                    @csrf
-                    @method('PUT')
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                        <tbody>
+            <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('staff.settings.update',$data->id) }}" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <tbody>
                         <tr>
-                            <th width="40%">
-                                @switch($data->name)
-                                    @case($data->name=='title')
-                                        Website Title
-                                        @break
-                                    @case($data->name=='fixed_cost_charge')
-                                        Fixed Cost Charge
-                                    @break
-                                    @case($data->name=='masters_fixed_cost')
-                                        Masters Fixed Cost Charge
-                                    @break
-                                    @case($data->name=='systemname')
-                                        Dashboard Header Title
-                                    @break
-                                    @case($data->name=='print')
-                                        Print
-                                    @break
-                                    @default
-                                        {{ $data->name }}
-                                @endswitch
-                                
-                            </th>
-                            <td width="40%">
-                                @switch($data->name)
-                                    @case($data->name=='print')
-                                    <div class="form-check form-check-inline bg-danger py-2 px-3 text-white rounded-pill">
-                                        <input class="form-check-input" type="radio" name="value" id="exampleRadios1" value="0" @if($data->value==0) @checked(true) @endif>
-                                        <label class="form-check-label" for="exampleRadios1">
-                                          Off
-                                        </label>
-                                      </div>
-                                      <div class="form-check form-check-inline bg-success py-2 px-3 text-white rounded-pill">
-                                        <input class="form-check-input" type="radio" name="value" id="exampleRadios2" value="1" @if($data->value==1) @checked(true) @endif>
-                                        <label class="form-check-label" for="exampleRadios2">
-                                         On
-                                        </label>
-                                      </div>
-                                    @break
-                                    @case($data->id==10)
-                                    <input required name="value" type="password" class="form-control" value="" placeholder="Enter Secret Value">
-                                    @break
-                                    @default
-                                    <input required name="value" type="text" class="form-control" value="{{ $data->value }}">
-                                @endswitch
-                            </td>
-                            <td width="20%"><button type="submit" class="btn btn-primary">Update</button></td>
+                            <th>Logo</th>
+                            <td><input name="logo" class="form-control" type="file" accept="image/*" ></td>
                         </tr>
-                        </tbody>
-                    </table>
-                </form>
-                </div>
-            @endforeach --}}
-            
+                    <tr>
+                        <th>Print</th>
+                        <td>
+                            <div class="form-check form-check-inline bg-danger py-2 px-3 text-white rounded-pill">
+                                <input class="form-check-input" type="radio" name="print" id="exampleRadios1" value="0" @if($data->enable_print==0) @checked(true) @endif>
+                                <label class="form-check-label" for="exampleRadios1">
+                                  Off
+                                </label>
+                              </div>
+                              <div class="form-check form-check-inline bg-success py-2 px-3 text-white rounded-pill">
+                                <input class="form-check-input" type="radio" name="print" id="exampleRadios2" value="1" @if($data->enable_print==1) @checked(true) @endif>
+                                <label class="form-check-label" for="exampleRadios2">
+                                 On
+                                </label>
+                              </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Online Payment</th>
+                        <td>
+                            <div class="form-check form-check-inline bg-danger py-2 px-3 text-white rounded-pill">
+                                <input class="form-check-input" type="radio" name="payment" id="exampleRadios1" value="0" @if($data->enable_payment==0) @checked(true) @endif>
+                                <label class="form-check-label" for="exampleRadios1">
+                                  Off
+                                </label>
+                              </div>
+                              <div class="form-check form-check-inline bg-success py-2 px-3 text-white rounded-pill">
+                                <input class="form-check-input" type="radio" name="payment" id="exampleRadios2" value="1" @if($data->enable_payment==1) @checked(true) @endif>
+                                <label class="form-check-label" for="exampleRadios2">
+                                 On
+                                </label>
+                              </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Print Secret</th>
+                        <td><input required name="secret" value="{{ $data->secret }}" type="text" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <th>Fixed Cost Honours</th>
+                        <td><input required name="fixed_cost" type="number" min="1" value="{{ $data->fixed_cost }}" class="form-control"></td>
+                    </tr>
+                    <tr>
+                        <th>Fixed Cost Masters</th>
+                        <td><input required name="fixed_cost_masters" min="1" type="number" value="{{ $data->fixed_cost_masters }}" class="form-control"></td>
+                    </tr> 
+                    <tr>
+                        <th>Enable Update and Delete Room</th>
+                        <td>
+                            <div class="form-check form-check-inline bg-danger py-2 px-3 text-white rounded-pill">
+                                <input class="form-check-input" type="radio" name="enable_delete" id="exampleRadios1" value="0" @if($data->enable_delete==0) @checked(true) @endif>
+                                <label class="form-check-label" for="exampleRadios1">
+                                  Off
+                                </label>
+                              </div>
+                              <div class="form-check form-check-inline bg-success py-2 px-3 text-white rounded-pill">
+                                <input class="form-check-input" type="radio" name="enable_delete" id="exampleRadios2" value="1" @if($data->enable_delete==1) @checked(true) @endif>
+                                <label class="form-check-label" for="exampleRadios2">
+                                 On
+                                </label>
+                              </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <input type="hidden" name="prev_logo" value="{{ $data->logo }}">
+                            <input type="hidden" name="old_secret" value="{{ $data->secret }}">
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </td>
+                    </tr>
+                    
+                    </tbody>
+                </table>
+            </form>
+            </div>
         </div>
     </div>
 

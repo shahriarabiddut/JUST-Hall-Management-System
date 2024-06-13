@@ -28,7 +28,7 @@
                             <th>#</th>
                             <th>Student</th>
                             <th>Balance</th>
-                            <th>Last Transaction Date</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tfoot>
@@ -36,7 +36,7 @@
                             <th>#</th>
                             <th>Student</th>
                             <th>Balance</th>
-                            <th>Last Transaction Date</th>
+                            <th>Status</th>
                         </tr>
                     </tfoot>
                     <tbody>
@@ -44,11 +44,16 @@
                         @foreach ($data as $key => $d)
                         <tr>
                             <td>{{ ++$key }}</td>
-                            <td>{{ $d->students->name }} - {{ $d->students->rollno }} - 
-                                @if ($d->students->ms==0)
+                            <td>
+                                @if ($d->students != null)
+                                {{ $d->students->name }} - {{ $d->students->rollno }} - 
+                                @if ($d->students->ms==1)
                                 (Masters)
                                 @else
                                 (Honours)
+                                @endif
+                                @else
+                                User Deleted
                                 @endif
                             </td>
                             @if ($d->balance_amount<0)
@@ -57,12 +62,11 @@
                             <td class="bg-success text-white">
                             @endif
                             {{ $d->balance_amount }}</td>
-                            <td>
-                                @if ($d->updated_at!=$d->created_at)
-                                {{ $d->updated_at->format('F j, Y')  }}
+                            @if ($d->students->status == 0)
+                            <td class="bg-danger text-white"> Removed
                                 @else
-                                No Transaction
-                                @endif
+                            <td class="bg-success text-white"> Active
+                            @endif
                             </td>
                         </tr>
                         @endforeach

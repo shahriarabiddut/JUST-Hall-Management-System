@@ -55,6 +55,7 @@ class EmailController extends Controller
         $dataEmail->message = $request->message;
         $dataEmail->objective = $request->objective;
         $dataEmail->staff_id = 0;
+        $dataEmail->hall_id = 0;
         $dataEmail->save();
         return redirect('admin/email')->with('danger', 'Email Sent Successfully!');
     }
@@ -84,9 +85,10 @@ class EmailController extends Controller
     public function destroy(string $id)
     {
         //
-        $data = Email::find($id);
-        $data->delete();
-        return redirect('admin/email')->with('danger', 'Email Data has been deleted Successfully!');
+        return redirect()->route('admin.email.index')->with('danger', 'Not Permitted!');
+        // $data = Email::find($id);
+        // $data->delete();
+        // return redirect('admin/email')->with('danger', 'Email Data has been deleted Successfully!');
     }
     public function RoomAllocationEmail(string $id, string $roomtitle, string $status)
     {
@@ -111,23 +113,18 @@ class EmailController extends Controller
         } else {
             return redirect()->back()->withInput()->with('danger', 'Server Error');
         }
-        //Sending email with information
-        if ($this->isOnline()) {
-            // The email sending is done using the to method on the Mail facade
-            Mail::to($RecieverEmail)->send(new AllocationEmail($emailBody, $emailObjective, $emailSubject));
+        // The email sending is done using the to method on the Mail facade
+        Mail::to($RecieverEmail)->send(new AllocationEmail($emailBody, $emailObjective, $emailSubject));
 
-            //Saving data to email history
-            $dataEmail = new Email;
-            $dataEmail->name = $RecieverName;
-            $dataEmail->email = $RecieverEmail;
-            $dataEmail->subject = $emailSubject;
-            $dataEmail->message = $emailBody;
-            $dataEmail->objective = $emailObjective;
-            $dataEmail->staff_id = 0;
-            $dataEmail->save();
-        } else {
-
-            return redirect()->back()->withInput()->with('error', 'No Internet Connection');
-        }
+        //Saving data to email history
+        $dataEmail = new Email;
+        $dataEmail->name = $RecieverName;
+        $dataEmail->email = $RecieverEmail;
+        $dataEmail->subject = $emailSubject;
+        $dataEmail->message = $emailBody;
+        $dataEmail->objective = $emailObjective;
+        $dataEmail->staff_id = 0;
+        $dataEmail->hall_id = $RecieverData->hall_id;
+        $dataEmail->save();
     }
 }

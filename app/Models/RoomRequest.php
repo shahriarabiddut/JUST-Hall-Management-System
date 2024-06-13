@@ -8,10 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 class RoomRequest extends Model
 {
     use HasFactory;
-    function rooms(){
-        return $this->belongsTo(Room::class,'room_id');
+    function rooms()
+    {
+        return $this->belongsTo(Room::class, 'room_id');
     }
-    function students(){
-        return $this->belongsTo(Student::class,'user_id');
+    function students()
+    {
+        return $this->belongsTo(Student::class, 'user_id');
+    }
+    function hall()
+    {
+        return $this->belongsTo(Hall::class, 'hall_id');
+    }
+    function visit()
+    {
+        return $this->belongsTo(Staff::class, 'visitor');
     }
 }

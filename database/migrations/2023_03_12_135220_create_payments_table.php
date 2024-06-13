@@ -25,6 +25,7 @@ return new class extends Migration
             $table->integer('staff_id')->references('id')->on('staff')->nullable();
             $table->string('type')->nullable();
             $table->string('proof')->nullable();
+            $table->integer('hall_id')->references('id')->on('halls');
             $table->timestamps();
         });
     }

@@ -17,10 +17,25 @@
                    <p class="text-danger"> {{ $error }} </p>
                 @endforeach
                 @endif
-            <form method="POST" action="{{ route('admin.rooms.bulkUpload') }}" enctype="multipart/form-data">
+            <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('admin.rooms.bulkUpload') }}" enctype="multipart/form-data">
                 @csrf
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <tbody>
+                    <tr>
+                        <th>Hall</th>
+                        <td>
+                            <select required name="hall_id" class="form-control">
+                                <option value="0">--- Select Hall ---</option>
+                                @foreach ($halls as $hall)
+                                <option value="{{ $hall->id }}">{{ $hall->title }}</option>
+                                @endforeach
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Format (Excel)</th>
+                        <td>Column name should be in serial - title,room_type_id,totalseats or Error May Occur!</td>
+                    </tr>
                     <tr>
                         <th style="width: 50%">File</th>
                         <td><input name="file" type="file" ></td>

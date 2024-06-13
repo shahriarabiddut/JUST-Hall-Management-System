@@ -48,13 +48,14 @@
                     </tfoot>
                     <tbody>
                         @if($data)
-                        @foreach ($data as $key => $d)
+                        @php $i =0; @endphp
+                        @foreach ($data as $d)
                         <tr>
-                            <td>{{ ++$key }}</td>
+                            <td>{{ ++$i }}</td>
                             <td>{{ $d->food_name }}</td>
-                            <td>{{ $d->foodtime->price }} /= Taka</td>
+                            <td>{{ $d->price }} /= Taka</td>
                             @switch($d->foodtime->title)
-                            @case('Launch')
+                            @case('Lunch')
                                 <td class="bg-warning text-white text-center"> {{ $d->foodtime->title }} <i class="fas fa-sun"></i></td>
                                     @break
                             @case('Dinner')
@@ -75,13 +76,13 @@
                             @endswitch
                             
                             <td class="text-center">
-                                <a href="{{ url('staff/food/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye">View </i></a>
+                                <a href="{{ url('staff/food/'.$d->id) }}" class="btn btn-info btn-sm m-1" title="View Data"><i class="fa fa-eye">View </i></a>
                                 @switch($d->status)
                                 @case(1)
-                                <a onclick="return confirm('Are You Sure?')" href="{{ url('staff/food/'.$d->id.'/disable') }}" class="btn btn-danger btn-sm"><i class="fa fa-ban">Disable</i></a>
+                                <a onclick="return confirm('Are You Sure?')" href="{{ url('staff/food/'.$d->id.'/disable') }}" class="btn btn-danger btn-sm m-1"><i class="fa fa-ban">Disable</i></a>
                                         @break
                                 @case(0)
-                                <a href="{{ url('staff/food/'.$d->id.'/active') }}" class="btn btn-success btn-sm"><i class="fa fa-check">Active</i></a>
+                                <a href="{{ url('staff/food/'.$d->id.'/active') }}" class="btn btn-success btn-sm m-1"><i class="fa fa-check">Active</i></a>
                                     @break
                                 @endswitch
                                 

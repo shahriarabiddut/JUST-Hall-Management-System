@@ -5,12 +5,12 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h3 class="m-0 font-weight-bold text-primary">Editing Student: {{ $data->name }}
-            <a href="{{ route('staff.student.show',$data->id) }}" class="float-right btn btn-info btn-sm ml-1"> <i class="fa fa-eye"></i> View Student </a> <a href="{{ route('staff.student.index') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a></h3>
+            <a href="{{ route('staff.student.show',$data->id) }}" class="float-right btn btn-info btn-sm ml-1" title="View Data"><i class="fa fa-eye"></i> View Student </a> <a href="{{ route('staff.student.index') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a></h3>
         </div>
         <div class="card-body">
             
             <div class="table-responsive">
-            <form method="POST" action="{{ route('staff.student.update',$data->id) }}" enctype="multipart/form-data">
+            <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('staff.student.update',$data->id) }}" enctype="multipart/form-data" onsubmit="handleSubmit(event)">
                 @csrf
                 @method('PUT')
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -33,6 +33,13 @@
                             <option @if($data->ms==0) selected @endif   value="0"> No </option>
                         </select></td>
                     </tr>
+                    {{-- <tr>
+                        <th>Gender <span class="text-danger">*</span></th>
+                        <td><select required name="gender" class="form-control room-list">
+                        <option @if($data->gender==1) selected @endif  value="1"> Male </option>
+                        <option @if($data->gender==0) selected @endif  value="0"> Female </option>
+                    </select></td>
+                    </tr> --}}
                     <tr>
                         <th>Full Name <span class="text-danger">*</span></th>
                         <td><input required name="name" type="text" class="form-control" value="{{ $data->name }}"></td>

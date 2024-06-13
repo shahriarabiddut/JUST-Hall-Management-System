@@ -3,10 +3,10 @@
 
 @section('content')
 
-<div class="card-header p-1 my-1 bg-info">
+{{-- <div class="card-header p-1 my-1 bg-info">
     <h3 class="m-0 p-2 font-weight-bold text-white bg-info">
         Order </h3>
-</div>
+</div> --}}
     <!-- Page Heading -->
             <!-- Session Messages Starts -->
             @if(Session::has('success'))
@@ -25,26 +25,26 @@
         <div class="card-header py-3">
             <div class="row">
                 <div class="col-sm">
-                    <h6 class="m-0 font-weight-bold text-primary">Order History </h6>
+                    <h3 class="m-0 font-weight-bold text-primary">Order History </h3>
                 </div>
-                <div class="col-sm float-right">
-                    <select id="mySelect" class="m-1" class="float-left form-control">
-                        <option value="option"> Search By Date/ Month </option>
+                <div class="col-sm float-right m-1">
+                    <select id="mySelect" class="form-control">
+                        <option value="option"> Select Search By Date/ Month </option>
                         <option value="option2"> Search By Month </option>
                         <option value="option1"> Search By Date </option>
                       </select>
                 </div>
-                <div class="col-6 float-right">
-                    <div id="myDiv" style="display: none;" >
-                        <form method="POST" action="{{ route('student.order.searchByDate') }}">
+                <div class="col-6 float-right m-1">
+                    <div id="myDiv" class="form-control" style="display: none;" >
+                        <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('student.order.searchByDate') }}">
                             @csrf
                             <label for="search-date">Search by Date:</label>
                             <input type="date" id="search-date" name="date">
                             <button type="submit">Search</button>
                           </form>
                       </div>
-                      <div id="myDiv2" style="display: none;">
-                        <form method="POST" action="{{ route('student.order.searchByMonth') }}">
+                      <div id="myDiv2" class="form-control" style="display: none;">
+                        <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('student.order.searchByMonth') }}">
                             @csrf
                             <label for="search-month">Search by Month:</label>
                             <input type="month" id="search-month" name="month">
@@ -85,15 +85,21 @@
                         @foreach ($data as $key => $d)
                         <tr>
                             <td>{{ ++$key }}</td>
-                            <td>{{ $d->food->food_name }}</td>
+                            <td>
+                                @if ($d->food==null)
+                                    N/A
+                                @else
+                                {{ $d->food->food_name }}
+                                @endif
+                            </td>
                             <td>{{ $d->date }}</td>
                             <td>{{ $d->order_type }}</td>
                             <td>{{ $d->quantity }}</td>
-                            <td>{{ $d->price }}</td>
+                            <td>৳ {{ $d->price }} /=</td>
                             
                             
                             <td class="text-center">
-                                <a href="{{ url('student/order/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye">View </i></a>
+                                <a href="{{ url('student/order/'.$d->id) }}" class="btn btn-info btn-sm" title="View Data"><i class="fa fa-eye">View </i></a>
                             </td>
 
                         </tr>

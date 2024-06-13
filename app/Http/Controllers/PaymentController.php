@@ -8,6 +8,23 @@ use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
+    protected $hall_id;
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->hall_id = Auth::user()->hall_id;
+            if ($this->hall_id == 0 || $this->hall_id == null) {
+                return redirect()->route('student.dashboard')->with('danger', 'Please Get Hall Room Allocation to get access!');
+            }
+            if ($this->hall_id != 0) {
+                if (Auth::user()->hall->status == 0) {
+                    return redirect()->route('student.dashboard')->with('danger', 'This Hall has been Disabled by System Administrator!');
+                }
+            }
+
+            return $next($request);
+        });
+    }
     /**
      * Display a listing of the resource.
      */
@@ -25,6 +42,9 @@ class PaymentController extends Controller
     public function create()
     {
         //
+        if (Auth::user()->hall->enable_payment == 0) {
+            return redirect()->route('student.dashboard')->with('danger', 'New Payments are Disabled by Hall Administrator!');
+        }
         return view('profile.balance.payment.create');
     }
 

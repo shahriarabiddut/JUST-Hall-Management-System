@@ -16,6 +16,8 @@ return new class extends Migration
             $table->integer('student_id')->references('id')->on('users')->onDelete('cascade');
             $table->float('balance_amount');
             $table->timestamp('last_transaction_date')->nullable();
+            $table->integer('hall_id')->references('id')->on('halls');
+            $table->integer('status');
             $table->timestamps();
         });
     }

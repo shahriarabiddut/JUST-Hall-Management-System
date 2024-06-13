@@ -11,7 +11,7 @@
         <div class="card-body">
             
             <div class="table-responsive">
-            <form method="POST" action="{{ url('staff/support/'.$data->id) }}" enctype="multipart/form-data">
+            <form onsubmit="handleSubmit(event)"  method="POST" action="{{ url('staff/support/'.$data->id) }}" enctype="multipart/form-data">
                 @csrf
                 @method('put')
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -52,7 +52,6 @@
                         </td>
                     </tr><tr>
                         <td colspan="2">
-                            <input type="hidden" name="repliedby" value="{{ Auth::user()->id }}">
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </td>
                     </tr>

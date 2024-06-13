@@ -5,16 +5,27 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h3 class="m-0 font-weight-bold text-primary">Editing Student: {{ $data->name }}
-            <a href="{{ route('admin.student.show',$data->id) }}" class="float-right btn btn-info btn-sm ml-1"> <i class="fa fa-eye"></i> View Student </a> <a href="{{ route('admin.student.index') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a></h3>
+            <a href="{{ route('admin.student.show',$data->id) }}" class="float-right btn btn-info btn-sm ml-1" title="View Data"><i class="fa fa-eye"></i> View Student </a> <a href="{{ route('admin.student.index') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a></h3>
         </div>
         <div class="card-body">
             
             <div class="table-responsive">
-            <form method="POST" action="{{ route('admin.student.update',$data->id) }}" enctype="multipart/form-data">
+            <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('admin.student.update',$data->id) }}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <tbody>
+                    <tr>
+                        <th>Select Hall</th>
+                        <td>
+                            <select required name="hall_id" class="form-control">
+                                <option value="0">--- Select Hall ---</option>
+                                @foreach ($halls as $hall)
+                                <option @if ($data->hall_id == $hall->id) selected @endif value="{{ $hall->id }}">{{ $hall->title }}</option>
+                                @endforeach
+                            </select>
+                        </td>
+                    </tr>
                     <tr>
                         <th>Roll No <span class="text-danger">*</span></th>
                         <td><input required name="rollno" type="text" class="form-control" value="{{ $data->rollno }}"></td>

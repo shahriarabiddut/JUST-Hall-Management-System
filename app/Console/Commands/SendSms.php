@@ -3,13 +3,14 @@
 namespace App\Console\Commands;
 
 use Carbon\Carbon;
+use App\Models\Hall;
 use App\Models\Order;
 use App\Models\Balance;
-use App\Models\HallOption;
 use App\Models\Student;
+use App\Mail\AdminEmail;
+use App\Models\HallOption;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\AdminEmail;
 
 class SendSms extends Command
 {
@@ -32,20 +33,15 @@ class SendSms extends Command
      */
     public function handle(): void
     {
-        //Getting Fixed Cost From Options
-        $fcc = HallOption::all()->where('name', '==', 'fixed_cost_charge')->first();
-        $fcc2 = HallOption::all()->where('name', '==', 'masters_fixed_cost')->first();
-        $fixed_cost_charge = $fcc->value;
-        $masters_fixed_cost_charge = $fcc2->value;
         //
         $users = Student::all();
         foreach ($users as $user) {
             $student_id = $user->id;
             $student_email = $user->email;
             if ($user->ms == 1) {
-                $fixedCharge = $masters_fixed_cost_charge;
+                $fixedCharge = $users->hall->fixed_cost_master;
             } else {
-                $fixedCharge = $fixed_cost_charge;
+                $fixedCharge = $users->hall->fixed_cost;
             }
             $today = Carbon::now();
             $startDate = Carbon::now()->startOfMonth();
@@ -70,6 +66,7 @@ class SendSms extends Command
                 $data2->quantity = 0;
                 $data2->price = $charge;
                 $data2->date = $endDate;
+                $data2->hall_id = $users->hall->id;
                 $data2->save();
                 // Order Done
 

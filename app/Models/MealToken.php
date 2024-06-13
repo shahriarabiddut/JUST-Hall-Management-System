@@ -20,4 +20,8 @@ class MealToken extends Model
     {
         return $this->belongsTo(Food::class, 'food_name', 'food_name');
     }
+    function hall()
+    {
+        return $this->belongsTo(Hall::class, 'hall_id');
+    }
 }

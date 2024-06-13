@@ -6,17 +6,25 @@ use App\Models\Room;
 use App\Models\RoomType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\AllocatedSeats;
 use Illuminate\Support\Facades\Auth;
 
 class RoomController extends Controller
 {
+    protected $hall_id;
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
-            if (Auth::guard('staff')->user()->type == 'provost') {
-                return $next($request);
-                // return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
-            } elseif (Auth::guard('staff')->user()->type == 'aprovost') {
+            $this->hall_id = Auth::guard('staff')->user()->hall_id;
+            if ($this->hall_id == 0 || $this->hall_id == null || Auth::guard('staff')->user()->status == 0) {
+                return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+            }
+            if (Auth::guard('staff')->user()->hall_id != 0) {
+                if (Auth::guard('staff')->user()->hall->status == 0) {
+                    return redirect()->route('staff.dashboard')->with('danger', 'This Hall has been Disabled by System Administrator!');
+                }
+            }
+            if (Auth::guard('staff')->user()->type == 'provost' || Auth::guard('staff')->user()->type == 'aprovost') {
                 return $next($request);
             } else {
                 return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
@@ -27,7 +35,7 @@ class RoomController extends Controller
     //
     public function index()
     {
-        $data = Room::all();
+        $data = Room::all()->where('hall_id', $this->hall_id);
         return view('staff.room.index', ['data' => $data]);
     }
 
@@ -47,11 +55,18 @@ class RoomController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'title' => 'required',
+            'rt_id' => 'required|not_in:0',
+            'totalseats' => 'required',
+        ]);
         $data = new Room;
+        $data->hall_id = $this->hall_id;
         $data->room_type_id = $request->rt_id;
         $data->title = $request->title;
         $data->totalseats = $request->totalseats;
         $data->vacancy = $request->totalseats;
+        $data->status = 1;
         //
         $positions = [];
         for ($i = 1; $i <= $request->totalseats; $i++) {
@@ -64,7 +79,7 @@ class RoomController extends Controller
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistory($staff_id, 'add', 'Room ' . $data->title . ' has been added Successfully!');
+        $HistoryController->addHistoryHall($staff_id, 'add', 'Room ' . $data->title . ' has been added Successfully!', $this->hall_id);
         //Saved
 
         return redirect()->route('staff.rooms.index')->with('success', 'Room has been added Successfully!');
@@ -80,6 +95,9 @@ class RoomController extends Controller
         if ($data == null) {
             return redirect()->route('staff.rooms.index')->with('danger', 'Not Found!');
         }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.rooms.index')->with('danger', 'Not Permitted!');
+        }
         return view('staff.room.show', ['data' => $data]);
     }
 
@@ -94,6 +112,9 @@ class RoomController extends Controller
         if ($data == null) {
             return redirect()->route('staff.rooms.index')->with('danger', 'Not Found!');
         }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.rooms.index')->with('danger', 'Not Permitted!');
+        }
         return view('staff.room.edit', ['data' => $data, 'roomtypes' => $roomtypes]);
     }
 
@@ -103,15 +124,19 @@ class RoomController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $request->validate([
+            'title' => 'required',
+        ]);
         $data = Room::find($id);
-        $data->room_type_id = $request->rt_id;
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.rooms.index')->with('danger', 'Not Permitted!');
+        }
         $data->title = $request->title;
-        $data->totalseats = $request->totalseats;
         $data->save();
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistory($staff_id, 'update', 'Room ' . $data->title . ' has been updated Successfully!');
+        $HistoryController->addHistoryHall($staff_id, 'update', 'Room ' . $data->title . ' has been updated Successfully!', $this->hall_id);
         //Saved
         return redirect()->route('staff.rooms.index')->with('success', 'Room has been updated Successfully!');
     }
@@ -121,17 +146,7 @@ class RoomController extends Controller
      */
     public function destroy($id)
     {
-        $data = Room::find($id);
-        if ($data == null) {
-            return redirect()->route('staff.rooms.index')->with('danger', 'Not Found!');
-        }
-        $data->delete();
-        //Saving History 
-        $HistoryController = new HistoryController();
-        $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistory($staff_id, 'delete', 'Room ' . $data->title . ' has been deleted Successfully!');
-        //Saved
-        return redirect()->route('staff.rooms.index')->with('danger', 'Room has been deleted Successfully!');
+        return redirect()->route('staff.rooms.index');
     }
     // Import Bilk users from csv
     public function importRoom()
@@ -149,7 +164,7 @@ class RoomController extends Controller
         $rows = array_map("str_getcsv", explode("\n", $csvData));
         $header = array_shift($rows);
         $length = count($rows);
-        $importedStudents = 1;
+        $importedStudents = 0;
         $errorTitles = [];
         foreach ($rows as $key => $row) {
             if ($key != $length - 1) {
@@ -172,7 +187,7 @@ class RoomController extends Controller
                 $jsonData = json_encode($positions);
                 $positions = $jsonData;
                 //
-                $data = Room::where('title', $title)->first();
+                $data = Room::where('title', $title)->where('hall_id', $this->hall_id)->first();
 
                 $titleMain = str_replace(' ', '', $row['title']);
                 if ($data == null) {
@@ -182,10 +197,12 @@ class RoomController extends Controller
                         'room_type_id' => $roomType,
                         'totalseats' => $totalseats,
                         'vacancy' => $totalseats,
-                        'positions' => $positions
+                        'positions' => $positions,
+                        'hall_id' => $this->hall_id,
+                        'status' => 1
                     ]);
                     $importedStudents++;
-                } elseif ($data->totalseats < $totalseats) {
+                } elseif ($data->totalseats < $totalseats && $data->hall_id == $this->hall_id) {
                     $data->positions = $positions;
                     $data->totalseats = $totalseats;
                     $data->vacancy = $totalseats;
@@ -198,12 +215,12 @@ class RoomController extends Controller
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistory($staff_id, 'add', 'Today ' . $importedStudents++ . ' Rooms has been imported Successfully!');
+        $HistoryController->addHistoryHall($staff_id, 'add', 'Today ' . $importedStudents . ' Rooms has been imported Successfully!', $this->hall_id);
         //Saved
         if ($errorTitles == null) {
-            return redirect()->route('staff.rooms.index')->with('success', 'Today ' . $importedStudents++ . ' Rooms has been imported Successfully!');
+            return redirect()->route('staff.rooms.index')->with('success', 'Today ' . $importedStudents . ' Rooms has been imported Successfully!');
         } else {
-            return redirect()->route('staff.rooms.index')->with('success', 'Today ' . $importedStudents++ . ' Rooms has been imported Successfully!')->with('danger-titles', $errorTitles);
+            return redirect()->route('staff.rooms.index')->with('success', 'Today ' . $importedStudents . ' Rooms has been imported Successfully!')->with('danger-titles', $errorTitles);
         }
     }
 }

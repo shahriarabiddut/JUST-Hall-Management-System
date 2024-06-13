@@ -21,7 +21,8 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h3 class="m-0 font-weight-bold text-primary">FoodTime 
-            <a href="{{ route('admin.foodtime.create') }}" class="float-right btn btn-success btn-sm" target="_blank">Add New</a> </h3>
+            {{-- <a href="{{ route('admin.foodtime.create') }}" class="float-right btn btn-success btn-sm" target="_blank">Add New</a>  --}}
+        </h3>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -64,8 +65,8 @@
                             @endswitch
                             
                             <td class="text-center">
-                                <a href="{{ url('admin/foodtime/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye">View </i></a>
-                                <a href="{{ url('admin/foodtime/'.$d->id.'/edit') }}" class="btn btn-secondary btn-sm mr-1"><i class="fa fa-edit"> Edit </i></a> 
+                                <a href="{{ url('admin/foodtime/'.$d->id) }}" class="btn btn-info btn-sm" title="View Data"><i class="fa fa-eye">View </i></a>
+                                <a href="{{ url('admin/foodtime/'.$d->id.'/edit') }}" class="btn btn-secondary btn-sm mr-1" title="Edit Data"> <i class="fa fa-edit"> Edit </i></a> 
                                 @switch($d->status)
                                 @case(1)
                                 <a onclick="return confirm('Are You Sure?')" href="{{ url('admin/foodtime/'.$d->id.'/disable') }}" class="btn btn-danger btn-sm"><i class="fa fa-ban">Disable</i></a>

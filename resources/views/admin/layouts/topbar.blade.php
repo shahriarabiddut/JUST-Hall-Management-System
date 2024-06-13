@@ -4,14 +4,12 @@
       <i class="fa fa-bars"></i>
       </button>
   <h6 class="sidebar-brand-text mt-2" > 
-  @isset($HallOption)
-      {{ $HallOption[2]->value }}
-  @endisset 
+  @isset($HallOption) {{ $HallOption[2]->value }} @endisset 
   </h6>
   <script>
+  let myDiv = document.getElementById('sidebarToggleTop');
     if (/Mobi/.test(navigator.userAgent)) {
         window.onload = function () {
-        let myDiv = document.getElementById('sidebarToggleTop');
         myDiv.click();
     };
     }
@@ -31,7 +29,7 @@
                 
                 </span>
                 <img class="img-profile rounded-circle"
-                    src="{{ asset('img/undraw_profile.svg') }}">
+                    src="{{ asset('images/user.png') }}">
             </a>
             <!-- Dropdown - User Information -->
             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"

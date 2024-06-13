@@ -8,8 +8,8 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h3 class="m-0 font-weight-bold text-primary">Food Item Details of <span class="bg-warning"> {{ $data->food_name }} </span> 
-            <a href="{{ url('staff/food') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h3>
+            <h3 class="m-0 font-weight-bold text-primary">Food Item Details of {{ $data->food_name }} 
+            <a href="{{ url('staff/food') }}" class="float-right btn btn-success btn-sm m-1"> <i class="fa fa-arrow-left"></i> View All </a> </h3>
         </div>
         <div class="card-body">
             
@@ -22,7 +22,7 @@
                     <tr>
                         <th>Food Time</th>
                         @switch($data->foodtime->title)
-                            @case('Launch')
+                            @case('Lunch')
                                 <td class="bg-warning text-white"> {{ $data->foodtime->title }} <i class="fas fa-sun"></i></td>
                                     @break
                             @case('Dinner')
@@ -35,23 +35,29 @@
                     </tr>
                     <tr>
                         <th>Food Price</th>
-                        <td>{{ $food_time->price }} /= Taka</td>
+                        <td>{{ $data->price }} /= Taka</td>
                     </tr>
                     <tr>
                         <th>Status</th>
                         <td>{{ $data->status }}</td>
                     </tr>
+                    
                     <tr>
                         <th>Created Date</th>
-                        <td>{{ $data->created_at }}</td>
+                        @if ($data->created_at!=null)
+                        <td>{{ $data->created_at->format('F j , Y')}}</td>
+                        @else
+                        <td>{{ $data->updated_at->format('F j , Y') }}</td>
+                        @endif
                     </tr>
                     <tr>
                         <th>Updated Date</th>
-                        <td>{{ $data->updated_at }}</td>
+                        <td>{{ $data->updated_at->format('F j , Y') }}</td>
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <a href="{{ url('staff/food/'.$data->id.'/edit') }}" class="float-left btn btn-info btn-sm mr-1"><i class="fa fa-edit"> Edit {{ $data->title }}  </i></a> 
+                            {{-- <a onclick="return confirm('Are You Sure?')" href="{{ url('staff/food/'.$data->id.'/delete') }}" class="float-right btn btn-danger btn-sm " title="Remove Data"><i class="fa fa-trash"> Delete </i></a> --}}
+                            <a href="{{ url('staff/food/'.$data->id.'/edit') }}" class="float-left btn btn-info btn-sm mr-1" title="Edit Data"> <i class="fa fa-edit"> Edit {{ $data->title }}  </i></a> 
                             
                         </td>
                         

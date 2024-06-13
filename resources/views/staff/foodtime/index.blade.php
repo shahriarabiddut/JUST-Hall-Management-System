@@ -30,7 +30,6 @@
                         <tr>
                             <th>#</th>
                             <th>Title</th>
-                            <th>Detail</th>
                             <th>Price</th>
                             <th>Status</th>
                             <th>Action</th>
@@ -40,7 +39,6 @@
                         <tr>
                             <th>#</th>
                             <th>Title</th>
-                            <th>Detail</th>
                             <th>Price</th>
                             <th>Status</th>
                             <th>Action</th>
@@ -48,11 +46,12 @@
                     </tfoot>
                     <tbody>
                         @if($data)
-                        @foreach ($data as $key => $d)
+                        @php $i =0; @endphp
+                        @foreach ($data as $d)
                         <tr>
-                            <td>{{ ++$key }}</td>
-                            <td>{{ $d->title }}</td>
-                            <td>{{ $d->detail }}</td>
+                            <td>{{ ++$i }}</td>
+                            <td>{{ $d->food_time->title }}</td>
+                            
                             <td>{{ $d->price }}/= Taka</td>
                             @switch($d->status)
                             @case(0)
@@ -64,8 +63,8 @@
                             @endswitch
                             
                             <td class="text-center">
-                                <a href="{{ url('staff/foodtime/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye">View </i></a>
-                                <a href="{{ url('staff/foodtime/'.$d->id.'/edit') }}" class="btn btn-secondary btn-sm mr-1"><i class="fa fa-edit"> Edit </i></a> 
+                                <a href="{{ url('staff/foodtime/'.$d->id) }}" class="btn btn-info btn-sm" title="View Data"><i class="fa fa-eye">View </i></a>
+                                <a href="{{ url('staff/foodtime/'.$d->id.'/edit') }}" class="btn btn-secondary btn-sm mr-1" title="Edit Data"> <i class="fa fa-edit"> Edit </i></a> 
                                 @switch($d->status)
                                 @case(1)
                                 <a onclick="return confirm('Are You Sure?')" href="{{ url('staff/foodtime/'.$d->id.'/disable') }}" class="btn btn-danger btn-sm"><i class="fa fa-ban">Disable</i></a>

@@ -3,14 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use Carbon\Carbon;
+use App\Models\Hall;
 use App\Models\Staff;
-use App\Models\Department;
-use App\Models\StaffPayment;
 use Illuminate\Http\Request;
-
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Staff\HistoryController;
 
 class StaffController extends Controller
 {
@@ -30,7 +26,8 @@ class StaffController extends Controller
     public function create()
     {
         //
-        return view('admin.staff.create');
+        $halls = Hall::all();
+        return view('admin.staff.create', ['halls' => $halls]);
     }
 
     /**
@@ -41,13 +38,15 @@ class StaffController extends Controller
         //
         $data = new Staff;
         $request->validate([
-            'email' => 'required|email|unique:staff',
-            'type' => 'required',
+            'email' => 'required|email|regex:/(.+)@(.+)\.(.+)/i|unique:staff',
+            'type' => 'required|not_in:0',
+            'hall_id' => 'required|not_in:101',
         ]);
+        $data->hall_id = $request->hall_id;
         $data->email = $request->email;
         $data->password = bcrypt($request->email);
         $data->type = $request->type;
-
+        $data->status = 1;
         $data->save();
 
         return redirect('admin/staff')->with('success', 'Staff Data has been added Successfully!');
@@ -73,10 +72,16 @@ class StaffController extends Controller
     {
         //
         $data = Staff::find($id);
+        $halls = Hall::all();
         if ($data == null) {
             return redirect()->route('admin.staff.index')->with('danger', 'Not Found!');
         }
-        return view('admin.staff.edit', ['data' => $data]);
+        if ($data->hall != null) {
+            if ($data->hall->enable_delete == 0) {
+                return redirect()->route('admin.staff.index')->with('danger', 'Not Permitted!');
+            }
+        }
+        return view('admin.staff.edit', ['data' => $data, 'halls' => $halls]);
     }
 
     /**
@@ -91,9 +96,10 @@ class StaffController extends Controller
             'bio' => 'required',
             'address' => 'required',
             'phone' => 'required',
-            'type' => 'required',
+            'type' => 'required|not_in:0',
+            'hall_id' => 'required|not_in:101',
         ]);
-
+        $data->hall_id = $request->hall_id;
         $data->name = $request->name;
         $data->bio = $request->bio;
         $data->address = $request->address;
@@ -120,14 +126,47 @@ class StaffController extends Controller
         if ($data == null) {
             return redirect()->route('admin.staff.index')->with('danger', 'Not Found!');
         }
-        $data->delete();
-        return redirect('admin/staff')->with('danger', 'Data has been deleted Successfully!');
+        if ($data->hall != null) {
+            if ($data->hall->enable_delete == 0) {
+                return redirect()->route('admin.staff.index')->with('danger', 'Not Permitted!');
+            }
+        }
+        if ($data->status == 0) {
+            return redirect()->route('admin.staff.index')->with('danger', 'No Action Needed!');
+        }
+        $data->status = 0;
+        $data->hall_id = 0;
+        $data->save();
+        return redirect('admin/staff')->with('danger', 'Staff data has been disabled Successfully!');
+    }
+    public function activate($id)
+    {
+        $data = Staff::find($id);
+        if ($data == null) {
+            return redirect()->route('admin.staff.index')->with('danger', 'Not Found!');
+        }
+        if ($data->status == 1) {
+            return redirect()->route('admin.staff.index')->with('danger', 'No Action Needed!');
+        }
+        if ($data->hall != null) {
+            if ($data->hall->enable_delete == 0) {
+                return redirect()->route('admin.staff.index')->with('danger', 'Not Permitted!');
+            }
+        }
+        $data->status = 1;
+        $data->save();
+        return redirect()->route('admin.staff.index')->with('success', 'Staff Data has been Activated Successfully and Please! Assign Hall to this User!');
     }
 
     public function change(string $id)
     {
         //
         $data = Staff::find($id);
+        if ($data->hall != null) {
+            if ($data->hall->enable_delete == 0) {
+                return redirect()->route('admin.staff.index')->with('danger', 'Not Permitted!');
+            }
+        }
         return view('admin.staff.change', ['data' => $data]);
     }
 
@@ -139,7 +178,7 @@ class StaffController extends Controller
         //
         $data = Staff::find($id);
         $request->validate([
-            'email' => 'required',
+            'email' => 'required|regex:/(.+)@(.+)\.(.+)/i',
             'password' => 'required',
 
         ]);

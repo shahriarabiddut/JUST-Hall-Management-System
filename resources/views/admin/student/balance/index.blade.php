@@ -28,9 +28,8 @@
                         <tr>
                             <th>#</th>
                             <th>Student</th>
-                            <th>Department</th>
-                            <th>Session</th>
                             <th>Balance</th>
+                            <th>Hall</th>
                             <th>Last Transaction Date</th>
                         </tr>
                     </thead>
@@ -38,9 +37,8 @@
                         <tr>
                             <th>#</th>
                             <th>Student</th>
-                            <th>Department</th>
-                            <th>Session</th>
                             <th>Balance</th>
+                            <th>Hall</th>
                             <th>Last Transaction Date</th>
                         </tr>
                     </tfoot>
@@ -49,16 +47,35 @@
                         @foreach ($data as $key => $d)
                         <tr>
                             <td>{{ ++$key }}</td>
-                            <td>{{ $d->students->name }} - {{ $d->students->rollno }}</td>
-                            <td>{{ $d->students->dept }}</td>
-                            <td>{{ $d->students->session }}</td>
-                            @if ($d->balance_amount<0)
+                            <td>@if ($d->students != null)
+                                {{ $d->students->name }} - {{ $d->students->rollno }} - 
+                                @if ($d->students->ms==0)
+                                (Masters)
+                                @else
+                                (Honours)
+                                @endif
+                                @else
+                                User Deleted
+                                @endif</td>
+                            @if ($d->balance_amount<50)
                             <td class="bg-danger text-white">
                             @else
                             <td class="bg-success text-white">
                             @endif
                             {{ $d->balance_amount }}</td>
-                            <td>{{ $d->last_transaction_date }}</td>
+                            <td>
+                                @if ($d->hall== null)
+                                No Hall Found
+                                @else
+                                {{ $d->hall->title }}
+                                @endif
+                            </td>
+                            <td>@if ($d->updated_at!=$d->created_at)
+                                {{ $d->updated_at->format('F j, Y')  }}
+                                @else
+                                No Transaction Yet
+                                @endif
+                            </td>
                         </tr>
                         @endforeach
                         @endif

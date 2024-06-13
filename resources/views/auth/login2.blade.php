@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
-    <link rel="icon" type="image/x-icon" href="{{ asset($HallOption[4]->value) }}" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('img/fav.png')}}" />
     <meta name="author" content="">
 
     <title> Login Rollno | @isset($HallOption)
@@ -34,7 +34,7 @@
             <div class="col-12 col-md-4 col-lg-4 h-50 ">
               <div class="card shadow">
                 <div class="card-body mx-2">
-                    @error('rollno')
+                  @error('rollno')
                   <div class="text-bold bg-danger text-center text-white p-2">{{ $message }}</div>
                   @enderror
                   @error('password')
@@ -52,7 +52,7 @@
                   <p class="text-muted font-weight-bold ">
                     <span>OR</span>
                   </p> --}}
-                  <form method="POST" action="{{ route('login2') }}">
+                  <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('login2') }}" >
                     @csrf
                     <div class="form-group input-group">
                       <div class="input-group-prepend">
@@ -116,7 +116,7 @@
     </script>
 
     @yield('scripts')
-
+@include('../layouts/validateinput')
 
 </body>
 

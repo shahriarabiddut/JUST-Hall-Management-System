@@ -14,7 +14,34 @@
                 <p>{{ session('danger') }} </p>
             </div>
             @endif
+            @if ($errors->any())
+            @foreach ($errors->all() as $error)
+                <div class="p-2 mb-2 bg-danger text-white">{{$error}}</div>
+            @endforeach
+            @endif
             <!-- Session Messages Ends -->
+            <div class="card shadow mb-4 pl-4 py-2 bg-secondary text-white">
+                <form onsubmit="handleSubmit(event)"  method="POST" class="p-1" action="{{ route('staff.history.searchByMonth') }}">
+                    @csrf
+                    <div class="form-row">
+                        <div class="col-md-3 mt-1"> <button class="form-control btn btn-dark" type="reset">Search by Date :</button> </div>
+                    <div class="col-md-3 mt-1">
+                    <select required class="form-control" name="staff_id" id="">
+                        <option value="x">-- Select Staff--</option>
+                        @foreach ($staff as $ft)
+                        <option value="{{$ft->id}}">{{$ft->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-3 mt-1">
+                    <input required type="month" class="form-control" id="search-month" name="month">
+                </div>
+                <div class="col-md-3 mt-1">
+                    <button class="form-control btn btn-info"  type="submit">Search</button>
+                </div>
+            </div>
+                  </form>
+            </div>
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
@@ -49,7 +76,11 @@
                             @else
                         @endif >
                             <td>{{ ++$key }}</td>
-                            <td>{{ $d->staff->name }}</td>
+                            <td>
+                                @if ($d->staff!=null)
+                                    {{ $d->staff->name }}
+                                @endif
+                            </td>
                             <td>{{ $d->data }}
                             <span
                             @switch($d->flag)
@@ -83,7 +114,7 @@
                             <td>{{ $d->created_at->format("F j, Y") }}</td>
                             
                             <td class="text-center">
-                                <a href="{{ route('staff.history.show',$d->id) }}" class="btn btn-primary btn-sm"><i class="fa fa-eye"></i></a>
+                                <a href="{{ route('staff.history.show',$d->id) }}" class="btn btn-primary btn-sm" title="View Data"><i class="fa fa-eye"></i></a>
                             </td>
 
                         </tr>

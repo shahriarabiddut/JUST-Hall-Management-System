@@ -13,16 +13,27 @@
             <div class="table-responsive">
                 <table class="table table-bordered" width="100%">
                         <tr>
+                        <th>Hall </th>
+                             <td>
+                                @if ($data->hall!=null)
+                                    {{ $data->hall->title }}
+                                @else
+                                    N/A 
+                                @endif
+                            </td>
+                         </tr>
+                        <tr>
                             <th>Photo</th>
                             <td><img width="100" src="{{$data->photo ? asset('storage/'.$data->photo) : url('images/user.png')}}" alt="User Photo"></td>
                         </tr><tr>
+                            <th>Full Name </th>
+                                 <td>{{ $data->name }}</td>
+                             </tr>
+                             <tr>
                             <th>Email </th>
                                  <td>{{ $data->email }}</td>
                              </tr>
                         <tr>
-                       <th>Full Name </th>
-                            <td>{{ $data->name }}</td>
-                        </tr><tr>
                             <th>Bio </th>
                             <td>{{ $data->bio }}</td>
                         </tr><tr>
@@ -33,7 +44,12 @@
                             <td>{{ $data->phone }}</td>
                         </tr><tr>
                             <td colspan="2">
-                                <a href="{{ url('admin/staff/'.$data->id.'/edit') }}" class="float-right btn btn-info btn-sm"><i class="fa fa-edit"> Edit {{ $data->title }} </i></a> <a href="{{ url('admin/staff/'.$data->id.'/change') }}" class="float-right btn btn-info btn-sm mr-2"><i class="fa fa-edit"> Change Email & Password {{ $data->title }} </i></a>
+                                @if ($data->status!=0)
+                                <a onclick="return confirm('Are You Sure?')" href="{{ url('admin/staff/'.$data->id.'/delete') }}" class="btn btn-danger btn-sm m-1" title="Disable Data"><i class="fa fa-ban"> Disable </i></a>
+                                @else 
+                                <a onclick="return confirm('Are You Sure, Activate the Account?')" href="{{ route('admin.staff.active',$data->id) }}" class="btn btn-success btn-sm m-1" title="Active Data"><i class="fa fa-check"> Active </i></a> 
+                                @endif
+                                <a href="{{ url('admin/staff/'.$data->id.'/edit') }}" class="float-right btn btn-info btn-sm m-1" title="Edit Data"> <i class="fa fa-edit"> Edit {{ $data->title }} </i></a> <a href="{{ url('admin/staff/'.$data->id.'/change') }}" class="float-right btn btn-info btn-sm m-1" title="Edit Data"> <i class="fa fa-edit"> Change Email & Password {{ $data->title }} </i></a>
                             </td>
                             
                         </tr>

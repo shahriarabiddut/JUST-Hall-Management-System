@@ -29,6 +29,7 @@
                     <thead>
                         <tr>
                             <th>#</th>
+                            <th>Hall</th>
                             <th>Name</th>
                             <th>Price</th>
                             <th>Food Time</th>
@@ -39,6 +40,7 @@
                     <tfoot>
                         <tr>
                             <th>#</th>
+                            <th>Hall</th>
                             <th>Name</th>
                             <th>Price</th>
                             <th>Food Time</th>
@@ -51,10 +53,17 @@
                         @foreach ($data as $key => $d)
                         <tr>
                             <td>{{ ++$key }}</td>
+                            <td>
+                                @if ($d->hall==null)
+                                    N/A
+                                    @else
+                                    {{ $d->hall->title }}
+                                @endif
+                                </td>
                             <td>{{ $d->food_name }}</td>
-                            <td>{{ $d->foodtime->price }}</td>
+                            <td>{{ $d->price }}</td>
                             @switch($d->foodtime->title)
-                            @case('Launch')
+                            @case('Lunch')
                                 <td class="bg-warning text-white text-center"> {{ $d->foodtime->title }} <i class="fas fa-sun"></i></td>
                                     @break
                             @case('Dinner')
@@ -75,7 +84,7 @@
                             @endswitch
                             
                             <td class="text-center">
-                                <a href="{{ url('admin/food/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye">View </i></a>
+                                <a href="{{ url('admin/food/'.$d->id) }}" class="btn btn-info btn-sm" title="View Data"><i class="fa fa-eye">View </i></a>
                                 @switch($d->status)
                                 @case(1)
                                 <a onclick="return confirm('Are You Sure?')" href="{{ url('admin/food/'.$d->id.'/disable') }}" class="btn btn-danger btn-sm"><i class="fa fa-ban">Disable</i></a>

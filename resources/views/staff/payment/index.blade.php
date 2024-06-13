@@ -29,6 +29,7 @@
                             <th>#</th>
                             <th>Student</th>
                             <th>Amount</th>
+                            <th>Method</th>
                             <th>Date</th>
                             <th>Status</th>
                             <th>Action</th>
@@ -39,6 +40,7 @@
                             <th>#</th>
                             <th>Student</th>
                             <th>Amount</th>
+                            <th>Method</th>
                             <th>Date</th>
                             <th>Status</th>
                             <th>Action</th>
@@ -49,11 +51,22 @@
                         @foreach ($data as $key => $d)
                         <tr>
                             <td>{{ ++$key }}</td>
-                            <td>{{ $d->students->name }} - {{ $d->students->rollno }}</td>
+                            <td>@if ($d->students!=null)
+                                
+                                {{ $d->students->name }} - {{ $d->students->rollno }}
+                            @endif
+                            </td>
                             <td>{{ $d->amount }}</td>
+                            <td>@switch($d->transaction_id)
+                                @case(0)
+                                    Cash / Bank
+                                        @break
+                                @default
+                                SSLCOMMERZ
+                            @endswitch</td>
                             <td>
                                 @if ($d->created_at==null)
-                                    {{ $d->updated_at->format('F j, Y') }} (Update Date)
+                                     N/A
                                     @else
                                     {{ $d->created_at->format('F j, Y - H:i:s') }}
                                 @endif
@@ -77,7 +90,7 @@
                             @endswitch
                             
                             <td class="text-center">
-                                <a href="{{ url('staff/payment/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
+                                <a href="{{ url('staff/payment/'.$d->id) }}" class="btn btn-info btn-sm" title="View Data"><i class="fa fa-eye"></i></a>
                                 @if($d->status == 'Accepted' || $d->status == 'Rejected')
                                 @else
                                 <a href="{{ url('staff/payment/'.$d->id.'/accept') }}" class="btn btn-success btn-sm"><i class="fa fa-check"></i></a>

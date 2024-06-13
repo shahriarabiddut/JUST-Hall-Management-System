@@ -12,13 +12,29 @@ use App\Http\Controllers\Staff\EmailController;
 
 class PaymentController extends Controller
 {
+    protected $hall_id;
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->hall_id = Auth::guard('staff')->user()->hall_id;
+            if ($this->hall_id == 0 || $this->hall_id == null || Auth::guard('staff')->user()->status == 0) {
+                return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+            }
+            if (Auth::guard('staff')->user()->hall_id != 0) {
+                if (Auth::guard('staff')->user()->hall->status == 0) {
+                    return redirect()->route('staff.dashboard')->with('danger', 'This Hall has been Disabled by System Administrator!');
+                }
+            }
+            return $next($request);
+        });
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         //
-        $data = Payment::latest()->get();
+        $data = Payment::latest()->where('hall_id', $this->hall_id)->get();
         return view('staff.payment.index', ['data' => $data]);
     }
 
@@ -28,7 +44,7 @@ class PaymentController extends Controller
     public function create()
     {
         //
-        $studentdata = Student::all();
+        $studentdata = Student::all()->where('hall_id', $this->hall_id)->where('status', 1);
         return view('staff.payment.create', ['studentdata' => $studentdata]);
     }
 
@@ -40,24 +56,35 @@ class PaymentController extends Controller
         //
         $data = new Payment;
         $request->validate([
-            'student_id' => 'required',
+            'student_id' => 'required|not_in:0',
             'staff_id' => 'required',
-            'mobileno' => 'required',
             'amount' => 'required',
-            'status' => 'required',
+            'status' => 'required|not_in:0',
         ]);
-
-
+        $findStudent = Student::find($request->student_id);
+        if ($findStudent != null) {
+            if ($findStudent->status == 0) {
+                return redirect()->route('staff.payment.index')->with('danger', 'User Account is not Active!');
+            }
+            if ($findStudent->mobile == null) {
+                $userMobile = 0;
+            } else {
+                $userMobile = $findStudent->mobile;
+            }
+        } else {
+            return redirect()->route('staff.payment.index')->with('danger', 'User Not Found!');
+        }
         $data->student_id = $request->student_id;
-        $data->staff_id = $request->staff_id;
+        $data->staff_id = Auth::guard('staff')->user()->id;
         $data->transaction_id = 0;
-        $data->phone = $request->mobileno;
+        $data->phone = $userMobile;
         $data->amount = $request->amount;
         $data->status = $request->status;
-        $data->name = Auth::guard('staff')->user()->name;
+        $data->name = 'Staff - ' . Auth::guard('staff')->user()->name;
         $data->email = Auth::guard('staff')->user()->email;
         $data->address = Auth::guard('staff')->user()->email;
         $data->currency = 'BDT';
+        $data->hall_id =  $this->hall_id;
         $data->save();
         $status = $data->status;
         // Add in Balance if accepted
@@ -76,9 +103,13 @@ class PaymentController extends Controller
             $staff_id = $data->staff_id;
             $EmailController->paymentEmail($student_id, $newBalance, $staff_id, $status);
 
-            return redirect('staff/payment')->with('success', 'Payment Data has been accepted and added balance to Student!');
+            return redirect()->route('staff.payment.index')->with('success', 'Payment Data has been accepted and added balance to Student!');
+            //Saving History 
+            $HistoryController = new HistoryController();
+            $HistoryController->addHistoryHall(Auth::guard('staff')->user()->id, 'Payment', 'New Payment of ' . $data->students->name . ' ( ' . $data->students->rollno . ' ) has been added by ' . $data->staff->name . ' !', $this->hall_id);
+            //Saved
         } else {
-            return redirect('staff/payment')->with('success', 'Payment Data has been added Successfully!');
+            return redirect()->route('staff.payment.index')->with('success', 'Payment Data has been added Successfully!');
         }
     }
 
@@ -93,6 +124,9 @@ class PaymentController extends Controller
         if ($data == null) {
             return redirect()->route('staff.payment.index')->with('danger', 'Not Found!');
         }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.payment.index')->with('danger', 'Not Permitted!');
+        }
         return view('staff.payment.show', ['data' => $data]);
     }
     public function acceptby(string $id)
@@ -101,6 +135,9 @@ class PaymentController extends Controller
         $data = Payment::find($id);
         if ($data == null) {
             return redirect()->route('staff.payment.index')->with('danger', 'Not Found!');
+        }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.payment.index')->with('danger', 'Not Permitted!');
         }
         if ($data->status == 'Accepted' || $data->status == 'Rejected') {
             return redirect('staff/payment')->with('danger', 'You are Warned!');
@@ -152,7 +189,7 @@ class PaymentController extends Controller
                 //Saving History 
                 $HistoryController = new HistoryController();
                 $staff_id = Auth::guard('staff')->user()->id;
-                $HistoryController->addHistory($staff_id, 'add', 'Room Allocation Payment of ' . $data->students->name . ' ( ' . $data->students->rollno . ' ) has been Accepted Successfully by ' . $data->staff->name . ' !');
+                $HistoryController->addHistoryHall($staff_id, 'add', 'Room Allocation Payment of ' . $data->students->name . ' ( ' . $data->students->rollno . ' ) has been Accepted Successfully by ' . $data->staff->name . ' !', $this->hall_id);
                 //Saved
                 return redirect('staff/payment')->with('success', 'Room Allocation Payment has been accepted!');
             }
@@ -164,6 +201,9 @@ class PaymentController extends Controller
         $data = Payment::find($id);
         if ($data == null) {
             return redirect()->route('staff.payment.index')->with('danger', 'Not Found!');
+        }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.payment.index')->with('danger', 'Not Permitted!');
         }
         if ($data->status == 'Accepted' || $data->status == 'Rejected') {
             return redirect('staff/payment')->with('danger', 'You are Warned!');
@@ -182,8 +222,7 @@ class PaymentController extends Controller
             $EmailController->paymentEmail($student_id, $newBalance, $staff_id, $status);
             //Saving History 
             $HistoryController = new HistoryController();
-            $staff_id = Auth::guard('staff')->user()->id;
-            $HistoryController->addHistory($staff_id, 'Rejected', 'Room Allocation Payment of ' . $data->students->name . ' ( ' . $data->students->rollno . ' ) has been Rejected by ' . $data->staff->name . ' !');
+            $HistoryController->addHistoryHall(Auth::guard('staff')->user()->id, 'Rejected', 'Room Allocation Payment of ' . $data->students->name . ' ( ' . $data->students->rollno . ' ) has been Rejected by ' . $data->staff->name . ' !', $this->hall_id);
             //Saved
             return redirect('staff/payment')->with('danger', 'Payment Data has been rejected!');
         }

@@ -2,24 +2,46 @@
 
 namespace App\Http\Controllers;
 
+use PDF;
 use Carbon\Carbon;
 use App\Models\Food;
+use App\Models\Hall;
 use App\Models\Room;
 use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Student;
 use App\Models\FoodTime;
+use App\Models\RoomIssue;
 use Illuminate\View\View;
 use App\Models\RoomRequest;
+use App\Models\FoodTimeHall;
 use Illuminate\Http\Request;
 use App\Models\AllocatedSeats;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 
 class ProfileController extends Controller
 {
+    protected $hall_id;
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            if (Auth::user()->hall_id != 0 || Auth::user()->hall_id != null) {
+                $this->hall_id = Auth::user()->hall_id;
+                $routeName = $request->route()->getName();
+                $includedRoutes = ['student.myroom', 'student.roomrequest', 'student.roomrequeststore', 'student.roomrequestshow', 'student.roomrequestdestroy', 'student.roomrequestpayment.destroy', 'student.roomrequestpayment', 'student.roomrequestpaymentstore'];
+                if (in_array($routeName, $includedRoutes)) {
+                    if (Auth::user()->hall->status == 0) {
+                        return redirect()->route('student.dashboard')->with('danger', 'This Hall has been Disabled by System Administrator!');
+                    }
+                }
+            }
+            return $next($request);
+        });
+    }
 
     public function index()
     {
@@ -39,7 +61,13 @@ class ProfileController extends Controller
 
 
         $resulttitle = [];
-        $total_food_times = FoodTime::select('id')->where('status', '=', '1')->get();
+        //
+        $dataFoodTime = FoodTimeHall::all()->where('status', '1')->where('hall_id', $this->hall_id);
+        $total_food_times = [];
+        foreach ($dataFoodTime as $dFT) {
+            $total_food_times[] = FoodTime::find($dFT->food_time_id);
+        }
+        //
         $results = [];
         foreach ($total_food_times as $total_food_time) {
             $i = $total_food_time->id;
@@ -62,7 +90,7 @@ class ProfileController extends Controller
         //foodtype
         $food_time = FoodTime::all()->where('status', '=', '1')->where('id', '=', $id)->first();
         //Food Item for search
-        $foods = Food::all()->where('status', '=', '1')->where('food_time_id', '=', $id);
+        $foods = Food::all()->where('status', '=', '1')->where('food_time_id', '=', $id)->where('hall_id', $this->hall_id);
         $food_id_data = [];
         foreach ($foods as $food) {
             $food_id_data[] = $food->id;
@@ -97,8 +125,11 @@ class ProfileController extends Controller
             'user' => $request->user(),
         ]);
     }
-    public function edit(Request $request): View
+    public function edit(Request $request)
     {
+        if (Auth::user()->status == 0) {
+            return redirect()->route('student.profile.view')->with('danger', 'You dont have enough permissions!');
+        }
         return view('profile.partials.edit', [
             'user' => $request->user(),
         ]);
@@ -109,13 +140,16 @@ class ProfileController extends Controller
      */
     public function update(Request $request)
     {
+        if (Auth::user()->status == 0) {
+            return redirect()->route('student.profile.view')->with('danger', 'You dont have enough permissions!');
+        }
         $data = Student::find($request->userid);
         $formFields = $request->validate([
             'name' => 'required',
             'mobile' => 'required',
             'dept' => 'required',
             'session' => 'required',
-            'email' => 'required',
+            // 'email' => 'required',
         ]);
         //If user Given any PHOTO
         if ($request->hasFile('photo')) {
@@ -133,7 +167,10 @@ class ProfileController extends Controller
         }
 
         $data->name = $request->name;
-        $data->email = $request->email;
+        // if ($data->email != $request->email) {
+        //     $data->email_verified_at = null;
+        // }
+        // $data->email = $request->email;
         $data->dept = $request->dept;
         $data->session = $request->session;
         $data->mobile = $request->mobile;
@@ -146,26 +183,6 @@ class ProfileController extends Controller
         return Redirect::route('student.profile.view')->with('success', 'Profile Updated');
     }
 
-    /**
-     * Delete the user's account.
-     */
-    // public function destroy(Request $request): RedirectResponse
-    // {
-    //     $request->validateWithBag('userDeletion', [
-    //         'password' => ['required', 'current-password'],
-    //     ]);
-
-    //     $user = $request->user();
-
-    //     Auth::logout();
-
-    //     $user->delete();
-
-    //     $request->session()->invalidate();
-    //     $request->session()->regenerateToken();
-
-    //     return Redirect::to('/');
-    // }
     //Room Details
     public function myroom()
     {
@@ -177,6 +194,53 @@ class ProfileController extends Controller
             return view('profile.room.myroom', ['data' => $data, 'rooms' => $rooms]);
         }
         return view('profile.room.myroom', ['data' => $data, 'rooms' => $rooms]);
+    }
+    public function roomchange()
+    {
+        $data = AllocatedSeats::all()->where('user_id', '=', Auth::user()->id)->first();
+        $roomchanges = RoomIssue::all()->where('user_id', '=', Auth::user()->id)->where('issue', 'roomchange');
+        if ($data == null) {
+            return redirect()->route('student.dashboard')->with('danger', 'No Room Alloacation Request Found!');
+        }
+        return view('profile.room.roomchange', ['roomchanges' => $roomchanges]);
+    }
+    public function roomleave()
+    {
+        $data = AllocatedSeats::all()->where('user_id', '=', Auth::user()->id)->first();
+        $roomchanges = RoomIssue::all()->where('user_id', '=', Auth::user()->id)->where('issue', 'roomleave');
+        if ($data == null) {
+            return redirect()->route('student.dashboard')->with('danger', 'No Room Alloacation Request Found!');
+        }
+        return view('profile.room.roomleave', ['roomchanges' => $roomchanges]);
+    }
+    public function roomissue(Request $request)
+    {
+        $request->validate([
+            'application' => 'required',
+        ]);
+        $data = AllocatedSeats::all()->where('user_id', '=', Auth::user()->id)->first();
+        if ($data == null) {
+            return redirect()->route('student.dashboard')->with('danger', 'No Room Alloacation Request Found!');
+        }
+        $data2 = RoomIssue::all()->where('user_id', '=', Auth::user()->id)->where('issue', $request->issue)->last();
+        if ($data2 != null) {
+            if ($data2->issue == 'roomchange' && $data2->status < 1) {
+                return redirect()->back()->with('danger', 'You have allready requested! Maximum!');
+            }
+            if ($data2->issue == 'roomleave') {
+                return redirect()->back()->with('danger', 'You have allready requested!');
+            }
+        }
+        $roomIssue = new RoomIssue();
+        $roomIssue->issue = $request->issue;
+        $roomIssue->application = $request->application;
+        $roomIssue->user_id = Auth::user()->id;
+        $roomIssue->allocated_seat_id = $data->id;
+        $roomIssue->hall_id = Auth::user()->hall_id;
+        $roomIssue->status = 0;
+        $roomIssue->flag = 0;
+        $roomIssue->save();
+        return redirect()->back()->with('success', 'Your Application is Submitted!');
     }
     //Room Request
     public function roomrequest()
@@ -190,16 +254,18 @@ class ProfileController extends Controller
         $rooms = Room::all()->where('vacancy', '!=', 0);
         $userid = Auth::user()->id;
         $data = RoomRequest::all()->where('user_id', '=', $userid)->first();
+        $halls = Hall::all()->where('type', Auth::user()->gender);
         $sorryAllocatedSeat = 0;
         if ($data != null) {
             $sorryAllocatedSeat = 1;
         }
-        return view('profile.room.roomrequest', ['rooms' => $rooms, 'sorryAllocatedSeat' => $sorryAllocatedSeat]);
+        return view('profile.room.roomrequest', ['halls' => $halls, 'rooms' => $rooms, 'sorryAllocatedSeat' => $sorryAllocatedSeat]);
     }
     public function roomrequeststore(Request $request)
     {
         $data = new RoomRequest;
         $request->validate([
+            'hall_id' => 'required|not_in:0',
             'banglaname' => 'required',
             'englishname' => 'required',
             'fathername' => 'required',
@@ -227,7 +293,17 @@ class ProfileController extends Controller
             'academic' => 'required',
             'earningproof' => 'required',
             'signature' => 'required',
+            'gpa' => 'required',
+            'ssc' => 'required',
+            'hsc' => 'required',
+            'school' => 'required',
+            'college' => 'required',
+            'meritposition' => 'required',
         ]);
+        if ($request->hall_id == 0) {
+            return redirect()->back()->with('danger', 'Please Select Hall!');
+        }
+        $data->hall_id = $request->hall_id;
         $data->room_id = 0;
         $data->user_id = $request->user_id;
         // New Added
@@ -261,6 +337,13 @@ class ProfileController extends Controller
         $arrayData['semester'] = $request->semester;
         $arrayData['culture'] = $request->culture;
         $arrayData['otisitic'] = $request->otisitic;
+        $arrayData['gpa'] = $request->gpa;
+        $arrayData['meritposition'] = $request->meritposition;
+        $arrayData['ssc'] = $request->ssc;
+        $arrayData['hsc'] = $request->hsc;
+        $arrayData['school'] = $request->school;
+        $arrayData['college'] = $request->college;
+        $arrayData['recommendation'] = 0;
         //If user Given any PHOTO dobsonod , academic , earningproof , signature
         if ($request->hasFile('dobsonod')) {
             $arrayData['dobsonod'] = 'app/public/' . $request->file('dobsonod')->store('HallRequest', 'public');
@@ -277,6 +360,7 @@ class ProfileController extends Controller
         $data->application = json_encode($arrayData);
         //
         $data->status = 3;
+        $data->recommendation = 0;
         $data->flag = 0;
         $data->save();
 
@@ -287,11 +371,12 @@ class ProfileController extends Controller
     {
         $userid = Auth::user()->id;
         $data = RoomRequest::all()->where('user_id', '=', $userid)->first();
-        $application = json_decode($data->application, true);
-        $dataPayment = Payment::all()->where('type', 'roomrequest')->where('student_id', $userid)->first();
+
         // page redirection
         $dataAllocatedSeats = AllocatedSeats::all()->where('user_id', '=', $userid)->first();
         if ($data != null) {
+            $application = json_decode($data->application, true);
+            $dataPayment = Payment::all()->where('type', 'roomrequest')->where('student_id', $userid)->where('service_id', $data->id)->first();
             if ($dataAllocatedSeats != null) {
                 return redirect()->route('student.myroom');
             } else {
@@ -311,7 +396,22 @@ class ProfileController extends Controller
         }
         //
         $data = RoomRequest::find($id);
-        $data->delete();
+
+        if ($data != null) {
+            if ($data->user_id != $userid) {
+                return redirect()->route('student.roomrequestshow')->with('danger', 'Access Denied! Warning!');
+            }
+            $dataPayment = Payment::all()->where('type', 'roomrequest')->where('student_id', $userid)->where('service_id', $data->id)->first();
+            if ($dataPayment != null) {
+                if (File::exists('storage/' . $dataPayment->proof)) {
+                    File::delete('storage/' . $dataPayment->proof);
+                }
+                $dataPayment->delete();
+            }
+            $data->delete();
+        } else {
+            return redirect()->route('student.roomrequestshow')->with('danger', 'Not Found!');
+        }
         return Redirect::to('student/rooms/requestshow')->with('danger', 'Room Alloacation Request has been Deleted!');
     }
     public function roomrequestpaymentdestroy($id)
@@ -332,6 +432,9 @@ class ProfileController extends Controller
         }
         if ($data->status == 'Accepted') {
             return redirect()->route('student.roomrequestshow')->with('danger', 'Access Denied! Payment Allready Accepted!');
+        }
+        if (File::exists('storage/' . $data->proof)) {
+            File::delete('storage/' . $data->proof);
         }
         $data->delete();
         return Redirect::to('student/rooms/requestshow')->with('danger', 'Room Alloacation Request Payment has been Deleted!');
@@ -366,23 +469,70 @@ class ProfileController extends Controller
 
         return redirect()->route('student.roomrequestshow')->with('success', 'Room Alloacation Request has been added Successfully!');
     }
+    //Recommendation
+    public function roomrequestrecommendation()
+    {
+        $userid = Auth::user()->id;
+        $data = RoomRequest::all()->where('user_id', '=', $userid)->first();
+        if ($data == null) {
+            return redirect()->route('student.dashboard')->with('danger', 'Not Found!');
+        }
+        $application = json_decode(Auth::user()->roomrequest->application, true);
+        $dataPayment = $application['recommendation'];
+        // IF User has Room Allocation
+        if ($dataPayment != 0) {
+            return redirect()->route('student.roomrequestshow')->with('danger', 'Existing Recommendation Found!');
+        }
+        return view('profile.room.roomrequestrecom', ['dataPayment' => $dataPayment, 'data' => $data]);
+    }
+    public function roomrequestrecommendationstore(Request $request)
+    {
+        $request->validate([
+            'recommendation' => 'required',
+        ]);
+        $userid = Auth::user()->id;
+        $data = RoomRequest::all()->where('user_id', '=', $userid)->first();
+        $application = json_decode(Auth::user()->roomrequest->application, true);
+        $application['recommendation'] = 'app/public/' . $request->file('recommendation')->store('Recommendation', 'public');
+        $jsonData = json_encode($application);
+        $data->application = $jsonData;
+        $data->recommendation = 1;
+        $data->save();
+        return redirect()->route('student.roomrequestshow')->with('success', ' Recommendation Uploaded!');
+    }
+    public function roomrequestrecommendationdestroy()
+    {
+        $userid = Auth::user()->id;
+        $data = RoomRequest::all()->where('user_id', '=', $userid)->first();
+        $application = json_decode(Auth::user()->roomrequest->application, true);
+        if (File::exists('storage/' . $application['recommendation'])) {
+            File::delete('storage/' . $application['recommendation']);
+        }
+        $application['recommendation'] = 0;
+        $jsonData = json_encode($application);
+        $data->application = $jsonData;
+        $data->recommendation = 0;
+        $data->save();
+        return redirect()->route('student.roomrequestshow')->with('success', ' Recommendation Cleared!');
+    }
     // Add Payment
     public function roomrequestpayment()
     {
         $userid = Auth::user()->id;
         $data = RoomRequest::all()->where('user_id', '=', $userid)->first();
-        $dataPayment = Payment::all()->where('type', 'roomrequest')->where('student_id', $userid)->first();
+        $dataPayment = Payment::all()->where('type', 'roomrequest')->where('student_id', $userid)->where('service_id', $data->id)->first();
         // IF User has Room Allocation
         if ($dataPayment != null) {
             return redirect()->route('student.roomrequestshow');
         }
-        return view('profile.room.roomrequestpayment', ['dataPayment' => $dataPayment]);
+        return view('profile.room.roomrequestpayment', ['dataPayment' => $dataPayment, 'data' => $data]);
     }
     public function roomrequestpaymentstore(Request $request)
     {
         $data = new Payment;
         $request->validate([
             'proof' => 'required',
+            'mobileno' => 'required|regex:/^[0-9]+$/',
             'amount' => 'required',
         ]);
         $imgPath = $request->proof->store('PaymentSlips', 'public');
@@ -398,6 +548,8 @@ class ProfileController extends Controller
         $data->currency = 'BDT';
         $data->type = 'roomrequest';
         $data->phone = $request->mobileno;
+        $data->service_id = $request->service_id;
+        $data->hall_id = $request->hall_id;
         $data->save();
 
         return redirect()->route('student.roomrequestshow')->with('success', 'Room Alloacation Request Payment has been added Successfully!');
@@ -432,5 +584,16 @@ class ProfileController extends Controller
         } else {
             return Redirect::back()->with('danger', "Current Password Didn't Match");
         }
+    }
+    public function generatePDF(string $rollno)
+    {
+        $mpdf = new \Mpdf\Mpdf(([
+            'default_font_size' => 12,
+            'default_font' => 'nikosh'
+        ]));
+        $mpdf->showImageErrors = true;
+        $html = view('profile.room.rr')->render();
+        $mpdf->WriteHTML($html);
+        return $mpdf->output($rollno . ' - RoomRequest.pdf', 'D');
     }
 }

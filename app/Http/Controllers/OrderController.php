@@ -4,16 +4,35 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Food;
+use App\Models\User;
 use App\Models\Order;
 use App\Models\Balance;
+use App\Models\Student;
 use App\Models\FoodTime;
 use App\Models\MealToken;
-// use Illuminate\Support\Carbon;
+use App\Models\FoodTimeHall;
 use Illuminate\Http\Request;
+use App\Models\AutoFoodOrder;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
+    protected $hall_id;
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->hall_id = Auth::user()->hall_id;
+            if ($this->hall_id == 0 || $this->hall_id == null) {
+                return redirect()->route('student.dashboard')->with('danger', 'Please Get Hall Room Allocation to get access!');
+            }
+            if (Auth::user()->hall_id != 0 || Auth::user()->hall_id != null) {
+                if (Auth::user()->hall->status == 0) {
+                    return redirect()->route('student.dashboard')->with('danger', 'This Hall has been Disabled by System Administrator!');
+                }
+            }
+            return $next($request);
+        });
+    }
     /**
      * Display a listing of the resource.
      */
@@ -34,15 +53,15 @@ class OrderController extends Controller
             $remainingTime = 0;
         }
         //
-        $dataFoodTime = FoodTime::all()->where('status', '=', '1');
+        $dataFoodTime = FoodTimeHall::all()->where('status', '1')->where('hall_id', $this->hall_id);
         $FoodTime = [];
         foreach ($dataFoodTime as $dFT) {
-            $FoodTime[] = $dFT;
+            $FoodTime[] = FoodTime::find($dFT->food_time_id);
         }
         $foods = [];
         foreach ($FoodTime as $ft) {
-            $dataFoodTime = Food::all()->where('status', '=', '1')->where('food_time_id', '=', $ft->id);
-            $foods[] = $dataFoodTime;
+            $dataFood = Food::all()->where('status', '=', '1')->where('food_time_id', '=', $ft->id)->where('hall_id', $this->hall_id);
+            $foods[] = $dataFood;
         }
 
 
@@ -59,9 +78,13 @@ class OrderController extends Controller
         $this->checkBalance($userid);
         //Check Food Time exist or not
         $food_time_id = $id;
-        $food_time = FoodTime::all()->where('status', '=', '1')->where('id', '=', $food_time_id)->first();
+        $food_time_hall = FoodTimeHall::all()->where('status', '=', '1')->where('food_time_id', '=', $food_time_id)->where('hall_id', $this->hall_id)->first();
+        if ($food_time_hall == null) {
+            return redirect()->route('student.order.index')->with('danger', 'Food Time is Disabled!');
+        }
+        $food_time = FoodTime::find($food_time_hall->food_time_id);
         if ($food_time == null) {
-            return redirect()->route('student.order.index')->with('danger', 'Not Found');
+            return redirect()->route('student.order.index')->with('danger', 'Select Valid Food Menu');
         }
         //checking if its tommorow 
         $currentDate = Carbon::now(); // get current date and time
@@ -71,7 +94,7 @@ class OrderController extends Controller
             $nextDate2 = $currentDate->addDay(); // add one day to current date
             $nextDate = $nextDate2->addDay(); // add one day to current date
         } else {
-            // Launch and Dinner 1 Day
+            // Lunch and Dinner 1 Day
             $nextDate = $currentDate->addDay(); // add one day to current date
         }
         //
@@ -98,7 +121,7 @@ class OrderController extends Controller
             //check time if it is less then 10 PM
             if ($current_time < "22:00:00") {
                 if ($food_time != null) {
-                    $food = Food::all()->where('status', '=', '1')->where('food_time_id', '=', $food_time_id);
+                    $food = Food::all()->where('status', '=', '1')->where('food_time_id', '=', $food_time_id)->where('hall_id', $this->hall_id);
                     return view('profile.order.create', ['food_time' => $food_time, 'food' => $food, 'nextDate' => $nextDate]);
                 } else {
                     return redirect()->route('student.order.foodmenu')->with('danger', 'Select Valid Food Menu');
@@ -110,7 +133,7 @@ class OrderController extends Controller
             //check time if it is less then 10 PM
             if ($current_time < "22:00:00") {
                 if ($food_time != null) {
-                    $food = Food::all()->where('status', '=', '1')->where('food_time_id', '=', $food_time_id);
+                    $food = Food::all()->where('status', '=', '1')->where('food_time_id', '=', $food_time_id)->where('hall_id', $this->hall_id);
                     return view('profile.order.create', ['food_time' => $food_time, 'food' => $food, 'dataquantity' => $dataquantity, 'nextDate' => $nextDate]);
                 } else {
                     return redirect()->route('student.order.foodmenu')->with('danger', 'Select Valid Food Menu');
@@ -131,7 +154,7 @@ class OrderController extends Controller
     {
         $userid = Auth::user()->id;
         // Checks Balance
-        $dataBalance = Balance::Find($userid);
+        $dataBalance = Balance::all()->where('student_id', $userid)->first();
         if ($dataBalance->balance_amount <= 50) {
             return redirect()->route('student.balance.index')->with('danger', 'Please! Add Balance First.');
         }
@@ -142,7 +165,8 @@ class OrderController extends Controller
             return redirect()->back()->with('danger', 'Please! Select Quantity!');
         } else {
             $food_time_id = $request->food_time_id;
-            $foodprice = FoodTime::all()->where('status', '=', '1')->where('id', '=', $food_time_id)->first();
+            $food_item = $request->food_item_id;
+            $food_item_data = Food::find($food_item);
             $request->validate([
                 'order_type' => 'required',
                 'food_item_id' => 'required',
@@ -153,9 +177,9 @@ class OrderController extends Controller
             $data->order_type = $request->order_type;
             $data->food_item_id = $request->food_item_id;
             $data->quantity = $request->quantity;
-            $data->price = $foodprice->price * $data->quantity;
+            $data->price = $food_item_data->price * $data->quantity;
             $data->date = $request->date;
-
+            $data->hall_id = $this->hall_id;
             $givendate = $data->date;
             //Suhr Ectra Rule
             if ($food_time_id == 3) {
@@ -172,7 +196,7 @@ class OrderController extends Controller
                 $this->deductBalance($userid, $dataPrice);
                 //Generating Meal Token
                 $MealTokenController = new MealTokenController();
-                $MealTokenController->generateTokenAuto($data->id);
+                $MealTokenController->generateTokenAuto($data->id, $this->hall_id);
             } else {
                 return redirect()->route('student.order.index')->with('danger', 'Please! Select Correct Date');
             }
@@ -221,13 +245,14 @@ class OrderController extends Controller
     public function deductBalance(string $userid, string $dataPrice)
     {
         // Deduct From Balance
-        $dataBalance = Balance::Find($userid);
+        $dataBalance = Balance::find($userid);
         if ($dataBalance != null) {
             $dataBalanceAmount = $dataBalance->balance_amount;
             $dataBalanceAmount = $dataBalanceAmount - $dataPrice;
 
             //Deducing Balance
             $dataBalance->balance_amount = $dataBalanceAmount;
+            $dataBalance->last_transaction_date = Carbon::now();
             $dataBalance->save();
         } else {
             return redirect('student/order')->with('danger', 'Please! Add Balance First');
@@ -240,7 +265,10 @@ class OrderController extends Controller
         if ($data == null) {
             return redirect()->route('student.order.index')->with('danger', 'Not Found');
         }
-        $foodItem = Food::all()->where('id', '=', $data->food_item_id)->first();
+        if ($data->student_id != Auth::user()->id) {
+            return redirect()->route('student.dashboard')->with('danger', ' Unauthorized Access!');
+        }
+        $foodItem = Food::all()->where('id', '=', $data->food_item_id)->where('hall_id', $this->hall_id)->first();
         $tokendata = MealToken::all()->where('order_id', '=', $id)->first();
         //Check Date is Valid To Delete
         $validDate = $this->isDateValid2Cancel($data->date, $foodItem->food_time_id);
@@ -296,21 +324,30 @@ class OrderController extends Controller
      */
     public function edit(string $id)
     {
+        $userid = Auth::user()->id;
         //
         $currentDate = Carbon::now(); // get current date and time
         $current_Date = $currentDate->setTimezone('GMT+6')->format('Y-m-d'); // 2023-03-17
         $current_time = $currentDate->setTimezone('GMT+6')->format('Y-m-d H:i:s'); // "00:10:15"
         $nextDate = $currentDate->addDay(); // add one day to current date
         $nextDate = $nextDate->setTimezone('GMT+6')->format('Y-m-d'); // 2023-03-17
-        $data = Order::all()->where('id', '=', $id)->first();
+        //
+        $data = Order::find($id);
+        if ($data == null) {
+            return redirect()->route('student.order.index')->with('danger', 'Not Found');
+        }
+        if ($data->student_id != $userid) {
+            return redirect()->route('student.dashboard')->with('danger', ' Unauthorized Access!');
+        }
+        //
         $TokenDate = $data->date;
         $TokenTime = $data->date . " 22:00:00";
         if ($TokenDate <= $nextDate) {
             return redirect('student/order')->with('danger', 'You cannot edit anymore for this Order!Day Passed!');
         } else {
             if ($current_time < $TokenTime) {
-                $foodItem = Food::all()->where('id', '=', $data->food_item_id)->first();
-                $foods = Food::all()->where('status', '=', '1')->where('food_time_id', '=', $foodItem->food_time_id);
+                $foodItem = Food::all()->where('id', '=', $data->food_item_id)->where('hall_id', $this->hall_id)->first();
+                $foods = Food::all()->where('status', '=', '1')->where('hall_id', $this->hall_id)->where('food_time_id', '=', $foodItem->food_time_id);
                 return view('profile.order.edit', ['data' => $data, 'foods' => $foods]);
             } else {
                 return redirect('student/order')->with('danger', 'You cannot edit anymore for this Order! Time Passed!');
@@ -336,7 +373,7 @@ class OrderController extends Controller
             $data->food_item_id = $request->food_item_id;
             $data->save();
             //Update in Meal Token
-            $food = Food::all()->where('id', '=', $request->food_item_id)->first();
+            $food = Food::all()->where('id', '=', $request->food_item_id)->where('hall_id', $this->hall_id)->first();
             $data2 = MealToken::all()->where('order_id', '=', $id)->first();
             $data2->food_name = $food->food_name;
             $data2->save();
@@ -379,30 +416,35 @@ class OrderController extends Controller
      */
     public function destroy(string $id)
     {
-        //Id 
         $userid = Auth::user()->id;
         //
-        $data = Order::all()->where('id', '=', $id)->first();
-        $foodItem = Food::all()->where('id', '=', $data->food_item_id)->first();
+        $data = Order::find($id);
         if ($data == null) {
             return redirect()->route('student.order.index')->with('danger', 'Not Found');
-        }
-        //Check Date is Valid To Delete
-        $validDate = $this->isDateValid2Cancel($data->date, $foodItem->food_time_id);
-        //
-        if (!$validDate) {
-            return redirect('student/order')->with('danger', 'You cannot edit anymore for this Order!Day Passed!');
         } else {
-            //Food Price
-            $dataPrice = $data->price;
-            //Add Deducted Balance
-            $this->AddBalance($userid, $dataPrice);
-            //Meal Token Delete
-            $MealToken = MealToken::all()->where('order_id', '=', $id)->first();
-            $MealToken->delete();
-            //Order Delete
-            $data->delete();
-            return redirect()->route('student.order.index')->with('success', 'Order Deleted!');
+            if ($data->student_id != $userid) {
+                return redirect()->route('student.dashboard')->with('danger', ' Unauthorized Access!');
+            }
+            $foodItem = Food::all()->where('id', '=', $data->food_item_id)->where('hall_id', $this->hall_id)->first();
+            //Check Date is Valid To Delete
+            $validDate = $this->isDateValid2Cancel($data->date, $foodItem->food_time_id);
+            //
+            if (!$validDate) {
+                return redirect('student/order')->with('danger', 'You cannot edit anymore for this Order!Day Passed!');
+            } else {
+                //Food Price
+                $dataPrice = $data->price;
+                //Add Deducted Balance
+                $this->AddBalance($userid, $dataPrice);
+                //Meal Token Delete
+                $MealToken = MealToken::all()->where('order_id', '=', $id)->first();
+                if ($MealToken != null) {
+                    $MealToken->delete();
+                }
+                //Order Delete
+                $data->delete();
+                return redirect()->route('student.order.index')->with('success', 'Order Deleted!');
+            }
         }
     }
     //Add Balance
@@ -435,18 +477,23 @@ class OrderController extends Controller
         //
         $userid = Auth::user()->id;
         // Checks Balance
-        $dataBalance = Balance::Find($userid);
+        $dataBalance = Balance::all()->where('student_id', $userid)->first();
         if ($dataBalance->balance_amount <= 50) {
             return redirect()->route('student.balance.index')->with('danger', 'Please! Add Balance First.');
         }
         //
         $food_time_id = $id;
-        $food_time = FoodTime::all()->where('status', '=', '1')->where('id', '=', $food_time_id)->first();
+        $food_time_hall = FoodTimeHall::all()->where('status', '=', '1')->where('food_time_id', '=', $food_time_id)->where('hall_id', $this->hall_id)->first();
+        if ($food_time_hall == null) {
+            return redirect()->route('student.order.index')->with('danger', 'Food Time is Disabled!');
+        }
+        $food_time = FoodTime::find($food_time_hall->food_time_id);
+        if ($food_time == null) {
+            return redirect()->route('student.order.index')->with('danger', 'Select Valid Food Menu');
+        }
         if ($food_time != null) {
-            $food = Food::all()->where('status', '=', '1')->where('food_time_id', '=', $food_time_id);
+            $food = Food::all()->where('status', '=', '1')->where('hall_id', $this->hall_id)->where('food_time_id', '=', $food_time_id);
             return view('profile.order.createAdvance', ['food_time' => $food_time, 'food' => $food, 'nextDate' => $nextDate3]);
-        } else {
-            return redirect()->route('student.order.foodmenu')->with('danger', 'Select Valid Food Menu');
         }
     }
     public function storeOrderAdvance(Request $request)
@@ -468,6 +515,9 @@ class OrderController extends Controller
         $advanceDate = $request->date;
         $food_time_id = $request->food_time_id;
         $food_time = FoodTime::all()->where('status', '=', '1')->where('id', '=', $food_time_id)->first();
+
+        $food_item = $request->food_item_id;
+        $food_item_data = Food::find($food_item);
         if ($request->food_item_id == 0) {
             return redirect()->back()->with('danger', 'Please!Select A Food !');
         } elseif ($request->quantity == 0) {
@@ -495,13 +545,13 @@ class OrderController extends Controller
             if ($dataquantity < 2) {
 
                 $food_time_id = $request->food_time_id;
-                $foodprice = FoodTime::all()->where('status', '=', '1')->where('id', '=', $food_time_id)->first();
+                // $foodprice = FoodTimeHall::all()->where('food_time_id', '=', $food_time_id)->where('hall_id', $this->hall_id)->first();
                 $data = new Order;
                 $userid = Auth::user()->id;
                 $data->student_id = $userid;
                 $data->order_type = $request->order_type;
                 $data->food_item_id = $request->food_item_id;
-
+                $data->hall_id = $this->hall_id;
                 //Setting Quantity for security
                 $order_quantity = $request->quantity;
                 if ($dataquantity == 1) {
@@ -509,7 +559,7 @@ class OrderController extends Controller
                 }
                 $data->quantity = $order_quantity;
                 // Quantity
-                $data->price = $foodprice->price * $data->quantity;
+                $data->price = $food_item_data->price * $data->quantity;
                 $data->date = $request->date;
                 $data->save();
 
@@ -518,7 +568,7 @@ class OrderController extends Controller
                 $this->deductBalance($userid, $dataPrice);
                 //Generating Meal Token
                 $MealTokenController = new MealTokenController();
-                $MealTokenController->generateTokenAuto($data->id);
+                $MealTokenController->generateTokenAuto($data->id, $this->hall_id);
 
 
                 return redirect()->route('student.order.index')->with('success', 'Advance Meal Order placed Successfully for ' . $advanceDate . ' And Token Generated Successfully!');
@@ -526,5 +576,71 @@ class OrderController extends Controller
                 return redirect()->route('student.order.foodmenu')->with('danger', 'You have allready ordered maximum  ' . $advanceDate . ' for ' . $food_time->title);
             }
         }
+    }
+    public function autoOrder()
+    {
+        //
+        $userid = Auth::user()->id;
+        $foods = Food::all()->where('hall_id', $this->hall_id)->where('status', 1);
+        return view('profile.order.autoorder', ['foods' => $foods]);
+    }
+    public function autoOrderOn(Request $request)
+    {
+        //
+        $userid = Auth::user()->id;
+        $data = new AutoFoodOrder();
+        $request->validate([
+            'user_id' => 'required',
+            'hall_id' => 'required',
+        ]);
+        $data->user_id = $request->user_id;
+        $data->hall_id = $request->hall_id;
+        $data->status = 1;
+        $arrayData['1'] = 0;
+        $arrayData['2'] = 0;
+        $arrayData['3'] = 0;
+        $arrayData['4'] = 0;
+        $arrayData['5'] = 0;
+        $arrayData['6'] = 0;
+        $arrayData['7'] = 0;
+        $arrayData['8'] = 0;
+        $arrayData['9'] = 0;
+        $arrayData['10'] = 0;
+        $arrayData['11'] = 0;
+        $arrayData['12'] = 0;
+        $arrayData['13'] = 0;
+        $arrayData['14'] = 0;
+        $data->orders = json_encode($arrayData);
+        $data->save();
+        return redirect()->route('student.order.autoorder')->with('success', 'Auto Order Feature Turned on!');
+    }
+    public function autoOrderUpdate(Request $request, $id)
+    {
+        //
+        $userid = Auth::user()->id;
+        $request->validate([
+            'status' => 'required',
+        ]);
+        $data = AutoFoodOrder::find($id);
+        $data->status = $request->status;
+        if ($request->status != 0 && $request->old_status == $request->status) {
+            $arrayData['1'] = $request->saturday;
+            $arrayData['2'] = $request->sunday;
+            $arrayData['3'] = $request->monday;
+            $arrayData['4'] = $request->tuesday;
+            $arrayData['5'] = $request->wednesday;
+            $arrayData['6'] = $request->thursday;
+            $arrayData['7'] = $request->friday;
+            $arrayData['8'] = $request->saturdayn;
+            $arrayData['9'] = $request->sundayn;
+            $arrayData['10'] = $request->mondayn;
+            $arrayData['11'] = $request->tuesdayn;
+            $arrayData['12'] = $request->wednesdayn;
+            $arrayData['13'] = $request->thursdayn;
+            $arrayData['14'] = $request->fridayn;
+            $data->orders = json_encode($arrayData);
+        }
+        $data->save();
+        return redirect()->route('student.order.autoorder')->with('success', 'Auto Order Data Updated!');
     }
 }

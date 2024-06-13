@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Food;
+use App\Models\Hall;
 use App\Models\FoodTime;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\FoodTimeHall;
 
 class FoodController extends Controller
 {
@@ -26,7 +28,8 @@ class FoodController extends Controller
     {
         //
         $food_time = FoodTime::all()->where('status', '=', '1');
-        return view('admin.food.create', ['food_time' => $food_time]);
+        $halls = Hall::all()->where('status', '=', '1');
+        return view('admin.food.create', ['food_time' => $food_time, 'halls' => $halls]);
     }
 
     /**
@@ -38,12 +41,18 @@ class FoodController extends Controller
         $data = new Food;
         $request->validate([
             'food_name' => 'required',
-            'food_time_id' => 'required',
-            'status' => 'required',
+            'food_time_id' => 'required|not_in:0',
+            'hall_id' => 'required|not_in:0',
         ]);
         $data->food_time_id = $request->food_time_id;
         $data->food_name = $request->food_name;
-        $data->status = $request->status;
+        $data->status = 0;
+        $data->hall_id = $request->hall_id;
+        //For food_time_hall
+        $FoodTimeHall = FoodTimeHall::all()->where('food_time_id', $request->food_time_id)->where('hall_id', $request->hall_id)->first();
+        $data->foodtimehall = $FoodTimeHall->id;
+        //For food_time_hall
+        $data->price = $FoodTimeHall->price;
         $data->save();
 
         return redirect('admin/food')->with('success', 'Food Item Data has been added Successfully!');
@@ -74,6 +83,11 @@ class FoodController extends Controller
         if ($food_time == null || $data == null) {
             return redirect()->route('admin.food.index')->with('danger', 'Not Found!');
         }
+        if ($data->hall != null) {
+            if ($data->hall->enable_delete == 0) {
+                return redirect()->route('admin.food.index')->with('danger', 'Not Permitted!');
+            }
+        }
         return view('admin.food.edit', ['data' => $data, 'food_time' => $food_time]);
     }
 
@@ -85,11 +99,13 @@ class FoodController extends Controller
         //
         $request->validate([
             'food_name' => 'required',
-            'food_time_id' => 'required',
+            'price' => 'required',
+            'food_time_id' => 'required|not_in:0',
         ]);
         $data = Food::find($id);
         $data->food_time_id = $request->food_time_id;
         $data->food_name = $request->food_name;
+        $data->price = $request->price;
         $data->save();
         return redirect('admin/food')->with('success', 'Food Item Data has been updated Successfully!');
     }
@@ -101,19 +117,30 @@ class FoodController extends Controller
     {
 
         return redirect()->route('admin.food.index')->with('danger', 'Not Permitted!');
-
         // $data = Food::find($id);
         // if ($data == null) {
         //     return redirect()->route('admin.food.index')->with('danger', 'Not Found!');
         // }
+        // if ($data->hall->enable_delete != 1) {
+        //     return redirect()->route('admin.food.index')->with('danger', 'Not Permitted!');
+        // }
+        // if ($data->status == 1) {
+        //     return redirect()->route('admin.food.index')->with('danger', 'Not Permitted!');
+        // }
         // $data->delete();
-        // return redirect('admin/food')->with('danger', 'Data has been deleted Successfully!');
+        // return redirect()->route('admin.food.index')->with('danger', 'Data has been deleted Successfully!');
     }
     public function active($id)
     {
         $data = Food::find($id);
+
         if ($data == null) {
             return redirect()->route('admin.food.index')->with('danger', 'Not Found!');
+        }
+        if ($data->hall != null) {
+            if ($data->hall->enable_delete == 0) {
+                return redirect()->route('admin.food.index')->with('danger', 'Not Permitted!');
+            }
         }
         $dataActive = FoodTime::find($data->food_time_id);
         if ($dataActive->status == 1) {
@@ -129,6 +156,11 @@ class FoodController extends Controller
         $data = Food::find($id);
         if ($data == null) {
             return redirect()->route('admin.food.index')->with('danger', 'Not Found!');
+        }
+        if ($data->hall != null) {
+            if ($data->hall->enable_delete == 0) {
+                return redirect()->route('admin.food.index')->with('danger', 'Not Permitted!');
+            }
         }
         $data->status = 0;
         $data->save();

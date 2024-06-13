@@ -18,7 +18,7 @@ class PaymentEmail extends Mailable
      *
      * @return void
      */
-    public function __construct(private $body, private $objective, public $subject)
+    public function __construct(private $body, private $objective, public $subject, public $title)
     {
         //
     }
@@ -44,7 +44,7 @@ class PaymentEmail extends Mailable
     {
         return new Content(
             view: 'mail.payment-email',
-            with: ['body' => $this->body, 'objective' => $this->objective],
+            with: ['body' => $this->body, 'objective' => $this->objective, 'title' => $this->title],
         );
     }
 }

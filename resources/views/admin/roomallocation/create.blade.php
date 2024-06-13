@@ -11,14 +11,13 @@
             <a href="{{ url('admin/roomallocation') }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h3>
         </div>
         <div class="card-body">
-            
-            <div class="table-responsive">
-                @if ($errors->any())
+            @if ($errors->any())
                 @foreach ($errors->all() as $error)
-                   <p class="text-danger"> {{ $error }} </p>
+                    <div class="bg-danger p-1 text-white">{{$error}}</div>
                 @endforeach
-                @endif
-            <form method="POST" action="{{ route('admin.roomallocation.store') }}" enctype="multipart/form-data">
+            @endif
+            <div class="table-responsive">
+            <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('admin.roomallocation.store') }}" enctype="multipart/form-data">
                 @csrf
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <tbody>
@@ -51,6 +50,7 @@
 
                     <tr>
                         <td colspan="2">
+                            <input type="hidden" name="hall_id" value="{{ $hall_id }}">
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </td>
                     </tr>

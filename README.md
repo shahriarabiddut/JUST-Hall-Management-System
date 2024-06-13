@@ -1,4 +1,4 @@
-<p align="center"><a href="https://JustHallAutomation.com" target="_blank"><img src="https://raw.githubusercontent.com/JustHallAutomation/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/JustHallAutomation-logolockup-cmyk-red.svg" width="400" alt="JustHallAutomation Logo"></a></p>
+<p align="center"><a href="https://residenthalls.just.edu.bd" target="_blank"><img src="https://residenthalls.just.edu.bd/img/just.jpg" width="400" alt="JustHallAutomation Logo"></a></p>
 
 <p align="center">
 <a href="https://github.com/JustHallAutomation/framework/actions"><img src="https://github.com/JustHallAutomation/framework/workflows/tests/badge.svg" alt="Build Status"></a>
@@ -19,9 +19,9 @@ php artisan storage:link
 
 php artisan send:sms
 
-## Extension Enable
+## Larvel and PHP version
 
-sockets
+Laravel 10.x and PHP 8.2^
 
 ## About Just Hall Automation
 
@@ -29,7 +29,7 @@ The traditional manual processes in halls can be time-consuming, prone to errors
 
 ## Project phase Just Hall Automation
 
-1.  Multi Auth Complete
+    1.  Multi Auth Complete
     Admin , Staff & User
     Larvel Breeze
     Email Verification Enabled for user
@@ -67,6 +67,33 @@ The traditional manual processes in halls can be time-consuming, prone to errors
     3.2 QR code added on Meal Tokens
     3.2 Live QR code scanner added for Meal Tokens to validate
 
+## Time Scheduler using dot Bat File
+
+1.  cd /d "directroy"
+    php artisan app:deduct-balance-hall
+
+2.  cd /d "directroy"
+    php artisan app:process-daily-order
+
+## dotEnv
+
+SSLCommerz
+SSLCZ_STORE_ID=
+SSLCZ_STORE_PASSWORD=
+SSLCZ_TESTMODE=true # set false when using live store id
+IS_LOCALHOST=true
+
+## SMTP
+
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=test@gmail.com
+MAIL_PASSWORD=AppPassword
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS="test@gmail.com"
+MAIL_FROM_NAME="${APP_NAME}"
+
 ## JustHallAutomation Sponsors
 
 CSE,Jashore University of Science And Technology
@@ -75,6 +102,7 @@ CSE,Jashore University of Science And Technology
 
 -   [Dr. Syed Md. Galib - Professor](https://just.edu.bd/t/smg) - ** Supervisor **
 -   [Mostafijur Rahman Akhond - Assistant Professor](https://just.edu.bd/t/mra) - ** Co-Supervisor **
+-   [Abu Rafe Md Jamil - Lecturer](https://just.edu.bd/t/armj) - ** Co-Supervisor **
 
 ## License
 

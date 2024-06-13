@@ -18,8 +18,7 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h3 class="m-0 font-weight-bold text-primary">Room Type 
-            <a href="{{ route('staff.roomtype.create') }}" class="float-right btn btn-success btn-sm" >Add New Type</a> </h3>
+            <h3 class="m-0 font-weight-bold text-primary">Room Type</h3>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -28,9 +27,6 @@
                         <tr>
                             <th>#</th>
                             <th>Title</th>
-                            <th>Details</th>
-                            <th>Price</th>
-                            <th>Images</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -38,9 +34,6 @@
                         <tr>
                             <th>#</th>
                             <th>Title</th>
-                            <th>Details</th>
-                            <th>Price</th>
-                            <th>Images</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
@@ -52,14 +45,8 @@
                         <tr>
                             <td>{{ ++$key }}</td>
                             <td>{{ $d->title }}</td>
-                            <td>{{ $d->details }}</td>
-                            <td>{{ $d->price }}</td>
-                            <td>{{ count($d->roomtypeimages) }}</td>
-                            
                             <td class="text-center">
-                                <a href="{{ url('staff/roomtype/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
-                                <a href="{{ url('staff/roomtype/'.$d->id.'/edit') }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a>
-                                <a onclick="return confirm('Are You Sure?')" href="{{ url('staff/roomtype/'.$d->id.'/delete') }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                <a href="{{ url('staff/roomtype/'.$d->id) }}" class="btn btn-info btn-sm" title="View Data"><i class="fa fa-eye"></i></a></a>
                             </td>
 
                         </tr>

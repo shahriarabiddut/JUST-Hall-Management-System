@@ -17,11 +17,7 @@ class User extends Authenticatable  implements MustVerifyEmail
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+    protected $fillable = ['rollno', 'name', 'email', 'password', 'dept', 'session', 'hall_id'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -47,5 +43,21 @@ class User extends Authenticatable  implements MustVerifyEmail
     function allocated_seat()
     {
         return $this->belongsTo(AllocatedSeats::class, 'user_id');
+    }
+    function hall()
+    {
+        return $this->belongsTo(Hall::class, 'hall_id');
+    }
+    function roomrequest()
+    {
+        return $this->hasOne(RoomRequest::class, 'user_id');
+    }
+    function allocatedRoom()
+    {
+        return $this->hasOne(AllocatedSeats::class, 'user_id');
+    }
+    function autoOrder()
+    {
+        return $this->hasOne(AutoFoodOrder::class, 'user_id');
     }
 }

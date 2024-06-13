@@ -1,6 +1,6 @@
 @extends('staff/layout')
 @section('title', 'Orders ')
-
+<script>let scanningEnabled = 1;</script>
 @section('content')
 
 
@@ -18,49 +18,69 @@
             @endif
             <!-- Session Messages Ends -->
 
-@if ($token==null)
+
+
 <div class="card shadow mb-2">
     <div class="card-header py-3">
-        <h3 class="m-0 font-weight-bold text-primary d-inline" >Enter Meal Token No</h3>
+        <h3 class="m-0 font-weight-bold text-primary d-inline" >Scan QR Code Again</h3>
     </div>
     <div class="card-body">
         <div class="table-responsive">
-            <form method="POST" action="{{ route('staff.orders.qrcodescan') }}" enctype="multipart/form-data">
-                @csrf
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <tbody>
-                    <tr>
-                        <th>Token Number<span class="text-danger">*</span></th>
-                        <td><input required name="token_number" type="text" class="form-control"></td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </form>
-        </div>
-    </div>
-</div>
-<div class="card shadow mb-2">
-    <div class="card-header py-3">
-        <h3 class="m-0 font-weight-bold text-primary d-inline" >Scan QR Code</h3>
-    </div>
-    <div class="card-body">
-        <div class="table-responsive">
-            <div class="section">
-                <div id="my-qr-reader">
-                </div>
+            
+            <div class="container">
+        <h1>Scan QR Codes</h1>
+        <div class="section">
+            <div id="my-qr-reader">
             </div>
+        </div>
+    </div>
+    <script src="{{ asset('js/html5qrcode.min.js') }}"></script>
+        <script >
+
+function domReady(fn) {
+	if (
+		document.readyState === "complete" ||
+		document.readyState === "interactive"
+	) {
+		setTimeout(fn, 1000);
+	} else {
+		document.addEventListener("DOMContentLoaded", fn);
+	}
+}
+
+domReady(function () {
     
-        <script src="{{ asset('js/html5qrcode.min.js') }}"></script>
-        <script src="{{ asset('js/qrcode.js') }}"></script>
+	// If found you qr code
+    if (scanningEnabled) {
+	function onScanSuccess(decodeText, decodeResult) {
+	    // Assuming the variable is part of the current URL
+        let myVariable = "/" + decodeText;
+        // Get the current URL
+        let currentURL = window.location.href;
+        // Concatenate the variable to the current URL
+        let newURL = "{{ route('staff.orders.scan') }}" + myVariable;
+        if (scanningEnabled) {
+            window.location.href = newURL;
+            alert("Scanned Successfully : " + decodeText, decodeResult);
+        scanningEnabled = 0;
+        }
+        scanningEnabled = 0;
+	}
+}
+
+	let htmlscanner = new Html5QrcodeScanner(
+		"my-qr-reader",
+		{ fps: 10, qrbos: 250 }
+	);
+	htmlscanner.render(onScanSuccess);
+});
+
+        </script>
+            
         </div>
     </div>
 </div>
-@else
+@if ($token!=null)
 @php $date = strtotime($token->date); $tokenDate = date("F j, Y", $date);; @endphp
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
@@ -89,8 +109,8 @@
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <table class="table table-bordered" width="100%">
                     <tr>
-                        <th width="60%">Meal Type</th>
-                        <td width="40%">{{ $token->meal_type }}</td>
+                        <th width="40%">Meal Type</th>
+                        <td width="60%">{{ $token->meal_type }}</td>
                     </tr>
                     <tr>
                         <th>Meal</th>
@@ -105,22 +125,18 @@
                         <td>{{ $token->quantity }}</td>
                     </tr>
                     <tr>
-                        <th>Validity Update Time</th>
+                        <th>Update Status Time</th>
                         <td>
                             @if ($token->created_at==$token->updated_at)
                                 N/A
                             @else
-                                {{ $token->updated_at }}
+                                {{ $token->updated_at->format('F j, Y') }}
                             @endif
                             </td>
                     </tr>
                     <tr>
                         <th>Order No</th>
                         <td>{{ $token->order_id }}</td>
-                    </tr>
-                    <tr>
-                        <th>Token No</th>
-                        <td>{{ $token->id }}</td>
                     </tr>
                     
                 </table>

@@ -39,7 +39,7 @@
                         </td>
                     </tr><tr>
                         <td colspan="2">
-                            <a href="{{ url('admin/roomtype/'.$data->id.'/edit') }}" class="float-right btn btn-info btn-sm"><i class="fa fa-edit"> Edit {{ $data->title }}  </i></a>
+                            <a href="{{ url('admin/roomtype/'.$data->id.'/edit') }}" class="float-right btn btn-info btn-sm" title="Edit Data"> <i class="fa fa-edit"> Edit {{ $data->title }}  </i></a>
                         </td>
                         
                     </tr>

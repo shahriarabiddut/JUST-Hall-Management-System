@@ -33,8 +33,12 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/profile/changePassword', [HomeController::class, 'editPassword'])->name('profile.editPassword');
     Route::put('/profile/changePassword', [HomeController::class, 'passwordUpdate'])->name('profile.passwordUpdate');
     // Settings Crud
-    Route::get('settings/', [HomeController::class, 'edit']);
-    Route::put('settings/update/{id}', [HomeController::class, 'update']);
+    Route::get('settings/', [HomeController::class, 'edit'])->name('settings.index');
+    Route::put('settings/update/{id}', [HomeController::class, 'update'])->name('settings.update');
+    // History
+    Route::get('settings/history', [HomeController::class, 'historyIndex'])->name('history.index');
+    Route::get('settings/history/{id}', [HomeController::class, 'historyShow'])->name('history.show');
+    Route::get('settings/historyRead', [HomeController::class, 'historyRead'])->name('history.read');
     // Email Crud
     Route::get('email/{id}/delete', [EmailController::class, 'destroy']);
     Route::resource('email', EmailController::class);
@@ -56,10 +60,12 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
     Route::get('student/import-bulk', [StudentController::class, 'importUser'])->name('student.bulk');
     Route::post('student/import-bulk', [StudentController::class, 'handleImportUser'])->name('student.bulkUpload');
     Route::get('student/{id}/delete', [StudentController::class, 'destroy']);
+    Route::get('studentActive/{id}/', [StudentController::class, 'activate'])->name('student.active');
     Route::resource('student', StudentController::class);
 
 
     // Staff Crud
+    Route::get('staffActive/{id}/', [StaffController::class, 'activate'])->name('staff.active');
     Route::get('staff/{id}/delete', [StaffController::class, 'destroy']);
     Route::get('staff/{id}/change', [StaffController::class, 'change']);
     Route::put('staff/{id}/changeUpdate', [StaffController::class, 'changeUpdate'])->name('staff.changeUpdate');
@@ -71,8 +77,12 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
     Route::get('roomallocation/ban/{id}', [AllocatedSeatController::class, 'roomrequestban'])->name('roomallocation.ban');
     Route::get('roomallocation/list/{id}', [AllocatedSeatController::class, 'roomrequestlist'])->name('roomallocation.list');
     Route::get('roomallocation/roomrequests/{id}', [AllocatedSeatController::class, 'showRoomRequest'])->name('roomallocation.showRoomRequest');
+    Route::get('roomrequest/generate-pdf/{id}',  [AllocatedSeatController::class, 'generatePdf'])->name('generatepdf');
     //Available Positions
     Route::get('room/postion/{selectedValue}', [AllocatedSeatController::class, 'getPositions']);
+    //Room Issue
+    Route::get('/roomallocationissue', [HomeController::class, 'roomallocationissue'])->name('roomallocation.issue');
+    Route::get('/roomallocationissue/{id}', [HomeController::class, 'roomallocationissueview'])->name('roomallocation.issueview');
     // Order Crud
     Route::get('orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('orders/status/{id}', [OrderController::class, 'show'])->name('orders.show');
@@ -85,12 +95,13 @@ Route::middleware('admin')->prefix('admin')->name('admin.')->group(function () {
     Route::get('roomallocation/allocate/{id}', [AllocatedSeatController::class, 'RoomRequestAllocate'])->name('roomallocation.RoomRequestAllocate');
     //RoomAllocation CRUD
     Route::get('roomallocation/{id}/delete', [AllocatedSeatController::class, 'destroy']);
+    Route::get('roomallocate/{id}/add', [AllocatedSeatController::class, 'create1'])->name('roomallocation.add');
     Route::resource('roomallocation', AllocatedSeatController::class);
     // Route::get('roomallocation/available-position/{room_id}', [AllocatedSeatController::class,'available_position']);
 
     //Suport Ticekts View
-    Route::get('support', [SupportController::class, 'adminIndex'])->name('support.index');
-    Route::get('support/{id}', [SupportController::class, 'showAdmin'])->name('support.show');
+    Route::get('support', [HomeController::class, 'supportIndex'])->name('support.index');
+    Route::get('support/{id}', [HomeController::class, 'supportShow'])->name('support.show');
 
     //Command Test 
     Route::get("/deductBalance", [App\Http\Controllers\ProcessController::class, 'deductBalance'])->name('student.deductBalance');

@@ -14,6 +14,22 @@ use Illuminate\Support\Facades\Mail;
 
 class EmailController extends Controller
 {
+    protected $hall_id;
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->hall_id = Auth::guard('staff')->user()->hall_id;
+            if ($this->hall_id == 0 || $this->hall_id == null || Auth::guard('staff')->user()->status == 0) {
+                return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+            }
+            if (Auth::guard('staff')->user()->hall_id != 0) {
+                if (Auth::guard('staff')->user()->hall->status == 0) {
+                    return redirect()->route('staff.dashboard')->with('danger', 'This Hall has been Disabled by System Administrator!');
+                }
+            }
+            return $next($request);
+        });
+    }
     /**
      * Display a listing of the resource.
      */
@@ -41,7 +57,7 @@ class EmailController extends Controller
     {
         //
         $request->validate([
-            'staff_id' => 'required',
+            'staff_id' => 'required|not_in:0',
             'name' => 'required',
             'email' => 'required',
             'subject' => 'required',
@@ -58,6 +74,7 @@ class EmailController extends Controller
         $dataEmail->message = $request->message;
         $dataEmail->objective = $request->objective;
         $dataEmail->staff_id = $request->staff_id;
+        $dataEmail->hall_id = Auth::guard('staff')->user()->hall_id;
         $dataEmail->save();
         return redirect('staff/email')->with('success', 'Email Sent Successfully!');
     }
@@ -88,6 +105,9 @@ class EmailController extends Controller
     {
         //
         $data = Email::find($id);
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.email.index')->with('danger', 'Not Permitted!');
+        }
         $data->delete();
         return redirect('staff/email')->with('danger', 'Email Data has been deleted Successfully!');
     }
@@ -114,23 +134,19 @@ class EmailController extends Controller
             return redirect()->back()->withInput()->with('danger', 'Server Error');
         }
         //Sending email with information
-        if ($this->isOnline()) {
-            // The email sending is done using the to method on the Mail facade
-            Mail::to($RecieverEmail)->send(new PaymentEmail($emailBody, $emailObjective, $emailSubject));
 
-            //Saving data to email history
-            $dataEmail = new Email;
-            $dataEmail->name = $RecieverName;
-            $dataEmail->email = $RecieverEmail;
-            $dataEmail->subject = $emailSubject;
-            $dataEmail->message = $emailBody;
-            $dataEmail->objective = $emailObjective;
-            $dataEmail->staff_id = $staff_id;
-            $dataEmail->save();
-        } else {
-
-            return redirect()->back()->withInput()->with('error', 'No Internet Connection');
-        }
+        //Saving data to email history
+        $dataEmail = new Email;
+        $dataEmail->name = $RecieverName;
+        $dataEmail->email = $RecieverEmail;
+        $dataEmail->subject = $emailSubject;
+        $dataEmail->message = $emailBody;
+        $dataEmail->objective = $emailObjective;
+        $dataEmail->staff_id = $staff_id;
+        $dataEmail->hall_id = Auth::guard('staff')->user()->hall_id;
+        $dataEmail->save();
+        // The email sending is done using the to method on the Mail facade
+        Mail::to($RecieverEmail)->send(new PaymentEmail($emailBody, $emailObjective, $emailSubject, $dataEmail->hall->title));
     }
     public function RoomAllocationEmail(string $id, string $roomtitle, string $status)
     {
@@ -146,7 +162,7 @@ class EmailController extends Controller
         if ($status == 1) {
             $emailObjective = 'Your Room Allocation Request Accepted';
             $emailSubject = 'Your Room Allocation Request Accepted ! Contact Hall Provost Soon!';
-            $emailBody = 'Your Room Allocation Request has been Accepted by Hall Provost! To get allocated Room no is ' . $RoomTitle . ' please contact Hall Provost . Login to See Further Details.';
+            $emailBody = 'Your Room Allocation Request has been Accepted by Hall Provost! To get allocated in Room no ' . $RoomTitle . ' ,Please contact Hall Provost as soon as possible. Login to See Further Details.';
         } elseif ($status == 2) {
             $emailObjective = 'Your Room Allocation Request Rejected';
             $emailSubject = 'Your Room Allocation Request Rejected! Contact Hall Provost Soon!';
@@ -154,28 +170,23 @@ class EmailController extends Controller
         } elseif ($status == 3) {
             $emailObjective = 'Your Room Allocation Request is on Waiting';
             $emailSubject = 'Your Room Allocation Request is on Waiting! Contact Hall Provost Soon!';
-            $emailBody = 'Your Room Allocation Request is on Waiting by Hall Provost! Your requested room was Room no ' . $RoomTitle . ' and Login to See Further Details.';
+            $emailBody = 'Your Room Allocation Request is on Waiting by Hall Provost! Your requested room was, Room no ' . $RoomTitle . ' and Login to See Further Details.';
         } else {
             return redirect()->back()->withInput()->with('danger', 'Server Error');
         }
         //Sending email with information
-        if ($this->isOnline()) {
-            // The email sending is done using the to method on the Mail facade
-            Mail::to($RecieverEmail)->send(new AllocationEmail($emailBody, $emailObjective, $emailSubject));
-
-            //Saving data to email history
-            $dataEmail = new Email;
-            $dataEmail->name = $RecieverName;
-            $dataEmail->email = $RecieverEmail;
-            $dataEmail->subject = $emailSubject;
-            $dataEmail->message = $emailBody;
-            $dataEmail->objective = $emailObjective;
-            $dataEmail->staff_id = 0;
-            $dataEmail->save();
-        } else {
-
-            return redirect()->back()->withInput()->with('error', 'No Internet Connection');
-        }
+        //Saving data to email history
+        $dataEmail = new Email;
+        $dataEmail->name = $RecieverName;
+        $dataEmail->email = $RecieverEmail;
+        $dataEmail->subject = $emailSubject;
+        $dataEmail->message = $emailBody;
+        $dataEmail->objective = $emailObjective;
+        $dataEmail->staff_id = Auth::guard('staff')->user()->id;
+        $dataEmail->hall_id = Auth::guard('staff')->user()->hall_id;
+        $dataEmail->save();
+        // The email sending is done using the to method on the Mail facade
+        Mail::to($RecieverEmail)->send(new PaymentEmail($emailBody, $emailObjective, $emailSubject, $dataEmail->hall->title));
     }
     public function RoomAllocationEmail2(string $id,  string $status)
     {
@@ -203,22 +214,17 @@ class EmailController extends Controller
             return redirect()->back()->withInput()->with('danger', 'Server Error');
         }
         //Sending email with information
-        if ($this->isOnline()) {
-            // The email sending is done using the to method on the Mail facade
-            Mail::to($RecieverEmail)->send(new AllocationEmail($emailBody, $emailObjective, $emailSubject));
-
-            //Saving data to email history
-            $dataEmail = new Email;
-            $dataEmail->name = $RecieverName;
-            $dataEmail->email = $RecieverEmail;
-            $dataEmail->subject = $emailSubject;
-            $dataEmail->message = $emailBody;
-            $dataEmail->objective = $emailObjective;
-            $dataEmail->staff_id = 0;
-            $dataEmail->save();
-        } else {
-
-            return redirect()->back()->withInput()->with('error', 'No Internet Connection');
-        }
+        //Saving data to email history
+        $dataEmail = new Email;
+        $dataEmail->name = $RecieverName;
+        $dataEmail->email = $RecieverEmail;
+        $dataEmail->subject = $emailSubject;
+        $dataEmail->message = $emailBody;
+        $dataEmail->objective = $emailObjective;
+        $dataEmail->staff_id = Auth::guard('staff')->user()->id;
+        $dataEmail->hall_id = Auth::guard('staff')->user()->hall_id;
+        $dataEmail->save();
+        // The email sending is done using the to method on the Mail facade
+        Mail::to($RecieverEmail)->send(new PaymentEmail($emailBody, $emailObjective, $emailSubject, $dataEmail->hall->title));
     }
 }

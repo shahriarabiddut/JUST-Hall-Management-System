@@ -21,7 +21,7 @@
                         <p>{{ session('danger') }} </p>
                     </div>
                 @endif
-            <form method="POST" action="{{ route('admin.email.store') }}" enctype="multipart/form-data">
+            <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('admin.email.store') }}" enctype="multipart/form-data">
                 @csrf
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <tbody>
@@ -44,6 +44,7 @@
                                 <option value="payment">Payment Issue</option>
                                 <option value="subscription">Subscription Message</option>
                               </select>
+                              {{-- <input class="form-control" type="text" name="objective" placeholder="Objective" required value="{{ old('objective') }}"> --}}
                             </td>
                     </tr>
                     <tr>

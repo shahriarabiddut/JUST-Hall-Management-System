@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
+use App\Models\Hall;
 use App\Models\Room;
 use App\Models\RoomType;
+use Illuminate\Http\Request;
+use App\Models\AllocatedSeats;
 use App\Http\Controllers\Controller;
 
 class RoomController extends Controller
@@ -23,7 +25,8 @@ class RoomController extends Controller
     {
         //
         $roomtypes = RoomType::all();
-        return view('admin.room.create', ['roomtypes' => $roomtypes]);
+        $halls = Hall::all();
+        return view('admin.room.create', ['roomtypes' => $roomtypes, 'halls' => $halls]);
     }
 
     /**
@@ -32,11 +35,19 @@ class RoomController extends Controller
     public function store(Request $request)
     {
         //
+        $request->validate([
+            'title' => 'required',
+            'rt_id' => 'required|not_in:0',
+            'totalseats' => 'required|not_in:0',
+            'hall_id' => 'required|not_in:0',
+        ]);
         $data = new Room;
         $data->room_type_id = $request->rt_id;
         $data->title = $request->title;
         $data->totalseats = $request->totalseats;
         $data->vacancy = $request->totalseats;
+        $data->hall_id = $request->hall_id;
+        $data->status = 1;
         //
         $positions = [];
         for ($i = 1; $i <= $request->totalseats; $i++) {
@@ -69,10 +80,16 @@ class RoomController extends Controller
     public function edit(string $id)
     {
         //
+
         $roomtypes = RoomType::all();
         $data = Room::find($id);
         if ($data == null) {
             return redirect()->route('admin.rooms.index')->with('danger', 'Not Found!');
+        }
+        if ($data->hall != null) {
+            if ($data->hall->enable_delete == 0) {
+                return redirect()->route('admin.rooms.index')->with('danger', 'Not Permitted!');
+            }
         }
         return view('admin.room.edit', ['data' => $data, 'roomtypes' => $roomtypes]);
     }
@@ -83,10 +100,11 @@ class RoomController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $request->validate([
+            'title' => 'required',
+        ]);
         $data = Room::find($id);
-        $data->room_type_id = $request->rt_id;
         $data->title = $request->title;
-        $data->totalseats = $request->totalseats;
         $data->save();
 
         return redirect('admin/rooms')->with('success', 'Room Data has been updated Successfully!');
@@ -101,19 +119,31 @@ class RoomController extends Controller
         if ($data == null) {
             return redirect()->route('admin.rooms.index')->with('danger', 'Not Found!');
         }
-        $data->delete();
-        return redirect('admin/rooms')->with('danger', 'Data has been deleted Successfully!');
+        if ($data->hall != null) {
+            if ($data->hall->enable_delete == 0) {
+                return redirect()->route('admin.rooms.index')->with('danger', 'Not Permitted!');
+            }
+        }
+        $dataAllocatedSeats = AllocatedSeats::all()->where('room_id', $id);
+        if (count($dataAllocatedSeats) != 0) {
+            return redirect('admin/rooms')->with('danger', 'Data can not be deleted!');
+        } else {
+            $data->delete();
+            return redirect('admin/rooms')->with('danger', 'Data has been deleted Successfully!');
+        }
     }
     // Import Bilk users from csv
     public function importRoom()
     {
-        return view('admin.room.importRoom');
+        $hall = Hall::all()->where('status', 1)->where('enable_delete', 1);
+        return view('admin.room.importRoom', ['halls' => $hall]);
     }
 
     public function handleImportRoom(Request $request)
     {
         $validator = $request->validate([
             'file' => 'required',
+            'hall_id' => 'required|not_in:0',
         ]);
         $file = $request->file('file');
         $csvData = file_get_contents($file);
@@ -122,6 +152,7 @@ class RoomController extends Controller
         $length = count($rows);
         $importedStudents = 1;
         $errorTitles = [];
+        $hall_id = $request->hall_id;
         foreach ($rows as $key => $row) {
             if ($key != $length - 1) {
                 $row = array_combine($header, $row);
@@ -153,7 +184,9 @@ class RoomController extends Controller
                         'room_type_id' => $roomType,
                         'totalseats' => $totalseats,
                         'vacancy' => $totalseats,
-                        'positions' => $positions
+                        'positions' => $positions,
+                        'hall_id' => $hall_id,
+                        'status' => 1
                     ]);
                     $importedStudents++;
                 } elseif ($data->totalseats < $totalseats) {

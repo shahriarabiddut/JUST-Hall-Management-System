@@ -1,5 +1,5 @@
 @extends('staff/layout')
-@section('title', 'Room Allocation Requests')
+@section('title', 'Room Allocation Applications / Requests')
 @section('content')
 
             <!-- Session Messages Starts -->
@@ -19,10 +19,16 @@
             </div>
             @endif
             <!-- Session Messages Ends -->
+            <div class="p-2 mb-1 text-white">
+                <button class="btn btn-mid bg-dark"><a href="{{ route('staff.roomallocation.roomrequestslistdata',1) }}" class="float-right btn btn-sm text-white">Accepted List</a> </button>
+                <button class="btn btn-mid text-white bg-dark"><a href="{{ route('staff.roomallocation.roomrequestslistdata',0) }}" class="float-right btn btn-sm text-white">Waiting List</a> </button>
+                <button class="btn btn-mid text-white bg-dark"><a href="{{ route('staff.roomallocation.roomrequestslistdata',2) }}" class="float-right btn btn-sm text-white">Rejected List</a> </button>
+                <button class="btn btn-mid text-white bg-dark"><a href="{{ route('staff.roomallocation.roomrequestslistdata',3) }}" class="float-right btn btn-sm text-white">Requested List</a> </button>
+            </div>
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h3 class="m-0 font-weight-bold text-primary">Room Allocation Requests
+            <h3 class="m-0 font-weight-bold text-primary">Room Allocation Applications / Requests
             <a href="{{ route('staff.roomallocation.create') }}" class="float-right btn btn-success btn-sm" target="_blank">Add New Room Allocation</a> </h3>
         </div>
         <div class="card-body">
@@ -34,6 +40,7 @@
                             <th>Student Name</th>
                             <th>Student Roll</th>
                             <th>Request Date</th>
+                            <th>Recommendation</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -44,6 +51,7 @@
                             <th>Student Name</th>
                             <th>Student Roll</th>
                             <th>Request Date</th>
+                            <th>Recommendation</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -52,7 +60,18 @@
                         @if($data)
                         @foreach ($data as $key=> $d)
                         <tr>
-                            <td>{{ ++$key }}</td>
+                            <td> {{ ++$key }} @if($d->flag==0 || $d->flag==null)<span class="bg-warning p-1 text-white rounded">New</span>@endif
+                                @if ($d->visited_at != null) 
+                                @php
+                                    $currentTime = Carbon\Carbon::now();
+                                    $maxVisitTime = $d->visited_at;
+                                    $diff = $currentTime->diff($maxVisitTime);
+                                @endphp
+                                @if ($currentTime->lt($maxVisitTime)) <span title="{{ $diff->format('%i minutes %s seconds more') }}" class="bg-danger p-1 text-white rounded">{{ $d->visit->name }}</span> @endif
+                                @endif
+                            </td>
+                            
+                            
                             <td>
                             @if ($d->students==null)
                                 User Deleted
@@ -67,11 +86,18 @@
                             {{ $d->students->rollno }}
                             @endif
                             </td>
-                            <td>{{ $d->created_at }}</td>
+                            <td>{{ $d->created_at->format('F j, Y') }}</td>
+                            <td class="text-center">
+                                @if ($d->recommendation==0)
+                                    ---
+                                @else
+                                 Yes
+                                @endif
+                            </td>
                             @if ($d->status=='1')
                             <td class="bg-success text-white"> Accepted </td>
                             @elseif($d->status=='0')
-                            <td class="bg-warning text-white"> On Queue </td>
+                            <td class="bg-warning text-white"> On Waiting List </td>
                             @elseif($d->status=='2')
                             <td class="bg-danger text-white"> Rejected </td>
                             @elseif($d->status=='4')
@@ -80,11 +106,15 @@
                             <td>Requested </td>
                             @endif
 
+
                             <td class="text-center">
 
-                                <a  title="View Request" href="{{ url('staff/roomallocation/roomrequests/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
+                                <a  title="View Request" href="{{ url('staff/roomallocation/roomrequests/'.$d->id) }}" class="btn btn-info btn-sm" title="View Data"><i class="fa fa-eye"></i></a>
+                                @if (Auth::guard('staff')->user()->type == 'officer' || Auth::guard('staff')->user()->type == 'staff')
+                                @else
                                 @if ($d->status!='1' || $d->status!='4')
                                 <a title="Reject" onclick="return confirm('Are You Sure?')" href="{{ url('staff/roomallocation/ban/'.$d->id) }}" class="btn btn-danger btn-sm"><i class="fa fa-ban" aria-hidden="true"></i></a>
+                                @endif
                                 @endif
                             </td>
 

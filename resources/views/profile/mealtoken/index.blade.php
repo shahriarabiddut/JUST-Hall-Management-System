@@ -58,13 +58,16 @@
                             
                             @switch($d->status)
                                 @case(1)
-                                <td class="bg-success text-white"> Printed </td>
+                                <td class="bg-danger text-white"> Used </td>
                                     @break
                                 @case(2)
                                 <td class="bg-warning text-white"> Error</td>
                                     @break
                                 @case(3)
                                 <td class="bg-info text-white"> On Queue To Print </td>
+                                    @break
+                                @case(4)
+                                <td class="bg-success text-white"> Printed </td>
                                     @break
                                 @default
                                 <td class="bg-secondary text-white"> Not Used </td>

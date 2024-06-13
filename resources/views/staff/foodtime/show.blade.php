@@ -14,16 +14,16 @@
                 <table class="table table-bordered" width="100%">
                     <tr>
                         <th>Title</th>
-                        <td>{{ $data->title }}</td>
+                        <td>{{ $data->food_time->title }}</td>
                     </tr><tr>
                         <th>Detail</th>
-                        <td>{{ $data->detail }}</td>
+                        <td>{{ $data->food_time->detail }}</td>
                     </tr><tr>
                         <th>Price</th>
                         <td>{{ $data->price }} /= Taka</td>
                     </tr><tr>
                         <th>Status</th>
-                        @switch($data->status)
+                        @switch($data->food_time->status)
                             @case(0)
                                 <td class="bg-warning text-white"> Disable</td>
                                     @break
@@ -31,21 +31,7 @@
                             <td class="bg-success text-white"> Active</td>
                                 @break
                         @endswitch
-                    </tr><tr>
-                        <th>Created Date</th>
-                        <td>{{ $data->created_at }}</td>
-                    </tr><tr>
-                        <th>Created By</th>
-                        <td>{{ $data->createdby }}</td>
                     </tr>
-                    {{-- <tr>
-                        <td colspan="2">
-                            <a onclick="return confirm('Are You Sure?')" href="{{ url('staff/foodtime/'.$data->id.'/delete') }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"> DELETE</i></a>
-                        </td>
-                        
-                    </tr> --}}
-                   
-                    
                 </table>
             </div>
         </div>

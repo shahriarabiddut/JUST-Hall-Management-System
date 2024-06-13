@@ -1,13 +1,18 @@
 <ul class="navbar-nav bg-gradient-success sidebar sidebar-dark accordion" id="accordionSidebar">
-
+@if (Auth::guard('staff')->user()->hall!= null)
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('staff.dashboard') }}">
         <div class="sidebar-brand-icon rotate-n-15">
+            @if (Auth::guard('staff')->user()->hall->logo == null)
             <img src="{{ asset($HallOption[3]->value) }}" class="rounded mx-auto d-block sidebar-card-illustration" alt="Logo" style="width:50%;">
+            @else
+            <img src="{{ asset('storage/'.Auth::guard('staff')->user()->hall->logo) }}" class="rounded mx-auto d-block sidebar-card-illustration" alt="Logo" style="width:50%;">
+            @endif
         </div>
         <div class="sidebar-brand-text mx-3">Staff Panel</div>
     </a>
-
+    
+@endif
     <!-- Divider -->
     <hr class="sidebar-divider my-0">
 
@@ -17,38 +22,26 @@
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
-    @if (Auth::guard('staff')->user()->type == 'provost')
     <!-- Divider -->
+@if (Auth::guard('staff')->user()->hall!= null && Auth::guard('staff')->user()->status != 0)
+    @if (Auth::guard('staff')->user()->hall_id!=0 && Auth::guard('staff')->user()->hall_id!=null)
+        @if (Auth::guard('staff')->user()->type == 'provost')
     <hr class="sidebar-divider">
     <!-- Heading -->
     <div class="sidebar-heading">
         Hall Rooms
     </div>
-    <!-- Nav Item Room Type - Pages Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link @if(!request()->is('staff/roomtype*')) collapsed @endif" href="#" data-toggle="collapse" data-target="#collapseRoomType"
-            aria-expanded="true" aria-controls="collapseRoomType">
-            <i class="fas fa-fw fa-hotel"></i>
-            <span>Room Type</span>
-        </a> 
-        <div id="collapseRoomType" class="collapse @if(request()->is('staff/roomtype*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Room Type Management</h6>
-                <a class="collapse-item" href="{{ route('staff.roomtype.index') }}">View All</a>
-                <a class="collapse-item" href="{{ route('staff.roomtype.create') }}">Add new</a>
-            </div>
-        </div>
-    </li>
 <!-- Nav Item Room - Pages Collapse Menu -->
 <li class="nav-item">
-    <a class="nav-link @if(!request()->is('staff/rooms*')) collapsed @endif" href="#" data-toggle="collapse" data-target="#collapseRoom"
+    <a class="nav-link @if(!request()->is('staff/rooms*') || !request()->is('staff/roomtype*')) collapsed @endif" href="#" data-toggle="collapse" data-target="#collapseRoom"
         aria-expanded="true" aria-controls="collapseRoom">
         <i class="fas fa-fw fa-hotel"></i>
         <span>Room</span>
     </a>
-    <div id="collapseRoom" class="collapse @if(request()->is('staff/rooms*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+    <div id="collapseRoom" class="collapse @if(request()->is('staff/rooms*') || request()->is('staff/roomtype*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Room Management</h6>
+            <a class="collapse-item" href="{{ route('staff.roomtype.index') }}">Room Types</a>
             <a class="collapse-item" href="{{ route('staff.rooms.index') }}">View All</a>
             <a class="collapse-item" href="{{ route('staff.rooms.create') }}">Add new</a>
         </div>
@@ -77,7 +70,7 @@
         </div>
     </li>
     @endif
-    @if (Auth::guard('staff')->user()->type == 'provost' || Auth::guard('staff')->user()->type == 'aprovost')
+@if (Auth::guard('staff')->user()->type == 'provost' || Auth::guard('staff')->user()->type == 'aprovost' || Auth::guard('staff')->user()->type == 'officer')
     <!-- Divider -->
     <hr class="sidebar-divider">
     <!-- Heading -->
@@ -96,8 +89,10 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Student Management</h6>
                 <a class="collapse-item" href="{{ route('staff.student.index') }}">View All</a>
+                @if (Auth::guard('staff')->user()->type == 'provost' || Auth::guard('staff')->user()->type == 'aprovost')
                 <a class="collapse-item" href="{{ route('staff.student.create') }}">Add new</a>
                 <a class="collapse-item" href="{{ route('staff.balance.index') }}"><b>Balances</b></a>
+                @endif
             </div>
         </div>
     </li>
@@ -111,12 +106,16 @@
         <div id="collapseStudentRoom" class="collapse @if(request()->is('staff/roomallocation*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Student Room Alocation</h6>
+                @if (Auth::guard('staff')->user()->type == 'provost' || Auth::guard('staff')->user()->type == 'aprovost')
                 <a class="collapse-item" href="{{ route('staff.roomallocation.index') }}">View All</a>
                 <a class="collapse-item" href="{{ route('staff.roomallocation.create') }}">Add new </a>
-                <a class="collapse-item" href="{{ route('staff.roomallocation.roomrequests') }}">Allocation Requests </a>
+                @endif
+                <a class="collapse-item" href="{{ route('staff.roomallocation.roomrequests') }}">Allocation Requests <span class="bg-danger text-white p-1 rounded">{{ App\Models\RoomRequest::all()->where('hall_id',Auth::guard('staff')->user()->hall_id)->where('flag',0)->count() }}</span> </a>
+                <a class="collapse-item" href="{{ route('staff.roomallocation.issue') }}">Room Leave/Change <span class="bg-danger text-white p-1 rounded">{{ App\Models\RoomIssue::all()->where('hall_id',Auth::guard('staff')->user()->hall_id)->where('flag',0)->count() }}</span> </a>
             </div>
         </div>
     </li>
+    @if (Auth::guard('staff')->user()->type == 'provost' || Auth::guard('staff')->user()->type == 'aprovost')
     <!-- Divider -->
     <hr class="sidebar-divider">
     <!-- Heading -->
@@ -125,27 +124,28 @@
     </div>
     <!-- Nav FoodTime Services - Utilities Collapse Menu -->
     <li class="nav-item">
-        <a class="nav-link @if (!request()->is('staff/food*') || !request()->is('staff/foodtime*'))
+        <a class="nav-link @if (!request()->is('staff/food*'))
             collapsed
         @endif" href="#" data-toggle="collapse" data-target="#collapseSeven"
             aria-expanded="true" aria-controls="collapseSeven">
             <i class="fas fa-table"></i>
             <span>Food </span>
         </a>
-        <div id="collapseSeven" class="collapse @if(request()->is('staff/food/*') || request()->is('staff/foodtime*')) show @endif" aria-labelledby="headingUtilities"
+        <div id="collapseSeven" class="collapse @if(request()->is('staff/food*')) show @endif" aria-labelledby="headingUtilities"
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Food Management</h6>
-                <a class="collapse-item" href="{{ route('staff.foodtime.index') }}"> Food Time </a>
-                <a class="collapse-item" href="{{ route('staff.food.index') }}">View All</a>
-                <a class="collapse-item" href="{{ route('staff.food.create') }}">Add new</a>
+                <a class="collapse-item" href="{{ route('staff.foodtime.index') }}"> Food Times </a>
+                <a class="collapse-item" href="{{ route('staff.food.index') }}">View All Food</a>
+                <a class="collapse-item" href="{{ route('staff.food.create') }}">Add new Food</a>
             </div>
         </div>
     </li>
+    @endif
   <!-- Divider -->
     @endif
     <hr class="sidebar-divider">
-    @if (Auth::guard('staff')->user()->type == 'staff' || Auth::guard('staff')->user()->type == 'provost' || Auth::guard('staff')->user()->type == 'aprovost')
+    @if (Auth::guard('staff')->user()->type == 'staff' || Auth::guard('staff')->user()->type == 'provost' || Auth::guard('staff')->user()->type == 'aprovost' || Auth::guard('staff')->user()->type == 'officer')
     <!-- Heading -->
     <div class="sidebar-heading">
         Hall Orders System
@@ -196,6 +196,24 @@
     <div class="sidebar-heading">
         Hall Support System
     </div>
+    
+     <!-- Nav Item Support - Utilities Collapse Menu -->
+     <li class="nav-item">
+        <a class="nav-link @if (!request()->is('staff/support*'))
+            collapsed
+        @endif" href="#" data-toggle="collapse" data-target="#collapseOne"
+            aria-expanded="true" aria-controls="collapseOne">
+            <i class="fas fa-ticket-alt"></i>
+            <span>Support</span>
+        </a>
+        <div id="collapseOne" class="collapse @if(request()->is('staff/support*')) show @endif" aria-labelledby="headingUtilities"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Support Ticket Management</h6>
+                <a class="collapse-item" href="{{ route('staff.support.index') }}">View Support Tickets</a>
+            </div>
+        </div>
+    </li>
     {{-- <!-- Nav Email Services - Utilities Collapse Menu -->
     <li class="nav-item">
         <a class="nav-link @if (!request()->is('staff/email*'))
@@ -214,23 +232,6 @@
             </div>
         </div>
     </li> --}}
-     <!-- Nav Item Support - Utilities Collapse Menu -->
-     <li class="nav-item">
-        <a class="nav-link @if (!request()->is('staff/support*'))
-            collapsed
-        @endif" href="#" data-toggle="collapse" data-target="#collapseOne"
-            aria-expanded="true" aria-controls="collapseOne">
-            <i class="fas fa-ticket-alt"></i>
-            <span>Support</span>
-        </a>
-        <div id="collapseOne" class="collapse @if(request()->is('staff/support*')) show @endif" aria-labelledby="headingUtilities"
-            data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Support Ticket Management</h6>
-                <a class="collapse-item" href="{{ route('staff.support.index') }}">View Support Tickets</a>
-            </div>
-        </div>
-    </li>
     @if (Auth::guard('staff')->user()->type == 'provost')
     <hr class="sidebar-divider d-none d-md-block">
     <div class="sidebar-heading">
@@ -238,7 +239,7 @@
     </div>
     <!-- Nav Item Settings - Utilities Collapse Menu -->
     <li class="nav-item">
-        <a class="nav-link @if (!request()->is('student/settings*'))
+        <a class="nav-link @if (!request()->is('staff/settings*'))
             collapsed
         @endif" href="#" data-toggle="collapse" data-target="#collapseSettings"
             aria-expanded="true" aria-controls="collapseSettings">
@@ -251,17 +252,18 @@
                 <h6 class="collapse-header">Site Management</h6>
                 <a class="collapse-item" href="{{ route('staff.settings.index') }}">View Settings</a>
                 <a class="collapse-item" href="{{ route('staff.history.index') }}">View History</a>
+                <a class="collapse-item" href="{{ route('staff.settings.secret') }}">Secret QR</a>
             </div>
         </div>
     </li>
     @endif
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
-
+@endif
     <!-- Sidebar Toggler (Sidebar - Logout - CopyRight) -->
     @include('../layouts/sidebar_toggle')
     <!-- End Sidebar Toggler (Sidebar - Logout - CopyRight) -->
 
     
-
+    @endif
 </ul>

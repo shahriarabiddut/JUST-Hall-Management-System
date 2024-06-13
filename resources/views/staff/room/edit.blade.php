@@ -10,7 +10,7 @@
         <div class="card-body">
             
             <div class="table-responsive">
-            <form method="POST" action="{{ route('staff.rooms.update',$data->id) }}" enctype="multipart/form-data">
+            <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('staff.rooms.update',$data->id) }}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -18,23 +18,6 @@
                     <tr>
                         <th>Title</th>
                         <td><input name="title" value="{{ $data->title }}" type="text" class="form-control"></td>
-                    </tr>
-                    <tr>
-                        <th>Select Room Type</th>
-                        <td>
-                            <select name="rt_id" class="form-control">
-                                @foreach ($roomtypes as $rt)
-                                <option @if ($data->room_type_id==$rt->id)
-                                    @selected(true)
-                                @endif
-                                 value="{{$rt->id}}">{{$rt->title}}</option>
-                                @endforeach
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>Total Seats</th>
-                        <td><input required name="totalseats" type="number" class="form-control" value="{{ $data->totalseats }}"></td>
                     </tr>
                     <tr>
                         <td colspan="2">

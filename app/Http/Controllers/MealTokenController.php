@@ -5,14 +5,31 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Food;
 use App\Models\Order;
+use App\Models\Student;
 use App\Models\MealToken;
+use App\Models\HallOption;
+use Illuminate\Http\Request;
 use App\Models\TokenPrintQueue;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
-use App\Models\HallOption;
 
 class MealTokenController extends Controller
 {
+    protected $hall_id;
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->hall_id = Auth::user()->hall_id;
+            if ($this->hall_id == 0 || $this->hall_id == null) {
+                return redirect()->route('student.dashboard')->with('danger', 'Please Get Hall Room Allocation to get access!');
+            }
+            if (Auth::user()->hall_id != 0 || Auth::user()->hall_id != null) {
+                if (Auth::user()->hall->status == 0) {
+                    return redirect()->route('student.dashboard')->with('danger', 'This Hall has been Disabled by System Administrator!');
+                }
+            }
+            return $next($request);
+        });
+    }
     /**
      * Display a listing of the resource.
      */
@@ -44,21 +61,22 @@ class MealTokenController extends Controller
         $newdata->save();
         return redirect('student/mealtoken')->with('success', 'Mealtoken Generated Successfully!');
     }
-    public function generateTokenAuto(string $id)
+    public function generateTokenAuto(string $id, string $hall_id)
     {
         //
-        $data = Order::all()->where('id', '=', $id)->first();
+        $data = Order::find($id);
         $foodname = Food::all()->where('id', '=', $data->food_item_id)->first();
-
+        $user = Student::find($data->student_id);
         $newdata = new MealToken;
         $newdata->food_name = $foodname->food_name;
         $newdata->date = $data->date;
         $newdata->token_number = bcrypt($id);
-        $newdata->rollno = Auth::user()->rollno;
+        $newdata->rollno = $user->rollno;
         $newdata->status = 0;
         $newdata->quantity = $data->quantity;
         $newdata->order_id = $id;
         $newdata->meal_type = $data->order_type;
+        $newdata->hall_id = $hall_id;
         $newdata->save();
         return $newdata->id;
     }
@@ -71,10 +89,14 @@ class MealTokenController extends Controller
     {
         //
         $data = MealToken::find($id);
+        if ($data == null) {
+            return redirect()->route('student.order.index')->with('danger', ' Not Found!');
+        }
+        if ($data->rollno != Auth::user()->rollno) {
+            return redirect()->route('student.dashboard')->with('danger', ' Unauthorized Access!');
+        }
         if ($data) {
-            $link = route('staff.orders.show', $data->order_id);
-            $qrcode = 0;
-            return view('profile.mealtoken.show', ['data' => $data, 'qrcode' => $qrcode]);
+            return view('profile.mealtoken.show', ['data' => $data]);
         } else {
             return redirect('student/mealtoken')->with('danger', ' Generate Mealtoken First!');
         }
@@ -83,11 +105,14 @@ class MealTokenController extends Controller
     {
         //
         $data = MealToken::all()->where('order_id', '=', $id)->first();
+        if ($data == null) {
+            return redirect()->route('student.order.index')->with('danger', ' Not Found!');
+        }
+        if ($data->rollno != Auth::user()->rollno) {
+            return redirect()->route('student.dashboard')->with('danger', ' Unauthorized Access!');
+        }
         if ($data) {
-            $link = route('staff.orders.show', $data->order_id);
-            // $qrcode = QrCode::size(300)->generate($link);
-            $qrcode = 0;
-            return view('profile.mealtoken.show', ['data' => $data, 'qrcode' => $qrcode]);
+            return view('profile.mealtoken.show', ['data' => $data]);
         } else {
             return redirect('student/mealtoken')->with('danger', ' Generate Mealtoken First!');
         }
@@ -95,8 +120,16 @@ class MealTokenController extends Controller
     //ESP 32
     public function printNet(string $id)
     {
+        $userid = Auth::user()->id;
         //
         $data = MealToken::all()->where('order_id', '=', $id)->first();
+        $data2 = Order::find($id);
+        if ($data == null || $data2 == null) {
+            return redirect()->route('student.order.index')->with('danger', 'Not Found');
+        }
+        if ($data2->student_id != $userid) {
+            return redirect()->route('student.dashboard')->with('danger', ' Unauthorized Access!');
+        }
         //Check Date is Valid To Print
         $result = $this->isDateValid($data->date);
         if ($result != 'true') {
@@ -106,7 +139,7 @@ class MealTokenController extends Controller
             return redirect()->route('student.mealtoken.index')->with('danger', 'Error!');
         }
         if ($data->print >= 1) {
-            return redirect()->route('student.mealtoken.index')->with('danger', 'You can not print anymore!');
+            return redirect()->route('student.mealtoken.index')->with('danger', "You can't print anymore!");
         }
         // Done
         if ($data->status == 0) {
@@ -123,10 +156,8 @@ class MealTokenController extends Controller
                 $newdata->order_id = $data->order_id;
                 $newdata->rollno = $data->rollno;
                 $newdata->data = $data;
+                $newdata->hall_id = $data->hall_id;
                 $newdata->save();
-                //Change Status to 1
-                // Update Token Status
-                //
                 return redirect()->route('student.mealtoken.index')->with('success', 'Token On Print Queue!');
             } else {
                 return redirect()->route('student.mealtoken.index')->with('danger', 'Token is Allready on Print Queue!');
@@ -137,82 +168,8 @@ class MealTokenController extends Controller
             return redirect()->route('student.mealtoken.index')->with('danger', 'Ops! Token Expired!');
         }
     }
-    //post method
-    public function TokenPrintQueue2(string $value1)
-    {
-        $printingOption = HallOption::all()->where('id', '10')->first();
 
-        if ($value1 != $printingOption->value) {
-            return redirect()->route('root')->with('danger', 'Ops! Token Expired!');
-        }
-        $data = TokenPrintQueue::all();
-        $dataTokenPrintQueue = '';
-        foreach ($data as $key => $d) {
-            if ($key >= 0 && $key < count($data) - 1) {
-                $dataTokenPrintQueue = $dataTokenPrintQueue . $d->data . ',';
-            } else {
-                $dataTokenPrintQueue = $dataTokenPrintQueue . $d->data;
-            }
-        }
-        // return response($d->data);
-        return response($dataTokenPrintQueue);
-    }
     //
-    public function TokenPrintQueue()
-    {
-        $data = TokenPrintQueue::all();
-        $dataTokenPrintQueue = '';
-        foreach ($data as $key => $d) {
-            if ($key >= 0 && $key < count($data) - 1) {
-                $dataTokenPrintQueue = $dataTokenPrintQueue . $d->data . ',';
-            } else {
-                $dataTokenPrintQueue = $dataTokenPrintQueue . $d->data;
-            }
-        }
-        // return response($d->data);
-        return response($dataTokenPrintQueue);
-    }
-    //Delete From Print Queue
-    public function TokenPrintQueueDelete(string $id, string $order_id, string $rollno)
-    {
-        // Token Status Update
-        $dataUpdate = MealToken::all()->where('id', '=', $id)->where('order_id', '=', $order_id)->where('rollno', '=', $rollno)->first();
-        if ($dataUpdate == null) {
-            return response()->json(0);
-        }
-        // $dataUpdate->status = 1;
-        // $dataUpdate->save();
-        //Delete
-        $data = TokenPrintQueue::all()->where('token_id', '=', $id)->where('order_id', '=', $order_id)->where('rollno', '=', $rollno)->first();
-        if ($data == null) {
-            return response()->json(0);
-        }
-        $data->delete();
-        return response()->json(1);
-    }
-    public function TokenPrintQueueDelete2(string $value, string $id, string $order_id, string $rollno)
-    {
-        $printingOption = HallOption::all()->where('id', '10')->first();
-
-        if ($value != $printingOption->value) {
-            return redirect()->route('root')->with('danger', 'Ops! Token Expired!');
-        }
-        // Token Status Update
-        $dataUpdate = MealToken::all()->where('id', '=', $id)->where('order_id', '=', $order_id)->where('rollno', '=', $rollno)->first();
-        if ($dataUpdate == null) {
-            return response()->json(0);
-        }
-        $dataUpdate->print = 1;
-        $dataUpdate->save();
-        //Delete
-        $data = TokenPrintQueue::all()->where('token_id', '=', $id)->where('order_id', '=', $order_id)->where('rollno', '=', $rollno)->first();
-        if ($data == null) {
-            return response()->json(0);
-        }
-        $data->delete();
-        return response()->json(1);
-    }
-
     public function isDateValid(string $date)
     {
         //

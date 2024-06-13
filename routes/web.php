@@ -4,6 +4,7 @@ use App\Mail\MyTestEmail;
 use App\Models\HallOption;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\EspController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\PaymentController;
@@ -23,35 +24,36 @@ use App\Http\Controllers\SslCommerzPaymentController;
 */
 
 
-Route::get('/testroute', function () {
-    $name = "Biddut";
+// Route::get('/testroute', function () {
+//     $name = "Biddut";
 
-    // The email sending is done using the to method on the Mail facade
-    Mail::to('shahriarabiddut@gmail.com')->send(new MyTestEmail($name));
-});
+//     // The email sending is done using the to method on the Mail facade
+//     Mail::to('shahriarabiddut@gmail.com')->send(new MyTestEmail($name));
+// });
 
 Route::get('/', function () {
     return view('home');
 })->name('root');
+Route::get('/manual', function () {
+    return view('manual');
+})->name('manual');
 
 //
 $printingOption = HallOption::all()->where('name', 'print')->first();
 if ($printingOption->value != 0) {
-    // Route::get('/tokenPrint', [MealTokenController::class, 'TokenPrintQueue'])->name('tokenPrint');
-    Route::get('/tokenPrint/{value1}', [MealTokenController::class, 'TokenPrintQueue2'])->name('tokenPrint');
-    Route::get('/tpqd/{id}&{order_id}&{rollno}/delete', [MealTokenController::class, 'TokenPrintQueueDelete'])->name('tokenprint.delete');
-    Route::get('/tpqd/{value}/{id}&{order_id}&{rollno}/delete', [MealTokenController::class, 'TokenPrintQueueDelete2'])->name('tokenprint.delete2');
-    Route::get('orders/scan/{value}/{id}', [App\Http\Controllers\Staff\OrderController::class, 'qrcodescanesp'])->name('orders.qrcodescanlink')->where('id', '(.*(?:%2F:)?.*)');
+    // Changed here added hall_id  
+    Route::get('/tokenPrint/{hall_id}/{value1}', [EspController::class, 'TokenPrintQueue2'])->name('tokenPrint');
+    //ESP 32 Token Print Queue Delete & added hall_id
+    Route::get('/tpqd/{hall_id}/{value}&{id}&{order_id}&{rollno}/delete', [EspController::class, 'TokenPrintQueueDelete2'])->name('tokenprint.delete2');
+    // Changed here added hall_id to identify the scanner 
+    Route::get('orders/scan/{hall_id}/{value}/{id}', [EspController::class, 'qrcodescanesp'])->name('orders.qrcodescanlink')->where('id', '(.*(?:%2F:)?.*)');
 }
-//
-//ESP 32 Token Print Queue Delete
-// Route::get('/tpqd/{id}&{order_id}&{rollno}', [MealTokenController::class, 'TokenPrintQueueDelete'])->name('tokenprint.delete');
 
 //User Routes
 Route::get('student', [ProfileController::class, 'index'])->middleware(['auth'])->name('student.dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->prefix('student')->name('student.')->group(function () {
+Route::middleware(['auth'])->prefix('student')->name('student.')->group(function () {
 
     //Profile Routes
     Route::get('/profile', [ProfileController::class, 'view'])->name('profile.view');
@@ -62,12 +64,21 @@ Route::middleware('auth')->prefix('student')->name('student.')->group(function (
 
     //Room Routes
     Route::get('rooms/myroom', [ProfileController::class, 'myroom'])->name('myroom');
+    Route::get('rooms/myroomchange', [ProfileController::class, 'roomchange'])->name('myroom.change');
+    Route::get('rooms/myroomleave', [ProfileController::class, 'roomleave'])->name('myroom.leave');
+    Route::post('rooms/roomissue', [ProfileController::class, 'roomissue'])->name('myroom.roomissue');
     Route::get('rooms/request', [ProfileController::class, 'roomrequest'])->name('roomrequest');
     Route::post('rooms/applyrequest', [ProfileController::class, 'roomrequeststore'])->name('roomrequeststore');
     Route::get('rooms/requestshow', [ProfileController::class, 'roomrequestshow'])->name('roomrequestshow');
     Route::get('rooms/request/{id}/edit', [ProfileController::class, 'roomrequestedit'])->name('roomrequest.edit');
     Route::put('rooms/request/update', [ProfileController::class, 'roomrequestupdate'])->name('roomrequest.update');
     Route::get('rooms/requestshow/{id}/delete', [ProfileController::class, 'roomrequestdestroy'])->name('roomrequest.destroy');
+    // PDf
+    Route::get('roomrequest/generate-pdf/{id}',  [ProfileController::class, 'generatePdf'])->name('generatepdf');
+    // Recommendation
+    Route::get('rooms/request/recommendation/', [ProfileController::class, 'roomrequestrecommendation'])->name('roomrequest.recommendation');
+    Route::get('rooms/request/recommendation/delete', [ProfileController::class, 'roomrequestrecommendationdestroy'])->name('roomrequestrecommendation.destroy');
+    Route::put('rooms/roomrequestrecommendation', [ProfileController::class, 'roomrequestrecommendationstore'])->name('roomrequestrecommendationstore');
     // Payment
     Route::get('rooms/request/payment/', [ProfileController::class, 'roomrequestpayment'])->name('roomrequest.roomrequestpayment');
     Route::get('rooms/request/payments/{id}/delete', [ProfileController::class, 'roomrequestpaymentdestroy'])->name('roomrequestpayment.destroy');
@@ -95,7 +106,10 @@ Route::middleware('auth')->prefix('student')->name('student.')->group(function (
     Route::post('order/foodmenu/advance', [OrderController::class, 'storeOrderAdvance'])->name('order.storeAdvance');
     Route::get('order/{id}/delete', [OrderController::class, 'destroy'])->name('order.delete');
 
-
+    //Auto Order
+    Route::get('orders/autoorder', [OrderController::class, 'autoOrder'])->name('order.autoorder');
+    Route::post('orders/autoorder/on', [OrderController::class, 'autoOrderOn'])->name('order.autoorderon');
+    Route::put('orders/autoorder/update/{id}', [OrderController::class, 'autoOrderUpdate'])->name('order.autoorderupdate');
     //mealtoken Routes
     Route::get('mealtoken/generate/{id}', [MealTokenController::class, 'generate'])->name('mealtoken.generate');
     Route::get('mealtoken/{id}/show', [MealTokenController::class, 'showbyorder'])->name('mealtoken.showbyorder');

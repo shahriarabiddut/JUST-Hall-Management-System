@@ -4,19 +4,34 @@ namespace App\Http\Controllers\Staff;
 
 use Carbon\Carbon;
 use App\Models\Food;
+use App\Models\Hall;
 use App\Models\Order;
 use App\Models\Staff;
+use App\Models\History;
 use App\Models\FoodTime;
 use Illuminate\View\View;
 use App\Models\HallOption;
+use App\Models\FoodTimeHall;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\RoomIssue;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 
 class HomeController extends Controller
 {
+    protected $hall_id;
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->hall_id = Auth::guard('staff')->user()->hall_id;
+            if ($this->hall_id == 0 || $this->hall_id == null || Auth::guard('staff')->user()->status == 0) {
+                return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+            }
+            return $next($request);
+        });
+    }
     //
     public function index()
     {
@@ -27,7 +42,13 @@ class HomeController extends Controller
         $nextDate = $currentDate->setTimezone('GMT+6')->format('Y-m-d'); // 2023-03-17
 
         $resulttitle = [];
-        $total_food_times = FoodTime::select('id')->where('status', '=', '1')->get();
+        //
+        $dataFoodTime = FoodTimeHall::all()->where('status', '1')->where('hall_id', $this->hall_id);
+        $total_food_times = [];
+        foreach ($dataFoodTime as $dFT) {
+            $total_food_times[] = FoodTime::find($dFT->food_time_id);
+        }
+        //
         $results = [];
         foreach ($total_food_times as $total_food_time) {
             $i = $total_food_time->id;
@@ -43,7 +64,7 @@ class HomeController extends Controller
         //foodtype
         $food_time = FoodTime::all()->where('status', '=', '1')->where('id', '=', $id)->first();
         //Food Item for search
-        $foods = Food::all()->where('status', '=', '1')->where('food_time_id', '=', $id);
+        $foods = Food::all()->where('status', '=', '1')->where('food_time_id', '=', $id)->where('hall_id', $this->hall_id);
         $food_id_data = [];
         foreach ($foods as $food) {
             $food_id_data[] = $food->id;
@@ -71,12 +92,16 @@ class HomeController extends Controller
             'user' => $user,
         ]);
     }
-    public function edit(): View
+    public function edit()
     {
         $user = Auth::guard('staff')->user();
-        return view('staff.partials.edit', [
-            'user' => $user,
-        ]);
+        if ($user->status == 0) {
+            return redirect()->route('staff.profile.view')->with('danger', 'You dont have enough permissions!');
+        } else {
+            return view('staff.partials.edit', [
+                'user' => $user,
+            ]);
+        }
     }
 
     /**
@@ -84,6 +109,7 @@ class HomeController extends Controller
      */
     public function update(Request $request)
     {
+
         $formFields = $request->validate([
             'name' => 'required',
             'mobile' => 'required',
@@ -91,6 +117,9 @@ class HomeController extends Controller
             'userid' => 'required',
         ]);
         $data = Staff::find($request->userid);
+        if ($data->status == 0) {
+            return redirect()->route('staff.profile.view')->with('danger', 'You dont have enough permissions!');
+        }
         //If user Gieven address
         if ($request->has('address')) {
             $formFields['address'] = $request->address;
@@ -115,9 +144,13 @@ class HomeController extends Controller
     /**
      * Update the user's password information.
      */
-    public function editPassword(Request $request): View
+    public function editPassword(Request $request)
     {
+
         $user = Auth::guard('staff')->user();
+        if ($user->status == 0) {
+            return redirect()->route('staff.profile.view')->with('danger', 'You dont have enough permissions!');
+        }
         return view('staff.partials.changePassword', [
             'user' => $user,
         ]);
@@ -146,25 +179,169 @@ class HomeController extends Controller
     }
     public function settings()
     {
-        $datas = HallOption::all();
-        return view('staff.settings.edit', ['datas' => $datas]);
+        $data = Hall::find($this->hall_id);
+        if ($data == null) {
+            return redirect()->route('staff.dashboard')->with('danger', 'Not Found!');
+        }
+        if ($data->id != $this->hall_id) {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized Access!');
+        }
+        if ($data->id != $this->hall_id) {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized Access!');
+        }
+        if ($data->status == 0) {
+            return redirect()->route('staff.dashboard')->with('danger', 'This Hall has been Disabled by System Administrator!');
+        }
+        return view('staff.settings.edit', ['data' => $data]);
+    }
+    public function settingsecret()
+    {
+        $data = Hall::find($this->hall_id);
+        if ($data == null) {
+            return redirect()->route('staff.dashboard')->with('danger', 'Not Found!');
+        }
+        if ($data->id != $this->hall_id) {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized Access!');
+        }
+        if ($data->id != $this->hall_id) {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized Access!');
+        }
+        if ($data->status == 0) {
+            return redirect()->route('staff.dashboard')->with('danger', 'This Hall has been Disabled by System Administrator!');
+        }
+        return view('staff.settings.secret', ['data' => $data]);
     }
     public function settingsUpdate(Request $request, $id)
     {
         //
-        $data = HallOption::find($id);
         $request->validate([
-            'value' => 'required',
+            'enable_delete' => 'required',
+            'print' => 'required',
+            'secret' => 'required',
+            'fixed_cost' => 'required',
+            'fixed_cost_masters' => 'required',
         ]);
-        if ($id == 4 || $id == 5) {
-            if ($request->hasFile('value')) {
-                $data->value = 'storage/app/public/' . $request->file('value')->store('Website', 'public');
+        $data = Hall::find($id);
+        if ($data->id != $this->hall_id) {
+            return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized Access!');
+        }
+        // Print Secret Set
+        function takeFirstLetters($titleHall)
+        {
+            $words = explode(" ", $titleHall);
+            $firstLetters = "";
+            foreach ($words as $word) {
+                $firstLetters .= substr($word, 0, 1);
             }
+            return $firstLetters;
+        }
+        $titleHall = $data->title;
+        $firstLetters = takeFirstLetters($titleHall);
+        $requestSecret = str_replace(' ', '', $request->secret);
+        if ($request->old_secret != $request->secret) {
+            $secret = $firstLetters . $data->id . $requestSecret;
         } else {
-            $data->value = $request->value;
+            $secret = $request->old_secret;
+        }
+        //
+        $data->enable_delete = $request->enable_delete;
+        $data->enable_print = $request->print;
+        $data->enable_payment = $request->payment;
+        $data->secret = $secret;
+        $data->fixed_cost = $request->fixed_cost;
+        $data->fixed_cost_masters = $request->fixed_cost_masters;
+        //If user Given any PHOTO
+        if ($request->hasFile('logo')) {
+            $data->logo = 'app/public/' . $request->file('logo')->store('Website', 'public');
+        } else {
+            $data->logo = $request->prev_logo;
         }
         $data->save();
 
         return redirect()->route('staff.settings.index')->with('success', 'Settings has been updated Successfully!');
+    }
+    public function roomallocationissue()
+    {
+        if (Auth::guard('staff')->user()->type == 'staff') {
+            return redirect()->route('staff.dashboard')->with('danger', 'Not Permitted!');
+        }
+        $data = RoomIssue::all()->where('hall_id', $this->hall_id);
+        return view('staff.roomallocation.issue', ['data' => $data]);
+    }
+    public function roomallocationissueview(string $id)
+    {
+        if (Auth::guard('staff')->user()->type == 'staff') {
+            return redirect()->route('staff.dashboard')->with('danger', 'Not Permitted!');
+        }
+        //
+        $data = RoomIssue::find($id);
+        if ($data == null) {
+            return redirect()->route('staff.roomallocation.issue')->with('danger', 'Not Found!');
+        }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.roomallocation.issue')->with('danger', 'Not Permitted!');
+        }
+        if ($data->flag != 1) {
+            $data->flag = 1;
+            $data->save();
+        }
+
+        return view('staff.roomallocation.issueshow', ['data' => $data]);
+    }
+    public function roomallocationissueaccept(string $id)
+    {
+        if (Auth::guard('staff')->user()->type == 'staff') {
+            return redirect()->route('staff.dashboard')->with('danger', 'Not Permitted!');
+        }
+        //
+        $data = RoomIssue::find($id);
+        if ($data == null) {
+            return redirect()->route('staff.roomallocation.issue')->with('danger', 'Not Found!');
+        }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.roomallocation.issue')->with('danger', 'Not Permitted!');
+        }
+        if ($data->status == 0) {
+            $data->status = 1;
+            $data->staff_id = Auth::guard('staff')->user()->id;
+            $data->save();
+            $issue = ($data->issue == 'roomchange' ? 'Room Change' : 'Room Leave');
+            //Saving History 
+            $HistoryController = new HistoryController();
+            $staff_id = Auth::guard('staff')->user()->id;
+            $HistoryController->addHistoryHall($staff_id, 'roomissue accept', 'Room Issue - ' . $issue . ' of '  . $data->students->rollno . ' has been accepted!', $this->hall_id);
+            //Saved
+            return view('staff.roomallocation.issueshow', ['data' => $data]);
+        } else {
+            return redirect()->route('staff.roomallocation.issue')->with('danger', 'Not Permitted!');
+        }
+    }
+    public function roomallocationissuereject(string $id)
+    {
+        if (Auth::guard('staff')->user()->type == 'staff') {
+            return redirect()->route('staff.dashboard')->with('danger', 'Not Permitted!');
+        }
+        //
+        $data = RoomIssue::find($id);
+        if ($data == null) {
+            return redirect()->route('staff.roomallocation.issue')->with('danger', 'Not Found!');
+        }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.roomallocation.issue')->with('danger', 'Not Permitted!');
+        }
+        if ($data->status == 0) {
+            $data->status = 1;
+            $data->staff_id = Auth::guard('staff')->user()->id;
+            $data->save();
+            $issue = ($data->issue == 'roomchange' ? 'Room Change' : 'Room Leave');
+            //Saving History 
+            $HistoryController = new HistoryController();
+            $staff_id = Auth::guard('staff')->user()->id;
+            $HistoryController->addHistoryHall($staff_id, 'roomissue reject', 'Room Issue - ' . $issue . ' of ' . $data->students->rollno . ' has been rejected!', $this->hall_id);
+            //Saved
+            return view('staff.roomallocation.issueshow', ['data' => $data]);
+        } else {
+            return redirect()->route('staff.roomallocation.issue')->with('danger', 'Not Permitted!');
+        }
     }
 }

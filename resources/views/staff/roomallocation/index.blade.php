@@ -40,7 +40,7 @@
                             <th>Room No</th>
                             <th>Seat No</th>
                             <th>Student Name</th>
-                            <th>Student Roll</th>
+                            <th>Status</th>
                             <th>Assigned Date</th>
                             <th>Action</th>
                         </tr>
@@ -51,38 +51,47 @@
                             <th>Room No</th>
                             <th>Seat No</th>
                             <th>Student Name</th>
-                            <th>Student Roll</th>
+                            <th>Status</th>
                             <th>Assigned Date</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
                     <tbody>
                         @if($data)
+                        @php $i=1; @endphp
                         @foreach ($data as $key=> $d)
                         <tr>
-                            <td>{{ ++$key }}</td>
-                            <td>{{ $d->rooms->title }}</td>
+                            <td>{{ $i++ }} </td>
+                            <td>
+                                @if ($d->rooms==null)
+                                    Room Deleted
+                                @else
+                                    {{ $d->rooms->title }}
+                                @endif
+                                </td>
                             <td>{{ $d->position }}</td>
                             <td>
                                 @if ($d->students==null)
                                     User Deleted
                                 @else
-                                {{ $d->students->name }}
+                                {{ $d->students->name }} - {{ $d->students->rollno }}
+                                <!--@if($d->students->gender)-->
+                                <!-- -Man @else - Female-->
+                                <!--@endif-->
                                 @endif
                             </td>
-                            <td>
-                                @if ($d->students==null)
-                                    User Deleted
+                            @if ($d->status==0)
+                            <td class="bg-danger text-white">
+                                    Removed
                                 @else
-                                    {{ $d->students->rollno }}
+                            <td class="bg-success text-white">
+                                    Active
                                 @endif
                             </td>
-                            <td>{{ $d->created_at->format("F j, Y")  }} </td>
+                            <td>{{ $d->created_at->format("F j, Y") }} </td>
 
                             <td class="text-center">
-                                <a href="{{ url('staff/roomallocation/'.$d->id) }}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
-                                {{-- <a href="{{ url('staff/roomallocation/'.$d->id.'/edit') }}" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i></a> --}}
-                                <a onclick="return confirm('Are You Sure?')" href="{{ url('staff/roomallocation/'.$d->id.'/delete') }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                <a href="{{ url('staff/roomallocation/'.$d->id) }}" class="btn btn-info btn-sm" title="View Data"><i class="fa fa-eye"></i></a>
                             </td>
 
                         </tr>

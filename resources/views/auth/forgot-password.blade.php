@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
-    <link rel="icon" type="image/x-icon" href="{{ asset($HallOption[4]->value) }}" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('img/fav.png')}}" />
     <meta name="author" content="">
 
     <title> Forgot Password | @isset($HallOption)
@@ -44,7 +44,7 @@
                   @error('email')
                   <div class="text-bold bg-danger text-center text-white p-2">{{ $message }}</div>
                   @enderror
-                  <form method="POST" action="{{ route('password.email') }}">
+                  <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('password.email') }}" >
                     @csrf
                     <div class="form-group input-group">
                       <div class="input-group-prepend">
@@ -70,7 +70,7 @@
     <script src="{{ asset('vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 
     @yield('scripts')
-
+@include('../layouts/validateinput')
 
 </body>
 

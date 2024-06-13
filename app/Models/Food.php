@@ -8,7 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Food extends Model
 {
     use HasFactory;
-    function foodtime(){
-        return $this->belongsTo(FoodTime::class,'food_time_id');
+    function foodtime()
+    {
+        return $this->belongsTo(FoodTime::class, 'food_time_id');
+    }
+    function food_time_hall()
+    {
+        return $this->belongsTo(FoodTimeHall::class, 'foodtimehall');
+    }
+    function hall()
+    {
+        return $this->belongsTo(Hall::class, 'hall_id');
     }
 }

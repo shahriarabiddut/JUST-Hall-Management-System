@@ -2,6 +2,11 @@
 @section('title', 'Request Room Allocation')
 @section('content')
 
+@if(Session::has('danger'))
+    <div class="p-3 mb-2 bg-danger text-white">
+        <p>{{ session('danger') }} </p>
+    </div>
+    @endif 
 
     <!-- Page Heading -->
 @if ($sorryAllocatedSeat)
@@ -24,58 +29,69 @@
                <p class="text-danger"> {{ $error }} </p>
             @endforeach
             @endif
-        <form method="POST" action="{{ route('student.roomrequeststore') }}" enctype="multipart/form-data">
+        <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('student.roomrequeststore') }}" enctype="multipart/form-data">
             @csrf
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <tbody>
                     <tr>
+                        <th colspan="2">Select Hall <span class="text-danger">*</span></th>
+                        <td colspan="2">
+                            <select required name="hall_id" class="form-control">
+                                <option value="0">--- Select Hall ---</option>
+                                @foreach ($halls as $hall)
+                                <option value="{{ $hall->id }}">{{ $hall->title }}</option>
+                                @endforeach
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
                         <th colspan="4">০১.আবেদনকারীর নাম</th>
                     </tr>
                 <tr>
-                    <th> বাংলায়</th>
+                    <th> বাংলায় <span class="text-danger">*</span></th>
                     <td><input type="text" required name="banglaname" value="{{ old('banglaname') }}" class="form-control"></td>
-                    <th> ইংরেজীতে (বড় অক্ষরে)</th>
+                    <th> ইংরেজীতে (বড় অক্ষরে) <span class="text-danger">*</span></th>
                     <td><input type="text" required name="englishname" class="form-control" value="{{ Auth::user()->name }}"></td>
                 </tr>
                 <tr>
-                    <th>০২. পিতার নাম</th>
+                    <th>০২. পিতার নাম <span class="text-danger">*</span></th>
                     <td><input type="text" required name="fathername" value="{{ old('fathername') }}" class="form-control"></td>
-                    <th>০৩. মাতার নাম	</th>
+                    <th>০৩. মাতার নাম <span class="text-danger">*</span></th>
                     <td><input type="text" required name="mothername" value="{{ old('mothername') }}" class="form-control"></td>
                 </tr>
                 <tr>
-                    <th>০৪. জন্ম তারিখ</th>
+                    <th>০৪. জন্ম তারিখ <span class="text-danger">*</span></th>
                     <td><input type="date" required name="dob" value="{{ old('dob') }}" class="form-control"></td>
-                    <th>০৫. জাতীয়তা	</th>
+                    <th>০৫. জাতীয়তা	<span class="text-danger">*</span></th>
                     <td><input type="text" required name="nationality" value="{{ old('nationality') }}" class="form-control"></td>
                 </tr>
                 <tr>
-                    <th>০৬.ধর্ম</th>
+                    <th>০৬.ধর্ম <span class="text-danger">*</span></th>
                     <td><input type="text" required name="religion" class="form-control" value="{{ old('religion') }}"></td>
-                    <th>০৭. বৈবাহিক অবস্থা</th>
+                    <th>০৭. বৈবাহিক অবস্থা <span class="text-danger">*</span></th>
                     <td><input type="text" required name="maritalstatus" class="form-control" value="{{ old('maritalstatus') }}"></td>
                 </tr>
                 <tr>
                     <th colspan="4"> ০৮. স্থায়ী ঠিকানা </th>
                 </tr>
                 <tr>
-                    <td><label for="">গ্রাম</label><input required type="text" name="village" class="form-control" value="{{ old('village') }}"></td>
-                    <td><label for="">পোষ্ট</label><input required type="text" name="postoffice"  value="{{ old('postoffice') }}"class="form-control"></td>
-                    <td><label for="">থানা</label><input required type="text" name="thana" class="form-control" value="{{ old('thana') }}"></td>
-                    <td><label for="">জেলা</label><input required type="text" name="zilla" class="form-control" value="{{ old('zilla') }}"></td>
+                    <td><label for="">গ্রাম <span class="text-danger">*</span></label><input required type="text" name="village" class="form-control" value="{{ old('village') }}"></td>
+                    <td><label for="">পোষ্ট <span class="text-danger">*</span></label><input required type="text" name="postoffice"  value="{{ old('postoffice') }}"class="form-control"></td>
+                    <td><label for="">থানা <span class="text-danger">*</span></label><input required type="text" name="thana" class="form-control" value="{{ old('thana') }}"></td>
+                    <td><label for="">জেলা <span class="text-danger">*</span></label><input required type="text" name="zilla" class="form-control" value="{{ old('zilla') }}"></td>
                 </tr>
                 <tr>
-                    <th>০৯. অভিভাবকের মোবাইল</th>
+                    <th>০৯. অভিভাবকের মোবাইল <span class="text-danger">*</span></th>
                     <td><input type="text" required name="parentmobile" class="form-control" maxlength="11" value="{{ old('parentmobile') }}"></td>
-                    <th>শিক্ষার্থীর মোবাইল</th>
+                    <th>শিক্ষার্থীর মোবাইল <span class="text-danger">*</span></th>
                     <td><input type="text" required name="mobile" class="form-control" value="{{ Auth::user()->mobile }}" maxlength="11" value="{{ old('mobile') }}"></td>
                 </tr>
                 <tr>
-                    <th>১০. বর্তমান ঠিকানা</th>
+                    <th>১০. বর্তমান ঠিকানা <span class="text-danger">*</span></th>
                     <td colspan="3"><textarea name="presentaddress" rows="2" class="form-control">{{ old('presentaddress') }}</textarea></td>
                 </tr>
                 <tr>
-                    <th colspan="2">১১. আবেদনকারীর বর্তমান আবাসনের ধরনঃ</th>
+                    <th colspan="2">১১. আবেদনকারীর বর্তমান আবাসনের ধরনঃ <span class="text-danger">*</span></th>
                     <td colspan="2">
                         <div class="form-check form-check-inline">
                             <input class="form-check-input" type="radio" id="inlineRadio1" value="নিজ গৃহে" name="applicanthouse">
@@ -92,11 +108,11 @@
                         </td>
                 </tr>
                 <tr>
-                    <th colspan="2">১২.পিতা/অভিভাবকের পেশা</th>
+                    <th colspan="2">১২.পিতা/অভিভাবকের পেশা <span class="text-danger">*</span></th>
                     <td colspan="2"><input required type="text" name="occupation" class="form-control" value="{{ old('occupation') }}"></td>
                 </tr>
                 <tr>
-                    <th colspan="4"> স্থানীয় অভিভাবকের নাম </th>
+                    <th colspan="4"> স্থানীয় অভিভাবকের নাম (যদি থাকে) </th>
                 </tr>
                 <tr>
                     <td><label for="">নাম</label><input type="text" name="ovivabok" class="form-control" value="{{ old('ovivabok') }}"></td>
@@ -108,54 +124,72 @@
                     <th colspan="4"> ১৪. প্রয়োজনীয় তথ্যাবলী </th>
                 </tr>
                 <tr>
-                    <th>ক.বিভাগের নামঃ</th>
+                    <th>ক.বিভাগের নামঃ <span class="text-danger">*</span></th>
                     <td><input type="text" required name="department" class="form-control" value="{{ Auth::user()->dept }}"></td>
-                    <th>খ.রোল নংঃ</th>
-                    <td><input type="text" required name="rollno" class="form-control" value="{{ Auth::user()->rollno }}"></td>
+                    <th>ছ.GPA (সর্বশেষ)<span class="text-danger">*</span></th>
+                    <td><input type="text" required name="gpa" class="form-control" value="{{ old('gpa') }}"></td>
                 </tr>
                 <tr>
-                    <th>গ.রেজিস্ট্রেশন নংঃ</th>
+                    <th>খ.রোল নংঃ <span class="text-danger">*</span></th>
+                    <td><input type="text" readonly required name="rollno" class="form-control" value="{{ Auth::user()->rollno }}"></td>
+                    <th>জ.ভর্তির মেধাক্রমঃ<span class="text-danger">*</span></th>
+                    <td><input type="text" required name="meritposition" class="form-control" value="{{ old('meritposition') }}"></td>
+                </tr>
+                <tr>
+                    <th>গ.রেজিস্ট্রেশন নংঃ <span class="text-danger">*</span></th>
                     <td><input type="text" required name="registrationno" class="form-control" value="{{ old('registrationno') }}"></td>
-                    <th>ঘ.শিক্ষাবর্ষঃ</th> 
+                    <th>ঝ.HSC GPA -<span class="text-danger">*</span></th>
+                    <td><input type="text" required name="hsc" class="form-control" value="{{ old('hsc') }}"></td>
+                </tr>
+                <tr>
+                    <th>ঘ.শিক্ষাবর্ষঃ <span class="text-danger">*</span></th> 
                     <td><input type="text" required name="session" class="form-control" value="{{ Auth::user()->session }}"></td>
+                    <th>ঞ.HSC কলেজের নামঃ<span class="text-danger">*</span></th>
+                    <td><input type="text" required name="college" class="form-control" value="{{ old('college') }}"></td>
                 </tr>
                 <tr>
-                    <th>ঙ.বর্ষঃ</th>
+                    <th>ঙ.বর্ষঃ <span class="text-danger">*</span></th>
                     <td><input type="text" required name="borsho" class="form-control" value="{{ old('borsho') }}"></td>
-                    <th>চ.সেমিস্টারঃ</th>
-                    <td><input type="text" required name="semester" class="form-control" value="{{ old('semester') }}"></td>
+                    <th>ট.SSC GPA -<span class="text-danger">*</span></th>
+                    <td><input type="text" required name="ssc" class="form-control" value="{{ old('ssc') }}"></td>
                 </tr>
                 <tr>
-                    <th colspan="2">খেলাধুলা, নাটক, সংগীত ইত্যাদিতে পারদর্শিতার বিবরণ (প্রমাণ সংযুক্ত করতে হবে)</th>
+                    <th>চ.সেমিস্টারঃ <span class="text-danger">*</span></th>
+                    <td><input type="text" required name="semester" class="form-control" value="{{ old('semester') }}"></td>
+                    <th>ঠ.SSC স্কুলের নামঃ<span class="text-danger">*</span></th>
+                    <td><input type="text" required name="school" class="form-control" value="{{ old('school') }}"></td>
+                </tr>
+                <tr>
+                    <th colspan="2">খেলাধুলা, নাটক, সংগীত ইত্যাদিতে পারদর্শিতার বিবরণ (প্রমাণ সংযুক্ত করতে হবে) <span class="text-danger">*</span></th>
                     <td colspan="2"><textarea name="culture" rows="3" class="form-control" >{{ old('culture') }}</textarea></td>
                 </tr>
                 <tr>
-                    <th colspan="2">শারীরিক প্রতিবন্ধী কি না? (প্রমাণ করতে হবে)</th>
+                    <th colspan="2">শারীরিক প্রতিবন্ধী কি না? (প্রমাণ করতে হবে) <span class="text-danger">*</span></th>
                     <td colspan="2"><textarea name="otisitic" rows="2" class="form-control">{{ old('otisitic') }}</textarea></td>
                 </tr>
                 
                 <tr>
-                    <th colspan="4">সংযুক্তি</th>
+                    <th colspan="4">সংযুক্তি </th>
                 </tr>
                 <tr>
-                    <th>ক) নাগরিক সনদের/জন্ম নিবদ্ধন এর অনুলিপি (ছবি)</th>
+                    <th>ক) নাগরিক সনদের/জন্ম নিবদ্ধন এর অনুলিপি (ছবি) <span class="text-danger">*</span></th>
                     <td colspan="3"><input required name="dobsonod" type="file" id="imageInput2" class="form-control" accept="image/*" onchange="validateFile2('imageInput2')" value="{{ old('dobsonod') }}"></td>
                     
                 </tr>
                 <tr>
-                    <th>খ) সর্বশেষ পরীক্ষার নম্বর পত্রের অনুলিপি/প্রথম বর্ষের ভর্তির কাগজপত্রের অনুলিপি। (ছবি)</th>
+                    <th>খ) সর্বশেষ পরীক্ষার নম্বর পত্রের অনুলিপি/প্রথম বর্ষের ভর্তির কাগজপত্রের অনুলিপি।(ছবি) <span class="text-danger">*</span></th>
                     <td colspan="3"><input required name="academic" type="file" class="form-control" accept="image/*" id="imageInput3" onchange="validateFile2('imageInput3')"></td>
                     
                 </tr>
                 <tr>
-                    <th>গ) অভিভাবকের মাসিক আয়ের প্রমাণ পত্র। (ছবি)</th>
+                    <th>গ) অভিভাবকের মাসিক আয়ের প্রমাণ পত্র। (ছবি) <span class="text-danger">*</span></th>
                     <td colspan="3"><input required name="earningproof" type="file" class="form-control" accept="image/*" id="imageInput4" onchange="validateFile2('imageInput4')"></td>
                     
                 </tr>
                 <tr>
                     <th width="25%">তারিখঃ</th>
                     <td width="25%"><input type="text" readonly name="applicationdate" class="form-control" value="{{ Carbon\Carbon::today()->format('F j , Y') }}"></td>
-                    <th width="25%">আবেদনকারীর স্বাক্ষর</th>
+                    <th width="25%">আবেদনকারীর স্বাক্ষর <span class="text-danger">*</span></th>
                     <td width="25%"><input name="signature" type="file" id="imageInput" class="form-control" accept="image/*" onchange="validateFile()">
                     <p>image with dimensions up to 300x300 pixels</p></td>
                 </tr>

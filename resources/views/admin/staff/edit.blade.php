@@ -9,13 +9,29 @@
             <a href="{{ url('admin/staff/'.$data->id) }}" class="float-right btn btn-success btn-sm"> <i class="fa fa-arrow-left"></i> View All </a> </h3>
         </div>
         <div class="card-body">
-            
+            @if ($errors->any())
+                @foreach ($errors->all() as $error)
+                   <p class="text-danger"> {{ $error }} </p>
+                @endforeach
+                @endif
             <div class="table-responsive">
-            <form method="POST" action="{{ route('admin.staff.update',$data->id) }}" enctype="multipart/form-data">
+            <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('admin.staff.update',$data->id) }}" enctype="multipart/form-data" id="myForm">
                 @csrf
                 @method('PUT')
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <tbody>
+                    <tr>
+                        <th>Select Hall</th>
+                        <td>
+                            <select required name="hall_id" class="form-control">
+                                <option value="101">--- Select Hall ---</option>
+                                <option value="0">--- N/A ---</option>
+                                @foreach ($halls as $hall)
+                                <option @if ($data->hall_id == $hall->id) selected @endif value="{{ $hall->id }}">{{ $hall->title }}</option>
+                                @endforeach
+                            </select>
+                        </td>
+                    </tr>
                     <tr>
                         <th>Photo</th>
                         <td>
@@ -33,7 +49,7 @@
                         <td><input required name="name" type="text" class="form-control" value="{{ $data->name }}"></td>
                     </tr><tr>
                         <th>Bio</th>
-                        <td><textarea name="bio" class="form-control">{{ $data->bio }}</textarea></td>
+                        <td><textarea required name="bio" class="form-control">{{ $data->bio }}</textarea></td>
                     </tr><tr>
                         <th>Address <span class="text-danger">*</span></th>
                         <td>
@@ -41,7 +57,7 @@
                         </td>
                     </tr><tr>
                         <th>Phone Number<span class="text-danger">*</span></th>
-                        <td><input required name="phone" type="text" class="form-control" value="{{ $data->phone }}" maxlength="11"></td>
+                        <td><input required name="phone" type="text" class="form-control" id="inputField" value="{{ $data->phone }}" maxlength="11"></td>
                     </tr>
                     <tr>
                         <th>Select User Type</th>
@@ -57,10 +73,14 @@
                                     @selected(true)
                                 @endif
                                  value="provost">Provost</option>
-                                 <option @if ($data->type=='provost')
+                                 <option @if ($data->type=='aprovost')
                                     @selected(true)
                                 @endif
                                  value="aprovost">Assistant Provost</option>
+                                 <option @if ($data->type=='officer')
+                                    @selected(true)
+                                @endif
+                                 value="officer">Officer</option>
                             </select>
                         </td>
                     </tr>
@@ -77,6 +97,20 @@
     </div>
 
     @section('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('myForm').addEventListener('submit', function(event) {
+                let input2 = document.getElementById('inputField').value;
+                let pattern = /^[0-9]+$/;
+            
+                if (!pattern.test(input2)) {
+                    alert('Use Valid Mobile Number!');
+                    event.preventDefault(); // Prevent form submission if input is invalid
+                    window.location.reload();
+                }
+            });
+        });
+    </script>
     @endsection
 @endsection
 

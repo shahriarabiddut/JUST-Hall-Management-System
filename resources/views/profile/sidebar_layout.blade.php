@@ -4,7 +4,11 @@
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('student.dashboard') }}">
         <div class="sidebar-brand-icon rotate-n-15">
+            @if (Auth::user()->hall_id==0 || Auth::user()->hall_id==null)
             <img src="{{ asset($HallOption[3]->value) }}" class="rounded mx-auto d-block sidebar-card-illustration" alt="Logo" style="width:50%;">
+            @else
+            <img src="{{ asset('storage/'.Auth::user()->hall->logo) }}" class="rounded mx-auto d-block sidebar-card-illustration" alt="Logo" style="width:50%;">
+            @endif
         </div>
         <div class="sidebar-brand-text mx-3">Student Panel</div>
     </a>
@@ -37,19 +41,22 @@
         <div id="collapseTwo" class="collapse @if(request()->is('student/room*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Room </h6>
-            @if(isset($sorryRoomSidebar))
-                @if($sorryRoomSidebar)
+                @if(Auth::user()->allocatedRoom != null)
                 <a class="collapse-item" href="{{ route('student.myroom') }}">My Room Details</a> 
+                <a class="collapse-item" href="{{ route('student.myroom.change') }}">Room Change</a> 
+                <a class="collapse-item" href="{{ route('student.myroom.leave') }}">Room Leave</a> 
                 @else
-                <a class="collapse-item" href="{{ route('student.roomrequest') }}">New Room Request</a>
-                <a class="collapse-item" href="{{ route('student.roomrequestshow') }}">My Room Requests</a>
+                    @if(Auth::user()->roomrequest==null)
+                    <a class="collapse-item" href="{{ route('student.roomrequest') }}">New Room Request</a>
+                    @else
+                    <a class="collapse-item" href="{{ route('student.roomrequestshow') }}">My Room Requests</a>
+                    @endif
                 @endif
-            @endif 
                 
             </div>
         </div>
     </li>
- @if (!Auth::user()->allocated_seat)
+ @if (Auth::user()->hall_id!=0 && Auth::user()->hall_id!=null)
     <!-- Divider -->
     <hr class="sidebar-divider">
     <!-- Heading -->
@@ -66,7 +73,8 @@
         </a>
         <div id="collapseThree" class="collapse @if(request()->is('student/order*') || request()->is('student/mealtoken*')) show @endif" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Oeder Food</h6>
+                <h6 class="collapse-header">Foods and Orders</h6>
+                <a class="collapse-item" href="{{ route('student.order.autoorder') }}">Auto Order Daily</a>
                 <a class="collapse-item" href="{{ route('student.order.foodmenu') }}">View Food Menu</a>
                 <a class="collapse-item" href="{{ route('student.order.index') }}">Order History</a>
                 <a class="collapse-item" href="{{ route('student.mealtoken.index') }}">Meal Token History</a>
@@ -115,9 +123,8 @@
                 <a class="collapse-item" href="{{ route('student.payments.create') }}">Add new prepayment</a>
             </div>
         </div>
-    </li>
+    </li>  
     <!-- Nav Item Support - Utilities Collapse Menu -->
-    @endif
     <li class="nav-item">
         <a class="nav-link @if (!request()->is('student/support*'))
             collapsed
@@ -135,7 +142,7 @@
             </div>
         </div>
     </li>
-   
+    @endif
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">

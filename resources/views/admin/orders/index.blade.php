@@ -16,11 +16,33 @@
             <!-- Session Messages Ends -->
             
             <div class="card shadow mb-4 pl-4 py-2 bg-secondary text-white">
-                <form method="POST" action="{{ route('admin.orders.searchByHistory') }}">
+                <form onsubmit="handleSubmit(event)"  method="POST" class="p-1" action="{{ route('admin.orders.searchByDate') }}">
                     @csrf
-                    <label for="search-date">Search by Date with Details :</label>
-                    <input type="date" id="search-date" name="date">
-                    <button type="submit">Search</button>
+                    <div class="form-row">
+                        <div class="col-md mt-1"> <button class="form-control btn btn-dark" type="reset">Search by Date :</button> </div>
+                        <div class="col-md mt-1">
+                        <select class="form-control" required name="hall_id" id="">
+                            <option value="0">-- Select Hall--</option>
+                            @foreach ($halls as $ft)
+                            <option value="{{$ft->id}}">{{$ft->title}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md mt-1">
+                    <select class="form-control" name="type" id="">
+                        <option value="x">-- Select Meal Type--</option>
+                        @foreach ($dataFoodTime as $ft)
+                        <option value="{{$ft->title}}">{{$ft->title}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md mt-1">
+                    <input class="form-control"  required type="date" id="search-date" name="date">
+                </div>
+                <div class="col-md mt-1">
+                    <button class="form-control btn btn-info"  type="submit">Search</button>
+                </div>
+            </div>
                   </form>
             </div>
 
@@ -28,13 +50,29 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h3 class="m-0 font-weight-bold text-primary">Orders
+            <h3 class="m-0 font-weight-bold text-primary">All Orders
                 <div class="float-right h6">
-                    <form method="POST" action="{{ route('admin.orders.searchByDate') }}">
+                    <form onsubmit="handleSubmit(event)"  method="POST" class="p-1 " action="{{ route('admin.orders.searchByHistory') }}">
                         @csrf
-                        <label for="search-date">Search History by Date:</label>
-                        <input type="date" id="search-date" name="date">
-                        <button type="submit">Search</button>
+                        <div class="form-row">
+                            <div class="col-md-3 mt-1">
+                        <button class="form-control btn btn-dark p-1" type="reset"> Order History </button>
+                    </div>
+                    <div class="col-md-3 mt-1">
+                        <select class="form-control" required name="hall_id" id="">
+                            <option value="0">-- Select Hall --</option>
+                            @foreach ($halls as $ft)
+                            <option value="{{$ft->id}}">{{$ft->title}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-3 mt-1">
+                        <input  class="form-control" required type="date" id="search-date" name="date">
+                    </div>
+                    <div class="col-md-3 mt-1">
+                        <button class="form-control btn btn-info" type="submit">Search</button>
+                    </div>
+                    </div>
                       </form>
                 </div>
         </div>
@@ -73,7 +111,17 @@
                                 $i=$key;
                             @endphp
                             <td>{{ ++$key }}</td>
-                            <td>{{ $d->student->name }} - {{ $d->student->rollno }}</td>
+                            <td>
+                                @if ($d->student==null)
+                                    User Deleted
+                                @else
+                                    {{ $d->student->name }} - {{ $d->student->rollno }}  
+                                @endif
+                                @if ($d->hall!=null)
+                                [{{ $d->hall->title }}]
+                                @endif
+                                
+                            </td>
                             <td>{{ $d->order_type }}</td>
                             <td>{{ $d->food->food_name }}</td>
                             <td>{{ $d->date }}</td>

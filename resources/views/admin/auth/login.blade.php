@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
-    <link rel="icon" type="image/x-icon" href="{{ asset($HallOption[4]->value) }}" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('img/fav.png')}}" />
     <meta name="author" content="">
 
     <title> Admin Login | @isset($HallOption)
@@ -39,7 +39,7 @@
                   @enderror
                   <img src="{{ asset($HallOption[3]->value) }}" class="rounded mx-auto d-block mb-1" alt="Logo" style="height: 100px;">
                   <h4 class="card-title text-center bg-secondary p-2 text-white my-3 rounded">Admin Login</h4>
-                  <form method="POST" action="{{ route('admin.adminlogin') }}">
+                  <form onsubmit="handleSubmit(event)"  method="POST" action="{{ route('admin.adminlogin') }}">
                     @csrf
                     <div class="form-group input-group">
                       <div class="input-group-prepend">

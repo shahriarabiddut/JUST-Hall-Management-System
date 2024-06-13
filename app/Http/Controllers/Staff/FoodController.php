@@ -4,19 +4,27 @@ namespace App\Http\Controllers\Staff;
 
 use App\Models\Food;
 use App\Models\FoodTime;
+use App\Models\FoodTimeHall;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
 class FoodController extends Controller
 {
+    protected $hall_id;
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
-            if (Auth::guard('staff')->user()->type == 'provost') {
-                return $next($request);
-                // return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
-            } elseif (Auth::guard('staff')->user()->type == 'aprovost') {
+            $this->hall_id = Auth::guard('staff')->user()->hall_id;
+            if ($this->hall_id == 0 || $this->hall_id == null || Auth::guard('staff')->user()->status == 0) {
+                return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
+            }
+            if (Auth::guard('staff')->user()->hall_id != 0) {
+                if (Auth::guard('staff')->user()->hall->status == 0) {
+                    return redirect()->route('staff.dashboard')->with('danger', 'This Hall has been Disabled by System Administrator!');
+                }
+            }
+            if (Auth::guard('staff')->user()->type == 'provost' || Auth::guard('staff')->user()->type == 'aprovost') {
                 return $next($request);
             } else {
                 return redirect()->route('staff.dashboard')->with('danger', 'Unauthorized access');
@@ -30,7 +38,7 @@ class FoodController extends Controller
     public function index()
     {
         //
-        $data = Food::all();
+        $data = Food::all()->where('hall_id', $this->hall_id);
         return view('staff.food.index', ['data' => $data]);
     }
 
@@ -40,7 +48,11 @@ class FoodController extends Controller
     public function create()
     {
         //
-        $food_time = FoodTime::all()->where('status', '=', '1');
+        $dataFoodTime = FoodTimeHall::all()->where('hall_id', $this->hall_id)->where('status', '1');
+        $food_time = [];
+        foreach ($dataFoodTime as $dFT) {
+            $food_time[] = FoodTime::find($dFT->food_time_id);
+        }
         return view('staff.food.create', ['food_time' => $food_time]);
     }
 
@@ -53,19 +65,25 @@ class FoodController extends Controller
         $data = new Food;
         $request->validate([
             'food_name' => 'required',
-            'food_time_id' => 'required',
-            'status' => 'required',
+            'food_time_id' => 'required|not_in:0',
+            'status' => 'required|not_in:3',
         ]);
         $data->food_time_id = $request->food_time_id;
         $data->food_name = $request->food_name;
         $data->status = $request->status;
+        $data->hall_id = $this->hall_id;
+        //For food_time_hall
+        $FoodTimeHall = FoodTimeHall::all()->where('food_time_id', $request->food_time_id)->where('hall_id', $this->hall_id)->first();
+        $data->foodtimehall = $FoodTimeHall->id;
+        //For food_time_hall
+        $data->price = $FoodTimeHall->price;
         $data->save();
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistory($staff_id, 'add', 'Food ( ' . $data->food_name . ' ) - of Foodtime - ' . $data->foodtime->title . ' has been added Successfully!');
+        $HistoryController->addHistoryHall($staff_id, 'add', 'Food ( ' . $data->food_name . ' ) - of Foodtime - ' . $data->foodtime->title . ' has been added Successfully!', $this->hall_id);
         //Saved
-        return redirect()->route('staff.food.index')->with('success', 'Food Item Data has been added Successfully!');
+        return redirect()->route('staff.food.index')->with('success', 'Food ( ' . $data->food_name . ' ) Item Data has been added Successfully!');
     }
 
     /**
@@ -77,6 +95,9 @@ class FoodController extends Controller
         $data = Food::find($id);
         if ($data == null) {
             return redirect()->route('staff.food.index')->with('danger', 'Not Found!');
+        }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.food.index')->with('danger', 'Not Permitted!');
         }
         $food_time = FoodTime::all()->where('id', '=', $data->food_time_id)->first();
         return view('staff.food.show', ['data' => $data, 'food_time' => $food_time]);
@@ -93,6 +114,9 @@ class FoodController extends Controller
         if ($food_time == null || $data == null) {
             return redirect()->route('staff.food.index')->with('danger', 'Not Found!');
         }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.food.index')->with('danger', 'Not Permitted!');
+        }
         return view('staff.food.edit', ['data' => $data, 'food_time' => $food_time]);
     }
 
@@ -104,16 +128,21 @@ class FoodController extends Controller
         //
         $request->validate([
             'food_name' => 'required',
-            'food_time_id' => 'required',
+            'price' => 'required',
+            'food_time_id' => 'required|not_in:0',
         ]);
         $data = Food::find($id);
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.food.index')->with('danger', 'Not Permitted!');
+        }
         $data->food_time_id = $request->food_time_id;
         $data->food_name = $request->food_name;
+        $data->price = $request->price;
         $data->save();
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistory($staff_id, 'update', 'Food ( ' . $data->food_name . ' ) - of Foodtime - ' . $data->foodtime->title . ' has been added Successfully!');
+        $HistoryController->addHistoryHall($staff_id, 'update', 'Food ( ' . $data->food_name . ' ) - of Foodtime - ' . $data->foodtime->title . ' has been updated Successfully!', $this->hall_id);
         //Saved
         return redirect()->route('staff.food.index')->with('success', 'Food Item Data has been updated Successfully!');
     }
@@ -125,13 +154,21 @@ class FoodController extends Controller
     {
 
         return redirect()->route('staff.food.index')->with('danger', 'Not Permitted!');
-
         // $data = Food::find($id);
         // if ($data == null) {
         //     return redirect()->route('staff.food.index')->with('danger', 'Not Found!');
         // }
+        // if ($data->hall_id != $this->hall_id) {
+        //     return redirect()->route('staff.food.index')->with('danger', 'Not Permitted!');
+        // }
+        // //Saving History 
+        // $HistoryController = new HistoryController();
+        // $staff_id = Auth::guard('staff')->user()->id;
+        // $HistoryController->addHistoryHall($staff_id, 'delete', 'Food ( ' . $data->food_name . ' ) - of Foodtime - ' . $data->foodtime->title . ' has been deleted Successfully!', $this->hall_id);
+        // //Saved
         // $data->delete();
-        // return redirect('staff/food')->with('danger', 'Data has been deleted Successfully!');
+
+        // return  redirect()->route('staff.food.index')->with('danger', 'Food data has been deleted Successfully!');
     }
     public function active($id)
     {
@@ -139,14 +176,18 @@ class FoodController extends Controller
         if ($data == null) {
             return redirect()->route('staff.food.index')->with('danger', 'Not Found!');
         }
-        $dataActive = FoodTime::find($data->food_time_id);
-        if ($dataActive->status == 1) {
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.food.index')->with('danger', 'Not Permitted!');
+        }
+
+        $food_time_hall = FoodTimeHall::all()->where('food_time_id', '=', $data->food_time_id)->where('hall_id', $this->hall_id)->first();
+        if ($food_time_hall->status == 1) {
             $data->status = 1;
             $data->save();
             //Saving History 
             $HistoryController = new HistoryController();
             $staff_id = Auth::guard('staff')->user()->id;
-            $HistoryController->addHistory($staff_id, 'Activated', 'Food ( ' . $data->food_name . ' ) - of Foodtime - ' . $data->foodtime->title . ' has been Activated Successfully!');
+            $HistoryController->addHistoryHall($staff_id, 'Activated', 'Food ( ' . $data->food_name . ' ) - of Foodtime - ' . $data->foodtime->title . ' has been Activated Successfully!', $this->hall_id);
             //Saved
             return redirect('staff/food')->with('success', 'Food Activate Successfully!');
         } else {
@@ -159,13 +200,16 @@ class FoodController extends Controller
         if ($data == null) {
             return redirect()->route('staff.food.index')->with('danger', 'Not Found!');
         }
+        if ($data->hall_id != $this->hall_id) {
+            return redirect()->route('staff.food.index')->with('danger', 'Not Permitted!');
+        }
         $data->status = 0;
         $data->save();
         //Saving History 
         $HistoryController = new HistoryController();
         $staff_id = Auth::guard('staff')->user()->id;
-        $HistoryController->addHistory($staff_id, 'Disabled', 'Food ( ' . $data->food_name . ' ) - of Foodtime - ' . $data->foodtime->title . ' has been Disabled Successfully!');
+        $HistoryController->addHistoryHall($staff_id, 'Disabled', 'Food ( ' . $data->food_name . ' ) - of Foodtime - ' . $data->foodtime->title . ' has been Disabled Successfully!', $this->hall_id);
         //Saved
-        return redirect('staff/food')->with('danger', 'Food Disabled Successfully!');
+        return redirect()->route('staff.food.index')->with('danger', 'Food Disabled Successfully!');
     }
 }
