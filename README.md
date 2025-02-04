@@ -1,81 +1,103 @@
-<p align="center"><a href="https://JustHallAutomation.com" target="_blank"><img src="https://raw.githubusercontent.com/JustHallAutomation/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/JustHallAutomation-logolockup-cmyk-red.svg" width="400" alt="JustHallAutomation Logo"></a></p>
+# Just Hall Automation
 
-<p align="center">
-<a href="https://github.com/JustHallAutomation/framework/actions"><img src="https://github.com/JustHallAutomation/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/JustHallAutomation/framework"><img src="https://img.shields.io/packagist/dt/JustHallAutomation/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/JustHallAutomation/framework"><img src="https://img.shields.io/packagist/v/JustHallAutomation/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/JustHallAutomation/framework"><img src="https://img.shields.io/packagist/l/JustHallAutomation/framework" alt="License"></a>
-</p>
+## Introduction
+The **Just Hall Automation** system is designed to streamline and automate various hall management processes, reducing manual workload and improving efficiency. It facilitates the management of student and staff records, meal plans, room bookings, balance tracking, and report generation. By implementing a structured and automated approach, this system enhances the overall experience for hall residents.
 
-## Run the migration Command
+## Table of Contents
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Project Phases](#project-phases)
+- [Sponsors](#sponsors)
+- [Mentors & Supervisors](#mentors--supervisors)
+- [License](#license)
 
-php artisan migrate:refresh --seed
+## Features
+- Multi-authentication system (Admin, Staff, Student) using Laravel Breeze
+- Email verification for users
+- Student & staff management (Admin CRUD operations)
+- Room booking system with approval workflow
+- Support system (Admin, Staff, and Student roles)
+- Balance system with payment approval/rejection
+- Meal ordering system with balance deduction
+- Meal token generation with QR code validation
+- Automated scheduled tasks using Cron Jobs
+- Printing mechanism for meal tokens
 
-## Storage Link Command
+## Installation
+### Prerequisites
+Ensure you have the following installed:
+- PHP (>= 8.0)
+- Laravel (latest version recommended)
+- Composer
+- MySQL or PostgreSQL
+- Node.js & npm
 
-php artisan storage:link
+### Steps
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/shahriarabiddut/JUST-Hall-Management-System.git
+   cd just-hall-automation
+   ```
 
-## Schedule Command
+2. Install dependencies:
+   ```bash
+   composer install
+   npm install && npm run dev
+   ```
 
-php artisan send:sms
+3. Configure environment:
+   - Copy `.env.example` to `.env`
+   - Update database credentials
 
-## Extension Enable
+4. Run migrations and seed database:
+   ```bash
+   php artisan migrate --seed
+   ```
 
-sockets
+5. Generate application key:
+   ```bash
+   php artisan key:generate
+   ```
 
-## About Just Hall Automation
+6. Start development server:
+   ```bash
+   php artisan serve
+   ```
 
-The traditional manual processes in halls can be time-consuming, prone to errors and often result in poor coordination and management. The System is a solution that aims to streamline and automate various hall management processes, resulting in improved efficiency, reduced workload, and better overall experience for hall residents. It will aid in the management of student records, staff records, meal management and the generation of student report, among other things.
+## Usage
+- **Admin Panel**: Manage students, staff, room bookings, and financial transactions.
+- **Staff Panel**: Handle meal orders, approve/reject payments, and manage support queries.
+- **Student Panel**: Request room bookings, order meals, generate meal tokens, and track balance.
 
-## Project phase Just Hall Automation
+## Project Phases
+### Phase 1: User Authentication & Management
+- Multi-auth system (Admin, Staff, Student)
+- Laravel Breeze setup with email verification
+- Admin CRUD for students and staff
 
-1.  Multi Auth Complete
-    Admin , Staff & User
-    Larvel Breeze
-    Email Verification Enabled for user
-    Login Work for all
-    Registration Only For Users
-    Admin CRUD for Students and Staff
+### Phase 2: Core Functionalities
+- Room Booking System (Admin approval required)
+- Support System (Tickets managed by Staff & Admin)
+- Balance System (Staff manages payments, email notifications on status updates)
+- **Meal Management:**
+  - Order meals for the next day
+  - Balance deduction upon ordering
+  - Staff dashboard for meal order summaries
+  - Meal token generation & validation via QR code
+  - Scheduled tasks for automatic balance deductions
 
-    2.1
-    RoomBooking Added in Admin
-    2.2
-    Room Booking Request Added in Student Panel
-    Admin Can se requests accept or reject it
-    Support system add - Admin can view, Staff Can reply and View & Student can create and view and delete until replied
-    2.3
-    Balance system added in student
-    Staff can add , accept and reject payments
-    If staff accept or reject an email will be sent to the student
-    If staff accepts payment -> Student balance will be added!
-    2.4 Added Food Item and Time
-    2.5 Food Order on next day and deducing balance -> Student Panel
-    2.5.1 2.5;s view and controller functions refined
-    2.5.2 Total orders on next day and order details in dashboard -> Staff Panel
-    2.5.3 View orders from staff panel all, and by date with foodtime
-    2.6 Meal token generated by user
-    2.6.1 Meal token generated by order placed and marked as not used (2.6 changed with minimum set off order)
-    2.6.2 Meal token checked is valid or not and checked for current date also
-    2.7 In Console/Kernel Schedule Function is called (need to check is it working or not)
-    2.8 Cron Job added per minute to deduct balance from fixed cost and mail the user
-    2.9 Added Deduct Balance per month
-    2.9.1 Add Settings option for fixed cost and name change in seeder also
-    2.9.2 Add Deduct Balance per month from Database in SendSMS - Kernel
-    2.9.3 Order change if selected less than 50 - (Not Ethical! Notice Would Be Better)
+### Phase 3: Enhancements & Automation
+- Printing system for meal tokens
+- Live QR code scanner for validation
+- Cron jobs for scheduled tasks like balance deduction and notifications
 
-    3.1 Printer and printing Mechanism Added
-    3.2 QR code added on Meal Tokens
-    3.2 Live QR code scanner added for Meal Tokens to validate
+## Sponsors
+**CSE, Jashore University of Science and Technology (JUST)**
 
-## JustHallAutomation Sponsors
-
-CSE,Jashore University of Science And Technology
-
-### Mentor / Supervisor
-
--   [Dr. Syed Md. Galib - Professor](https://just.edu.bd/t/smg) - ** Supervisor **
--   [Mostafijur Rahman Akhond - Assistant Professor](https://just.edu.bd/t/mra) - ** Co-Supervisor **
+## Mentors & Supervisors
+- **Dr. Syed Md. Galib** - Professor (Supervisor)
+- **Mostafijur Rahman Akhond** - Assistant Professor (Co-Supervisor)
 
 ## License
-
-The JustHallAutomation framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is open-source and licensed under the **MIT License**.
